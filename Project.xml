@@ -50,7 +50,8 @@
 	<define name="VIDEOS_ALLOWED" if="cpp" />
 	<define name="DISCORD_ALLOWED" if="cpp"/>
 
-	<define name="HIT_SINGLE"/>
+	<!-- OOPPSSS HAHA -->
+	<!-- define name="HIT_SINGLE"/ -->
 
 	<!-- <define name="EMBED_FILES"/> -->
 
