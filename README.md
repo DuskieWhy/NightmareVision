@@ -1,14 +1,27 @@
 helloe we hit single
 
-all project files located in the projFiles folder
+![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)
 
-Havee fun (engine still in *beta* btw, ***follow me on twitter***)
+Havee fun (engine still in *beta* btw, ***[follow me on twitter](https://twitter.com/DuskieWhy)***)
 
-# HIT SINGLE
-- i did like eveyrthing mostly
-- decoy yoshinova helped
-
-# ENGINE
-- majority of the code by me
-- help from nebula the zorua
-- note splashes by peakjuggler
+![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)
+![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)
+![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)
+![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)
+![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)
+![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)
+![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)
+![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)
+![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)
+![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)
+![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)
+![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)
+![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)
+![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)
+![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)
+![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)
+![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)
+![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)
+![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)
+![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)
+![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)
