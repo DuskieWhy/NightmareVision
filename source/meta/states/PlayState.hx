@@ -117,7 +117,8 @@ class PlayState extends MusicBeatState
 {
 	public var modManager:ModManager;
 
-	public var ghostsAllowed:Bool = false;
+	// i accidentally left this off OOPSSSS
+	public var ghostsAllowed:Bool = true;
 
 	//var notefields:NotefieldManager = new NotefieldManager();
 	var speedChanges:Array<SpeedEvent> = [];
