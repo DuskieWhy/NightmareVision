@@ -1383,6 +1383,8 @@ class PlayState extends MusicBeatState
 		setOnScripts('topBar', topBar);
 		setOnScripts('bottomBar', bottomBar);
 
+		callOnScripts('onCreate', []);
+
 
 		// if (SONG.song == 'South')
 		// FlxG.camera.alpha = 0.7;
