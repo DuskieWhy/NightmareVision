@@ -4489,6 +4489,8 @@ class PlayState extends MusicBeatState
 		var daRating:Rating = Conductor.judgeNote(note, noteDiff);
 		var ratingNum:Int = 0;
 
+		score = daRating.score;
+
 		totalNotesHit += daRating.ratingMod;
 		note.ratingMod = daRating.ratingMod;
 		if(!note.ratingDisabled) daRating.increase();
@@ -4623,8 +4625,8 @@ class PlayState extends MusicBeatState
 
 			callOnHScripts('popupNumScore', [numScore]);
 			if(!isPixelStage){
-				numScore.scale.set(0.785, 0.785);
-				FlxTween.tween(numScore.scale, {x: 0.7, y: 0.7}, 0.5, {ease: FlxEase.expoOut});
+				numScore.scale.set(0.6, 0.6);
+				FlxTween.tween(numScore.scale, {x: 0.5, y: 0.5}, 0.5, {ease: FlxEase.expoOut});
 			}else{
 				numScore.scale.set(6,6);
 			}
@@ -5590,6 +5592,7 @@ class PlayState extends MusicBeatState
 
 			// Rating FC
 			ratingFC = "";
+			if (epics > 0) ratingFC = "KFC";
 			if (sicks > 0) ratingFC = "SFC";
 			if (goods > 0) ratingFC = "GFC";
 			if (bads > 0 || shits > 0) ratingFC = "FC";
