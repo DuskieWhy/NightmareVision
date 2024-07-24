@@ -180,6 +180,7 @@ class FunkinHScript extends FunkinScript
 		set("FlxEase", FlxEase);
 		set("FlxSave", flixel.util.FlxSave); // should probably give it 1 save instead of giving it FlxSave
 		set("FlxBar", flixel.ui.FlxBar);
+		set("FlxFlicker", flixel.effects.FlxFlicker);
 
 		set("LEFT_TO_RIGHT", LEFT_TO_RIGHT);
 		set("RIGHT_TO_LEFT", RIGHT_TO_LEFT);

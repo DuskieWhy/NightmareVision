@@ -81,10 +81,12 @@ class ChartingState extends MusicBeatState
 		'GF Sing',
 		'No Animation',
 		'Ghost Note',
+		#if HIT_SINGLE
 		'Normal Slam',
 		'Half Slam Lane 1',
 		'Half Slam Lane 2',
 		'Half Slam Lane 3'
+		#end
 	];
 	private var noteTypeIntMap:Map<Int, String> = new Map<Int, String>();
 	private var noteTypeMap:Map<String, Null<Int>> = new Map<String, Null<Int>>();
@@ -113,7 +115,11 @@ class ChartingState extends MusicBeatState
 		['Camera Fade', "Fades the game camera\n\nValue 1: Alpha\nValue 2: Duration"],
 		['Camera Flash', "Value 1: Color, Alpha (Optional)\nValue 2: Fade duration"],
 		['Camera Zoom', "Changes the Camera Zoom.\n\nValue 1: Zoom Multiplier (1 is default)\n\nIn case you want a tween, use Value 2 like this:\n\n\"3, elasticOut\"\n(Duration, Ease Type)"],
-        ["Mult SV", "Changes the notes' scroll velocity via multiplication.\nValue 1: Multiplier"],
+		['Camera Zoom Chain', "Value 1: Camera Zoom Values (0.015, 0.03)\n(also you can add another two values to make it\nzoom screen shake(0.015, 0.03, 0.01, 0.01))\n\nValue 2: Total Amount of Beat Cam Zooms and\nthe space with eachother (4, 1)"],
+		['Screen Shake Chain', "Value 1: Screen Shake Values (0.003, 0.0015)\n\nValue 2: Total Amount of Screen Shake per beat]"],
+		['Set Cam Zoom', "Value 1: Zoom"],
+		['Set Cam Pos', "Value 1: X\nValue 2: Y"],
+		["Mult SV", "Changes the notes' scroll velocity via multiplication.\nValue 1: Multiplier"],
         ["Constant SV", "Uses scroll velocity to set the speed to a constant number.\nValue 1: Constant"],
 	];
 
@@ -260,7 +266,7 @@ class ChartingState extends MusicBeatState
 				events: [],
 				bpm: 150.0,
 				needsVoices: true,
-				arrowSkin: '',
+				arrowSkin: 'default',
 				splashSkin: 'noteSplashes',//idk it would crash if i didn't
 				player1: 'bf',
 				player2: 'dad',
@@ -1326,18 +1332,38 @@ class ChartingState extends MusicBeatState
 			directories.push(Paths.mods(mod + '/custom_events/'));
 		#end
 
+		var eventexts = [
+			'.txt',
+			'.hx',
+			'.hxs',
+			'.hscript'
+		];
+		var removeShit = [4, 3, 4, 8];
+
 		for (i in 0...directories.length) {
 			var directory:String =  directories[i];
 			if(FileSystem.exists(directory)) {
 				for (file in FileSystem.readDirectory(directory)) {
 					var path = haxe.io.Path.join([directory, file]);
-					if (!FileSystem.isDirectory(path) && file != 'readme.txt' && file.endsWith('.txt')) {
-						var fileToCheck:String = file.substr(0, file.length - 4);
-						if(!eventPushedMap.exists(fileToCheck)) {
-							eventPushedMap.set(fileToCheck, true);
-							eventStuff.push([fileToCheck, File.getContent(path)]);
+					for(ext in 0...eventexts.length){
+						if (!FileSystem.isDirectory(path) && file != 'readme.txt' && file.endsWith(eventexts[ext])){
+							var fileToCheck:String = file.substr(0, file.length - removeShit[ext]);
+							if(!eventPushedMap.exists(fileToCheck)) {
+								eventPushedMap.set(fileToCheck, true);
+								for(x in ['.hx', '.hxs', '.hscript']){
+									if(file.endsWith(x)){
+										eventStuff.push([fileToCheck, 'scripted description']);
+										break;
+									}else{
+										eventStuff.push([fileToCheck, File.getContent(path)]);
+										break;
+									}
+								}
+							}
+							break;
 						}
 					}
+
 				}
 			}
 		}
@@ -2966,11 +2992,11 @@ class ChartingState extends MusicBeatState
 		if(_song.arrowSkin != ''){
 			for(ext in PlayState.hscriptExtsStatic){
 				if(noteskinScript == null){
-					if(FileSystem.exists(Paths.noteskin('${_song.arrowSkin}.$ext'))){
-						noteskinScript = FunkinHScript.fromFile(Paths.noteskin('${_song.arrowSkin}.$ext'));
-					}else if(FileSystem.exists(Paths.modsNoteskin('${_song.arrowSkin}.$ext'))){
-						//Noteskin doesn't exist in assets, trying mods folder
+					if(FileSystem.exists(Paths.modsNoteskin('${_song.arrowSkin}.$ext'))){
 						noteskinScript = FunkinHScript.fromFile(Paths.modsNoteskin('${_song.arrowSkin}.$ext'));
+					}else if(FileSystem.exists(Paths.noteskin('${_song.arrowSkin}.$ext'))){
+						//Noteskin doesn't exist in mods, trying assets folder
+						noteskinScript = FunkinHScript.fromFile(Paths.noteskin('${_song.arrowSkin}.$ext'));
 					}else{
 						noteskinScript = null;
 					}						
