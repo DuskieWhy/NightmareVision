@@ -21,7 +21,7 @@
 	<!-- ____________________________ Window Settings ___________________________ -->
 
 	<!--These window settings apply to all targets-->
-	<window width="1280" height="720" fps="" background="#000000" hardware="true" vsync="false" />
+	<window width="1280" height="720" fps="0" background="#000000" hardware="true" vsync="false" />
 
 	<!--HTML5-specific-->
 	<window if="html5" resizable="true" />
@@ -46,68 +46,44 @@
 	<!-- PSYCH ENGINE CUSTOMIZATION -->
 	<define name="MODS_ALLOWED" if="desktop" />
 	<define name="LUA_ALLOWED" if="desktop" />
-	<!-- <define name="ACHIEVEMENTS_ALLOWED" /> FUCK YOUUUU-->
 	<define name="VIDEOS_ALLOWED" if="cpp" />
 	<define name="DISCORD_ALLOWED" if="cpp"/>
-
-	<!-- OOPPSSS HAHA -->
-	<!-- define name="HIT_SINGLE"/ -->
-
-	<!-- <define name="EMBED_FILES"/> -->
-
-	<!-- <assets path="assets/embeds/songs" rename= "assets/songs" library="songs" embed="true" if="EMBED_FILES"/>
-	<assets path="assets/embeds/songs" rename= "assets/songs" library="songs" embed="false" unless="EMBED_FILES"/>
-
-	<assets path="assets/embeds" rename= "assets" embed="true" if="EMBED_FILES"/>
-	<assets path="assets/embeds" rename= "assets" embed="false" unless="EMBED_FILES"/> -->
-
 	
 	<define name="hscriptPos" if="debug" />
 
-	<assets path="assets/preload" rename="assets"/>
+	<assets path='assets/embeds' rename='assets' embed="true" />
 
-	<library name="videos"        preload="true" />
+	<assets path="assets/fonts" />
+	<assets path="assets/shared"        exclude="*.ogg" if="web"/>
+	<assets path="assets/shared"        exclude="*.mp3" unless="web"/>
+	<assets path="assets/videos"        library="videos"        if="VIDEOS_ALLOWED"/>
+
+	<library name="videos"        preload="true" if="VIDEOS_ALLOWED"/>
 	<library name="songs"         preload="true" />
-	<library name="shared"        preload="true" />
-	
-	<assets path="assets/videos"        library="videos" if="VIDEOS_ALLOWED"/>
-	<assets path="assets/songs"         library="songs" unless="HIT_SINGLE"/>
-	<assets path="assets/shared"        library="shared"/>
+	<library name="week_assets"   preload="true" />
 
 	<assets path='content' embed='false' if="MODS_ALLOWED"/>
 
-
-	<!-- <template path='mods' /> -->
-	
 	<!-- assets path="CHANGELOG.md" rename='changelog.txt' -->
 
-	<!-- NOTE FOR FUTURE SELF SINCE FONTS ARE ALWAYS FUCKY 
-		TO FIX ONE OF THEM, I CONVERTED IT TO OTF. DUNNO IF YOU NEED TO
-		THEN UHHH I USED THE NAME OF THE FONT WITH SETFORMAT() ON THE TEXT!!!
-		NOT USING A DIRECT THING TO THE ASSET!!!
-	-->
 
-
-
-	<assets path="assets/fonts" embed='true'/>
 	<!-- _______________________________ Libraries ______________________________ -->
 	<!-- <haxelib name="" version=""/> -->
 	<lime version="8.1.1"/>
-	<haxelib name="openfl" version="9.2.2"/>
+	<haxelib name="openfl"/>
 
-	<haxelib name="flixel" version="5.2.2" />
-	<haxelib name="flixel-addons" version="2.10.0"/>
-	<haxelib name="flixel-ui" version="2.5.0"/>
-	<haxelib name="flixel-tools" version="1.5.1"/>
-	<haxelib name="flxanimate" version="3.0.4"/>
-
+	<haxelib name="flixel"/>
+	<haxelib name="flixel-addons"/>
+	<haxelib name="flixel-ui"/>
+	<haxelib name="flixel-tools"/>
+	<haxelib name="flxanimate"/>
+	<haxelib name="compiletime"/>
+	
 	<haxedev set='webgl' />
 	<haxelib name="hscript" />
 
 	<haxelib name="linc_luajit" if="LUA_ALLOWED"/>
-	<haxelib name="faxe" if='switch'/>
 	<haxelib name="discord_rpc" if="DISCORD_ALLOWED"/>
-	<haxelib name="away3d"/>
 	<haxelib name="hxvlc" if="VIDEOS_ALLOWED"/>
 
 	<!-- <haxedef name="FLX_NO_PITCH" /> -->

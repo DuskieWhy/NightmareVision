@@ -114,7 +114,7 @@ function onUpdate(elapsed){
         }
 
     }
-    phillyWindow.alpha = FlxMath.lerp(phillyWindow.alpha, 0, CoolUtil.boundTo(elapsed * 3.2, 0, 1));
+    phillyWindow.alpha = FlxMath.lerp(phillyWindow.alpha, 0, FlxMath.bound(elapsed * 3.2, 0, 1));
     // game.boyfriend.angle += 5;
 }
 

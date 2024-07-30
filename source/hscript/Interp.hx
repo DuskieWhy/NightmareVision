@@ -256,7 +256,8 @@ class Interp {
 		locals = new Hash();
 		#end
 		declared = new Array();
-		return exprReturn(expr);
+		var returnExpr = exprReturn(expr);
+		return returnExpr;
 	}
 
 	function exprReturn(e) : Dynamic {

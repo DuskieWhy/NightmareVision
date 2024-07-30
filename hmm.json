@@ -1,0 +1,87 @@
+{
+    "dependencies": [
+        {
+            "name": "lime",
+            "type": "haxelib",
+            "version": null
+        },
+        {
+            "name": "openfl",
+            "type": "haxelib",
+            "version": null
+        },
+        {
+            "name": "hxcpp-debug-server",
+            "type": "haxelib",
+            "version": null
+        },
+        {
+            "name": "hxcpp",
+            "type": "haxelib",
+            "version": null
+        },
+        {
+            "name": "hscript",
+            "type": "haxelib",
+            "version": null
+        },
+        {
+            "name": "flixel",
+            "type": "haxelib",
+            "version": null
+        },
+        {
+            "name": "flixel-addons",
+            "type": "haxelib",
+            "version": null
+        },
+        {
+            "name": "flixel-ui",
+            "type": "haxelib",
+            "version": null
+        },
+        {
+            "name": "flixel-tools",
+            "type": "haxelib",
+            "version": null
+        },
+        {
+            "name": "flixel-screenshot-plugin",
+            "type": "haxelib",
+            "version": null
+        },
+        {
+            "name": "spritesheet",
+            "type": "haxelib",
+            "version": null
+        },
+        {
+            "name": "linc_luajit",
+            "type": "git",
+            "dir": null,
+            "url": "https://github.com/superpowers04/linc_luajit.git"
+        },
+        {
+            "name": "discord_rpc",
+            "type": "git",
+            "dir": null,
+            "url": "https://github.com/Aidan63/linc_discord-rpc"
+        },
+        {
+            "name": "flxanimate",
+            "type": "git",
+            "dir": null,
+            "url": "https://github.com/FunkinCrew/flxanimate"
+        },
+        {
+            "name": "compiletime",
+            "type": "haxelib",
+            "version": null
+        },
+        {
+            "name": "hxvlc",
+            "type": "haxelib",
+            "version": "1.5.5"
+        }
+    ]
+}
