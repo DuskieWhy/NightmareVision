@@ -52,7 +52,6 @@
 	<define name="hscriptPos" if="debug" />
 
 	<assets path='assets/embeds' rename='assets' embed="true" />
-
 	<assets path="assets/fonts" />
 	<assets path="assets/shared"        exclude="*.ogg" if="web"/>
 	<assets path="assets/shared"        exclude="*.mp3" unless="web"/>
@@ -60,7 +59,6 @@
 
 	<library name="videos"        preload="true" if="VIDEOS_ALLOWED"/>
 	<library name="songs"         preload="true" />
-	<library name="week_assets"   preload="true" />
 
 	<assets path='content' embed='false' if="MODS_ALLOWED"/>
 
