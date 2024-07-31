@@ -99,7 +99,7 @@ class Character extends FlxSprite
 	public var originalFlipX:Bool = false;
 	public var healthColorArray:Array<Int> = [255, 0, 0];
 
-	public var baseCameraDisplacement:Float = 5;
+	public var baseCameraDisplacement:Float = 20;
 
 	public static final DEFAULT_CHARACTER:String = 'bf'; //In case a character is missing, it will use BF on its place
 	public static function getCharacterFile(character:String):CharacterFile{
