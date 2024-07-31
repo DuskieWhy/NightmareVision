@@ -91,6 +91,7 @@ class FunkinHScript extends FunkinScript
 		var posInfo = interpreter.posInfos();
 		haxe.Log.trace(text, posInfo);
 	}
+	//needs to be reorganized!
 	public function new(parsed:Expr, ?name:String = "Script", ?additionalVars:Map<String, Any>)
 	{
 		scriptType = ScriptType.HSCRIPT;
@@ -128,6 +129,10 @@ class FunkinHScript extends FunkinScript
 
 		set("FlxMath", flixel.math.FlxMath);
 		set("FlxText", flixel.text.FlxText);
+
+
+
+		set('Globals',Globals);
 
 
 		//abstracts

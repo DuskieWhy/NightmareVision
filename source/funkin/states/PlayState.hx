@@ -1665,8 +1665,12 @@ class PlayState extends MusicBeatState
 	function shouldPush(event:EventNote){
 		switch(event.event){
 			default:
-				var returnValue:Dynamic = callEventScript(event.event,'shouldPush',[event],[event.value1,event.value2]);
-				return returnValue != false;
+				//prevents doing this over non scripted events
+				if (eventScripts.exists(event.event)) {
+					var returnValue:Dynamic = callEventScript(event.event,'shouldPush',[event],[event.value1,event.value2]) == Globals.Function_Continue;
+					return returnValue;
+				}
+	
 		}
 		return true;
 	}
@@ -1883,9 +1887,7 @@ class PlayState extends MusicBeatState
 		{
 			var doPush:Bool = false;
 			var baseScriptFile:String = 'custom_events/' + event;
-			var exts = [#if LUA_ALLOWED "lua" #end];
-			for (e in FunkinHScript.exts)
-				exts.push(e);
+			var exts = [#if LUA_ALLOWED "lua" #end].concat(FunkinHScript.exts);
 			for (ext in exts)
 			{
 				if (doPush)
@@ -2188,7 +2190,7 @@ class PlayState extends MusicBeatState
 	//wip
 	function callEventScript(scriptName:String, func:String,args:Array<Dynamic>,?luaArgs:Array<Dynamic>):Dynamic
 	{
-		if (!eventScripts.exists(scriptName)) return null;
+		if (!eventScripts.exists(scriptName)) return 0;
 
 		trace('script ' + scriptName + ' func: ' + func);
 
@@ -2425,6 +2427,7 @@ class PlayState extends MusicBeatState
 		}
 
 		callOnHScripts('update', [elapsed]);
+		
 		callOnScripts('onUpdate', [elapsed]);
 		super.update(elapsed);
 		currentSV = getSV(Conductor.songPosition);
