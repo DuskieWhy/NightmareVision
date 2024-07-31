@@ -33,7 +33,7 @@ class MathUtil {
 
 	inline public static function numberArray(?min:Int, max:Int):Array<Int>
 	{
-		min ??= 0;
+		if (min == null) min = 0;
 		return [for (i in min...max) i];
 	}
 
