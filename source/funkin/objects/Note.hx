@@ -1,5 +1,6 @@
 package funkin.objects;
 
+import funkin.data.scripts.FunkinScript.ScriptType;
 import flixel.FlxG;
 import flixel.math.FlxPoint;
 import flixel.FlxSprite;
@@ -270,7 +271,7 @@ class Note extends FlxSprite
 					else
 						noteScript = ChartingState.instance.notetypeScripts.get(value);
 					
-					if (noteScript != null && noteScript.scriptType == 'hscript')
+					if (noteScript != null && noteScript.scriptType == HSCRIPT)
 					{
 						var noteScript:FunkinHScript = cast noteScript;
 						noteScript.executeFunc("setupNote", [this], this);
@@ -451,7 +452,7 @@ class Note extends FlxSprite
 		if(texture == null) texture = '';
 		if(suffix == null) suffix = '';
 
-		if (noteScript != null && noteScript.scriptType == 'hscript')
+		if (noteScript != null && noteScript.scriptType == HSCRIPT)
 		{
 			var noteScript:FunkinHScript = cast noteScript;
 			if (noteScript.executeFunc("onReloadNote", [this, prefix, texture, suffix], this) == Globals.Function_Stop)
@@ -548,7 +549,7 @@ class Note extends FlxSprite
 			baseScaleY = scale.y;
 		}
 
-		if (noteScript != null && noteScript.scriptType == 'hscript')
+		if (noteScript != null && noteScript.scriptType == HSCRIPT)
 		{
 			var noteScript:FunkinHScript = cast noteScript;
 			noteScript.executeFunc("postReloadNote", [this, prefix, texture, suffix], this);
@@ -556,7 +557,7 @@ class Note extends FlxSprite
 	}
 
 	public function loadNoteAnims() {
-		if (noteScript != null && noteScript.scriptType == 'hscript'){
+		if (noteScript != null && noteScript.scriptType == HSCRIPT){
 			var noteScript:FunkinHScript = cast noteScript;
 			if (noteScript.exists("loadNoteAnims") && Reflect.isFunction(noteScript.get("loadNoteAnims"))){
 				noteScript.executeFunc("loadNoteAnims", [this], this, ["super" => _loadNoteAnims]);
@@ -567,7 +568,7 @@ class Note extends FlxSprite
 	}
 
 	public function loadPixelNoteAnims() {
-		if (noteScript != null && noteScript.scriptType == 'hscript')
+		if (noteScript != null && noteScript.scriptType == HSCRIPT)
 		{
 			var noteScript:FunkinHScript = cast noteScript;
 			if (noteScript.exists("loadPixelNoteAnims") && Reflect.isFunction(noteScript.get("loadNoteAnims")))
@@ -647,7 +648,7 @@ class Note extends FlxSprite
 		super.update(elapsed);
 
 		if(!inEditor){
-			if (noteScript != null && noteScript.scriptType == 'hscript'){
+			if (noteScript != null && noteScript.scriptType == HSCRIPT){
 				var noteScript:FunkinHScript = cast noteScript;
 				noteScript.executeFunc("update", [this, elapsed], this);
 			}

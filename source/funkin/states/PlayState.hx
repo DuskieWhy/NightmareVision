@@ -1,5 +1,6 @@
 package funkin.states;
 
+import funkin.data.scripts.FunkinScript.ScriptType;
 import funkin.huds.BaseHUD;
 import flixel.util.helpers.FlxBounds;
 import flixel.util.FlxSignal;
@@ -1089,6 +1090,7 @@ class PlayState extends MusicBeatState
 		if(FileSystem.exists(Paths.modFolders(baseFile + '.lua'))) {
 			scriptFile = Paths.modFolders(baseFile+ '.lua');
 			doPush = true;
+			//add proper support for the other hx exts
 		} else if(FileSystem.exists(Paths.modFolders(baseFile + '.hscript'))) {
 			scriptFile = Paths.modFolders(baseFile+ '.hscript');
 			doPush = true;
@@ -1657,28 +1659,14 @@ class PlayState extends MusicBeatState
 		playHUD.onSongStart();
 	}
 
-	var debugNum:Int = 0;
 	private var noteTypeMap:Map<String, Bool> = new Map<String, Bool>();
 	private var eventPushedMap:Map<String, Bool> = new Map<String, Bool>();
 
 	function shouldPush(event:EventNote){
 		switch(event.event){
 			default:
-				if (eventScripts.exists(event.event))
-				{
-					var eventScript:Dynamic = eventScripts.get(event.event);
-					var returnVal:Any = true;
-					if (eventScript.scriptType == 'lua')
-					{
-						returnVal = callScript(eventScript, "shouldPush", [event.value1, event.value2]);
-					}
-					else
-					{
-						returnVal = callScript(eventScript, "shouldPush", [event]);
-					}
-					var fuck:Bool = returnVal != false;
-					return returnVal != false;
-				}
+				var returnValue:Dynamic = callEventScript(event.event,'shouldPush',[event],[event.value1,event.value2]);
+				return returnValue != false;
 		}
 		return true;
 	}
@@ -1741,17 +1729,14 @@ class PlayState extends MusicBeatState
 		songSpeedType = ClientPrefs.getGameplaySetting('scrolltype','multiplicative');
 
 		songSpeed = SONG.speed;
-		//temp because i HAVENT implemented a menu to access this yet
 
-		// switch(songSpeedType)
-		// {
-		// 	case "multiplicative":
-		// 		songSpeed = SONG.speed * ClientPrefs.getGameplaySetting('scrollspeed', 1);
-		// 	case "constant":
-		// 		songSpeed = ClientPrefs.getGameplaySetting('scrollspeed', 1);
-		// }
-
-
+		switch(songSpeedType)
+		{
+			case "multiplicative":
+				songSpeed = SONG.speed * ClientPrefs.getGameplaySetting('scrollspeed', 1);
+			case "constant":
+				songSpeed = ClientPrefs.getGameplaySetting('scrollspeed', 1);
+		}
 
 		var songData = SONG;
 		Conductor.changeBPM(songData.bpm);
@@ -1862,7 +1847,7 @@ class PlayState extends MusicBeatState
 				{
 					if (FileSystem.exists(file))
 					{
-						if (ext == 'lua')
+						if (ext == LUA)
 						{
 							var script = new FunkinLua(file, notetype);
 							luaArray.push(script);
@@ -1911,7 +1896,7 @@ class PlayState extends MusicBeatState
 				{
 					if (FileSystem.exists(file))
 					{
-						if (ext == 'lua')
+						if (ext == LUA)
 						{
 							var script = new FunkinLua(file, event);
 							luaArray.push(script);
@@ -1925,7 +1910,7 @@ class PlayState extends MusicBeatState
 						{
 							var script = FunkinHScript.fromFile(file, event);
 							trace("event script " + event);
-							// eventScripts.set(event, script);
+							eventScripts.set(event, script);
 							script.call("onLoad", [event]);
 							hscriptArray.push(script);
 							funkyScripts.push(script);
@@ -2017,7 +2002,7 @@ class PlayState extends MusicBeatState
 				modchartObjects.set('note${swagNote.ID}', swagNote);
 				unspawnNotes.push(swagNote);
 
-				if(swagNote.noteScript != null && swagNote.noteScript.scriptType == 'lua'){
+				if(swagNote.noteScript != null && swagNote.noteScript.scriptType == LUA){
 					callScript(swagNote.noteScript, 'setupNote', [
 						unspawnNotes.indexOf(swagNote),
 						Math.abs(swagNote.noteData),
@@ -2046,7 +2031,7 @@ class PlayState extends MusicBeatState
 						sustainNote.parent = swagNote;
 						// sustainNote.player = sustainNote.parent.player;
 						unspawnNotes.push(sustainNote);
-						if (sustainNote.noteScript != null && sustainNote.noteScript.scriptType == 'lua')
+						if (sustainNote.noteScript != null && sustainNote.noteScript.scriptType == LUA)
 						{
 							callScript(sustainNote.noteScript, 'setupNote', [
 								unspawnNotes.indexOf(sustainNote),
@@ -2174,18 +2159,7 @@ class PlayState extends MusicBeatState
 
 				addCharacterToList(event.value2, charType);
 			default:
-				if (eventScripts.exists(event.event))
-				{
-					var eventScript:Dynamic = eventScripts.get(event.event);
-					if (eventScript.scriptType == 'lua')
-					{
-						callScript(eventScript, "onPush",[event.value1, event.value2]);
-					}
-					else
-					{
-						callScript(eventScript, "onPush", [event]);
-					}
-				}
+				callEventScript(event.event,'onPush', [event],[event.value1, event.value2]);
 
 		}
 	}
@@ -2205,38 +2179,34 @@ class PlayState extends MusicBeatState
 		switch (event.event)
 		{
 			default:
-				// should PROBABLY turn this into a function, callEventScript(eventNote, "func") or something, idk
-				if (eventScripts.exists(event.event))
-				{
-					var eventScript:Dynamic = eventScripts.get(event.event);
-					if (eventScript.scriptType == 'lua')
-					{
-						callScript(eventScript, "firstPush", [event.value1, event.value2]);
-					}
-					else
-					{
-						callScript(eventScript, "firstPush", [event]);
-					}
-				}
+				callEventScript(event.event,'firstPush',[event],[event.value1,event.value2]);
 		}
 	}
 
 
-	//data todo make this a thing
-	function callEventScripts(eventNote) {}
+	//currently from my knowledge lua does not work like at all lol so we need to look into that later
+	//wip
+	function callEventScript(scriptName:String, func:String,args:Array<Dynamic>,?luaArgs:Array<Dynamic>):Dynamic
+	{
+		if (!eventScripts.exists(scriptName)) return null;
+
+		trace('script ' + scriptName + ' func: ' + func);
+
+		var script = eventScripts.get(scriptName);
+		if (luaArgs == null) luaArgs = args;
+
+		if (script.scriptType == LUA) return callScript(script,func,luaArgs);
+		
+		return callScript(script,func,args);
+	}
 
 
 	function eventNoteEarlyTrigger(event:EventNote):Float {
 		var returnedValue:Float = callOnScripts('eventEarlyTrigger', [event.event, event.value1, event.value2]);
 
-		if (eventScripts.exists(event.event)){
-			var eventScript:Dynamic = eventScripts.get(event.event);
-			if(eventScript.scriptType == 'lua'){
-				returnedValue = callScript(eventScript, "getOffset", [event.value1, event.value2]);
-			}else{
-				returnedValue = callScript(eventScript, "getOffset", [event]);
-			}
-		}
+		if (eventScripts.exists(event.event))
+			returnedValue = callEventScript(event.event,'getOffset',[event],[event.value1,event.value2]);
+
 		if(returnedValue != 0)
 			return returnedValue;
 
@@ -2451,8 +2421,7 @@ class PlayState extends MusicBeatState
 
 		for (key in eventScripts.keys())
 		{
-			var script = eventScripts.get(key);
-			script.call("update", [elapsed]);
+			eventScripts.get(key).call('update',[elapsed]);
 		}
 
 		callOnHScripts('update', [elapsed]);
@@ -2566,7 +2535,7 @@ class PlayState extends MusicBeatState
 			{
 				var dunceNote:Note = unspawnNotes[0];
 				var doSpawn:Bool= true;
-				if(dunceNote.noteScript != null && dunceNote.noteScript.scriptType == 'lua'){
+				if(dunceNote.noteScript != null && dunceNote.noteScript.scriptType == LUA){
 					doSpawn = callScript(dunceNote.noteScript, "spawnNote", [dunceNote])!= Globals.Function_Stop;
 				}
 				if (doSpawn)
@@ -2616,7 +2585,7 @@ class PlayState extends MusicBeatState
 					if (dunceNote.noteScript != null)
 					{
 						var script:Dynamic = dunceNote.noteScript;
-						if (script.scriptType == 'lua')
+						if (script.scriptType == LUA)
 						{
 							callScript(script, 'postSpawnNote', [
 								notes.members.indexOf(dunceNote),
@@ -2925,6 +2894,7 @@ class PlayState extends MusicBeatState
 			if(eventNotes[0].value2 != null)
 				value2 = eventNotes[0].value2;
 
+			trace('eventNote active!' + ' ' + eventNotes[0].event);
 			triggerEventNote(eventNotes[0].event, value1, value2);
 			eventNotes.shift();
 		}
@@ -3353,17 +3323,8 @@ class PlayState extends MusicBeatState
 		}
 
 		callOnScripts('onEvent', [eventName, value1, value2]);
-		if(eventScripts.exists(eventName)){
-			var eventScript:Dynamic = eventScripts.get(eventName);
-			if (eventScript.scriptType == 'lua')
-			{
-				callScript(eventScript, "onTrigger", [value1, value2]);
-			}
-			else
-			{
-				callScript(eventScript, "onTrigger", [value1, value2]);
-			}
-		}
+
+		callEventScript(eventName, 'onTrigger',[value1,value2]);
 
 	}
 
@@ -4055,7 +4016,7 @@ class PlayState extends MusicBeatState
 		if (daNote.noteScript!=null)
 		{
 			var script:Dynamic = daNote.noteScript;
-			if (script.scriptType == 'lua')
+			if (script.scriptType == LUA)
 			{
 				callScript(script, 'noteMiss', [
 					notes.members.indexOf(daNote),
@@ -4213,7 +4174,7 @@ class PlayState extends MusicBeatState
 		if (note.noteScript != null)
 		{
 			var script:Dynamic = note.noteScript;
-			if (script.scriptType == 'lua')
+			if (script.scriptType == LUA)
 			{
 				callScript(script, 'opponentNoteHit', luaArgs);
 			}
@@ -4370,7 +4331,7 @@ class PlayState extends MusicBeatState
 			if (note.noteScript!=null)
 			{
 				var script:Dynamic = note.noteScript;
-				if (script.scriptType == 'lua')
+				if (script.scriptType == LUA)
 				{
 					callScript(script, 'goodNoteHit', luaArgs);
 				}
@@ -4579,8 +4540,10 @@ class PlayState extends MusicBeatState
 	{
 
 		if (scriptArray == null){
-			scriptArray = funkyScripts;
-			for(s in eventScripts) { scriptArray.push(s); }
+			//haxe doesnt copy arrays instead itll point to em
+			//so we doing this to create a new array
+			scriptArray = [].concat(funkyScripts);
+			for(s in eventScripts) scriptArray.push(s); 
 		}
 		if(exclusions==null)exclusions = [];
 		var returnVal:Dynamic = Globals.Function_Continue;
@@ -4588,7 +4551,7 @@ class PlayState extends MusicBeatState
 		{
 			if (exclusions.contains(script.scriptName)
 				|| ignoreSpecialShit
-				&& (notetypeScripts.exists(script.scriptName) || eventScripts.exists(script.scriptName) ) )
+				&& (notetypeScripts.exists(script.scriptName) || eventScripts.exists(script.scriptName)))
 			{
 				continue;
 			}

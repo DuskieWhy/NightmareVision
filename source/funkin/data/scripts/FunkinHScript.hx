@@ -1,5 +1,6 @@
 package funkin.data.scripts;
 
+import funkin.data.scripts.FunkinScript.ScriptType;
 import funkin.utils.MacroUtil;
 import flixel.effects.FlxFlicker;
 import flixel.system.FlxBGSprite;
@@ -92,7 +93,7 @@ class FunkinHScript extends FunkinScript
 	}
 	public function new(parsed:Expr, ?name:String = "Script", ?additionalVars:Map<String, Any>)
 	{
-		scriptType = 'hscript';
+		scriptType = ScriptType.HSCRIPT;
 		scriptName = name;
 
 		setDefaultVars();

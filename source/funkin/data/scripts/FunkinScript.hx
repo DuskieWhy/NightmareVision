@@ -123,8 +123,8 @@ interface IFunkinScript
 }
 
 enum abstract ScriptType(String) to String from String
- {
-	var LUA:String = 'lua';
-	var HX:String = 'hx';
+{
+	public var LUA:String = 'lua';
+	public var HSCRIPT:String = 'hscript';
 	
 }
