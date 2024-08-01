@@ -28,8 +28,6 @@ import openfl.media.Sound;
 import sys.FileSystem;
 import sys.io.File;
 #end
-import windows.*;
-
 
 class FunkinHScript extends FunkinScript
 {
@@ -98,41 +96,101 @@ class FunkinHScript extends FunkinScript
 		scriptName = name;
 
 		setDefaultVars();
+
+		//haxe vars
 		set("Std", Std);
 		set("Type", Type);
 		set("Math", Math);
 		set("script", this);
 		set("StringTools", StringTools);
 		set("Dynamic", Dynamic);
-
-		set("Assets", Assets);
-		set("OpenFlAssets", openfl.utils.Assets);
-
 		set('StringMap', haxe.ds.StringMap);
 		set('IntMap', haxe.ds.IntMap);
 
+		set("Main", Main);
+		set("Lib", openfl.Lib);
 
-		set('SpriteFromSheet',SpriteFromSheet);
-
-		set("MusicBeatState", funkin.backend.MusicBeatState);
-
-
-		set("FlxG", flixel.FlxG);
-		set("state", flixel.FlxG.state);
-		set("FlxTypedGroup", flixel.group.FlxGroup.FlxTypedGroup);
-		set("createTypedGroup", ()->{
-			return new flixel.group.FlxGroup.FlxTypedGroup<Dynamic>();
-		});
-		set("FlxSprite", HScriptSprite);
-		
-		set("FlxCamera", flixel.FlxCamera);
-
-		set("FlxMath", flixel.math.FlxMath);
-		set("FlxText", flixel.text.FlxText);
-
+		set("Assets", Assets);
+		set("OpenFlAssets", openfl.utils.Assets);
+		set("ShaderFilter", openfl.filters.ShaderFilter);
+		set("ColorMatrixFilter", openfl.filters.ColorMatrixFilter);
 
 
 		set('Globals',Globals);
+
+		//flixel related
+		set("FlxG", flixel.FlxG);
+		set("state", flixel.FlxG.state);
+		set("add", FlxG.state.add);
+		set("remove", FlxG.state.remove);
+		set("insert",FlxG.state.insert);
+		set("members",FlxG.state.members);
+		set("FlxCamera", flixel.FlxCamera);
+		set("FlxMath", flixel.math.FlxMath);
+		set("FlxText", flixel.text.FlxText);
+		set("FlxTypedGroup", flixel.group.FlxGroup.FlxTypedGroup);
+		set("FlxSound", FlxSound);
+		set("FlxTimer", flixel.util.FlxTimer);
+		set("FlxTween", FlxTween);
+		set("FlxEase", FlxEase);
+		set("FlxSave", flixel.util.FlxSave); // should probably give it 1 save instead of giving it FlxSave
+		set("FlxBar", flixel.ui.FlxBar);
+		set("FlxFlicker", flixel.effects.FlxFlicker);
+		set("FlxRuntimeShader", FlxRuntimeShader);
+		set('FlxColor',HScriptColor);
+		set("FlxSprite", HScriptSprite);
+		set('FlxSpriteUtil',flixel.util.FlxSpriteUtil);
+
+
+		// FNF-specific things
+		set("MusicBeatState", funkin.backend.MusicBeatState);
+		set("Paths", Paths);
+		set("Conductor", Conductor);
+		set("Song", Song);
+		set("ClientPrefs", ClientPrefs);
+		set("CoolUtil", CoolUtil);
+		set("StageData", StageData);
+		set("PlayState", PlayState);
+		set("FunkinLua", FunkinLua);
+		set("FunkinHScript", FunkinHScript);
+
+		//objects
+		set("Note", Note);
+		set("Bar", funkin.objects.Bar);
+		set("VideoSprite",funkin.objects.VideoSprite);
+		set("BackgroundDancer", funkin.objects.stageobjects.BackgroundDancer);
+		set("BackgroundGirls", funkin.objects.stageobjects.BackgroundGirls);
+		set("TankmenBG", funkin.objects.stageobjects.TankmenBG);
+		set("FNFSprite", funkin.objects.FNFSprite);
+		set("HealthIcon", HealthIcon);
+		set("Character", Character);
+		set("NoteSplash", NoteSplash);
+		set("BGSprite", BGSprite);
+		set('SpriteFromSheet',SpriteFromSheet);
+		set("StrumNote", StrumNote);
+		set("Alphabet", Alphabet);
+		set("AttachedSprite", AttachedSprite);
+		set("AttachedText", AttachedText);
+
+		set("CutsceneHandler", funkin.backend.CutsceneHandler);
+
+		//modchart related
+		set("ModManager", funkin.modchart.ModManager);
+		set("SubModifier", funkin.modchart.SubModifier);
+		set("NoteModifier", funkin.modchart.NoteModifier);
+		set("EventTimeline", funkin.modchart.EventTimeline);
+		set("Modifier", funkin.modchart.Modifier);
+		set("StepCallbackEvent", funkin.modchart.events.StepCallbackEvent);
+		set("CallbackEvent", funkin.modchart.events.CallbackEvent);
+		set("ModEvent", funkin.modchart.events.ModEvent);
+		set("EaseEvent", funkin.modchart.events.EaseEvent);
+		set("SetEvent", funkin.modchart.events.SetEvent);
+
+
+		set("GameOverSubstate", funkin.states.substates.GameOverSubstate);
+
+		set("HScriptSubstate", HScriptSubstate);
+		set("ScriptState", HScriptState);
 
 
 		//abstracts
@@ -187,26 +245,8 @@ class FunkinHScript extends FunkinScript
 			SCREEN: BlendMode.SCREEN
 		});
 
-		set("FlxSound", FlxSound);
-		set("FlxTimer", flixel.util.FlxTimer);
-		set('FlxColor',HScriptColor);
 
-		set("FlxTween", FlxTween);
-		set("FlxEase", FlxEase);
-		set("FlxSave", flixel.util.FlxSave); // should probably give it 1 save instead of giving it FlxSave
-		set("FlxBar", flixel.ui.FlxBar);
-		set("FlxFlicker", flixel.effects.FlxFlicker);
 
-		set("Bar", funkin.objects.Bar);
-
-		set("VideoSprite",funkin.objects.VideoSprite);
-		set("CutsceneHandler", funkin.backend.CutsceneHandler);
-
-		set("ShaderFilter", openfl.filters.ShaderFilter);
-		set("ColorMatrixFilter", openfl.filters.ColorMatrixFilter);
-		set("newColorMatrixFilter", (matrix:Array<Float>)->{
-			return new openfl.filters.ColorMatrixFilter(matrix);
-		});
 
 		set("getClass", function(className:String)
 		{
@@ -276,10 +316,9 @@ class FunkinHScript extends FunkinScript
 			set(variable, arg);
 		}
 
-		set("Main", Main);
-		set("Lib", openfl.Lib);
 
-		set("FlxRuntimeShader", FlxRuntimeShader);
+
+
 		set("newShader", function(fragFile:String = null, vertFile:String = null){ // returns a FlxRuntimeShader but with file names lol
 			var runtime:FlxRuntimeShader = null;
 
@@ -331,55 +370,13 @@ class FunkinHScript extends FunkinScript
 			}
 		}
 
-		// FNF-specific things
-		set("Paths", Paths);
-		set("AttachedSprite", AttachedSprite);
-		set("AttachedText", AttachedText);
-		set("Conductor", Conductor);
-		set("Note", Note);
-		set("Song", Song);
-		set("StrumNote", StrumNote);
-		set("NoteSplash", NoteSplash);
-		set("ClientPrefs", ClientPrefs);
-		set("Alphabet", Alphabet);
-		set("BGSprite", BGSprite);
-		set("CoolUtil", CoolUtil);
-		set("Character", Character);
-		set("BackgroundDancer", funkin.objects.stageobjects.BackgroundDancer);
-		set("BackgroundGirls", funkin.objects.stageobjects.BackgroundGirls);
-		set("TankmenBG", funkin.objects.stageobjects.TankmenBG);
-		set("FNFSprite", funkin.objects.FNFSprite);
-		set("SubModifier", funkin.modchart.SubModifier);
-		set("NoteModifier", funkin.modchart.NoteModifier);
-		set("EventTimeline", funkin.modchart.EventTimeline);
-		set("ModManager", funkin.modchart.ModManager);
-		set("Modifier", funkin.modchart.Modifier);
-		set("StepCallbackEvent", funkin.modchart.events.StepCallbackEvent);
-		set("CallbackEvent", funkin.modchart.events.CallbackEvent);
-		set("ModEvent", funkin.modchart.events.ModEvent);
-		set("EaseEvent", funkin.modchart.events.EaseEvent);
-		set("SetEvent", funkin.modchart.events.SetEvent);
-		
-		set("StageData", StageData);
-		set("PlayState", PlayState);
-		set("FunkinLua", FunkinLua);
-		set("FunkinHScript", FunkinHScript);
-		set("HScriptSubstate", HScriptSubstate);
-		set("GameOverSubstate", funkin.states.substates.GameOverSubstate);
-		set("HealthIcon", HealthIcon);
 
 
-		set("ScriptState", HScriptState);
+
 		set("newScriptedState", function(stateName:String){
 			return new HScriptState(fromFile(Paths.modFolders('states/$stateName.hscript')));
 		});
-		
-		set("add", FlxG.state.add);
-		set("remove", FlxG.state.remove);
-		set("insert",FlxG.state.insert);
-		set("members",FlxG.state.members);
-		set('FlxSpriteUtil',flixel.util.FlxSpriteUtil);
-		// set("buildStage", PlayState.instance.buildStage);
+	
 		
 		if (additionalVars != null){
 			for (key in additionalVars.keys())
