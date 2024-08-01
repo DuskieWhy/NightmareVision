@@ -1,3 +1,6 @@
+the data-branch is a bunch of changes by me Data that could be merged into the main branch.
+Main goals are to make the engine more easy to navigate and kinder to work with
+
 helloe we hit single
 
 ![](https://github.com/evilfuck/images/blob/main/nightmarevision.png)

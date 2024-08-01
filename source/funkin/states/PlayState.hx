@@ -274,7 +274,7 @@ class PlayState extends MusicBeatState
 	public var hscriptArray:Array<FunkinHScript> = [];
 
 	public var notetypeScripts:Map<String, FunkinScript> = []; // custom notetypes for scriptVer '1'
-	public var eventScripts:Map<String, FunkinScript> = []; // custom events for scriptVer '1' //causes crashes and barely functions.
+	public var eventScripts:Map<String, FunkinScript> = []; // custom events for scriptVer '1'
 	public var stageScripts:Map<String, FunkinHScript> = [];
 
 	public var noteskinScript:FunkinHScript;
