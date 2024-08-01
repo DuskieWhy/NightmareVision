@@ -2203,18 +2203,25 @@ class PlayState extends MusicBeatState
 
 
 	function eventNoteEarlyTrigger(event:EventNote):Float {
-		var returnedValue:Float = callOnScripts('eventEarlyTrigger', [event.event, event.value1, event.value2]);
 
-		if (eventScripts.exists(event.event))
-			returnedValue = callEventScript(event.event,'getOffset',[event],[event.value1,event.value2]);
+		var returnValue:Float = callOnScripts('eventEarlyTrigger', [event.event, event.value1, event.value2]);
+		if(returnValue != Globals.Function_Continue) {
+			return returnValue;
+		}
 
-		if(returnedValue != 0)
-			return returnedValue;
+		//should this be renamed? getOffset isnt that clear. should this happen before general scripts? think about this later
+		returnValue = callEventScript(event.event,'getOffset',[event],[event.value1,event.value2]);
+		if(returnValue != Globals.Function_Continue) {
+			return returnValue;
+		}
+
 
 		switch(event.event) {
 			case 'Kill Henchmen': //Better timing so that the kill sound matches the beat intended
 				return 280; //Plays 280ms before the actual position
 		}
+
+
 		return 0;
 	}
 
