@@ -2185,23 +2185,6 @@ class PlayState extends MusicBeatState
 	}
 
 
-	//currently from my knowledge lua does not work like at all lol so we need to look into that later
-	//wip
-	function callEventScript(scriptName:String, func:String,args:Array<Dynamic>,?luaArgs:Array<Dynamic>):Dynamic
-	{
-		if (!eventScripts.exists(scriptName)) return Globals.Function_Continue;
-
-		trace('script ' + scriptName + ' func: ' + func);
-
-		var script = eventScripts.get(scriptName);
-		if (luaArgs == null) luaArgs = args;
-
-		if (script.scriptType == LUA) return callScript(script,func,luaArgs);
-		
-		return callScript(script,func,args);
-	}
-
-
 	function eventNoteEarlyTrigger(event:EventNote):Float {
 
 		var returnValue:Float = callOnScripts('eventEarlyTrigger', [event.event, event.value1, event.value2]);
@@ -2220,7 +2203,6 @@ class PlayState extends MusicBeatState
 			case 'Kill Henchmen': //Better timing so that the kill sound matches the beat intended
 				return 280; //Plays 280ms before the actual position
 		}
-
 
 		return 0;
 	}
@@ -4576,6 +4558,24 @@ class PlayState extends MusicBeatState
 			script.set(variable, arg);
 		}
 	}
+
+
+	//currently from my knowledge lua does not work like at all lol so we need to look into that later
+	function callEventScript(scriptName:String, func:String,args:Array<Dynamic>,?luaArgs:Array<Dynamic>):Dynamic
+	{
+		if (!eventScripts.exists(scriptName)) return Globals.Function_Continue;
+
+		var script = eventScripts.get(scriptName);
+		if (luaArgs == null) luaArgs = args;
+
+		if (script.scriptType == LUA) return callScript(script,func,luaArgs);
+		
+		return callScript(script,func,args);
+	}
+
+	//data todo make a callNoteScript!
+	function callNoteTypeScript() {}
+	
 
 	public function callScript(script:Dynamic, event:String, args:Array<Dynamic>): Dynamic{
 		if((script is FunkinScript)){
