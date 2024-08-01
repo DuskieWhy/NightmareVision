@@ -1665,11 +1665,10 @@ class PlayState extends MusicBeatState
 	function shouldPush(event:EventNote){
 		switch(event.event){
 			default:
-				//prevents doing this over non scripted events
-				if (eventScripts.exists(event.event)) {
-					var returnValue:Dynamic = callEventScript(event.event,'shouldPush',[event],[event.value1,event.value2]) == Globals.Function_Continue;
-					return returnValue;
-				}
+
+				var returnValue:Dynamic = callEventScript(event.event,'shouldPush',[event],[event.value1,event.value2]) == Globals.Function_Continue;
+				return returnValue;
+
 	
 		}
 		return true;
@@ -2190,7 +2189,7 @@ class PlayState extends MusicBeatState
 	//wip
 	function callEventScript(scriptName:String, func:String,args:Array<Dynamic>,?luaArgs:Array<Dynamic>):Dynamic
 	{
-		if (!eventScripts.exists(scriptName)) return 0;
+		if (!eventScripts.exists(scriptName)) return Globals.Function_Continue;
 
 		trace('script ' + scriptName + ' func: ' + func);
 
@@ -2416,19 +2415,14 @@ class PlayState extends MusicBeatState
 
 		if (generatedMusic && !endingSong && !isCameraOnForcedPos) moveCameraSection();
 
-		for(key in notetypeScripts.keys()){
-			var script = notetypeScripts.get(key);
-			script.call("update", [elapsed]);
-		}
 
-		for (key in eventScripts.keys())
-		{
-			eventScripts.get(key).call('update',[elapsed]);
-		}
-
-		callOnHScripts('update', [elapsed]);
+		for(key in notetypeScripts.keys()) notetypeScripts.get(key).call('update',[elapsed]);
+		for (key in eventScripts.keys()) eventScripts.get(key).call('update',[elapsed]);
 		
+		callOnHScripts('update', [elapsed]);
 		callOnScripts('onUpdate', [elapsed]);
+
+
 		super.update(elapsed);
 		currentSV = getSV(Conductor.songPosition);
 		Conductor.visualPosition = getVisualPosition();
@@ -2439,11 +2433,6 @@ class PlayState extends MusicBeatState
 		setOnHScripts('curStep', curStep);
 		setOnHScripts('curBeat', curBeat);
 
-
-		// if(botplayTxt.visible) {
-		// 	botplaySine += 180 * elapsed;
-		// 	botplayTxt.alpha = 1 - Math.sin((Math.PI * botplaySine) / 180);
-		// }
 
 		if (controls.PAUSE && startedCountdown && canPause)
 		{

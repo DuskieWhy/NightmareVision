@@ -46,16 +46,6 @@
             "version": null
         },
         {
-            "name": "flixel-screenshot-plugin",
-            "type": "haxelib",
-            "version": null
-        },
-        {
-            "name": "spritesheet",
-            "type": "haxelib",
-            "version": null
-        },
-        {
             "name": "linc_luajit",
             "type": "git",
             "dir": null,
