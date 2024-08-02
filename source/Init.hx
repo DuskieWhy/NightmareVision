@@ -1,16 +1,12 @@
 package; 
 
-import flixel.util.FlxAxes;
-import flixel.system.macros.FlxMacroUtil;
 import flixel.util.FlxSave;
 import funkin.states.MainMenuState;
 import flixel.FlxState;
 import flixel.FlxG;
 import flixel.input.keyboard.FlxKey;
-import flixel.addons.transition.FlxTransitionableState;
 import lime.app.Application;
 import funkin.backend.Discord.DiscordClient;
-
 
 class Init extends FlxState
 {
@@ -56,7 +52,6 @@ class Init extends FlxState
 
 		// MusicBeatState.transitionInState = funkin.states.transitions.FadeTransition;
 		// MusicBeatState.transitionOutState = funkin.states.transitions.FadeTransition;
-
 
 		#if desktop
 		if (!DiscordClient.isInitialized)

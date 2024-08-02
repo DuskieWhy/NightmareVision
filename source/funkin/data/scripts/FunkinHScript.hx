@@ -192,8 +192,12 @@ class FunkinHScript extends FunkinScript
 		set("HScriptSubstate", HScriptSubstate);
 		set("ScriptState", HScriptState);
 
-
 		//abstracts
+		set("FlxTextAlign",MacroUtil.buildAbstract(flixel.text.FlxText.FlxTextAlign));
+		set('FlxAxes',MacroUtil.buildAbstract(flixel.util.FlxAxes));
+		set('BlendMode',MacroUtil.buildAbstract(openfl.display.BlendMode));
+
+
 		set("FlxCameraFollowStyle", {
 			LOCKON: flixel.FlxCameraFollowStyle.LOCKON,
 			PLATFORMER: flixel.FlxCameraFollowStyle.PLATFORMER,
@@ -209,17 +213,8 @@ class FunkinHScript extends FunkinScript
 			OUTLINE: flixel.text.FlxText.FlxTextBorderStyle.OUTLINE,
 			OUTLINE_FAST: flixel.text.FlxText.FlxTextBorderStyle.OUTLINE_FAST
 		});
-		set("FlxTextAlign", {
-			CENTER: flixel.text.FlxText.FlxTextAlign.CENTER,
-			JUSTIFY: flixel.text.FlxText.FlxTextAlign.JUSTIFY,
-			LEFT: flixel.text.FlxText.FlxTextAlign.LEFT,
-			RIGHT: flixel.text.FlxText.FlxTextAlign.RIGHT
-		});
-		set("FlxAxes", {
-			X: flixel.util.FlxAxes.X,
-			Y: flixel.util.FlxAxes.Y,
-			XY: flixel.util.FlxAxes.XY
-		});
+
+
 		set("FlxBarFillDirection",{
 			LEFT_TO_RIGHT: FlxBarFillDirection.LEFT_TO_RIGHT,
 			RIGHT_TO_LEFT: FlxBarFillDirection.RIGHT_TO_LEFT,
@@ -230,23 +225,6 @@ class FunkinHScript extends FunkinScript
 			VERTICAL_INSIDE_OUT: FlxBarFillDirection.VERTICAL_INSIDE_OUT,
 			VERTICAL_OUTSIDE_IN: FlxBarFillDirection.VERTICAL_OUTSIDE_IN,
 		});
-		set('BlendMode',{
-			SUBTRACT: BlendMode.SUBTRACT,
-			ADD: BlendMode.ADD,
-			MULTIPLY: BlendMode.MULTIPLY,
-			ALPHA: BlendMode.ALPHA,
-			DARKEN: BlendMode.DARKEN,
-			DIFFERENCE: BlendMode.DIFFERENCE,
-			INVERT: BlendMode.INVERT,
-			HARDLIGHT: BlendMode.HARDLIGHT,
-			LIGHTEN: BlendMode.LIGHTEN,
-			OVERLAY: BlendMode.OVERLAY,
-			SHADER: BlendMode.SHADER,
-			SCREEN: BlendMode.SCREEN
-		});
-
-
-
 
 		set("getClass", function(className:String)
 		{
@@ -554,7 +532,7 @@ class HScriptSprite extends FlxSprite
 		if (updateHB) this.updateHitbox();
 	}
 
-	//why does old flixel only accept int for setGraphicSize
+
 	public function updateGraphicSize(w:Float = 0,h:Float = 0,updateHB:Bool = true) 
 	{
 		if (w <= 0 && h <= 0)
