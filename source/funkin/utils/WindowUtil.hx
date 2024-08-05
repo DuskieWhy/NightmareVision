@@ -23,7 +23,7 @@ class WindowUtil {
 
     public static function setTitle(?arg:String,append:Bool = false) 
     {
-        arg ??= defaultAppTitle;
+        if (arg == null) arg = defaultAppTitle;
 
         if (append)
             getWindow().title += arg;
@@ -32,13 +32,11 @@ class WindowUtil {
         
     }
 
-
-
     static var _windowTween:FlxTween = null; 
     public static function tweenWindow(values:Dynamic,time:Float = 0.01,?options:TweenOptions,?fill = true) {
-        _windowTween?.cancel();
+        if (_windowTween != null) _windowTween.cancel();
 
-        options ??= {}
+       // options ??= {}
         
 		FlxG.scaleMode = new flixel.system.scaleModes.RatioScaleMode(fill);
 		getWindow().resizable = !fill;
@@ -55,15 +53,5 @@ class WindowUtil {
     }
 
 
-    // public static function getScreenCenterPos(axes:FlxAxes) {
-    //     var x:Array<Float> = [];    //     if (axes.x && axes.y) return (x = [(monitorResolutionWidth/2) - (getWindow().width/2),(monitorResolutionHeight/2) - (getWindow().height/2)]);
-    //     else if (axes.x) return (x = [(monitorResolutionWidth/2) - (getWindow().width/2)]); 
-    //     else if (axes.y) return (x = [(monitorResolutionHeight/2) - (getWindow().height/2)]); 
-    // }
-
-    public static function TweenValueHelper(?x:Float, ?y:Float,?width:Float,?height:Float) {
-        var values = {};
-        return {'x': x, 'y': y, 'width': width, 'height': height};
-    }
 
 }

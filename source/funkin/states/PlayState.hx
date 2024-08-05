@@ -55,7 +55,14 @@ class PlayState extends MusicBeatState
 	// i accidentally left this off OOPSSSS
 	public var ghostsAllowed:Bool = false; //replace this later
 
-	var speedChanges:Array<SpeedEvent> = [];
+	var speedChanges:Array<SpeedEvent> = [{
+		position: 0,
+		songTime: 0,
+		startTime: 0,
+		startSpeed: 1,
+		speed: 1,
+	}];
+
 	public var currentSV:SpeedEvent = {position: 0, startTime: 0, songTime:0, speed: 1, startSpeed: 1};
 
 	var noteRows:Array<Array<Array<Note>>> = [[],[]];
@@ -89,7 +96,7 @@ class PlayState extends MusicBeatState
 	public var hscriptGlobals:Map<String, Dynamic> = new Map();
 	public var variables:Map<String, Dynamic> = new Map();
 
-	public  var isCameraOnForcedPos:Bool = false;
+	public var isCameraOnForcedPos:Bool = false;
 
 	public var boyfriendMap:Map<String, Character> = new Map();
 	public var dadMap:Map<String, Character> = new Map();
@@ -170,7 +177,7 @@ class PlayState extends MusicBeatState
 	function set_health(v:Float):Float
 	{
 		health = v;
-		playHUD.onHealthChange(v);
+		callHUDFunc(p->p.onHealthChange(v));
 		return v;
 	}
 
@@ -207,7 +214,6 @@ class PlayState extends MusicBeatState
 	public var camOther:FlxCamera;
 	public var cameraSpeed:Float = 1;
 
-	public var allowedToUpdateScoreTXT:Bool = true;
 	public var defaultScoreAddition:Bool = true;
 
 	var stageData:StageFile;
@@ -294,11 +300,7 @@ class PlayState extends MusicBeatState
 
 	var precacheList:Map<String, String> = new Map<String, String>();
 
-	public var camTween:FlxTween;
-	public var camHUDAlphaTween:FlxTween;
 	public var camCurTarget:Character = null;
-
-	public var scoreAllowedToBop:Bool = true;
 
 	public var onPauseSignal:FlxSignal = new FlxSignal();
 	public var onResumeSignal:FlxSignal = new FlxSignal();
@@ -369,6 +371,9 @@ class PlayState extends MusicBeatState
 		}
 	}
 
+	//null checking
+	function callHUDFunc(f:BaseHUD->Void) if (playHUD != null) f(playHUD);
+
 	override public function create()
 	{
 
@@ -427,14 +432,6 @@ class PlayState extends MusicBeatState
 		rating.noteSplash = false;
 		ratingsData.push(rating);
 
-		speedChanges.push({
-			position: 0,
-			songTime: 0,
-			startTime: 0,
-			startSpeed: 1,
-			speed: 1,
-		});
-
 		// For the "Just the Two of Us" achievement
 		for (i in 0...keysArray.length)
 		{
@@ -455,14 +452,16 @@ class PlayState extends MusicBeatState
 		camHUD = new FlxCamera();
 		camOther = new FlxCamera();
 
-		camHUD.bgColor.alpha = 0;
-		camOther.bgColor.alpha = 0;
+		camHUD.bgColor = 0x0;
+		camOther.bgColor = 0x0;
 
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD,false);
 		FlxG.cameras.add(camOther,false);
+		
 		setOnScripts('camGame', camGame);
 		setOnScripts('camHUD', camHUD);
+
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 
 		persistentUpdate = true;
@@ -1656,7 +1655,7 @@ class PlayState extends MusicBeatState
 		#end
 		setOnScripts('songLength', songLength);
 		callOnScripts('onSongStart', []);
-		playHUD.onSongStart();
+		callHUDFunc((p)->p.onSongStart());
 	}
 
 	private var noteTypeMap:Map<String, Bool> = new Map<String, Bool>();
@@ -2817,7 +2816,7 @@ class PlayState extends MusicBeatState
 
 	public function updateScoreBar(miss:Bool = false)
 	{
-		playHUD.onUpdateScore({score: songScore,accuracy: funkin.utils.MathUtil.floorDecimal(ratingPercent * 100, 2),misses: songMisses},miss);
+		callHUDFunc((p)->p.onUpdateScore({score: songScore,accuracy: funkin.utils.MathUtil.floorDecimal(ratingPercent * 100, 2),misses: songMisses},miss));
 
 		callOnScripts('onUpdateScore',[miss]);
 	}
@@ -2846,7 +2845,6 @@ class PlayState extends MusicBeatState
 					timer.active = true;
 				}
 				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x - boyfriend.positionArray[0], boyfriend.getScreenPosition().y - boyfriend.positionArray[1], camFollowPos.x, camFollowPos.y));
-				// MusicBeatState.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
 				#if desktop
 				// Game Over doesn't get his own variable because it's only used here
@@ -2962,7 +2960,7 @@ class PlayState extends MusicBeatState
 					setOnScripts('gfGroup', gfGroup);
 				}
 		}
-		playHUD.onCharacterChange();
+		callHUDFunc(p->p.onCharacterChange());
 	}
 
 	public function triggerEventNote(eventName:String, value1:String, value2:String) {
@@ -3016,11 +3014,8 @@ class PlayState extends MusicBeatState
 				}
 
 			case 'Camera Zoom':
-				if (camTween != null)
-				{
-					camTween.cancel();
-					camTween = null;
-				}
+				FlxTween.cancelTweensOf(FlxG.camera, ['zoom']);
+
 				var val1:Float = Std.parseFloat(value1);
 				if(Math.isNaN(val1)) val1 = 1;
 
@@ -3036,12 +3031,7 @@ class PlayState extends MusicBeatState
 
 					if (duration > 0)
 					{
-						camTween = FlxTween.tween(FlxG.camera, {zoom: targetZoom}, duration, {ease: FlxEase.circOut, onComplete:
-							function (twn:FlxTween)
-							{
-								camTween = null;
-							}
-						});
+						FlxTween.tween(FlxG.camera, {zoom: targetZoom}, duration, {ease: FlxEase.circOut});
 					}
 					else
 					{
@@ -3053,11 +3043,8 @@ class PlayState extends MusicBeatState
 
 
 			case 'HUD Fade':
-				if (camHUDAlphaTween != null)
-				{
-					camHUDAlphaTween.cancel();
-					camHUDAlphaTween = null;
-				}
+				FlxTween.cancelTweensOf(camHUD, ['alpha']);
+
 				var leAlpha:Float = Std.parseFloat(value1);
 				if(Math.isNaN(leAlpha)) leAlpha = 1;
 
@@ -3066,12 +3053,7 @@ class PlayState extends MusicBeatState
 
 				if (duration > 0)
 				{
-					camHUDAlphaTween = FlxTween.tween(camHUD, {alpha: leAlpha}, duration, {ease: FlxEase.linear, onComplete:
-						function (twn:FlxTween)
-						{
-							camHUDAlphaTween = null;
-						}
-					});
+					FlxTween.tween(camHUD, {alpha: leAlpha}, duration);
 				}
 				else
 				{
@@ -4430,7 +4412,7 @@ class PlayState extends MusicBeatState
 		lastStepHit = curStep;
 		setOnScripts('curStep', curStep);
 		callOnScripts('onStepHit', []);
-		playHUD.stepHit();
+		callHUDFunc(p->p.stepHit());
 	}
 
 
@@ -4487,7 +4469,7 @@ class PlayState extends MusicBeatState
 
 		setOnScripts('curBeat', curBeat); //DAWGG?????
 		callOnScripts('onBeatHit', []);
-		playHUD.beatHit();
+		callHUDFunc(p->p.beatHit());
 	}
 
 	override function sectionHit()
@@ -4510,7 +4492,7 @@ class PlayState extends MusicBeatState
 
 		setOnScripts('curSection', curSection);
 		callOnScripts('onSectionHit', []);
-		playHUD.sectionHit();
+		callHUDFunc(p->p.sectionHit());
 	}
 
 	public var closeLuas:Array<FunkinLua> = [];
@@ -4545,7 +4527,7 @@ class PlayState extends MusicBeatState
 			if (ret != Globals.Function_Continue && ret!=null)
 				returnVal = ret;
 		}
-		if(returnVal==null)returnVal = Globals.Function_Continue;
+		if(returnVal==null) returnVal = Globals.Function_Continue;
 		return returnVal;
 	}
 
