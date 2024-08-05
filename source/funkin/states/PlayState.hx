@@ -2196,8 +2196,9 @@ class PlayState extends MusicBeatState
 			return returnValue;
 		}
 
-		//should this be renamed? getOffset isnt that clear. should this happen before general scripts? think about this later
-		returnValue = callEventScript(event.event,'getOffset',[event],[event.value1,event.value2]);
+		//should this be renamed? getOffset isnt that clear. should this happen before general scripts?
+		//decided getOffset isnt clear enough and further more ur setting it not getting it so like no
+		returnValue = callEventScript(event.event,'offsetStrumtime',[event],[event.value1,event.value2]);
 		if(returnValue != Globals.Function_Continue) {
 			return returnValue;
 		}
