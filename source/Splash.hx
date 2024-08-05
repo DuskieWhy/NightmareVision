@@ -2,7 +2,6 @@ package;
 
 import flixel.FlxState;
 
-
 @:access(flixel.FlxGame)
 @:access(Main)
 class Splash extends FlxState {

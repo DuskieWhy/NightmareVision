@@ -37,22 +37,8 @@ class MusicBeatState extends FlxUIState
 
 	override function create() {
 		camBeat = FlxG.camera;
-		var skip:Bool = FlxTransitionableState.skipNextTransOut;
 		super.create();
 	}
-	
-
-	#if (VIDEOS_ALLOWED && windows)
-	override public function onFocus():Void
-	{
-		super.onFocus();
-	}
-
-	override public function onFocusLost():Void
-	{
-		super.onFocusLost();
-	}
-	#end
 
 	override function update(elapsed:Float)
 	{
@@ -129,7 +115,7 @@ class MusicBeatState extends FlxUIState
 		curStep = lastChange.stepTime + Math.floor(shit);
 	}
 
-	public static function switchState(nextState:FlxState)
+	inline public static function switchState(nextState:FlxState)
 	{
 		FlxG.switchState(nextState); // just because im too lazy to goto every instance of switchState and change it to a FlxG call
 	}

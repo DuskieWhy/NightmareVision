@@ -1,6 +1,7 @@
 package funkin.states.substates;
 
 
+import funkin.data.options.OptionsState;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
@@ -25,7 +26,7 @@ class PauseSubState extends MusicBeatSubstate
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
 	var menuItems:Array<String> = [];
-	var menuItemsOG:Array<String> = ['Resume', 'Restart Song','Change Difficulty', 'Exit to menu'];
+	var menuItemsOG:Array<String> = ['Resume', 'Restart Song','Change Difficulty','Options', 'Exit to menu'];
 	var difficultyChoices = [];
 	var curSelected:Int = 0;
 
@@ -41,9 +42,8 @@ class PauseSubState extends MusicBeatSubstate
 	override function create()
 	{
 		var cam:FlxCamera = FlxG.cameras.list[FlxG.cameras.list.length - 1];
-		//if(CoolUtil.difficulties.length < 2) 
-
-		menuItemsOG.remove('Change Difficulty'); //No need to change difficulty if there is only one!
+		if(CoolUtil.difficulties.length < 2) 
+			menuItemsOG.remove('Change Difficulty'); //No need to change difficulty if there is only one!
 
 
 		if(PlayState.chartingMode #if debug || true #end)
@@ -236,6 +236,15 @@ class PauseSubState extends MusicBeatSubstate
 				case 'Options':
 					PlayState.instance.paused = true; // For lua
 					PlayState.instance.vocals.volume = 0;
+					FlxG.switchState(()->new OptionsState());
+					@:privateAccess {
+						if (pauseMusic._sound != null) {
+							FlxG.sound.playMusic(pauseMusic._sound,0);
+							FlxTween.tween(FlxG.sound.music, {volume: 0.5},0.7);
+						}
+					}
+
+					OptionsState.onPlayState = true;
 				case "Resume":
 					close();
 				case 'Change Difficulty':
@@ -297,12 +306,9 @@ class PauseSubState extends MusicBeatSubstate
 		if(noTrans)
 		{
 			FlxTransitionableState.skipNextTransOut = true;
-			FlxG.resetState();
 		}
-		else
-		{
-			MusicBeatState.resetState();
-		}
+
+		FlxG.resetState();
 	}
 
 	override function destroy()

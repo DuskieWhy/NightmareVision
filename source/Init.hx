@@ -1,7 +1,5 @@
 package; 
 
-import flixel.util.FlxSave;
-import funkin.states.MainMenuState;
 import flixel.FlxState;
 import flixel.FlxG;
 import flixel.input.keyboard.FlxKey;

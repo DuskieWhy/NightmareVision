@@ -21,8 +21,6 @@ import funkin.data.*;
 import funkin.objects.*;
 
 
-using StringTools;
-
 class FreeplayState extends MusicBeatState
 {
 	var debugBG:FlxSprite;
@@ -43,7 +41,7 @@ class FreeplayState extends MusicBeatState
 	var intendedScore:Int = 0;
 	var intendedRating:Float = 0;
 
-	 var grpSongs:FlxTypedGroup<Alphabet>;
+	var grpSongs:FlxTypedGroup<Alphabet>;
 	var curPlaying:Bool = false;
 
 	var iconArray:Array<HealthIcon> = [];

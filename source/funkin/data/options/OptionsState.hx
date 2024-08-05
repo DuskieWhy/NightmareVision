@@ -31,6 +31,8 @@ using StringTools;
 
 class OptionsState extends MusicBeatState
 {
+	public static var onPlayState:Bool = false;
+
 	var options:Array<String> = ['Notes', 'Controls', 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay', "Loading"];
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private static var curSelected:Int = 0;
@@ -110,7 +112,13 @@ class OptionsState extends MusicBeatState
 
 		if (controls.BACK) {
 			FlxG.sound.play(Paths.sound('cancelMenu'));
-			MusicBeatState.switchState(new MainMenuState());
+			if (onPlayState) {
+				StageData.loadDirectory(PlayState.SONG);
+				LoadingState.loadAndSwitchState(new PlayState());
+				FlxG.sound.music.volume = 0;
+			}
+			else
+				FlxG.switchState(new MainMenuState());
 		}
 
 		if (controls.ACCEPT) {

@@ -8,9 +8,7 @@ import flixel.FlxState;
 import openfl.Lib;
 import openfl.display.Sprite;
 import openfl.events.Event;
-import openfl.text.TextField;
 import openfl.display.StageScaleMode;
-import funkin.data.*;
 
 class Main extends Sprite
 {

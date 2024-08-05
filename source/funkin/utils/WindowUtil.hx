@@ -1,6 +1,5 @@
 package funkin.utils;
 
-import flixel.util.FlxAxes;
 import lime.app.Application;
 
 

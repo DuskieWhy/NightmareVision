@@ -9,13 +9,8 @@ import lime.utils.Assets as LimeAssets;
 import lime.utils.AssetLibrary;
 import lime.utils.AssetManifest;
 import funkin.states.*;
-#if sys
-import sys.io.File;
-import sys.FileSystem;
-#end
 import openfl.utils.Assets;
 import funkin.utils.MathUtil.Vector3;
-import funkin.modchart.*;
 
 
 class CoolUtil

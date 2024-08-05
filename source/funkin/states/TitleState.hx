@@ -18,7 +18,6 @@ import openfl.display.BitmapData;
 import sys.FileSystem;
 import sys.io.File;
 #end
-//import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxFrame;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxGroup;
@@ -40,8 +39,6 @@ import funkin.states.substates.*;
 import funkin.objects.*;
 import funkin.objects.shader.*;
 import funkin.backend.Discord.DiscordClient;
-
-using StringTools;
 typedef TitleData =
 {
 
