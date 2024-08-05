@@ -592,7 +592,12 @@ class PlayState extends MusicBeatState
 			add(dadGroup);
 			add(boyfriendGroup);
 
-			add(stage.foreground);
+			//either we move the chars inside the stage groupings or we move the stage groupings to the state
+			//either way i personally dont like the stage system and want to rework it later
+			while (stage.foreground.members.length > 0) {
+				var obj = stage.foreground.members.shift();
+				add(obj);
+			}
 		}
 
 		setOnHScripts('camGame', camGame);
@@ -1171,7 +1176,7 @@ class PlayState extends MusicBeatState
 
 		if(foundFile) {
 			inCutscene = true;
-			var bg = new FlxSprite(-FlxG.width, -FlxG.height).makeGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.BLACK);
+			var bg = new funkin.states.transitions.FadeTransition.FixedFlxBGSprite();
 			bg.scrollFactor.set();
 			bg.cameras = [camHUD];
 			add(bg);
