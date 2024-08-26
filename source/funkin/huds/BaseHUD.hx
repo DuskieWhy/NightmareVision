@@ -7,6 +7,10 @@ import flixel.FlxBasic;
 @:access(funkin.states.PlayState)
 class BaseHUD extends FlxTypedContainer<FlxBasic>
 {
+
+    //keep this in caps for consistency
+    public var name:String = 'BASE';
+
     public var parent:PlayState;
 
     public var curStep(get,never):Int;

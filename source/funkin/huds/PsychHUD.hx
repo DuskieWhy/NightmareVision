@@ -17,6 +17,8 @@ class PsychHUD extends BaseHUD
     var timeBar:Bar;
 
     override function init() {
+
+        name = 'PSYCH';
         
         healthBar = new Bar(0, FlxG.height * (!ClientPrefs.downScroll ? 0.89 : 0.11), 'healthBar', function() return parent.health, parent.healthBounds.min, parent.healthBounds.max);
 		healthBar.screenCenter(X);
@@ -64,6 +66,10 @@ class PsychHUD extends BaseHUD
 		add(timeBar);
 		add(timeTxt);
 
+
+
+        onUpdateScore({score: 0, accuracy: 0, misses: 0});
+
     }
 
     override function onSongStart() {
@@ -71,7 +77,8 @@ class PsychHUD extends BaseHUD
 		FlxTween.tween(timeTxt, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
     }
 
-    override function onUpdateScore(data:ScoreData,missed:Bool = false) {
+    override function onUpdateScore(data:ScoreData,missed:Bool = false) 
+    {
 
         var str:String = parent.ratingName;
 		if(parent.totalPlayed != 0)

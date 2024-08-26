@@ -72,6 +72,7 @@ class DebugDisplay extends Sprite
 		updateText();
 		underlay.width = text.width + 5;
 		underlay.height = text.height;
+		
 		deltaTimeout += deltaTime;
 	}
 

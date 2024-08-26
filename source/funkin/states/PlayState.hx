@@ -754,8 +754,8 @@ class PlayState extends MusicBeatState
 		add(playFields);
 		add(grpNoteSplashes);
 
-		var hud = new funkin.huds.PsychHUD(this);
-		playHUD = hud;
+
+		playHUD = new funkin.huds.PsychHUD(this);
 		add(playHUD);
 		playHUD.cameras = [camHUD];
 
@@ -820,12 +820,15 @@ class PlayState extends MusicBeatState
 		setOnScripts('grpNoteSplashes', grpNoteSplashes);
 		setOnScripts('notes', notes);
 
-		// setOnScripts('healthBar', healthBar);
-		// setOnScripts('iconP1', iconP1);
-		// setOnScripts('iconP2', iconP2);
-		// setOnScripts('scoreTxt', scoreTxt);
-		// setOnScripts('timeBar', timeBar);
-		// setOnScripts('timeTxt', timeTxt);
+		if (playHUD.name == 'PSYCH') {
+			setOnScripts('healthBar', playHUD.getVar('healthBar'));
+			setOnScripts('iconP1', playHUD.getVar('iconP1'));
+			setOnScripts('iconP2', playHUD.getVar('iconP2'));
+			setOnScripts('scoreTxt', playHUD.getVar('scoreTxt'));
+			setOnScripts('timeBar', playHUD.getVar('timeBar'));
+			setOnScripts('timeTxt', playHUD.getVar('timeTxt'));
+		}
+
 
 		setOnScripts('botplayTxt', botplayTxt);
 
@@ -2820,9 +2823,11 @@ class PlayState extends MusicBeatState
 
 	public function updateScoreBar(miss:Bool = false)
 	{
-		callHUDFunc((p)->p.onUpdateScore({score: songScore,accuracy: funkin.utils.MathUtil.floorDecimal(ratingPercent * 100, 2),misses: songMisses},miss));
 
-		callOnScripts('onUpdateScore',[miss]);
+		final scoreRetVal = callOnScripts('onUpdateScore',[miss]);
+		if (scoreRetVal != Globals.Function_Stop) 
+			callHUDFunc(p->p.onUpdateScore({score: songScore,accuracy: funkin.utils.MathUtil.floorDecimal(ratingPercent * 100, 2),misses: songMisses},miss));
+
 	}
 
 	public var isDead:Bool = false; //Don't mess with this on Lua!!!
