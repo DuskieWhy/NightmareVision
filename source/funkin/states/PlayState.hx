@@ -4679,7 +4679,6 @@ class PlayState extends MusicBeatState
 
 	override public function startOutro(onOutroComplete:() -> Void) {
 		if(isPixelStage != stageData.isPixelStage) isPixelStage = stageData.isPixelStage;
-		FlxG.sound.music.onComplete = null;
 		super.startOutro(onOutroComplete);
 	}
 

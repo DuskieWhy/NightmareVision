@@ -1,6 +1,7 @@
 package funkin.states.substates;
 
 
+import funkin.utils.CameraUtil;
 import funkin.data.options.OptionsState;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -41,7 +42,8 @@ class PauseSubState extends MusicBeatSubstate
 
 	override function create()
 	{
-		var cam:FlxCamera = FlxG.cameras.list[FlxG.cameras.list.length - 1];
+		var cam:FlxCamera = CameraUtil.lastCamera;
+
 		if(CoolUtil.difficulties.length < 2) 
 			menuItemsOG.remove('Change Difficulty'); //No need to change difficulty if there is only one!
 
@@ -89,10 +91,10 @@ class PauseSubState extends MusicBeatSubstate
 
 		var bg:FlxSprite = new FlxSprite().makeGraphic(1, 1, FlxColor.BLACK);
 		bg.setGraphicSize(cam.width,cam.height);
-		bg.alpha = 0;
-		bg.screenCenter(XY);
+		bg.updateHitbox();
 		bg.scrollFactor.set();
 		add(bg);
+		bg.alpha = 0;
 
 		var levelInfo:FlxText = new FlxText(20, 15, 0, "", 32);
 		levelInfo.text += PlayState.SONG.song;
@@ -108,7 +110,7 @@ class PauseSubState extends MusicBeatSubstate
 		levelDifficulty.updateHitbox();
 		add(levelDifficulty);
 
-		var blueballedTxt:FlxText = new FlxText(20, 15 + 32, 0, "", 32);
+		var blueballedTxt:FlxText = new FlxText(20, 15 + (32 * 2), 0, "", 32);
 		blueballedTxt.text = "Blueballed: " + PlayState.deathCounter;
 		blueballedTxt.scrollFactor.set();
 		blueballedTxt.setFormat(Paths.font('vcr.ttf'), 32);
@@ -142,7 +144,7 @@ class PauseSubState extends MusicBeatSubstate
 
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
 		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
-		//FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
+		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 		FlxTween.tween(blueballedTxt, {alpha: 1, y: blueballedTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
 
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
@@ -323,20 +325,14 @@ class PauseSubState extends MusicBeatSubstate
 		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 		curSelected = FlxMath.wrap(curSelected + change,0,menuItems.length-1);
 
-		var bullShit:Int = 0;
-
-		for (item in grpMenuShit.members)
+		for (k=>item in grpMenuShit.members)
 		{
-			item.targetY = bullShit - curSelected;
-			bullShit++;
+			item.targetY = k - curSelected;
 
 			item.alpha = 0.6;
-			// item.setGraphicSize(Std.int(item.width * 0.8));
-
 			if (item.targetY == 0)
 			{
 				item.alpha = 1;
-				// item.setGraphicSize(Std.int(item.width));
 
 				if(item == skipTimeTracker)
 				{
@@ -384,7 +380,7 @@ class PauseSubState extends MusicBeatSubstate
 
 		skipTimeText.x = skipTimeTracker.x + skipTimeTracker.width + 60;
 		skipTimeText.y = skipTimeTracker.y;
-		skipTimeText.visible = (skipTimeTracker.alpha >= 1);
+		skipTimeText.visible = (skipTimeTracker.alpha == 1);
 	}
 
 	function updateSkipTimeText()

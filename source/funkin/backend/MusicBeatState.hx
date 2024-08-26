@@ -154,6 +154,17 @@ class MusicBeatState extends FlxUIState
 		return val == null ? 4 : val;
 	}
 
+	@:access(funkin.states.FreeplayState)
+	override function startOutro(onOutroComplete:() -> Void) {
+		FlxG.sound?.music?.fadeTween?.cancel();
+		FreeplayState.vocals?.fadeTween?.cancel();
+		
+		if (FlxG.sound != null && FlxG.sound.music != null) FlxG.sound.music.onComplete = null;
+
+		super.startOutro(onOutroComplete);
+
+	}
+
 
 
 	//overriden to use our own custom trans subs
