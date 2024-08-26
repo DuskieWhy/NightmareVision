@@ -808,6 +808,7 @@ class PlayState extends MusicBeatState
 		botplayTxt.scrollFactor.set();
 		botplayTxt.borderSize = 1.25;
 		botplayTxt.visible = cpuControlled;
+		if (ClientPrefs.downScroll) botplayTxt.y = FlxG.height - botplayTxt.height - 55;
 		add(botplayTxt);
 
 		playFields.cameras = [camHUD];

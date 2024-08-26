@@ -197,34 +197,10 @@ class FunkinHScript extends FunkinScript
 		set('FlxAxes',MacroUtil.buildAbstract(flixel.util.FlxAxes));
 		set('BlendMode',MacroUtil.buildAbstract(openfl.display.BlendMode));
 
+		set('FlxCameraFollowStyle',flixel.FlxCamera.FlxCameraFollowStyle);
+		set("FlxTextBorderStyle",flixel.text.FlxText.FlxTextBorderStyle);
+		set("FlxBarFillDirection",flixel.ui.FlxBar.FlxBarFillDirection);
 
-		set("FlxCameraFollowStyle", {
-			LOCKON: flixel.FlxCameraFollowStyle.LOCKON,
-			PLATFORMER: flixel.FlxCameraFollowStyle.PLATFORMER,
-			TOPDOWN: flixel.FlxCameraFollowStyle.TOPDOWN,
-			TOPDOWN_TIGHT: flixel.FlxCameraFollowStyle.TOPDOWN_TIGHT,
-			SCREEN_BY_SCREEN: flixel.FlxCameraFollowStyle.SCREEN_BY_SCREEN,
-			NO_DEAD_ZONE: flixel.FlxCameraFollowStyle.NO_DEAD_ZONE,
-
-		});
-		set("FlxTextBorderStyle", {
-			NONE: flixel.text.FlxText.FlxTextBorderStyle.NONE,
-			SHADOW: flixel.text.FlxText.FlxTextBorderStyle.SHADOW,
-			OUTLINE: flixel.text.FlxText.FlxTextBorderStyle.OUTLINE,
-			OUTLINE_FAST: flixel.text.FlxText.FlxTextBorderStyle.OUTLINE_FAST
-		});
-
-
-		set("FlxBarFillDirection",{
-			LEFT_TO_RIGHT: FlxBarFillDirection.LEFT_TO_RIGHT,
-			RIGHT_TO_LEFT: FlxBarFillDirection.RIGHT_TO_LEFT,
-			TOP_TO_BOTTOM: FlxBarFillDirection.TOP_TO_BOTTOM,
-			BOTTOM_TO_TOP: FlxBarFillDirection.BOTTOM_TO_TOP,
-			HORIZONTAL_INSIDE_OUT: FlxBarFillDirection.HORIZONTAL_INSIDE_OUT,
-			HORIZONTAL_OUTSIDE_IN: FlxBarFillDirection.HORIZONTAL_OUTSIDE_IN,
-			VERTICAL_INSIDE_OUT: FlxBarFillDirection.VERTICAL_INSIDE_OUT,
-			VERTICAL_OUTSIDE_IN: FlxBarFillDirection.VERTICAL_OUTSIDE_IN,
-		});
 
 		set("getClass", function(className:String)
 		{
