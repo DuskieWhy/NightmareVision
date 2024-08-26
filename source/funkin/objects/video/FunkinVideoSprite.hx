@@ -1,11 +1,11 @@
-package funkin.objects;
+package funkin.objects.video;
 
 
 import openfl.Assets;
 import haxe.io.Bytes;
 import hxvlc.flixel.FlxVideoSprite;
 
-class VideoSprite extends FlxVideoSprite
+class FunkinVideoSprite extends FlxVideoSprite
 {
     static var _init:Bool = false;
     public static function init() {
@@ -73,7 +73,6 @@ class VideoSprite extends FlxVideoSprite
 
         final realLocal = decipherLocation(location);
 
-        
 
 		if (realLocal != null && !(realLocal is Int) && !(realLocal is Bytes) && (realLocal is String))
 		{
@@ -129,7 +128,7 @@ class VideoSprite extends FlxVideoSprite
 
     public static function quickGen(data:VideoData) 
     {
-        var video = new VideoSprite();
+        var video = new FunkinVideoSprite();
         final isMute = data.muted ? muted : '';
         final loops = data.loops ? looping : '';
         video.load(data.file,[isMute,loops]);
@@ -137,7 +136,7 @@ class VideoSprite extends FlxVideoSprite
     }
 
     public static function cacheVid(path:String) {
-        var video = new VideoSprite(0,0,false,true);
+        var video = new FunkinVideoSprite(0,0,false,true);
         video.load(path, [muted]);
         video.addCallback(ONFORMAT,()->{video.destroy();});
         video.play();

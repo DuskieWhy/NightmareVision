@@ -1,12 +1,13 @@
 package;
 
+import funkin.objects.video.FunkinVideo;
 import flixel.FlxState;
 
 @:access(flixel.FlxGame)
 @:access(Main)
 class Splash extends FlxState {
 
-    var video:FlxVideo;
+    var video:FunkinVideo;
 
     var _cachedAutoPause:Bool;
     override function create() {
@@ -15,11 +16,11 @@ class Splash extends FlxState {
 		FlxG.autoPause = false;
 
         FlxTimer.wait(1,()->{
-			video = new FlxVideo();
+			video = new FunkinVideo();
 			video.onEndReached.add(complete,true);
             video.onEndReached.add(()->video.dispose());
 			
-            trace('vidLoadded? ' + video.load(openfl.Assets.getBytes('assets/videos/intro.mp4')));
+            trace('vidLoadded? ' + video.load('intro.mp4'));
 			video.play();
         });
 

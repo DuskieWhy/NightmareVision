@@ -199,7 +199,9 @@ class Paths
 
 	inline static public function exists(asset:String, ?type:openfl.utils.AssetType)
 	{
+		#if sys
 		if (FileSystem.exists(asset)) return true;
+		#end
 		if (OpenFlAssets.exists(asset)) return true;
 
 		return false;

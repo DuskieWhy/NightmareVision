@@ -31,9 +31,8 @@ class Init extends FlxState
 		FlxG.keys.preventDefaultKeys = [TAB];
 
 		FlxG.mouse.visible = false;
-		funkin.backend.PlayerSettings.init();
 
-		super.create();
+		funkin.backend.PlayerSettings.init();
 
 		FlxG.save.bind('funkin', CoolUtil.getSavePath());
 
@@ -41,7 +40,7 @@ class Init extends FlxState
 
 		funkin.data.Highscore.load();
 
-		funkin.objects.VideoSprite.init();
+		funkin.objects.video.FunkinVideoSprite.init();
 
 		if(FlxG.save.data != null && FlxG.save.data.fullscreen) FlxG.fullscreen = FlxG.save.data.fullscreen;
 		if (FlxG.save.data.weekCompleted != null) funkin.states.StoryMenuState.weekCompleted = FlxG.save.data.weekCompleted;
@@ -58,6 +57,8 @@ class Init extends FlxState
 			Application.current.onExit.add((ec)->{DiscordClient.shutdown();});
 		}
 		#end
+
+		super.create();
 
 		FlxG.switchState(new funkin.states.TitleState());
 	}

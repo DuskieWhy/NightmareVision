@@ -157,7 +157,7 @@ class FunkinHScript extends FunkinScript
 		//objects
 		set("Note", Note);
 		set("Bar", funkin.objects.Bar);
-		set("VideoSprite",funkin.objects.VideoSprite);
+		set("FunkinVideoSprite",funkin.objects.video.FunkinVideoSprite);
 		set("BackgroundDancer", funkin.objects.stageobjects.BackgroundDancer);
 		set("BackgroundGirls", funkin.objects.stageobjects.BackgroundGirls);
 		set("TankmenBG", funkin.objects.stageobjects.TankmenBG);
