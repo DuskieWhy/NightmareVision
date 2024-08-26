@@ -1,11 +1,11 @@
 package funkin.huds;
 
-import flixel.group.FlxGroup.FlxTypedGroup;
+
 import flixel.group.FlxContainer.FlxTypedContainer;
 import flixel.FlxBasic;
 
 @:access(funkin.states.PlayState)
-class BaseHUD extends FlxTypedGroup<FlxBasic>
+class BaseHUD extends FlxTypedContainer<FlxBasic>
 {
     public var parent:PlayState;
 

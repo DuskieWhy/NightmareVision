@@ -203,7 +203,6 @@ class ClientPrefs {
 
 	public static function loadPrefs() {
 
-
 		if (FlxG.save.data.gpuCaching != null) FlxG.save.data.gpuCaching = gpuCaching;
 		
 		if(FlxG.save.data.editorGradColors != null){
