@@ -821,16 +821,6 @@ class PlayState extends MusicBeatState
 		setOnScripts('grpNoteSplashes', grpNoteSplashes);
 		setOnScripts('notes', notes);
 
-		if (playHUD.name == 'PSYCH') {
-			setOnScripts('healthBar', playHUD.getVar('healthBar'));
-			setOnScripts('iconP1', playHUD.getVar('iconP1'));
-			setOnScripts('iconP2', playHUD.getVar('iconP2'));
-			setOnScripts('scoreTxt', playHUD.getVar('scoreTxt'));
-			setOnScripts('timeBar', playHUD.getVar('timeBar'));
-			setOnScripts('timeTxt', playHUD.getVar('timeTxt'));
-		}
-
-
 		setOnScripts('botplayTxt', botplayTxt);
 
 		setOnScripts('doof', doof);

@@ -70,6 +70,17 @@ class PsychHUD extends BaseHUD
 
         onUpdateScore({score: 0, accuracy: 0, misses: 0});
 
+
+
+
+
+        parent.setOnScripts('healthBar', healthBar);
+        parent.setOnScripts('iconP1', iconP1);
+        parent.setOnScripts('iconP2', iconP2);
+        parent.setOnScripts('scoreTxt', scoreTxt);
+        parent.setOnScripts('timeBar', timeBar);
+        parent.setOnScripts('timeTxt', timeTxt);
+
     }
 
     override function onSongStart() {

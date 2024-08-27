@@ -250,23 +250,17 @@ class FreeplayState extends MusicBeatState
 		scoreText.text = 'PERSONAL BEST: ' + lerpScore + ' (' + ratingSplit.join('.') + '%)';
 		positionHighscore();
 
-		var upP = controls.UI_UP_P;
-		var downP = controls.UI_DOWN_P;
-		var accepted = controls.ACCEPT;
-		var space = FlxG.keys.justPressed.SPACE;
-		var ctrl = FlxG.keys.justPressed.CONTROL;
-
 		var shiftMult:Int = 1;
 		if(FlxG.keys.pressed.SHIFT) shiftMult = 3;
 
 		if(songs.length > 1)
 		{
-			if (upP)
+			if (controls.UI_UP_P)
 			{
 				changeSelection(-shiftMult);
 				holdTime = 0;
 			}
-			if (downP)
+			if (controls.UI_DOWN_P)
 			{
 				changeSelection(shiftMult);
 				holdTime = 0;
@@ -290,7 +284,7 @@ class FreeplayState extends MusicBeatState
 			changeDiff(-1);
 		else if (controls.UI_RIGHT_P)
 			changeDiff(1);
-		else if (upP || downP) changeDiff();
+		else if (controls.UI_UP_P || controls.UI_DOWN_P) changeDiff();
 
 		if (controls.BACK)
 		{
@@ -302,16 +296,16 @@ class FreeplayState extends MusicBeatState
 
 		}
 
-		if(ctrl)
+		if(FlxG.keys.justPressed.CONTROL)
 		{
 			persistentUpdate = false;
 			openSubState(new GameplayChangersSubstate());
 		}
-		else if(space)
+		else if(FlxG.keys.justPressed.SPACE)
 		{
 			if(instPlaying != curSelected)
 			{
-				#if PRELOAD_ALL
+				//#if PRELOAD_ALL
 				destroyFreeplayVocals();
 				FlxG.sound.music.volume = 0;
 				Paths.currentModDirectory = songs[curSelected].folder;
@@ -329,11 +323,11 @@ class FreeplayState extends MusicBeatState
 				vocals.looped = true;
 				vocals.volume = 0.7;
 				instPlaying = curSelected;
-				#end
+				//#end
 			}
 		}
 
-		else if (accepted)
+		else if (controls.ACCEPT)
 		{
 			persistentUpdate = false;
 			var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
@@ -380,6 +374,7 @@ class FreeplayState extends MusicBeatState
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 		}
 		super.update(elapsed);
+		
 	}
 
 	public static function destroyFreeplayVocals() {
