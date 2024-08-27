@@ -885,8 +885,8 @@ class PlayState extends MusicBeatState
 					schoolIntro(doof);
 
 				default:
-					var ret:Dynamic = callOnHScripts("doStartCountdown", []);
-					trace(ret);
+					final ret:Dynamic = callOnHScripts("doStartCountdown", []);
+					// trace(ret);
 					if(ret != null && ret == Globals.Function_Continue)
 						startCountdown();
 					else
@@ -896,8 +896,8 @@ class PlayState extends MusicBeatState
 		}
 		else
 		{
-			var ret:Dynamic = callOnHScripts("doStartCountdown", []);
-			trace(ret);
+			final ret:Dynamic = callOnHScripts("doStartCountdown", []);
+			// trace(ret);
 			if(ret != null && ret == Globals.Function_Continue)
 				startCountdown();
 			else
@@ -1348,8 +1348,8 @@ class PlayState extends MusicBeatState
 		// //makes it so the camera immediately starts at the player instead of at 0,0
 		// camFollowPos.setPosition(camFollow.x, camFollow.y);
 
-		var ret:Dynamic = callOnScripts('onStartCountdown', []);
-		trace(ret);
+		final ret:Dynamic = callOnScripts('onStartCountdown', []);
+		// trace(ret);
 		if(ret != Globals.Function_Stop) {
 			if (skipCountdown || startOnTime > 0) skipArrowStartTween = true;
 
@@ -1661,7 +1661,7 @@ class PlayState extends MusicBeatState
 		switch(event.event){
 			default:
 
-				var returnValue:Dynamic = callEventScript(event.event,'shouldPush',[event],[event.value1,event.value2]) == Globals.Function_Continue;
+				final returnValue:Dynamic = callEventScript(event.event,'shouldPush',[event],[event.value1,event.value2]) == Globals.Function_Continue;
 				return returnValue;
 
 	
@@ -2182,7 +2182,7 @@ class PlayState extends MusicBeatState
 
 	function eventNoteEarlyTrigger(event:EventNote):Float {
 
-		var returnValue:Float = callOnScripts('eventEarlyTrigger', [event.event, event.value1, event.value2]);
+		var returnValue:Dynamic = callOnScripts('eventEarlyTrigger', [event.event, event.value1, event.value2]);
 		if(returnValue != Globals.Function_Continue) {
 			return returnValue;
 		}
@@ -2432,7 +2432,7 @@ class PlayState extends MusicBeatState
 
 		if (controls.PAUSE && startedCountdown && canPause)
 		{
-			var ret:Dynamic = callOnScripts('onPause', []);
+			final ret:Dynamic = callOnScripts('onPause', []);
 			if(ret != Globals.Function_Stop) {
 				persistentUpdate = false;
 				persistentDraw = true;
@@ -2825,7 +2825,7 @@ class PlayState extends MusicBeatState
 	public function updateScoreBar(miss:Bool = false)
 	{
 
-		final scoreRetVal = callOnScripts('onUpdateScore',[miss]);
+		final scoreRetVal:Dynamic = callOnScripts('onUpdateScore',[miss]);
 		if (scoreRetVal != Globals.Function_Stop) 
 			callHUDFunc(p->p.onUpdateScore({score: songScore,accuracy: funkin.utils.MathUtil.floorDecimal(ratingPercent * 100, 2),misses: songMisses},miss));
 
@@ -2835,8 +2835,8 @@ class PlayState extends MusicBeatState
 	function doDeathCheck(?skipHealthCheck:Bool = false) {
 		if (((skipHealthCheck && instakillOnMiss) || health <= 0) && !practiceMode && !isDead)
 		{
-			var ret:Dynamic = callOnScripts('onGameOver', []);
-			trace(ret);
+			final ret:Dynamic = callOnScripts('onGameOver', []);
+			// trace(ret);
 			if(ret != Globals.Function_Stop) {
 				boyfriend.stunned = true;
 				deathCounter++;
@@ -3432,9 +3432,9 @@ class PlayState extends MusicBeatState
 		#end
 
 		#if LUA_ALLOWED
-		var ret:Dynamic = callOnScripts('onEndSong', []);
+		final ret:Dynamic = callOnScripts('onEndSong', []);
 		#else
-		var ret:Dynamic = Globals.Function_Continue;
+		final ret:Dynamic = Globals.Function_Continue;
 		#end
 
 		if(ret != Globals.Function_Stop && !transitioning) {
@@ -4632,7 +4632,7 @@ class PlayState extends MusicBeatState
 		setOnLuas('misses', songMisses);
 		setOnLuas('hits', songHits);
 
-		var ret:Dynamic = callOnScripts('onRecalculateRating', []);
+		final ret:Dynamic = callOnScripts('onRecalculateRating', []);
 		if(ret != Globals.Function_Stop)
 		{
 			if(totalPlayed < 1) //Prevent divide by 0
