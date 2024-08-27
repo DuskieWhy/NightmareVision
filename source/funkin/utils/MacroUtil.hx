@@ -8,23 +8,41 @@ using Lambda;
  #end
 class MacroUtil
 {
+    /**
+    * enforces the use of haxe 4.3 cuz i use alot of its null coalescents lol
+    */
+    public macro static function haxeVersionEnforcement()
+    {
+        #if (haxe_ver < 4.3)
+        Context.fatalError('use haxe 4.3.0 or newer thx', (macro null).pos);
+        #end
+        return macro $v{0}
+    }
+
+    /**
+    * returns the current Date as a string during compilation.
+    */
     public static macro function getDate() 
     {
         return macro $v{Date.now().toString()};
     }
 
-	public static macro function include(path:String) 
+    /**
+    * forces the compiler to include a class even if the dce kills it
+    */
+	public static macro function include(path:Expr) 
     {
-		haxe.macro.Compiler.include(path);
+		haxe.macro.Compiler.include(path.toString());
 		return macro $v{0};
 	}
 
-    //https://code.haxe.org/category/macros/combine-objects.html
-    //https://github.com/HaxeFlixel/flixel/blob/master/flixel/system/macros/FlxMacroUtil.hx
+
     /**
-    * wip!! Cannot build non abstracted enums yet!!!!
+    * wip???
     * Builds a anon strcture from static uppercase inline variables in an abstract type.
     * ripped from FlxMacroUtil but modified to fit my needs
+    * https://code.haxe.org/category/macros/combine-objects.html
+    * https://github.com/HaxeFlixel/flixel/blob/master/flixel/system/macros/FlxMacroUtil.hx
     */
     public static macro function buildAbstract(typePath:Expr,?exclude:Array<String>) {
         var type = Context.getType(typePath.toString());

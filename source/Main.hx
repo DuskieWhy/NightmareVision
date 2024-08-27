@@ -28,6 +28,8 @@ class Main extends Sprite
 
 	public static function main():Void
 	{
+		funkin.utils.MacroUtil.haxeVersionEnforcement();
+
 		Lib.current.addChild(new Main());
 	}
 
