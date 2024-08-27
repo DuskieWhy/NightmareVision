@@ -69,7 +69,11 @@ class PsychHUD extends BaseHUD
 
 
         onUpdateScore({score: 0, accuracy: 0, misses: 0});
+        
 
+
+
+        
 
 
 
@@ -147,7 +151,7 @@ class PsychHUD extends BaseHUD
         updateIconsScale(elapsed);
 
 
-        if (!parent.startingSong && !parent.paused && parent.updateTime)
+        if (!parent.startingSong && !parent.paused && parent.updateTime && !parent.endingSong)
         {
             var curTime:Float = Math.max(0, Conductor.songPosition - ClientPrefs.noteOffset);
             parent.songPercent = (curTime / parent.songLength);
