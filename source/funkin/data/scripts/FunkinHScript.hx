@@ -193,9 +193,9 @@ class FunkinHScript extends FunkinScript
 		set("ScriptState", HScriptState);
 
 		//abstracts
-		set("FlxTextAlign",MacroUtil.buildAbstract(flixel.text.FlxText.FlxTextAlign));
-		set('FlxAxes',MacroUtil.buildAbstract(flixel.util.FlxAxes));
-		set('BlendMode',MacroUtil.buildAbstract(openfl.display.BlendMode));
+		set("FlxTextAlign", MacroUtil.buildAbstract(flixel.text.FlxText.FlxTextAlign));
+		set('FlxAxes', MacroUtil.buildAbstract(flixel.util.FlxAxes));
+		set('BlendMode', MacroUtil.buildAbstract(openfl.display.BlendMode));
 
 		set('FlxCameraFollowStyle',flixel.FlxCamera.FlxCameraFollowStyle);
 		set("FlxTextBorderStyle",flixel.text.FlxText.FlxTextBorderStyle);
