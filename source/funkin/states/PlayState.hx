@@ -994,7 +994,7 @@ class PlayState extends MusicBeatState
 		hscriptArray.push(noteskinScript);
 		var skins = ['bfSkin', 'dadSkin'];
 		arrowSkins.splice(0,arrowSkins.length);
-		
+
 		for(skin in skins){
 			arrowSkins.push(noteskinScript.call(skin, []));
 		}
@@ -2281,6 +2281,17 @@ class PlayState extends MusicBeatState
 			onPauseSignal.dispatch();
 			FlxTimer.globalManager.forEach((i:FlxTimer)->if(!i.finished) i.active = false);
 			FlxTween.globalManager.forEach((i:FlxTween)->if(!i.finished) i.active = false);
+
+			for(i in playFields.members){
+				if (i.inControl && i.playerControls){
+					for (s in i.members) {
+						if (s.animation.curAnim?.name != 'static') {
+							s.playAnim('static');
+							s.resetAnim = 0;
+						}
+					}
+				}
+			}
 
 		}
 		callOnHScripts('onSubstateOpen', []);
