@@ -472,64 +472,8 @@ class PlayState extends MusicBeatState
 		Conductor.changeBPM(SONG.bpm);
 
 		arrowSkin = SONG.arrowSkin;
-		scriptedNoteOffsets = [];
-		scriptedStrumOffsets = [];
-		scriptedSustainOffsets = [];
-		for(i in 0...SONG.keys){
-			scriptedNoteOffsets.push(new FlxPoint());
-			scriptedStrumOffsets.push(new FlxPoint());
-			scriptedSustainOffsets.push(new FlxPoint());
-		}
-		trace('noteskin script: "${SONG.arrowSkin}"');
 
-		if(SONG.arrowSkin != 'default' && SONG.arrowSkin != '' && SONG.arrowSkin != null){
-			for(ext in FunkinHScript.exts){
-				if(FileSystem.exists(Paths.modsNoteskin('${SONG.arrowSkin}.$ext'))){
-					noteskinScript = FunkinHScript.fromFile(Paths.modsNoteskin('${SONG.arrowSkin}.$ext'));
-					break;
-				}else if(FileSystem.exists(Paths.noteskin('${SONG.arrowSkin}.$ext'))){
-					//Noteskin doesn't exist in assets, trying mods folder
-					noteskinScript = FunkinHScript.fromFile(Paths.noteskin('${SONG.arrowSkin}.$ext'));
-					break;
-				}
-			}	
-		}else{
-			trace('unscripted noteskin, loading default!');
-			for(ext in FunkinHScript.exts){
-				if(FileSystem.exists(Paths.modsNoteskin('default.$ext'))){
-					noteskinScript = FunkinHScript.fromFile(Paths.modsNoteskin('default.$ext'));
-					break;
-				}else{
-					noteskinScript = FunkinHScript.fromFile(Paths.noteskin('default.$ext'));
-					break;
-				}
-			}
-		}
-
-		if(noteskinScript != null){
-			noteskinScript.call("offset", [scriptedNoteOffsets, scriptedStrumOffsets,scriptedSustainOffsets]);
-			funkyScripts.push(noteskinScript);
-			hscriptArray.push(noteskinScript);
-			// scriptedNoteOffsets = noteskinScript.call('noteOffsets', [[new FlxPoint(0, 0), new FlxPoint(0, 0), new FlxPoint(0, 0), new FlxPoint(0, 0)]]);
-			var skins = ['bfSkin', 'dadSkin'];
-			arrowSkins = [];
-			for(skin in skins){
-				arrowSkins.push(noteskinScript.call(skin, []));
-			}
-			arrowSkin = noteskinScript.call('arrowSkin', []);
-			trace(noteskinScript.call('bfSkin', []));
-			trace(noteskinScript.call('dadSkin', []));
-
-			trace(scriptedNoteOffsets);
-			trace(scriptedStrumOffsets);
-			trace(scriptedSustainOffsets);
-
-		}else{
-			arrowSkins = ['NOTE_assets', 'NOTE_assets'];
-			trace('oops.. your noteskin script is null!!!!!\nMake sure your noteskin exists under one of these names:');
-			for(ext in FunkinHScript.exts){ trace(Paths.modsNoteskin('${SONG.arrowSkin}.$ext')); trace(FileSystem.exists(Paths.modsNoteskin('${SONG.arrowSkin}.$ext'))); }
-		}
-		trace(arrowSkins);
+		initNoteskinScripting();
 
 
 		#if desktop
@@ -1011,6 +955,61 @@ class PlayState extends MusicBeatState
 		}
 
 	}
+
+	function initNoteskinScripting() {
+
+		for(i in 0...SONG.keys){
+			scriptedNoteOffsets.push(new FlxPoint());
+			scriptedStrumOffsets.push(new FlxPoint());
+			scriptedSustainOffsets.push(new FlxPoint());
+		}
+		
+		trace('noteskin script: "${SONG.arrowSkin}"');
+
+		if(SONG.arrowSkin != 'default' && SONG.arrowSkin != '' && SONG.arrowSkin != null){
+			for(ext in FunkinHScript.exts){
+				if(FileSystem.exists(Paths.modsNoteskin('${SONG.arrowSkin}.$ext'))){
+					noteskinScript = FunkinHScript.fromFile(Paths.modsNoteskin('${SONG.arrowSkin}.$ext'));
+					break;
+				}else if(FileSystem.exists(Paths.noteskin('${SONG.arrowSkin}.$ext'))){
+					//Noteskin doesn't exist in assets, trying mods folder
+					noteskinScript = FunkinHScript.fromFile(Paths.noteskin('${SONG.arrowSkin}.$ext'));
+					break;
+				}
+			}	
+		}else{
+			for(ext in FunkinHScript.exts){
+				if(FileSystem.exists(Paths.modsNoteskin('default.$ext'))){
+					noteskinScript = FunkinHScript.fromFile(Paths.modsNoteskin('default.$ext'));
+					break;
+				}
+			}
+		}
+
+		//since stuff relies on this and we dont want people to actually be able to mess with the default // they can use modsfolder hx to modify it though
+		noteskinScript ??= FunkinHScript.fromString(FunkinHScript.noteSkinDefault);
+
+		noteskinScript.call("offset", [scriptedNoteOffsets, scriptedStrumOffsets,scriptedSustainOffsets]);
+		funkyScripts.push(noteskinScript);
+		hscriptArray.push(noteskinScript);
+		var skins = ['bfSkin', 'dadSkin'];
+		arrowSkins.splice(0,arrowSkins.length);
+		
+		for(skin in skins){
+			arrowSkins.push(noteskinScript.call(skin, []));
+		}
+		arrowSkin = noteskinScript.call('arrowSkin', []);
+		trace(noteskinScript.call('bfSkin', []));
+		trace(noteskinScript.call('dadSkin', []));
+
+		trace(scriptedNoteOffsets);
+		trace(scriptedStrumOffsets);
+		trace(scriptedSustainOffsets);
+
+		trace(arrowSkins);
+
+	}
+
 
 	function set_songSpeed(value:Float):Float
 	{
