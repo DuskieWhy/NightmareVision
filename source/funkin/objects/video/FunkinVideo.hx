@@ -11,7 +11,7 @@ class FunkinVideo extends FlxVideo
             var local:String = cast(local,String);
 
             var modPath:String = Paths.modFolders('videos/$local');
-            var assetPath:String = 'openfl.utils.Assets/videos/$local';
+            var assetPath:String = 'assets/videos/$local';
 
             //found bytes. return em
             if (openfl.utils.Assets.exists(modPath,BINARY)) return cast openfl.utils.Assets.getBytes(modPath);
