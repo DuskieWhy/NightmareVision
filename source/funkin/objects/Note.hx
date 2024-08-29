@@ -15,7 +15,7 @@ import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import funkin.data.scripts.*;
 import funkin.objects.shader.*;
-import funkin.utils.MathUtil.Vector3;
+import funkin.Vector3;
 #if sys
 import sys.FileSystem;
 #end

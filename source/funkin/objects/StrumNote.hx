@@ -11,7 +11,7 @@ import funkin.states.*;
 import flixel.math.FlxPoint;
 import funkin.data.*;
 import funkin.modchart.*;
-import funkin.utils.MathUtil.Vector3;
+import funkin.Vector3;
 #if sys
 import sys.FileSystem;
 #end

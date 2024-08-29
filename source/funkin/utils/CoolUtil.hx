@@ -10,7 +10,7 @@ import lime.utils.AssetLibrary;
 import lime.utils.AssetManifest;
 import funkin.states.*;
 import openfl.utils.Assets;
-import funkin.utils.MathUtil.Vector3;
+import funkin.Vector3;
 
 
 class CoolUtil

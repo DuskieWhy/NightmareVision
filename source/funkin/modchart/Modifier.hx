@@ -3,7 +3,7 @@
 package funkin.modchart;
 
 import flixel.FlxSprite;
-import funkin.utils.MathUtil.Vector3;
+import funkin.Vector3;
 import funkin.data.*;
 import funkin.states.*;
 import funkin.states.substates.*;
