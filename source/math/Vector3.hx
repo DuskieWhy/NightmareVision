@@ -1,4 +1,6 @@
-package funkin.backend;
+package math;
+
+
 
 // modified from lime.math.Vector4
 /**

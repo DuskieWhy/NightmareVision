@@ -12,7 +12,7 @@ import funkin.data.*;
 import funkin.states.*;
 import funkin.states.substates.*;
 import funkin.objects.*;
-import funkin.backend.Vector3;
+import math.Vector3;
 // Weird amalgamation of Schmovin' modifier system, Andromeda modifier system and my own new shit -neb
 
 class ModManager {

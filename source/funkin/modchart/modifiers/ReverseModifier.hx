@@ -4,7 +4,7 @@ import funkin.modchart.Modifier.ModifierOrder;
 import flixel.FlxSprite;
 import flixel.FlxG;
 import funkin.modchart.*;
-import funkin.backend.Vector3;
+import math.Vector3;
 import funkin.states.*;
 import funkin.objects.*;
 
