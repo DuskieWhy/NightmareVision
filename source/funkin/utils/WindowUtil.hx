@@ -51,6 +51,38 @@ class WindowUtil {
 
     }
 
+    public static function setGameDimensions(width:Int,height:Int, cameras:Array<FlxCamera>) {
+        if (_windowTween !=null)
+            FlxTween.cancelTweensOf(getWindow(),['width','height']);
 
+        var newWidth:Int = width;
+        var newHeight:Int = height; 
+        var scaledHeight:Int = height;
+
+        for(camera in cameras){
+            camera.width = FlxG.width;
+            if(newHeight <= FlxG.height){
+                camera.height = Std.int(FlxG.height * (FlxG.width / newHeight));
+                scaledHeight = camera.height;
+            }
+            // if(newWidth == newHeight){
+            //     camera.y 
+            // }
+        }
+        if(!FlxG.fullscreen){
+            FlxG.resizeWindow(newWidth, newHeight);
+            FlxG.stage.window.x = Std.int((monitorResolutionWidth - newWidth) / 2);
+            FlxG.stage.window.y = Std.int((monitorResolutionHeight - newHeight) / 2);
+        } 
+
+        // else {
+        //     FlxG.stage.window.onResize = ()->{
+        //         FlxG.resizeWindow(newWidth, newHeight);
+        //     }
+        // }
+        var s = new funkin.backend.FunkinRatioScaleMode();
+        s.height = scaledHeight;
+        FlxG.scaleMode = s;
+    }
 
 }

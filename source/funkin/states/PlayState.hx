@@ -3339,7 +3339,10 @@ class PlayState extends MusicBeatState
 	{
 		var desiredPos:FlxPoint = null;
 		var curCharacter:Character = null;
-		curCharacter = isDad ? dad : boyfriend;
+		if(opponentStrums != null && playerStrums != null)
+			curCharacter = isDad ? opponentStrums.owner : playerStrums.owner;
+		else
+			curCharacter = isDad ? dad : boyfriend;
 		if (camCurTarget != null) curCharacter = camCurTarget;
 	
 
@@ -4057,7 +4060,7 @@ class PlayState extends MusicBeatState
 		if (Paths.formatToSongPath(SONG.song) != 'tutorial')
 			camZooming = true;
 
-		var char:Character = playfield.owner;
+		var char:Character = note.owner == null ? playfield.owner : note.owner;
 
 		if(note.gfNote)
 			char = gf;
@@ -4252,20 +4255,29 @@ class PlayState extends MusicBeatState
 						var chord = noteRows[note.gfNote ? 2 : note.mustPress ? 0 : 1][note.row];
 						var animNote = chord[0];
 						var realAnim = singAnimations[Std.int(Math.abs(animNote.noteData))] + daAlt;
-						if (field.owner.mostRecentRow != note.row)
-							field.owner.playAnim(realAnim, true);
+						if (field.owner.mostRecentRow != note.row){
+							if(note.owner == null) field.owner.playAnim(realAnim, true);
+							else note.owner.playAnim(realAnim, true);
+						}
+							
 
-						if (note != animNote && chord.indexOf(note) != animNote.noteData)
-							field.owner.playGhostAnim(chord.indexOf(note), animToPlay, true);
+						if (note != animNote && chord.indexOf(note) != animNote.noteData){
+							if(note.owner == null) field.owner.playGhostAnim(chord.indexOf(note), animToPlay, true);
+							else note.owner.playGhostAnim(chord.indexOf(note), animToPlay, true);
+						}
 							// doGhostAnim('bf', animToPlay);
 
 						field.owner.mostRecentRow = note.row;
 					}
 					else{
-						if(note.noteType != "Ghost Note")
-							field.owner.playAnim(animToPlay + daAlt, true);
-						else
-							field.owner.playGhostAnim(note.noteData, animToPlay, true);
+						if(note.noteType != "Ghost Note"){
+							if(note.owner == null) field.owner.playAnim(animToPlay + daAlt, true);
+							else note.owner.playAnim(animToPlay + daAlt, true);
+						}
+						else{
+							if(note.owner == null) field.owner.playGhostAnim(note.noteData, animToPlay, true);
+							else note.owner.playGhostAnim(note.noteData, animToPlay, true);
+						}
 					}
 				}
 
@@ -4501,7 +4513,7 @@ class PlayState extends MusicBeatState
 		}
 
 		setOnScripts('curSection', curSection);
-		callOnScripts('onSectionHit', []);
+		callOnScripts('onSectionHit', [SONG.notes[curSection]]);
 		callHUDFunc(p->p.sectionHit());
 	}
 

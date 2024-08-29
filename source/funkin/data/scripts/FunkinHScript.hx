@@ -219,6 +219,7 @@ class FunkinHScript extends FunkinScript
 		set("FlxTextBorderStyle",flixel.text.FlxText.FlxTextBorderStyle);
 		set("FlxBarFillDirection",flixel.ui.FlxBar.FlxBarFillDirection);
 
+		set("WindowUtil", funkin.utils.WindowUtil);
 
 		set("getClass", function(className:String)
 		{

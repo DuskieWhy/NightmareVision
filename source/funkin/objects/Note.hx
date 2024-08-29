@@ -15,6 +15,7 @@ import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import funkin.data.scripts.*;
 import funkin.objects.shader.*;
+import funkin.objects.Character;
 import funkin.utils.MathUtil.Vector3;
 #if sys
 import sys.FileSystem;
@@ -165,6 +166,7 @@ class Note extends FlxSprite
 
 	public var player:Int = 0;
 
+	public var owner:Character = null;
 	public var playField(default, set):PlayField;
 	public var desiredPlayfield:PlayField; // incase a note should be put into a specific playfield
 	public static var defaultNotes = [
@@ -243,6 +245,8 @@ class Note extends FlxSprite
 
 		if(noteData > -1 && noteType != value) {
 			switch(value) {
+				case "Test Owner Note":
+					owner = PlayState.instance.gf;
 				case 'Hurt Note':
 					ignoreNote = mustPress;
 					reloadNote('HURT');
