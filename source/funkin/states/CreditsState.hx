@@ -76,6 +76,7 @@ class CreditsState extends MusicBeatState
 		}
 		#end
 
+		//were gonna need to update these credits later lol //data todo
 		var pisspoop:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
 			['NIGHTMARISH FEDS'],
 			['DuskieWhy', 'duskie', 'Main Developer', 'https://twitter.com/DuskieWhy', '6D32A8'],
