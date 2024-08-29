@@ -31,25 +31,6 @@ class WindowUtil {
         
     }
 
-    static var _windowTween:FlxTween = null; 
-    public static function tweenWindow(values:Dynamic,time:Float = 0.01,?options:TweenOptions,?fill = true) {
-        if (_windowTween != null) _windowTween.cancel();
-
-       // options ??= {}
-        
-		FlxG.scaleMode = new flixel.system.scaleModes.RatioScaleMode(fill);
-		getWindow().resizable = !fill;
-
-        _windowTween = FlxTween.tween(getWindow(),values,time,options);
-    }
-
-    public static function setWindowSize(width:Int,height:Int) {
-        if (_windowTween !=null)
-            FlxTween.cancelTweensOf(getWindow(),['width','height']);
-
-        FlxG.resizeWindow(width,height);
-
-    }
 
     public static function setGameDimensions(width:Int,height:Int, cameras:Array<FlxCamera>) {
         if (_windowTween !=null)

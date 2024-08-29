@@ -3308,6 +3308,15 @@ class PlayState extends MusicBeatState
 			camFollow.set(gf.getMidpoint().x, gf.getMidpoint().y);
 			camFollow.x += gf.cameraPosition[0] + girlfriendCameraOffset[0];
 			camFollow.y += gf.cameraPosition[1] + girlfriendCameraOffset[1];
+
+			var displacement = gf.returnDisplacePoint();
+
+			camFollow.x += displacement.x;
+			camFollow.y += displacement.y;
+			
+			displacement.put();
+
+
 			callOnScripts('onMoveCamera', ['gf']);
 			setOnScripts('whosTurn', 'gf');
 			return;

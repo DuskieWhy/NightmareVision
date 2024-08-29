@@ -469,7 +469,7 @@ class Character extends FlxSprite
 	inline public function returnDisplacePoint():FlxPoint
 	{
 		var displace:FlxPoint = FlxPoint.weak();
-		switch (animation.curAnim.name.substr(4).toLowerCase()) {
+		switch (animation.curAnim.name.substr(4).split('-')[0].toLowerCase()) {
 			case 'up' | 'up-alt': return  displace.set(0,-baseCameraDisplacement);
 			case 'down' | 'down-alt': return displace.set(0,baseCameraDisplacement);
 			case 'left' | 'left-alt': return displace.set(-baseCameraDisplacement,0);

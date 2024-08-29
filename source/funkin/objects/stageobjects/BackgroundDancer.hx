@@ -4,6 +4,7 @@ import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 import funkin.data.*;
 
+@:keep
 class BackgroundDancer extends FlxSprite
 {
 	public function new(x:Float, y:Float)
