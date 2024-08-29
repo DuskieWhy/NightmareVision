@@ -2,7 +2,7 @@ package funkin.modchart.modifiers;
 
 import flixel.math.FlxPoint;
 import funkin.modchart.Modifier.ModifierOrder;
-import funkin.Vector3;
+import funkin.backend.Vector3;
 import funkin.data.*;
 import funkin.states.*;
 import funkin.states.substates.*;

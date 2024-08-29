@@ -3,7 +3,7 @@ import flixel.FlxSprite;
 import funkin.modchart.*;
 import flixel.math.FlxMath;
 import flixel.FlxG;
-import funkin.Vector3;
+import funkin.backend.Vector3;
 import funkin.objects.*;
 
 class DrunkModifier extends NoteModifier {

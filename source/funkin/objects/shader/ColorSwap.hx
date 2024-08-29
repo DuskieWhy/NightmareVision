@@ -2,7 +2,7 @@ package funkin.objects.shader;
 
 import flixel.FlxG;
 import flixel.system.FlxAssets.FlxShader;
-import funkin.Vector3;
+import funkin.backend.Vector3;
 import funkin.modchart.*;
 
 class ColorSwap {

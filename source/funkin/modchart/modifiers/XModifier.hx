@@ -1,6 +1,6 @@
 package funkin.modchart.modifiers;
 
-import funkin.Vector3;
+import funkin.backend.Vector3;
 import funkin.data.*;
 import funkin.states.*;
 import funkin.states.substates.*;
