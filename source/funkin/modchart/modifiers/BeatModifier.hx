@@ -3,7 +3,7 @@ package funkin.modchart.modifiers;
 import flixel.FlxSprite;
 import funkin.modchart.*;
 import flixel.math.FlxMath;
-import funkin.backend.Vector3;
+import math.Vector3;
 import funkin.states.*;
 
 class BeatModifier extends NoteModifier {

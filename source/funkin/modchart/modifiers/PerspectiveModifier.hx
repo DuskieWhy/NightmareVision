@@ -3,7 +3,7 @@ import flixel.FlxSprite;
 import ui.*;
 import funkin.modchart.*;
 import flixel.math.FlxPoint;
-import funkin.backend.Vector3;
+import math.Vector3;
 import flixel.math.FlxMath;
 import flixel.FlxG;
 using StringTools;
