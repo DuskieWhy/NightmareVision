@@ -159,6 +159,8 @@ class FunkinHScript extends FunkinScript
 		set("FlxSprite", HScriptSprite);
 		set('FlxSpriteUtil',flixel.util.FlxSpriteUtil);
 
+		set('AnimateSprite',flxanimate.AnimateSprite);
+
 
 		// FNF-specific things
 		set("MusicBeatState", funkin.backend.MusicBeatState);

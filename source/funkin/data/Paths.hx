@@ -227,6 +227,21 @@ class Paths
 		return 'assets/videos/$key.$VIDEO_EXT';
 	}
 
+
+	inline static public function modTextureAtlas(key:String) 
+	{
+		return modFolders('images/$key');
+	}
+
+	static public function textureAtlas(key:String,?library:String) 
+	{
+		var modp = modTextureAtlas(key);
+		if (FileSystem.exists(modp)) return modp;
+
+		return getPath(key,AssetType.BINARY,library);
+
+	}
+
 	static public function sound(key:String, ?library:String):Sound
 	{
 		var sound:Sound = returnSound('sounds', key, library);
