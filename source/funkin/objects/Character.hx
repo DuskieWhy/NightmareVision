@@ -430,11 +430,11 @@ class Character extends FlxSprite
 		specialAnim = false;
 
 		var AnimName:String;
-		for(e in exclusions){
+		for(e in animSuffixExclusions){
 			if(!name.toLowerCase().contains(e.toLowerCase()))
 				AnimName = name + animSuffix;
 			else
-				break
+				break;
 		}
 
 		animation.play(AnimName, Force, Reversed, Frame);
