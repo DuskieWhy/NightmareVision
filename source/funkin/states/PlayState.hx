@@ -50,9 +50,6 @@ class PlayState extends MusicBeatState
 {
 	public var modManager:ModManager;
 
-	// i accidentally left this off OOPSSSS
-	public var ghostsAllowed:Bool = false; //replace this later
-
 	var speedChanges:Array<SpeedEvent> = [{
 		position: 0,
 		songTime: 0,
@@ -4099,7 +4096,7 @@ class PlayState extends MusicBeatState
 					if (!note.isSustainNote
 						&& noteRows[note.mustPress ? 0 : 1][note.row] != null
 						&& noteRows[note.mustPress ? 0 : 1][note.row].length > 1
-						&& note.noteType != "Ghost Note" && ghostsAllowed)
+						&& note.noteType != "Ghost Note" && char.ghostsEnabled)
 					{
 						// potentially have jump anims?
 						var chord = noteRows[note.mustPress ? 0 : 1][note.row];
@@ -4258,7 +4255,7 @@ class PlayState extends MusicBeatState
 				{
 					// field.owner.playAnim(animToPlay + daAlt, true);
 					field.owner.holdTimer = 0;
-					if (!note.isSustainNote && noteRows[note.gfNote ? 2 : note.mustPress ? 0 : 1][note.row]!=null && noteRows[note.gfNote ? 2 : note.mustPress ? 0 : 1][note.row].length > 1 && note.noteType != "Ghost Note" && ghostsAllowed)
+					if (!note.isSustainNote && noteRows[note.gfNote ? 2 : note.mustPress ? 0 : 1][note.row]!=null && noteRows[note.gfNote ? 2 : note.mustPress ? 0 : 1][note.row].length > 1 && note.noteType != "Ghost Note" && field.owner.ghostsEnabled)
 					{
 						// potentially have jump anims?
 						var chord = noteRows[note.gfNote ? 2 : note.mustPress ? 0 : 1][note.row];

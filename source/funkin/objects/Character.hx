@@ -61,13 +61,10 @@ class Character extends FlxSprite
 	public var animOffsets:Map<String, Array<Dynamic>>;
 	public var camOffsets:Map<String, Array<Float>> = [];
 	public var debugMode:Bool = false;
-	public var camOffX:Float = 0;
-	public var camOffY:Float = 0;
 
 	public var isPlayer:Bool = false;
 	public var curCharacter:String = DEFAULT_CHARACTER;
 
-	public var colorTween:FlxTween;
 	public var holdTimer:Float = 0;
 	public var heyTimer:Float = 0;
 	public var animTimer:Float = 0;
@@ -87,6 +84,7 @@ class Character extends FlxSprite
 	public var positionArray:Array<Float> = [0, 0];
 	public var cameraPosition:Array<Float> = [0, 0];
 
+	public var ghostsEnabled:Bool = true;
 	public var doubleGhosts:Array<FlxSprite> = [];
 	public var ghostID:Int = 0;
 	public var ghostAnim:String = '';
@@ -370,8 +368,10 @@ class Character extends FlxSprite
 				playAnim(animation.curAnim.name + '-loop');
 			}
 		}
-		for (ghost in doubleGhosts)
-			ghost.update(elapsed);
+		if (ghostsEnabled) {
+			for (ghost in doubleGhosts) ghost.update(elapsed);
+		}
+
 		super.update(elapsed);
 
 		if(!debugMode){
@@ -396,10 +396,13 @@ class Character extends FlxSprite
 
 
 	override function draw(){
-		for(ghost in doubleGhosts){
-			if(ghost.visible)
-				ghost.draw();
+		if (ghostsEnabled) {
+			for(ghost in doubleGhosts){
+				if(ghost.visible)
+					ghost.draw();
+			}
 		}
+
 		
 		super.draw();
 	}
@@ -429,48 +432,37 @@ class Character extends FlxSprite
 	{
 		specialAnim = false;
 
-		var AnimName:String = name;
+		var animationName:String = name;
+
 		for(e in animSuffixExclusions){
-			if(!name.toLowerCase().contains(e.toLowerCase()))
-				AnimName = name + animSuffix;
+			if(!animationName.toLowerCase().contains(e.toLowerCase()))
+				animationName += animSuffix;
 			else
 				break;
 		}
 
-		animation.play(AnimName, Force, Reversed, Frame);
+		animation.play(animationName, Force, Reversed, Frame);
 
-		var daOffset = animOffsets.get(AnimName);
-		if (animOffsets.exists(AnimName))
+		var daOffset = animOffsets.get(animationName);
+		if (animOffsets.exists(animationName))
 		{
 			offset.set(daOffset[0], daOffset[1]);
 		}
 		else
 			offset.set(0, 0);
 
-		camOffX = 0;
-		camOffY = 0;
-		if(camOffsets.exists(AnimName) && camOffsets.get(AnimName).length==2){
-			camOffX = camOffsets.get(AnimName)[0];
-			camOffY = camOffsets.get(AnimName)[1];
-		}
-		else if (camOffsets.exists(AnimName.replace("-loop", "")) && camOffsets.get(AnimName.replace("-loop", "")).length == 2)
-		{
-			camOffX = camOffsets.get(AnimName.replace("-loop", ""))[0];
-			camOffY = camOffsets.get(AnimName.replace("-loop", ""))[1];
-		}
-
 		if (curCharacter.startsWith('gf'))
 		{
-			if (AnimName == 'singLEFT')
+			if (animationName == 'singLEFT')
 			{
 				danced = true;
 			}
-			else if (AnimName == 'singRIGHT')
+			else if (animationName == 'singRIGHT')
 			{
 				danced = false;
 			}
 
-			if (AnimName == 'singUP' || AnimName == 'singDOWN')
+			if (animationName == 'singUP' || animationName == 'singDOWN')
 			{
 				danced = !danced;
 			}

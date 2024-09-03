@@ -90,7 +90,6 @@ class AnimateFrames
             var curSpritemap = getBitmapData('$Path/${curJson.meta.image}');
             if (curSpritemap != null)
             {
-                trace('yahoo');
                 var graphic = FlxG.bitmap.add(curSpritemap, '$Path/${curJson.meta.image}');
                 var spritemapFrames = FlxAnimateFrames.getExistingAnimateFrames(graphic);
                 if (spritemapFrames == null)
