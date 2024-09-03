@@ -429,7 +429,7 @@ class Character extends FlxSprite
 	{
 		specialAnim = false;
 
-		var AnimName:String;
+		var AnimName:String = name;
 		for(e in animSuffixExclusions){
 			if(!name.toLowerCase().contains(e.toLowerCase()))
 				AnimName = name + animSuffix;
