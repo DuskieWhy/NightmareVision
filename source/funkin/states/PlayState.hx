@@ -37,13 +37,13 @@ import funkin.states.editors.*;
 import funkin.data.scripts.FunkinLua.ModchartSprite;
 import funkin.modchart.*;
 
-typedef SpeedEvent =
+@:structInit class SpeedEvent
 {
-	position:Float, // the y position where the change happens (modManager.getVisPos(songTime))
-	startTime:Float, // the song position (conductor.songTime) where the change starts
-	songTime:Float, // the song position (conductor.songTime) when the change ends
-	?startSpeed:Float, // the starting speed
-	speed:Float // speed mult after the change
+	public var position:Float; // the y position where the change happens (modManager.getVisPos(songTime))
+	public var startTime:Float; // the song position (conductor.songTime) where the change starts
+	public var songTime:Float; // the song position (conductor.songTime) when the change ends
+	@:optional public var startSpeed:Null<Float>; // the starting speed
+	public var speed:Float; // speed mult after the change
 }
 
 class PlayState extends MusicBeatState
