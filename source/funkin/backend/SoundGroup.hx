@@ -47,7 +47,7 @@ class SoundGroup extends FlxTypedGroup<FlxSound>
 
     public function getDesyncDifference(?desiredTime:Float) 
     {
-        desiredTime ?? getFirstAlive().time;
+        desiredTime ??= getFirstAlive().time;
 
         var diff:Float = 0;
         forEachAlive(f->{
@@ -55,12 +55,13 @@ class SoundGroup extends FlxTypedGroup<FlxSound>
             if (s > diff) diff = s; //get the highest difference
         });
 
+        trace('diff is: ' + diff);
         return diff;
     }
 
     public function resync(?time:Float) 
     {
-        time ?? getFirstAlive().time; //nothing given. synce to the first track
+        time ??= getFirstAlive().time; //nothing given. synce to the first track
 
         forEachAlive(f->{
             f.pause();

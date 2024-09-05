@@ -402,8 +402,6 @@ class Character extends FlxSprite
 					ghost.draw();
 			}
 		}
-
-		
 		super.draw();
 	}
 	/**
