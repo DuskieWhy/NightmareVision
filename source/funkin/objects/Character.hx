@@ -534,6 +534,7 @@ class Character extends FlxSprite
 	{
 		animation.addByPrefix(name, anim, 24, false);
 	}
+	
 
 	public function playGhostAnim(ghostID = 0, AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0){
 
@@ -541,6 +542,7 @@ class Character extends FlxSprite
 		ghost.scale.copyFrom(scale);
 		ghost.frames = frames;
 		ghost.animation.copyFrom(animation);
+		ghost.antialiasing = antialiasing;
 		// ghost.shader = shader;
 		ghost.x = x;
 		ghost.y = y;
@@ -553,31 +555,33 @@ class Character extends FlxSprite
 		if (ghostTweenGRP[ghostID] != null)
 			ghostTweenGRP[ghostID].cancel();
 
-		var direction:String = AnimName.substring(4);
+		var direction:String = AnimName.substring(4).split('-')[0];
 
+		//rewrite this
 		var directionMap:Map<String, Array<Float>> = [
 			'UP' => [0, -45],
 			'DOWN' => [0, 45],
 			'RIGHT' => [45, 0],
 			'LEFT' => [-45, 0],
-			'UP-alt' => [0, -45],
-			'DOWN-alt' => [0, 45],
-			'RIGHT-alt' => [45, 0],
-			'LEFT-alt' => [-45, 0],
 		];
 		//had to add alt cuz it kept crashing on room code LOL
 
-		var moveDirections:Array<Float> = [
-			x + (directionMap.get(direction)[0]),
-			y + (directionMap.get(direction)[1])
-		];
+		var moveX = x;
+		var moveY = y;
 
-		ghostTweenGRP[ghostID] = FlxTween.tween(ghost, {alpha: 0, x: moveDirections[0], y: moveDirections[1]}, 0.75, {
+		if (directionMap.exists(direction)) {
+			var dir = directionMap.get(direction);
+			moveX += dir[0];
+			moveY += dir[1];
+		}
+
+		ghostTweenGRP[ghostID] = FlxTween.tween(ghost, {alpha: 0, x: moveX, y: moveY}, 0.75, {
 			ease: FlxEase.linear,
 			onComplete: function(twn:FlxTween)
 			{
 				ghost.visible = false;
-				ghostTweenGRP[ghostID].destroy(); // maybe?
+				// ghostTweenGRP[ghostID].destroy(); // maybe?
+				
 				ghostTweenGRP[ghostID] = null;
 			}
 		});
