@@ -4153,7 +4153,7 @@ class PlayState extends MusicBeatState
 		}
 
 		if (SONG.needsVoices){
-			vocalsGroup.playerVolume = 1;
+			vocalsGroup.opponentVolume = 1;
 		}
 
 		if (playfield.autoPlayed) {
