@@ -55,7 +55,6 @@ class SoundGroup extends FlxTypedGroup<FlxSound>
             if (s > diff) diff = s; //get the highest difference
         });
 
-        trace('diff is: ' + diff);
         return diff;
     }
 
@@ -109,3 +108,46 @@ class SoundGroup extends FlxTypedGroup<FlxSound>
 	function get_playing():Bool return getFirstAlive() == null ? false : getFirstAlive().playing;
 }
  
+
+//specialized ver
+class VocalGroup extends SoundGroup
+{
+    public var playerVocals:flixel.sound.FlxSound = null;
+    public var opponentVocals:flixel.sound.FlxSound = null;
+
+    public var playerVolume(get,set):Float;
+
+    public var opponentVolume(get,set):Float;
+
+    public function addOpponentVocals(sound:flixel.sound.FlxSound) 
+    {
+        if (sound == null) return null;
+        opponentVocals = sound;
+        return add(sound);
+    }
+
+    public function addPlayerVocals(sound:flixel.sound.FlxSound) 
+    {
+        if (sound == null) return null;
+        playerVocals = sound;
+        return add(sound);
+    }
+
+    function set_playerVolume(value:Float):Float 
+    {
+        if (playerVocals != null) playerVocals.volume = value;
+        return value;
+    }
+	function get_playerVolume():Float return playerVocals != null ? playerVocals.volume : 1;
+	
+
+    function set_opponentVolume(value:Float):Float
+    {
+        if (opponentVocals != null) opponentVocals.volume = value;
+        return value; 
+    }
+	function get_opponentVolume():Float return opponentVocals != null ? opponentVocals.volume : 1;
+
+
+	
+}

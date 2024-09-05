@@ -259,9 +259,10 @@ class Paths
 		return file;
 	}
 
-	inline static public function voices(song:String):Null<openfl.media.Sound>
+	inline static public function voices(song:String,?postFix:String):Null<openfl.media.Sound>
 	{
 		var songKey:String = '${formatToSongPath(song)}/Voices';
+		if (postFix != null) songKey += '-$postFix';
 		var voices = returnSound(null, songKey,'songs');
 		return voices;
 	}

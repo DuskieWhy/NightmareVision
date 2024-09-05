@@ -125,7 +125,9 @@ class PlayState extends MusicBeatState
 
 	public var spawnTime:Float = 3000;
 
+	public var vocalsGroup:VocalGroup;
 	public var vocals:FlxSound;
+	public var opponentVocals:FlxSound;
 
 	public var dad:Character = null;
 	public var gf:Character = null;
@@ -301,8 +303,6 @@ class PlayState extends MusicBeatState
 
 	public var onPauseSignal:FlxSignal = new FlxSignal();
 	public var onResumeSignal:FlxSignal = new FlxSignal();
-
-	var vocalsGroup:SoundGroup;
 
 
 	public var playHUD:BaseHUD = null;
@@ -1743,13 +1743,22 @@ class PlayState extends MusicBeatState
 		curSong = songData.song;
 
 		
-		vocalsGroup = new SoundGroup();
+		vocalsGroup = new VocalGroup();
 		add(vocalsGroup);
 
 		if (SONG.needsVoices) {
-			vocals = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song));
-			vocalsGroup.add(vocals);
+			var playerSound = Paths.voices(PlayState.SONG.song,'player');
+			vocals = new FlxSound().loadEmbedded(playerSound ?? Paths.voices(PlayState.SONG.song));
+			vocalsGroup.addPlayerVocals(vocals);
 			FlxG.sound.list.add(vocals);
+
+			var opponentSound = Paths.voices(PlayState.SONG.song,'opp');
+			if (opponentSound != null) {
+				opponentVocals = new FlxSound().loadEmbedded(opponentSound);
+				vocalsGroup.addOpponentVocals(opponentVocals);
+				FlxG.sound.list.add(opponentVocals);
+			}
+
 		}
 
 
@@ -3606,7 +3615,7 @@ class PlayState extends MusicBeatState
 		//trace(noteDiff, ' ' + Math.abs(note.strumTime - Conductor.songPosition));
 
 		// boyfriend.playAnim('hey');
-		vocalsGroup.volume = 1;
+		vocalsGroup.playerVolume = 1;
 		var placement:String = Std.string(combo);
 
 		var coolText:FlxObject = new FlxObject(0, 0);
@@ -3982,14 +3991,14 @@ class PlayState extends MusicBeatState
 		health -= daNote.missHealth * healthLoss;
 		if(instakillOnMiss)
 		{
-			vocalsGroup.volume = 0;
+			vocalsGroup.playerVolume = 0;
 			doDeathCheck(true);
 		}
 
 		//For testing purposes
 		//trace(daNote.missHealth);
 		songMisses++;
-		vocalsGroup.volume = 0;
+		vocalsGroup.playerVolume = 0;
 		if(!practiceMode) songScore -= 10;
 
 		totalPlayed++;
@@ -4041,7 +4050,7 @@ class PlayState extends MusicBeatState
 			health -= 0.05 * healthLoss;
 			if(instakillOnMiss)
 			{
-				vocalsGroup.volume = 0;
+				vocalsGroup.playerVolume = 0;
 				doDeathCheck(true);
 			}
 
@@ -4074,7 +4083,7 @@ class PlayState extends MusicBeatState
 				if(boyfriend.animTimer <= 0 && !boyfriend.voicelining)
 					boyfriend.playAnim(singAnimations[Std.int(Math.abs(direction))] + 'miss', true);
 			}
-			vocalsGroup.volume = 0;
+			vocalsGroup.playerVolume = 0;
 		}
 		callOnScripts('noteMissPress', [direction]);
 	}
@@ -4144,7 +4153,7 @@ class PlayState extends MusicBeatState
 		}
 
 		if (SONG.needsVoices){
-			vocalsGroup.volume = 1;
+			vocalsGroup.playerVolume = 1;
 		}
 
 		if (playfield.autoPlayed) {
@@ -4323,7 +4332,7 @@ class PlayState extends MusicBeatState
 			}
 
 			note.wasGoodHit = true;
-			vocalsGroup.volume = 1;
+			vocalsGroup.playerVolume = 1;
 
 			if(note.noteData > 4)
 			{
@@ -4445,10 +4454,9 @@ class PlayState extends MusicBeatState
 		super.stepHit();
 
 
-		if (Math.abs(FlxG.sound.music.time - (Conductor.songPosition - Conductor.offset)) > 20
-			|| (SONG.needsVoices &&  vocalsGroup.getDesyncDifference(Math.abs(Conductor.songPosition - Conductor.offset)) > 20))
+		//rework this
+		if (Math.abs(FlxG.sound.music.time - (Conductor.songPosition - Conductor.offset)) > 20 || (SONG.needsVoices && vocalsGroup.getDesyncDifference(Math.abs(Conductor.songPosition - Conductor.offset)) > 20))
 		{
-			trace('desynced. PENIS');
 			resyncVocals();
 		}
 
