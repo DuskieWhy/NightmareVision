@@ -112,24 +112,31 @@ class SoundGroup extends FlxTypedGroup<FlxSound>
 //specialized ver
 class VocalGroup extends SoundGroup
 {
-    public var playerVocals:flixel.sound.FlxSound = null;
-    public var opponentVocals:flixel.sound.FlxSound = null;
+    public var playerVocals:SoundGroup; //sound groups inside sound groups hype
+    public var opponentVocals:SoundGroup;
 
     public var playerVolume(get,set):Float;
 
     public var opponentVolume(get,set):Float;
 
+    public function new() 
+    {
+        super();
+        playerVocals = new SoundGroup();
+        opponentVocals = new SoundGroup();
+    }
+
     public function addOpponentVocals(sound:flixel.sound.FlxSound) 
     {
         if (sound == null) return null;
-        opponentVocals = sound;
+        opponentVocals.add(sound);
         return add(sound);
     }
 
     public function addPlayerVocals(sound:flixel.sound.FlxSound) 
     {
         if (sound == null) return null;
-        playerVocals = sound;
+        playerVocals.add(sound);
         return add(sound);
     }
 
@@ -148,6 +155,25 @@ class VocalGroup extends SoundGroup
     }
 	function get_opponentVolume():Float return opponentVocals != null ? opponentVocals.volume : 1;
 
+    override function clear() {
+        opponentVocals.clear();
+        playerVocals.clear();
+        super.clear();
+    }
+
+    override function destroy() {
+        if (opponentVocals != null) {
+            opponentVocals.destroy();
+            opponentVocals = null;
+        }
+
+        if (playerVocals != null) {
+            playerVocals.destroy();
+            playerVocals = null;
+        }
+
+        super.destroy();
+    }
 
 	
 }
