@@ -126,8 +126,6 @@ class PlayState extends MusicBeatState
 	public var spawnTime:Float = 3000;
 
 	public var vocalsGroup:VocalGroup;
-	public var vocals:FlxSound;
-	public var opponentVocals:FlxSound;
 
 	public var dad:Character = null;
 	public var gf:Character = null;
@@ -1748,15 +1746,11 @@ class PlayState extends MusicBeatState
 
 		if (SONG.needsVoices) {
 			var playerSound = Paths.voices(PlayState.SONG.song,'player');
-			vocals = new FlxSound().loadEmbedded(playerSound ?? Paths.voices(PlayState.SONG.song));
-			vocalsGroup.addPlayerVocals(vocals);
-			FlxG.sound.list.add(vocals);
+			vocalsGroup.addPlayerVocals(new FlxSound().loadEmbedded(playerSound ?? Paths.voices(PlayState.SONG.song)));
 
 			var opponentSound = Paths.voices(PlayState.SONG.song,'opp');
 			if (opponentSound != null) {
-				opponentVocals = new FlxSound().loadEmbedded(opponentSound);
-				vocalsGroup.addOpponentVocals(opponentVocals);
-				FlxG.sound.list.add(opponentVocals);
+				vocalsGroup.addOpponentVocals(new FlxSound().loadEmbedded(opponentSound));
 			}
 
 		}
@@ -1770,7 +1764,7 @@ class PlayState extends MusicBeatState
 
 		FlxG.sound.music.volume = 0;
 
-		setOnHScripts('vocals', vocals);
+		setOnHScripts('vocals', vocalsGroup);
 		setOnHScripts('inst', FlxG.sound.music);
 
 

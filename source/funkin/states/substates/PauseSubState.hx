@@ -237,7 +237,7 @@ class PauseSubState extends MusicBeatSubstate
 			{
 				case 'Options':
 					PlayState.instance.paused = true; // For lua
-					PlayState.instance.vocals.volume = 0;
+					PlayState.instance.vocalsGroup.volume = 0;
 					FlxG.switchState(()->new OptionsState());
 					@:privateAccess {
 						if (pauseMusic._sound != null) {
@@ -303,7 +303,7 @@ class PauseSubState extends MusicBeatSubstate
 	{
 		PlayState.instance.paused = true; // For lua
 		FlxG.sound.music.volume = 0;
-		PlayState.instance.vocals.volume = 0;
+		PlayState.instance.vocalsGroup.volume = 0;
 
 		if(noTrans)
 		{

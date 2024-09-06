@@ -42,6 +42,8 @@ class SoundGroup extends FlxTypedGroup<FlxSound>
         f.pitch = pitch;
         f.volume = volume;
 
+        FlxG.sound.list.add(f);
+
         return f;
     }
 
