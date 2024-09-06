@@ -1,5 +1,6 @@
 package funkin.huds;
 
+import flixel.util.FlxStringUtil;
 import funkin.objects.Bar;
 import funkin.objects.HealthIcon;
 import funkin.huds.BaseHUD.ScoreData;
@@ -100,8 +101,9 @@ class PsychHUD extends BaseHUD
 		{
 			str += ' (${data.accuracy}%) - ${parent.ratingFC}';
 		}
+        
 
-		final tempScore:String = 'Score: ${data.score}'
+		final tempScore:String = 'Score: ${FlxStringUtil.formatMoney(data.score,false)}'
 		+ (!parent.instakillOnMiss ? ' | Misses: ${data.misses}' : "")
 		+ ' | Rating: ${str}';
 
