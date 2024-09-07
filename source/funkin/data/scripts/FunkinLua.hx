@@ -595,10 +595,10 @@ class FunkinLua extends FunkinScript
 
 			FlxG.sound.music.pause();
 			FlxG.sound.music.volume = 0;
-			if(PlayState.instance.vocalsGroup != null)
+			if(PlayState.instance.vocals != null)
 			{
-				PlayState.instance.vocalsGroup.pause();
-				PlayState.instance.vocalsGroup.volume = 0;
+				PlayState.instance.vocals.pause();
+				PlayState.instance.vocals.volume = 0;
 			}
 		});
 
