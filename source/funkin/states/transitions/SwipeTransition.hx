@@ -62,7 +62,7 @@ class SwipeTransition extends BaseTransitionState
       case IN_TO:
       case OUT_OF:
         angle=270;
-        duration = .8;
+        duration = .6;
       default:
         //trace("bruh");
       }

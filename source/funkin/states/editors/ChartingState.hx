@@ -566,21 +566,23 @@ class ChartingState extends MusicBeatState
 
 	function createFriends() 
 	{
+		//temp
+		var isInfry:Bool = FlxG.random.bool(50);
 
-		littleBF = new OurLittleFriend('bf');
+		littleBF = new OurLittleFriend(isInfry ? 'dingalingdemon' : 'bf');
 		littleBF.setPosition((640 + GRID_SIZE / 2) + 25 + 200,FlxG.height - littleBF.height - 50);
 		littleBF.scrollFactor.set();
 
-		littleDad = new OurLittleFriend('fella');
+		littleDad = new OurLittleFriend(isInfry ? "opp" : 'fella');
 		littleDad.setPosition((640 + GRID_SIZE / 2) + 25,FlxG.height - littleDad.height - 50);
 		littleDad.scrollFactor.set();
 
-		littleStage = new FlxSprite().loadGraphic(Paths.image('editors/friends/platform'));
+		littleStage = new FlxSprite().loadGraphic(Paths.image('editors/friends/${isInfry ? "stage" : 'platform'}'));
 		littleStage.scrollFactor.set();
 		littleStage.scale.set(littleDad.scale.x,littleDad.scale.x);
 		littleStage.updateHitbox();
 		littleStage.x = littleDad.x;
-		littleStage.y = littleDad.y + littleDad.height;
+		littleStage.y = littleDad.y + littleDad.height + (isInfry ? -10 : 0);
 
 		add(littleStage);
 		add(littleDad);
