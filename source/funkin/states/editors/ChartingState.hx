@@ -2135,6 +2135,7 @@ class ChartingState extends MusicBeatState
 
 			if (FlxG.mouse.wheel != 0)
 			{
+				resetLittleFriends();
 				FlxG.sound.music.pause();
 				if (!mouseQuant)
 					FlxG.sound.music.time -= (FlxG.mouse.wheel * Conductor.stepCrotchet*0.8);
