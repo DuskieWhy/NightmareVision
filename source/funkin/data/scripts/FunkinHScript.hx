@@ -31,6 +31,7 @@ import sys.io.File;
 
 class FunkinHScript extends FunkinScript
 {
+	//kill this off soon
 	@:noCompletion
 	public static final noteSkinDefault:String = "
 		// this gets the BF noteskin
@@ -48,8 +49,11 @@ class FunkinHScript extends FunkinScript
 		// offset notes, receptors and sustains
 		function offset(noteOff, strumOff, susOff){}
 	";
+	
 
 	public static final exts:Array<String> = ['hx','hxs','hscript'];
+
+	public static function findScript() {}
 
 	static var parser:Parser = new Parser();
 	public static var defaultVars:Map<String,Dynamic> = new Map<String, Dynamic>();
