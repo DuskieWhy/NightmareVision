@@ -70,6 +70,8 @@ class OurLittleFriend extends FlxSprite
 	var _colors:Array<FlxColor> = [FlxColor.MAGENTA,FlxColor.CYAN,FlxColor.LIME,FlxColor.RED,FlxColor.WHITE];
 	var _dances:Array<String> = ['left','down','up','right','idle'];
 
+	var _offsetPath:String = '';
+
 	public var offsets:IntMap<Array<Float>> = new IntMap();
 	public function new(char:String) 
 	{
@@ -87,7 +89,9 @@ class OurLittleFriend extends FlxSprite
 			setGraphicSize(100);
 			updateHitbox();
 
-			if (FileSystem.exists(Paths.getSharedPath('$basePath.txt'))) buildOffsets('$basePath.txt');
+
+				
+			buildOffsets(basePath);
 
 			sing(4);
 			
@@ -96,14 +100,33 @@ class OurLittleFriend extends FlxSprite
 		}
 	}
 
-	function buildOffsets(path:String) 
+	// #if debug
+	// override function update(elapsed:Float) 
+	// {
+	// 	super.update(elapsed);
+
+	// 	if (FlxG.keys.justPressed.G) buildOffsets();
+	// 	if (FlxG.keys.justPressed.T) sing(0);
+	// 	if (FlxG.keys.justPressed.Y) sing(1);
+	// 	if (FlxG.keys.justPressed.U) sing(2);
+	// 	if (FlxG.keys.justPressed.I) sing(3);
+	// 	if (FlxG.keys.justPressed.O) sing(4);
+	// }
+	// #end
+
+	
+
+	function buildOffsets(?path:String) 
 	{
-		for (k => i in File.getContent(Paths.getSharedPath(path)).trim().split('\n')) 
+		path ??= _offsetPath;
+		if (FileSystem.exists(Paths.getSharedPath('$path.txt')))
+		for (k => i in File.getContent(Paths.getSharedPath('$path.txt')).trim().split('\n')) 
 		{
 			var value = i.trim().split(',');
 			offsets.set(k,[Std.parseFloat(value[0]),Std.parseFloat(value[1])]);
 		}
-	
+
+		_offsetPath = path;
 	}
 
 	public function sing(dir:Int) 
@@ -302,6 +325,7 @@ class ChartingState extends MusicBeatState
 
 	var littleBF:OurLittleFriend;
 	var littleDad:OurLittleFriend;
+	var littleStage:FlxSprite;
 
 
 	override function create()
@@ -532,18 +556,35 @@ class ChartingState extends MusicBeatState
 
 		updateGrid();
 
+		createFriends();
 
-		littleBF = new OurLittleFriend('dingalingdemon');
-		littleBF.setPosition((640 + GRID_SIZE / 2) + 25 + 200,FlxG.height - littleBF.height - 50);
-		add(littleBF);
-		littleBF.scrollFactor.set();
 
-		littleDad = new OurLittleFriend('opp');
-		littleDad.setPosition((640 + GRID_SIZE / 2) + 25,FlxG.height - littleDad.height - 50);
-		add(littleDad);
-		littleDad.scrollFactor.set();
+
 
 		super.create();
+	}
+
+	function createFriends() 
+	{
+
+		littleBF = new OurLittleFriend('bf');
+		littleBF.setPosition((640 + GRID_SIZE / 2) + 25 + 200,FlxG.height - littleBF.height - 50);
+		littleBF.scrollFactor.set();
+
+		littleDad = new OurLittleFriend('fella');
+		littleDad.setPosition((640 + GRID_SIZE / 2) + 25,FlxG.height - littleDad.height - 50);
+		littleDad.scrollFactor.set();
+
+		littleStage = new FlxSprite().loadGraphic(Paths.image('editors/friends/platform'));
+		littleStage.scrollFactor.set();
+		littleStage.scale.set(littleDad.scale.x,littleDad.scale.x);
+		littleStage.updateHitbox();
+		littleStage.x = littleDad.x;
+		littleStage.y = littleDad.y + littleDad.height;
+
+		add(littleStage);
+		add(littleDad);
+		add(littleBF);
 	}
 
 	inline function resetLittleFriends() {
