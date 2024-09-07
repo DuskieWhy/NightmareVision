@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Funkin Packer v0.1.3 https://neeeoo.github.io/funkin-packer/
+-->
+<TextureAtlas imagePath="opp.png" width="626" height="886">
+	<SubTexture name="d0000" x="154" y="622" width="183" height="250" frameX="-23" frameY="-0" frameWidth="213" frameHeight="257"/>
+	<SubTexture name="d0001" x="154" y="622" width="183" height="250" frameX="-23" frameY="-0" frameWidth="213" frameHeight="257"/>
+	<SubTexture name="d0002" x="404" y="590" width="213" height="230" frameX="-0" frameY="-27" frameWidth="213" frameHeight="257"/>
+	<SubTexture name="d0003" x="404" y="590" width="213" height="230" frameX="-0" frameY="-27" frameWidth="213" frameHeight="257"/>
+	<SubTexture name="i0000" x="0" y="595" width="149" height="291" frameX="-0" frameY="-0" frameWidth="149" frameHeight="291"/>
+	<SubTexture name="l0000" x="0" y="0" width="247" height="282" frameX="-0" frameY="-9" frameWidth="247" frameHeight="291"/>
+	<SubTexture name="l0001" x="0" y="0" width="247" height="282" frameX="-0" frameY="-9" frameWidth="247" frameHeight="291"/>
+	<SubTexture name="l0002" x="404" y="294" width="206" height="291" frameX="-32" frameY="-0" frameWidth="247" frameHeight="291"/>
+	<SubTexture name="l0003" x="404" y="294" width="206" height="291" frameX="-32" frameY="-0" frameWidth="247" frameHeight="291"/>
+	<SubTexture name="r0000" x="155" y="333" width="244" height="284" frameX="-13" frameY="-2" frameWidth="257" frameHeight="289"/>
+	<SubTexture name="r0001" x="155" y="333" width="244" height="284" frameX="-13" frameY="-2" frameWidth="257" frameHeight="289"/>
+	<SubTexture name="r0002" x="397" y="0" width="229" height="289" frameX="-0" frameY="-0" frameWidth="257" frameHeight="289"/>
+	<SubTexture name="r0003" x="397" y="0" width="229" height="289" frameX="-0" frameY="-0" frameWidth="257" frameHeight="289"/>
+	<SubTexture name="u0000" x="252" y="0" width="140" height="328" frameX="-5" frameY="-0" frameWidth="150" frameHeight="331"/>
+	<SubTexture name="u0001" x="252" y="0" width="140" height="328" frameX="-5" frameY="-0" frameWidth="150" frameHeight="331"/>
+	<SubTexture name="u0002" x="0" y="287" width="150" height="303" frameX="-0" frameY="-28" frameWidth="150" frameHeight="331"/>
+	<SubTexture name="u0003" x="0" y="287" width="150" height="303" frameX="-0" frameY="-28" frameWidth="150" frameHeight="331"/>
+</TextureAtlas>

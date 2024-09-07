@@ -1,6 +1,7 @@
 package funkin.states.editors;
 
 
+import haxe.ds.IntMap;
 import openfl.geom.Rectangle;
 import haxe.Json;
 import haxe.format.JsonParser;
@@ -63,7 +64,65 @@ import sys.FileSystem;
 import sys.io.File;
 #end
 
+//this was neat //probably will rewrite the uhhh sing4 being idle later
+class OurLittleFriend extends FlxSprite
+{
+	var _colors:Array<FlxColor> = [FlxColor.MAGENTA,FlxColor.CYAN,FlxColor.LIME,FlxColor.RED,FlxColor.WHITE];
+	var _dances:Array<String> = ['left','down','up','right','idle'];
 
+	public var offsets:IntMap<Array<Float>> = new IntMap();
+	public function new(char:String) 
+	{
+		super();
+		final basePath = 'images/editors/friends/$char';
+		if (FileSystem.exists(Paths.getSharedPath('$basePath.png'))) 
+		{
+			frames = Paths.getSparrowAtlas(basePath.substr(basePath.indexOf('/') + 1));
+			animation.addByPrefix('idle','i',24);
+			animation.addByPrefix('left','l',24,false);
+			animation.addByPrefix('down','d',24,false);
+			animation.addByPrefix('up','u',24,false);
+			animation.addByPrefix('right','r',24,false);
+
+			setGraphicSize(100);
+			updateHitbox();
+
+			if (FileSystem.exists(Paths.getSharedPath('$basePath.txt'))) buildOffsets('$basePath.txt');
+
+			sing(4);
+			
+
+			
+		}
+	}
+
+	function buildOffsets(path:String) 
+	{
+		for (k => i in File.getContent(Paths.getSharedPath(path)).trim().split('\n')) 
+		{
+			var value = i.trim().split(',');
+			offsets.set(k,[Std.parseFloat(value[0]),Std.parseFloat(value[1])]);
+		}
+	
+	}
+
+	public function sing(dir:Int) 
+	{
+		animation.play(_dances[dir]);
+
+		color = _colors[dir];
+
+		centerOffsets();
+
+		if (offsets.exists(dir)) 
+		{
+			offset.x += offsets.get(dir)[0] * scale.x;
+			offset.y += offsets.get(dir)[1] * scale.y;
+		}
+		// else offset.set();
+	}
+	
+}
 @:access(flixel.sound.FlxSound._sound)
 @:access(openfl.media.Sound.__buffer)
 
@@ -238,6 +297,11 @@ class ChartingState extends MusicBeatState
 	var gradient:FlxSprite;
 	var shit:FlxSprite;
 	var canAddNotes:Bool = true;
+
+
+
+	var littleBF:OurLittleFriend;
+	var littleDad:OurLittleFriend;
 
 
 	override function create()
@@ -467,7 +531,24 @@ class ChartingState extends MusicBeatState
 		add(zoomTxt);
 
 		updateGrid();
+
+
+		littleBF = new OurLittleFriend('dingalingdemon');
+		littleBF.setPosition((640 + GRID_SIZE / 2) + 25 + 200,FlxG.height - littleBF.height - 50);
+		add(littleBF);
+		littleBF.scrollFactor.set();
+
+		littleDad = new OurLittleFriend('opp');
+		littleDad.setPosition((640 + GRID_SIZE / 2) + 25,FlxG.height - littleDad.height - 50);
+		add(littleDad);
+		littleDad.scrollFactor.set();
+
 		super.create();
+	}
+
+	inline function resetLittleFriends() {
+		littleBF?.sing(4);
+		littleDad?.sing(4);
 	}
 
 	var check_mute_inst:FlxUICheckBox = null;
@@ -2084,6 +2165,7 @@ class ChartingState extends MusicBeatState
 
 			if (FlxG.keys.pressed.W || FlxG.keys.pressed.S)
 			{
+				resetLittleFriends();
 				FlxG.sound.music.pause();
 
 				var holdingShift:Float = 1;
@@ -2091,6 +2173,7 @@ class ChartingState extends MusicBeatState
 				else if (FlxG.keys.pressed.SHIFT) holdingShift = 4;
 
 				var daTime:Float = 700 * FlxG.elapsed * holdingShift;
+				resetLittleFriends();
 
 
 				if (FlxG.keys.pressed.W)
@@ -2266,6 +2349,17 @@ class ChartingState extends MusicBeatState
 		}else{
 			clickForInfo.color = 0xFF8c8c8c;
 		}
+
+		curRenderedNotes.forEach((note)-> {
+			if(note.strumTime <= Conductor.songPosition) {
+				var data:Int = note.noteData % _song.keys;
+				if(note.strumTime >= lastConductorPos -100 && FlxG.sound.music.playing && note.noteData > -1) {
+					var char:OurLittleFriend = note.mustPress ? littleBF : littleDad;
+					char.sing(data);
+				}
+			}
+
+		});
 
 		_song.bpm = tempBpm;
 
@@ -2757,6 +2851,9 @@ class ChartingState extends MusicBeatState
 		// Basically old shit from changeSection???
 		FlxG.sound.music.time = sectionStartTime();
 
+
+		resetLittleFriends();
+
 		if (songBeginning)
 		{
 			FlxG.sound.music.time = 0;
@@ -2812,6 +2909,7 @@ class ChartingState extends MusicBeatState
 		}
 		Conductor.songPosition = FlxG.sound.music.time;
 		updateWaveform();
+		resetLittleFriends();
 
 	}
 
@@ -3474,7 +3572,10 @@ class ChartingState extends MusicBeatState
 		LoadingState.loadAndSwitchState(new PlayState());
 	}
 
+	//why is this static
     public static function togglePause(){
+		instance?.resetLittleFriends();
+
 		if (FlxG.sound.music.playing)
 			{
 				FlxG.sound.music.pause();

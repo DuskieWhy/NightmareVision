@@ -79,39 +79,43 @@ class CreditsState extends MusicBeatState
 		//were gonna need to update these credits later lol //data todo
 		var pisspoop:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
 			['NIGHTMARISH FEDS'],
-			['DuskieWhy', 'duskie', 'Main Developer', 'https://twitter.com/DuskieWhy', '6D32A8'],
-			['Data', 'data', 'Programmer', 'https://twitter.com/FixedData', '0xFFFFAF64'],
-			['NebulaZorua', 'neb', 'HScript foundation writer', 'https://twitter.com/Nebula_Zorua', 'B300B3'],
-			['PHO', 'pho', 'Programmer', 'https://twitter.com/Phomow1', '0xFF7455be'],
-			['Decoy', 'decoy', 'Programmer, Charter', 'https://www.youtube.com/watch?v=PuYZ-9zcp4w', '0xFF5833B6'],
-			['JoggingScout', 'joggingscout', 'Artist (SUPER KUTTY!!!!)', 'https://twitter.com/JoggingScout', '0xFF3366CC'],
-			['Iseta', 'iseta', 'Artist (a little less kutty...)', 'https://twitter.com/Isetaaaaa', '0xffdede0b'],
+			['DuskieWhy', 			'duskie', 			'Main Developer', 											'https://twitter.com/DuskieWhy', 				'0x6D32A8'],
+			['Data', 				'data', 			'Programmer', 												'https://twitter.com/FixedData', 				'0xFFAF64'],
+			['NebulaZorua', 		'neb', 				'HScript implementation', 									'https://twitter.com/Nebula_Zorua', 			'0xB300B3'],
+			['PHO', 				'pho', 				'Programmer', 												'https://twitter.com/Phomow1', 					'0x7455be'],
+			['Decoy', 				'decoy', 			'Programmer, Charter', 										'https://www.youtube.com/watch?v=PuYZ-9zcp4w', 	'0x5833B6'],
+			['JoggingScout', 		'joggingscout', 	'Artist (SUPER KUTTY!!!!)', 								'https://twitter.com/JoggingScout', 			'0x3366CC'],
+			['Iseta', 				'iseta', 			'Artist (a little less kutty...)', 							'https://twitter.com/Isetaaaaa', 				'0x6ede0b'],
+			[''],
+			['Special Thanks'],
+			['Infry', 				'infry', 			'made the little guys in chart editor', 					'https://twitter.com/Isetaaaaa', 				'0x8d00df'],
+			['Rozebud', 			'rozebud', 			'made the original little chart guys', 						'https://twitter.com/Isetaaaaa', 				'0x800000'],
+			['riconuts', 			'riconuts', 		'made the stage implementation setup', 						'https://twitter.com/Isetaaaaa', 				'0x700b98'],
 			[''],
 			['Psych Engine Team'],
-			['Shadow Mario',		'shadowmario',		'Main Programmer of Psych Engine',							'https://twitter.com/Shadow_Mario_',	'444444'],
-			['RiverOaken',			'riveroaken',		'Main Artist/Animator of Psych Engine',						'https://twitter.com/RiverOaken',		'C30085'],
+			['Shadow Mario',		'shadowmario',		'Main Programmer of Psych Engine',							'https://twitter.com/Shadow_Mario_',			'0x444444'],
+			['RiverOaken',			'riveroaken',		'Main Artist/Animator of Psych Engine',						'https://twitter.com/RiverOaken',				'0xC30085'],
 			[''],
 			['Former Psych Members'],
-			['bb-panzu',			'bb-panzu',			'Ex-Programmer of Psych Engine',							'https://twitter.com/bbsub3',			'389A58'],
+			['bb-panzu',			'bb-panzu',			'Ex-Programmer of Psych Engine',							'https://twitter.com/bbsub3',					'0x389A58'],
 			[''],
 			['Psych Contributors'],
-			['iFlicky',				'iflicky',			'Composer of Psync and Tea Time\nMade the Dialogue Sounds',	'https://twitter.com/flicky_i',			'AA32FE'],
-			['SqirraRNG',			'gedehari',			'Chart Editor\'s Sound Waveform base',						'https://twitter.com/gedehari',			'FF9300'],
-			['PolybiusProxy',		'polybiusproxy',	'.MP4 Video Loader Extension',								'https://twitter.com/polybiusproxy',	'FFEAA6'],
-			['Keoiki',				'keoiki',			'Note Splash Animations',									'https://twitter.com/Keoiki_',			'FFFFFF'],
-			['Smokey',				'smokey',			'Spritemap Texture Support',								'https://twitter.com/Smokey_5_',		'4D5DBD'],
+			['iFlicky',				'iflicky',			'Composer of Psync and Tea Time\nMade the Dialogue Sounds',	'https://twitter.com/flicky_i',					'0xAA32FE'],
+			['SqirraRNG',			'gedehari',			'Chart Editor\'s Sound Waveform base',						'https://twitter.com/gedehari',					'0xFF9300'],
+			['PolybiusProxy',		'polybiusproxy',	'.MP4 Video Loader Extension',								'https://twitter.com/polybiusproxy',			'0xFFEAA6'],
+			['Keoiki',				'keoiki',			'Note Splash Animations',									'https://twitter.com/Keoiki_',					'0xFFFFFF'],
+			['Smokey',				'smokey',			'Spritemap Texture Support',								'https://twitter.com/Smokey_5_',				'0x4D5DBD'],
 			[''],
 			["Funkin' Crew"],
-			['ninjamuffin99',		'ninjamuffin99',	"Programmer of Friday Night Funkin'",						'https://twitter.com/ninja_muffin99',	'F73838'],
-			['PhantomArcade',		'phantomarcade',	"Animator of Friday Night Funkin'",							'https://twitter.com/PhantomArcade3K',	'FFBB1B'],
-			['evilsk8r',			'evilsk8r',			"Artist of Friday Night Funkin'",							'https://twitter.com/evilsk8r',			'53E52C'],
-			['kawaisprite',			'kawaisprite',		"Composer of Friday Night Funkin'",							'https://twitter.com/kawaisprite',		'6475F3']
+			['ninjamuffin99',		'ninjamuffin99',	"Programmer of Friday Night Funkin'",						'https://twitter.com/ninja_muffin99',			'0xF73838'],
+			['eliteMasterEric',		'mastereric',		"Programmer of Friday Night Funkin'",						'https://twitter.com/ninja_muffin99',			'0xF73838'],
+			['PhantomArcade',		'phantomarcade',	"Animator of Friday Night Funkin'",							'https://twitter.com/PhantomArcade3K',			'0xFFBB1B'],
+			['evilsk8r',			'evilsk8r',			"Artist of Friday Night Funkin'",							'https://twitter.com/evilsk8r',					'0x53E52C'],
+			['kawaisprite',			'kawaisprite',		"Composer of Friday Night Funkin'",							'https://twitter.com/kawaisprite',				'0x6475F3']
 		];
 		
-		for(i in pisspoop){
-			creditsStuff.push(i);
-		}
-	
+		creditsStuff = creditsStuff.concat(pisspoop);
+
 		for (i in 0...creditsStuff.length)
 		{
 			var isSelectable:Bool = !unselectableCheck(i);
@@ -119,7 +123,8 @@ class CreditsState extends MusicBeatState
 			optionText.isMenuItem = true;
 			optionText.screenCenter(X);
 			optionText.yAdd -= 70;
-			if(isSelectable) {
+			if(isSelectable) 
+			{
 				optionText.x -= 70;
 			}
 			optionText.forceX = optionText.x;
@@ -157,11 +162,10 @@ class CreditsState extends MusicBeatState
 		descText = new FlxText(50, FlxG.height + offsetThing - 25, 1180, "", 32);
 		descText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER/*, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK*/);
 		descText.scrollFactor.set();
-		//descText.borderSize = 2.4;
 		descBox.sprTracker = descText;
 		add(descText);
 
-		bg.color = getCurrentBGColor();
+		bg.color = FlxColor.fromString(creditsStuff[curSelected][4]);
 		intendedColor = bg.color;
 		changeSelection();
 		super.create();
@@ -210,14 +214,14 @@ class CreditsState extends MusicBeatState
 				}
 			}
 
-			if(controls.ACCEPT && (creditsStuff[curSelected][3] == null || creditsStuff[curSelected][3].length > 4)) {
+			if(controls.ACCEPT && (creditsStuff[curSelected][3] == null || creditsStuff[curSelected][3].length > 4)) 
+			{
 				CoolUtil.browserLoad(creditsStuff[curSelected][3]);
 			}
 			if (controls.BACK)
 			{
-				if(colorTween != null) {
-					colorTween.cancel();
-				}
+				colorTween?.cancel();
+				
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				MusicBeatState.switchState(new MainMenuState());
 				quitting = true;
@@ -250,35 +254,24 @@ class CreditsState extends MusicBeatState
 	function changeSelection(change:Int = 0)
 	{
 		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
-		do {
-			curSelected += change;
-			if (curSelected < 0)
-				curSelected = creditsStuff.length - 1;
-			if (curSelected >= creditsStuff.length)
-				curSelected = 0;
-		} while(unselectableCheck(curSelected));
+		do (curSelected = FlxMath.wrap(curSelected + change,0,creditsStuff.length-1))
+		while(unselectableCheck(curSelected));
 
-		var newColor:Int =  Std.parseInt(creditsStuff[curSelected][4]);
+		final newColor:FlxColor = FlxColor.fromString(creditsStuff[curSelected][4]);
+		trace(newColor);
 		if(newColor != intendedColor) {
-			if(colorTween != null) {
-				colorTween.cancel();
-			}
-			intendedColor =newColor;
-			colorTween = FlxTween.color(bg, 1, bg.color, intendedColor, {
-				onComplete: function(twn:FlxTween) {
-					colorTween = null;
-				}
-			});
+
+			colorTween?.cancel();
+			intendedColor = newColor;
+
+			colorTween = FlxTween.color(bg, 1, bg.color, intendedColor, {onComplete: function(twn:FlxTween) {colorTween = null;}});
 		}
 
-		var bullShit:Int = 0;
-
-		for (item in grpOptions.members)
+		for (k => item in grpOptions.members)
 		{
-			item.targetY = bullShit - curSelected;
-			bullShit++;
+			item.targetY = k - curSelected;
 
-			if(!unselectableCheck(bullShit-1)) {
+			if(!unselectableCheck(k)) {
 				item.alpha = 0.6;
 				if (item.targetY == 0) {
 					item.alpha = 1;
@@ -321,15 +314,6 @@ class CreditsState extends MusicBeatState
 	}
 	#end
 
-	function getCurrentBGColor() {
-		var bgColor:String = creditsStuff[curSelected][4];
-		if(!bgColor.startsWith('0x')) {
-			bgColor = '0xFF' + bgColor;
-		}
-		return Std.parseInt(bgColor);
-	}
-
-	private function unselectableCheck(num:Int):Bool {
-		return creditsStuff[num].length <= 1;
-	}
+	function unselectableCheck(num:Int):Bool return creditsStuff[num].length <= 1;
+	
 }
