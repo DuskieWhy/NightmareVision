@@ -197,16 +197,6 @@ class Paths
 		return getPath('$key.lua', TEXT, library);
 	}
 
-	inline static public function exists(asset:String, ?type:openfl.utils.AssetType)
-	{
-		#if sys
-		if (FileSystem.exists(asset)) return true;
-		#end
-		if (OpenFlAssets.exists(asset)) return true;
-
-		return false;
-	}
-
 	inline static public function getContent(asset:String):Null<String>{
 		#if sys
 		if (FileSystem.exists(asset)) return File.getContent(asset);
@@ -273,21 +263,7 @@ class Paths
 		var inst = returnSound(null, songKey,'songs');
 		return inst;
 	}
-
-	inline static public function voicesAlt(song:String):Null<openfl.media.Sound>
-	{
-		var songKey:String = '${formatToSongPath(song)}/VoicesAlt';
-		var voices = returnSound(null, songKey,'songs');
-		return voices;
-	}
-
-	inline static public function instAlt(song:String):Null<openfl.media.Sound>
-	{
-		var songKey:String = '${formatToSongPath(song)}/InstAlt';
-		var inst = returnSound(null, songKey,'songs');
-		return inst;
-	}
-
+	
 	inline static public function modsShaderFragment(key:String, ?library:String)
 		return modFolders('shaders/'+key+'.frag');
 	
@@ -494,8 +470,7 @@ class Paths
 		// I hate this so god damn much
 		var gottenPath:String = '$key.$SOUND_EXT';
 		if(path != null) gottenPath = '$path/$gottenPath';
-		gottenPath = getPath(gottenPath, SOUND, library);
-		gottenPath = gottenPath.substring(gottenPath.indexOf(':') + 1, gottenPath.length);
+		gottenPath = strip(getPath(gottenPath, SOUND, library));
 		// trace(gottenPath);
 		if(!currentTrackedSounds.exists(gottenPath))
 		{
@@ -511,6 +486,8 @@ class Paths
 		localTrackedAssets.push(gottenPath);
 		return currentTrackedSounds.get(gottenPath);
 	}
+
+	inline public static function strip(path:String) return path.indexOf(':') != -1 ? path.substr(path.indexOf(':') + 1,path.length) : path;
 
 	#if MODS_ALLOWED
 	inline static public function mods(key:String = '') {

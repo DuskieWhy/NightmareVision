@@ -96,56 +96,57 @@ class PauseSubState extends MusicBeatSubstate
 		add(bg);
 		bg.alpha = 0;
 
-		var levelInfo:FlxText = new FlxText(20, 15, 0, "", 32);
-		levelInfo.text += PlayState.SONG.song;
-		levelInfo.scrollFactor.set();
-		levelInfo.setFormat(Paths.font("vcr.ttf"), 32);
-		levelInfo.updateHitbox();
+		var corners:Array<FlxText> = [];
+		function createCornerText(text:String,addto:Bool = false) 
+		{
+			var t = new FlxText(0,15,cam.width-15,text,32);
+			t.alignment = RIGHT;
+			t.setFormat(Paths.font("vcr.ttf"), 32);
+			t.scrollFactor.set();
+			corners.push(t);
+			if (addto) add(t);
+			return t;
+		}
+
+		var levelInfo = createCornerText(PlayState.SONG.song);
 		add(levelInfo);
 
-		var levelDifficulty:FlxText = new FlxText(20, 15 + 32, 0, "", 32);
-		levelDifficulty.text += CoolUtil.difficultyString();
-		levelDifficulty.scrollFactor.set();
-		levelDifficulty.setFormat(Paths.font('vcr.ttf'), 32);
-		levelDifficulty.updateHitbox();
+		var levelDifficulty = createCornerText(CoolUtil.difficultyString());
 		add(levelDifficulty);
 
-		var blueballedTxt:FlxText = new FlxText(20, 15 + (32 * 2), 0, "", 32);
-		blueballedTxt.text = "Blueballed: " + PlayState.deathCounter;
-		blueballedTxt.scrollFactor.set();
-		blueballedTxt.setFormat(Paths.font('vcr.ttf'), 32);
-		blueballedTxt.updateHitbox();
+		//temp just wanted to see this
+		var meta:Metadata = PlayState.meta;
+		if (meta != null) 
+		{
+			if (meta.composers != null) createCornerText("Composers: " + meta.composers,true);
+			if (meta.charters != null) createCornerText("Charters: " + meta.charters,true);
+			if (meta.artists != null) createCornerText("Artists: " + meta.artists,true);
+			if (meta.coders != null) createCornerText("Coders: " + meta.coders,true);
+		}
+
+
+		var blueballedTxt = createCornerText("Blueballed: " + PlayState.deathCounter);
 		add(blueballedTxt);
 
-		practiceText = new FlxText(20, 15 + 101, 0, "PRACTICE MODE", 32);
-		practiceText.scrollFactor.set();
-		practiceText.setFormat(Paths.font('vcr.ttf'), 32);
-		practiceText.x = cam.width - (practiceText.width + 20);
-		practiceText.updateHitbox();
+		practiceText = createCornerText("PRACTICE MODE");
 		practiceText.visible = PlayState.instance.practiceMode;
 		add(practiceText);
 
-		var chartingText:FlxText = new FlxText(20, 15 + 101, 0, "CHARTING MODE", 32);
-		chartingText.scrollFactor.set();
-		chartingText.setFormat(Paths.font('vcr.ttf'), 32);
-		chartingText.x = cam.width - (chartingText.width + 20);
-		chartingText.y = cam.height - (chartingText.height + 20);
-		chartingText.updateHitbox();
-		chartingText.visible = PlayState.chartingMode;
+		var chartingText = createCornerText("CHARTING MODE");
 		add(chartingText);
+		chartingText.visible = PlayState.chartingMode;
 
-		blueballedTxt.alpha = 0;
-		levelDifficulty.alpha = 0;
-		levelInfo.alpha = 0;
+		FlxTween.tween(bg, {alpha: 0.6},0.4);
 
-		levelInfo.x = cam.width - (levelInfo.width + 20);
-		levelDifficulty.x = cam.width - (levelDifficulty.width + 20);
-		blueballedTxt.x = cam.width - (blueballedTxt.width + 20);
+		var yt:Float = 15;
+		for (k => i in corners) 
+		{
+			i.y = yt - i.height;
+			i.alpha = 0;
+			FlxTween.tween(i, {alpha: 1, y: yt},0.2, {ease: FlxEase.circOut, startDelay: 0.1 * k});
+			yt+=i.height;
 
-		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
-		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
-		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
-		FlxTween.tween(blueballedTxt, {alpha: 1, y: blueballedTxt.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
+		}
 
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
 		add(grpMenuShit);
