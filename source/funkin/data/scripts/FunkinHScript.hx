@@ -331,6 +331,14 @@ class FunkinHScript extends FunkinScript
 				set("global", state.variables);
 				set("getInstance", getInstance);
 
+				//why is ther hscriptglobals and variables when they achieve the same thign maybe kill off one or smth
+				set('setGlobalFunc',(name:String,func:Dynamic)->state.variables.set(name,func));
+				set('callGlobalFunc',(name:String,?args:Dynamic)->
+				{
+					if (state.variables.exists(name)) return state.variables.get(name)(args);
+					else return null;
+				});
+
 			}
 			else if ((state is ChartingState) && state == ChartingState.instance){
 				var state:ChartingState = ChartingState.instance;
