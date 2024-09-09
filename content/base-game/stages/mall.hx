@@ -4,6 +4,9 @@ var bottomBoppers:BGSprite;
 var santa:BGSprite;
 
 function onLoad(){
+    if (Paths.formatToSongPath(PlayState.SONG.song) == "eggnog") 
+        game.outroDelay = 1.5; // Outro delay for storymode.
+
     var bg:BGSprite = new BGSprite('christmas/bgWalls', -1000, -500, 0.2, 0.2);
     bg.setGraphicSize(Std.int(bg.width * 0.8));
     bg.updateHitbox();
@@ -44,6 +47,20 @@ function onCountdownTick(){
 
     bottomBoppers.dance(true);
     santa.dance(true);
+}
+
+function onEndSong() {
+    // Check to see if horrorland is next up in the song list, and that we are in story mode.
+    trace(PlayState.isStoryMode);
+    if (Paths.formatToSongPath(PlayState.SONG.song) == "eggnog" && PlayState.isStoryMode) {
+        var blackShit:FlxSprite = new FlxSprite(-FlxG.width * FlxG.camera.zoom,
+            -FlxG.height * FlxG.camera.zoom).makeGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.BLACK);
+        blackShit.scrollFactor.set();
+        blackShit.cameras = [game.camOther];
+        add(blackShit);
+
+        FlxG.sound.play(Paths.sound('Lights_Shut_off'));
+    }
 }
 
 function onBeatHit(){
