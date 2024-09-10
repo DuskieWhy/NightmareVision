@@ -1,9 +1,14 @@
+import funkin.objects.BGSprite;
+import funkin.states.substates.GameOverSubstate;
+import funkin.objects.FNFSprite.CrowdAnim;
+import funkin.objects.stageobjects.TankmenBG;
+
 var tankWatchtower:BGSprite;
 var tankGround:BGSprite;
-var tankmanRun:FlxTypedGroup<TankmenBG> = [];
-var foregroundSprites:FlxTypedGroup<BGSprite> = [];
+var tankmanRun:FlxTypedGroup;
+var foregroundSprites:FlxTypedGroup;
 var chart:SONG.SwagSong = null;
-var picoAnims:Array<FNFSprite.CrowdAnim> = [];
+var picoAnims:Array<CrowdAnim> = [];
 var anims:Array<String> = ['shoot1', 'shoot2', 'shoot3', 'shoot4'];
 
 
@@ -48,7 +53,7 @@ function onLoad(){
     tankGround = new BGSprite('tankRolling', 300, 300, 0.5, 0.5,['BG tank w lighting'], true);
     add(tankGround);
 
-    tankmanRun = createTypedGroup();
+    tankmanRun = new FlxTypedGroup();
     add(tankmanRun);
 
     var ground:BGSprite = new BGSprite('tankGround', -420, -150);
@@ -56,6 +61,9 @@ function onLoad(){
     ground.updateHitbox();
     add(ground);
     moveTank();
+
+    foregroundSprites = new FlxTypedGroup();
+    foreground.add(foregroundSprites);
 
     foregroundSprites.add(new BGSprite('tank0', -500, 650, 1.7, 1.5, ['fg']));
     if(!ClientPrefs.lowQuality) foregroundSprites.add(new BGSprite('tank1', -300, 750, 2, 0.2, ['fg']));

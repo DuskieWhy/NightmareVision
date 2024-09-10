@@ -1,3 +1,6 @@
+import funkin.objects.BGSprite;
+import funkin.states.substates.GameOverSubstate;
+
 function onLoad(){
     GameOverSubstate.deathSoundName = 'fnf_loss_sfx-pixel';
     GameOverSubstate.loopSoundName = 'gameOver-pixel';

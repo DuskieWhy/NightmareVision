@@ -1,3 +1,6 @@
+import funkin.objects.BGSprite;
+
+
 function onLoad(){
     var bg:BGSprite = new BGSprite('christmas/evilBG', -400, -500, 0.2, 0.2);
     bg.setGraphicSize(Std.int(bg.width * 0.8));

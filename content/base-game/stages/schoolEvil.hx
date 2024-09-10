@@ -1,3 +1,5 @@
+import funkin.objects.BGSprite;
+
 var bgGhouls:BGSprite;
 
 function onLoad(){

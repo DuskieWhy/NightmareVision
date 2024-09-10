@@ -29,6 +29,8 @@ import sys.FileSystem;
 import sys.io.File;
 #end
 
+//replaced by funkinIris
+//will be killed off soon
 class FunkinHScript extends FunkinScript
 {
 	//kill this off soon
@@ -286,10 +288,10 @@ class FunkinHScript extends FunkinScript
 			
 		});
 
-		set("importScript", function(){
-			// unimplemented lol
-			throw new haxe.exceptions.NotImplementedException();
-		});
+		// set("importScript", function(){
+		// 	// unimplemented lol
+		// 	throw new haxe.exceptions.NotImplementedException();
+		// });
 
 		for(variable => arg in defaultVars){
 			set(variable, arg);

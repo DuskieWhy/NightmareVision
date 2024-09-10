@@ -290,13 +290,13 @@ class PlayState extends MusicBeatState
 	public static var instance:PlayState;
 	public var luaArray:Array<FunkinLua> = [];
 	public var funkyScripts:Array<FunkinScript> = [];
-	public var hscriptArray:Array<FunkinHScript> = [];
+	public var hscriptArray:Array<FunkinIris> = [];
 
 	public var notetypeScripts:Map<String, FunkinScript> = []; // custom notetypes for scriptVer '1'
 	public var eventScripts:Map<String, FunkinScript> = []; // custom events for scriptVer '1'
-	public var stageScripts:Map<String, FunkinHScript> = [];
+	public var stageScripts:Map<String, FunkinIris> = [];
 
-	public var noteskinScript:FunkinHScript;
+	public var noteskinScript:FunkinIris;
 
 	//might make this a map ngl
 	public var script_NOTEOffsets:haxe.ds.Vector<FlxPoint>;
@@ -525,17 +525,17 @@ class PlayState extends MusicBeatState
 
 		// STAGE SCRIPTS
 		stage.buildStage();
-		#if LUA_ALLOWED
-		for (script in stage.luaArray){
-			luaArray.push(script);
-			funkyScripts.push(script);
+
+		if (stage.curStageScript != null)
+		{
+			switch (stage.curStageScript.scriptType) {
+				case HSCRIPT: hscriptArray.push(cast stage.curStageScript);
+				#if LUA_ALLOWED	case LUA: luaArray.push(cast stage.curStageScript); #end
+			}
+			funkyScripts.push(stage.curStageScript);
+			trace(stage.curStageScript.scriptName);
 		}
-		#end
-		for (script in stage.hscriptArray){
-			hscriptArray.push(script);
-			funkyScripts.push(script);
-			trace(script.scriptName);
-		}
+		
 
 		if(isPixelStage) {
 			introSoundsSuffix = '-pixel';
@@ -593,9 +593,9 @@ class PlayState extends MusicBeatState
 							#end
 						}
 						else{
-							for(ext in FunkinHScript.exts){
+							for(ext in FunkinIris.exts){
 								if(file.endsWith('.$ext')){
-									var script = FunkinHScript.fromFile(folder + file);
+									var script = FunkinIris.fromFile(folder + file);
 									hscriptArray.push(script);
 									funkyScripts.push(script);
 									filesPushed.push(file);
@@ -818,9 +818,9 @@ class PlayState extends MusicBeatState
 							#end
 						}
 						else{
-							for(ext in FunkinHScript.exts){
+							for(ext in FunkinIris.exts){
 								if(file.endsWith('.$ext')){
-									var script = FunkinHScript.fromFile(folder + file);
+									var script = FunkinIris.fromFile(folder + file);
 									hscriptArray.push(script);
 									funkyScripts.push(script);
 									filesPushed.push(file);
@@ -987,27 +987,27 @@ class PlayState extends MusicBeatState
 		trace('noteskin script: "${SONG.arrowSkin}"');
 
 		if(SONG.arrowSkin != 'default' && SONG.arrowSkin != '' && SONG.arrowSkin != null){
-			for(ext in FunkinHScript.exts){
+			for(ext in FunkinIris.exts){
 				if(FileSystem.exists(Paths.modsNoteskin('${SONG.arrowSkin}.$ext'))){
-					noteskinScript = FunkinHScript.fromFile(Paths.modsNoteskin('${SONG.arrowSkin}.$ext'));
+					noteskinScript = FunkinIris.fromFile(Paths.modsNoteskin('${SONG.arrowSkin}.$ext'));
 					break;
 				}else if(FileSystem.exists(Paths.noteskin('${SONG.arrowSkin}.$ext'))){
 					//Noteskin doesn't exist in assets, trying mods folder
-					noteskinScript = FunkinHScript.fromFile(Paths.noteskin('${SONG.arrowSkin}.$ext'));
+					noteskinScript = FunkinIris.fromFile(Paths.noteskin('${SONG.arrowSkin}.$ext'));
 					break;
 				}
 			}	
 		}else{
-			for(ext in FunkinHScript.exts){
+			for(ext in FunkinIris.exts){
 				if(FileSystem.exists(Paths.modsNoteskin('default.$ext'))){
-					noteskinScript = FunkinHScript.fromFile(Paths.modsNoteskin('default.$ext'));
+					noteskinScript = FunkinIris.fromFile(Paths.modsNoteskin('default.$ext'));
 					break;
 				}
 			}
 		}
 
 		//since stuff relies on this and we dont want people to actually be able to mess with the default // they can use modsfolder hx to modify it though
-		noteskinScript ??= FunkinHScript.fromString(FunkinHScript.noteSkinDefault); //kill this off eventually if its null just dont use it
+		noteskinScript ??= FunkinIris.fromString(FunkinHScript.noteSkinDefault,'noteskinScript'); //kill this off eventually if its null just dont use it
 
 		noteskinScript.call("offset", [script_NOTEOffsets, script_STRUMOffsets,script_SUSTAINOffsets]);
 		funkyScripts.push(noteskinScript);
@@ -1135,7 +1135,7 @@ class PlayState extends MusicBeatState
 					luaArray.push(lua);
 					funkyScripts.push(lua);
 			}else{
-				var script:FunkinHScript = FunkinHScript.fromFile(scriptFile);
+				var script:FunkinIris = FunkinIris.fromFile(scriptFile);
 				hscriptArray.push(script);
 				funkyScripts.push(script);
 				script.call('onCreate', []);
@@ -1865,7 +1865,7 @@ class PlayState extends MusicBeatState
 			var doPush:Bool = false;
 			var baseScriptFile:String = 'custom_notetypes/' + notetype;
 			var exts = [#if LUA_ALLOWED "lua" #end];
-			for (e in FunkinHScript.exts)
+			for (e in FunkinIris.exts)
 				exts.push(e);
 			for (ext in exts)
 			{
@@ -1887,7 +1887,7 @@ class PlayState extends MusicBeatState
 						}
 						else
 						{
-							var script = FunkinHScript.fromFile(file, notetype);
+							var script = FunkinIris.fromFile(file, notetype);
 							hscriptArray.push(script);
 							funkyScripts.push(script);
 							notetypeScripts.set(notetype, script);
@@ -1914,7 +1914,7 @@ class PlayState extends MusicBeatState
 		{
 			var doPush:Bool = false;
 			var baseScriptFile:String = 'custom_events/' + event;
-			var exts = [#if LUA_ALLOWED "lua" #end].concat(FunkinHScript.exts);
+			var exts = [#if LUA_ALLOWED "lua" #end].concat(FunkinIris.exts);
 			for (ext in exts)
 			{
 				if (doPush)
@@ -1937,7 +1937,7 @@ class PlayState extends MusicBeatState
 						}
 						else
 						{
-							var script = FunkinHScript.fromFile(file, event);
+							var script = FunkinIris.fromFile(file, event);
 							trace("event script " + event);
 							eventScripts.set(event, script);
 							script.call("onLoad", [event]);
@@ -4660,7 +4660,7 @@ class PlayState extends MusicBeatState
 
 	public function hscriptSetDefault(variable:String, arg:Dynamic)
 	{
-		FunkinHScript.defaultVars.set(variable, arg);
+		FunkinIris.defaultVars.set(variable, arg);
 		return setOnHScripts(variable, arg);
 	}
 

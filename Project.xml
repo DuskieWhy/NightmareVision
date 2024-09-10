@@ -61,6 +61,8 @@
 	<library name="songs"         preload="true" />
 
 	<assets path='content' embed='false' if="MODS_ALLOWED"/>
+	<assets path="assets/shared"        exclude="*.ogg" if="web"/>
+	<assets path="assets/shared"        exclude="*.mp3" unless="web"/>
 
 	<!-- assets path="CHANGELOG.md" rename='changelog.txt' -->
 
@@ -79,6 +81,7 @@
 	
 	<haxedev set='webgl' />
 	<haxelib name="hscript" />
+	<haxelib name="hscript-iris" />
 
 	<haxelib name="linc_luajit" if="LUA_ALLOWED"/>
 	<haxelib name="discord_rpc" if="DISCORD_ALLOWED"/>

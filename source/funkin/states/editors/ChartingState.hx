@@ -153,7 +153,7 @@ class ChartingState extends MusicBeatState
 {
 	public static var instance:ChartingState;
 	public var notetypeScripts:Map<String, FunkinScript> = [];
-	public var noteskinScript:FunkinHScript;
+	public var noteskinScript:FunkinIris;
 
 	public static var noteTypeList:Array<String> = //Used for backwards compatibility with 0.1 - 0.3.2 charts, though, you should add your hardcoded custom note types here too.
 	[
@@ -3054,13 +3054,13 @@ class ChartingState extends MusicBeatState
 		prevRenderedSustains.clear();
 		
 		if(_song.arrowSkin != ''){
-			for(ext in FunkinHScript.exts){
+			for(ext in FunkinIris.exts){
 				if(noteskinScript == null){
 					if(FileSystem.exists(Paths.modsNoteskin('${_song.arrowSkin}.$ext'))){
-						noteskinScript = FunkinHScript.fromFile(Paths.modsNoteskin('${_song.arrowSkin}.$ext'));
+						noteskinScript = FunkinIris.fromFile(Paths.modsNoteskin('${_song.arrowSkin}.$ext'));
 					}else if(FileSystem.exists(Paths.noteskin('${_song.arrowSkin}.$ext'))){
 						//Noteskin doesn't exist in mods, trying assets folder
-						noteskinScript = FunkinHScript.fromFile(Paths.noteskin('${_song.arrowSkin}.$ext'));
+						noteskinScript = FunkinIris.fromFile(Paths.noteskin('${_song.arrowSkin}.$ext'));
 					}else{
 						noteskinScript = null;
 					}						

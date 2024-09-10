@@ -1,4 +1,7 @@
-addHaxeLibrary('BackgroundDancer', 'gameObjects');
+
+import funkin.objects.stageobjects.BackgroundDancer;
+import funkin.objects.BGSprite;
+
 var grpLimoDancers:Array<BackgroundDancer> = [];
 var grpLimoParticles:Array<BGSprite> = [];
 var limo:BGSprite;

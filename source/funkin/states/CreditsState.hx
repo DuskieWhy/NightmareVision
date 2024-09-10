@@ -76,7 +76,7 @@ class CreditsState extends MusicBeatState
 		}
 		#end
 
-		//were gonna need to update these credits later lol //data todo
+		//were gonna need to update these credits later lol //data todo //still todo lol
 		var pisspoop:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
 			['NIGHTMARISH FEDS'],
 			['DuskieWhy', 			'duskie', 			'Main Developer', 											'https://twitter.com/DuskieWhy', 				'0x6D32A8'],
@@ -100,9 +100,10 @@ class CreditsState extends MusicBeatState
 			['bb-panzu',			'bb-panzu',			'Ex-Programmer of Psych Engine',							'https://twitter.com/bbsub3',					'0x389A58'],
 			[''],
 			['Psych Contributors'],
+			["crowplexus",			"crowplexus",		"HScript Iris",												"https://twitter.com/crowplexus",				"0xCFCFCF"],
 			['iFlicky',				'iflicky',			'Composer of Psync and Tea Time\nMade the Dialogue Sounds',	'https://twitter.com/flicky_i',					'0xAA32FE'],
-			['SqirraRNG',			'gedehari',			'Chart Editor\'s Sound Waveform base',						'https://twitter.com/gedehari',					'0xFF9300'],
-			['PolybiusProxy',		'polybiusproxy',	'.MP4 Video Loader Extension',								'https://twitter.com/polybiusproxy',			'0xFFEAA6'],
+			['SqirraRNG',			'sqirra',			'Chart Editor\'s Sound Waveform base',						'https://x.com/sqirradotdev',					'0xFF9300'],
+			['MAJigsaw77',			'majigsaw',			'Video Playback support',									'https://x.com/MAJigsaw77',						'0x6E6E6E'],
 			['Keoiki',				'keoiki',			'Note Splash Animations',									'https://twitter.com/Keoiki_',					'0xFFFFFF'],
 			['Smokey',				'smokey',			'Spritemap Texture Support',								'https://twitter.com/Smokey_5_',				'0x4D5DBD'],
 			[''],

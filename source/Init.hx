@@ -15,6 +15,7 @@ class Init extends FlxState
 	override public function create():Void
 	{
 		funkin.data.scripts.FunkinHScript.init();
+		funkin.data.scripts.FunkinIris.init();
 
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();

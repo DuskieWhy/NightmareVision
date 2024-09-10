@@ -26,6 +26,11 @@
             "version": null
         },
         {
+            "name": "hscript-iris",
+            "type": "haxelib",
+            "version": null
+        },
+        {
             "name": "flixel",
             "type": "haxelib",
             "version": null

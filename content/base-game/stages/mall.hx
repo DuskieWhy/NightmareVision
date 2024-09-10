@@ -1,3 +1,5 @@
+import funkin.objects.BGSprite;
+
 var heyTimer:Float;
 var upperBoppers:BGSprite;
 var bottomBoppers:BGSprite;

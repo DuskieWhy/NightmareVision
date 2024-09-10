@@ -1,5 +1,9 @@
+
+import funkin.objects.BGSprite;
+
 var halloweenWhite:BGSprite;
-function onLoad(){
+function onLoad()
+{
     if(!ClientPrefs.lowQuality) {
         halloweenBG = new BGSprite('week2/halloween_bg', -200, -100, ['halloweem bg0', 'halloweem bg lightning strike']);
     } else {
@@ -11,7 +15,7 @@ function onLoad(){
     halloweenWhite = new BGSprite(null, -800, -400, 0, 0);
     halloweenWhite.makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.WHITE);
     halloweenWhite.alpha = 0;
-    // halloweenWhite.blend = ADD;
+    halloweenWhite.blend = BlendMode.ADD;
     foreground.add(halloweenWhite);
 }
 

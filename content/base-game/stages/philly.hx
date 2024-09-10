@@ -1,3 +1,7 @@
+
+import funkin.objects.BGSprite;
+
+
 var phillyLightsColors:Array<FlxColor>;
 var phillyWindow:BGSprite;
 var phillyStreet:BGSprite;

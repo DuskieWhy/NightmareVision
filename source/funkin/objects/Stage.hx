@@ -33,11 +33,7 @@ import openfl.utils.Assets;
 
 class Stage extends FlxTypedGroup<FlxBasic>
 {
-	public var stageScripts:Array<FunkinScript> = [];
-	public var hscriptArray:Array<FunkinHScript> = [];
-	#if LUA_ALLOWED
-	public var luaArray:Array<FunkinLua> = [];
-	#end
+	public var curStageScript:FunkinScript;
 	
 	public var curStage = "stage1";
 	public var stageData:StageFile = {
@@ -74,7 +70,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		var baseScriptFile:String = 'stages/' + curStage;
 
 		#if LUA_ALLOWED
-		for (ext in FunkinHScript.exts.concat(['lua']))
+		for (ext in FunkinIris.exts.concat(['lua']))
 		{
 			if (doPush)
 				break;
@@ -88,11 +84,12 @@ class Stage extends FlxTypedGroup<FlxBasic>
 				if (FileSystem.exists(file))
 				{
 					#if LUA_ALLOWED
-					if (FunkinHScript.exts.contains(ext)){
+					if (FunkinIris.exts.contains(ext)){
 					#end
-						var script = FunkinHScript.fromFile(file);
-						hscriptArray.push(script);
-						stageScripts.push(script);
+						var script = FunkinIris.fromFile(file);
+						curStageScript = script;
+						// hscriptArray.push(script);
+						// stageScripts.push(script);
 
 						// define variables lolol
 						script.set("add", add);
@@ -104,8 +101,9 @@ class Stage extends FlxTypedGroup<FlxBasic>
 					#if LUA_ALLOWED
 					} else if (ext == 'lua'){
 						var script = new FunkinLua(file);
-						luaArray.push(script);
-						stageScripts.push(script);
+						// luaArray.push(script);
+						// stageScripts.push(script);
+						curStageScript = script;
 						
 						script.call("onCreate", []);
 						trace(script.call('onCreate', []));
@@ -124,11 +122,6 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		// return this;
 	}
 
-	override function destroy(){
-		for (script in stageScripts)
-			script.stop();
-		super.destroy();
-	}
 
 	//// Stages of the currently loaded mod.
 	// public static function getStageList(modsOnly = false):Array<String>{
