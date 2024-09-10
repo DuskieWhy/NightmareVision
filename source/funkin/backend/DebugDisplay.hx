@@ -58,27 +58,27 @@ class DebugDisplay extends Sprite
 	// Event Handlers
 	private override function __enterFrame(deltaTime:Float):Void
 	{
-		// prevents the overlay from updating every frame, why would you need to anyways
-		if (deltaTimeout > 1000) {
-			deltaTimeout = 0.0;
-			return;
-		}
-
 		final now:Float = haxe.Timer.stamp() * 1000;
 		times.push(now);
 		while (times[0] < now - 1000) times.shift();
+
+		// prevents the overlay from updating every frame, why would you need to anyways @crowplexus
+		if (deltaTimeout < 1000) {
+			deltaTimeout += deltaTime;
+			return;
+		}
 
 		currentFPS = times.length < FlxG.updateFramerate ? times.length : FlxG.updateFramerate;		
 		updateText();
 		underlay.width = text.width + 5;
 		underlay.height = text.height;
 		
-		deltaTimeout += deltaTime;
+		deltaTimeout = 0.0;
 	}
 
-	public dynamic function updateText():Void { // so people can override it in hscript
+	inline function updateText():Void 
+	{
         text.text = 'FPS: $currentFPS • Memory: ${flixel.util.FlxStringUtil.formatBytes(memoryMegas)}';
-		
 		
 		text.textColor = 0xFFFFFFFF;
 		if (currentFPS < FlxG.drawFramerate * 0.5)
@@ -86,6 +86,10 @@ class DebugDisplay extends Sprite
 	}
 
 	inline function get_memoryMegas():Float {
+		#if cpp 
+		return cpp.vm.Gc.memInfo64(cpp.vm.Gc.MEM_INFO_USAGE);
+		#else
 		return cast(System.totalMemory, UInt);
+		#end
 	}
 }

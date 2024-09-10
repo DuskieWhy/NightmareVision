@@ -1376,12 +1376,12 @@ class PlayState extends MusicBeatState
 			//generateStaticArrows(0, skipArrowStartTween );
 			//generateStaticArrows(1, skipArrowStartTween );
 
-			playerStrums = new PlayField(ClientPrefs.middleScroll ? (FlxG.width / 2):(FlxG.width / 2 + (FlxG.width / 4)), strumLine.y, SONG.keys, boyfriend, true, cpuControlled, 0);
-			opponentStrums = new PlayField(ClientPrefs.middleScroll?(FlxG.width / 2):(FlxG.width/2 - (FlxG.width/4)), strumLine.y, SONG.keys, dad, false, true, 1);
+			playerStrums = new PlayField(ClientPrefs.middleScroll ? (FlxG.width / 2) : (FlxG.width / 2 + (FlxG.width / 4)), strumLine.y, SONG.keys, boyfriend, true, cpuControlled, 0);
+			opponentStrums = new PlayField(ClientPrefs.middleScroll ? (FlxG.width / 2) :(FlxG.width / 2 - (FlxG.width / 4)), strumLine.y, SONG.keys, dad, false, true, 1);
 			if (!ClientPrefs.opponentStrums)
 				opponentStrums.baseAlpha = 0;
 			else if (ClientPrefs.middleScroll)
-				opponentStrums.baseAlpha = 0.35; //the alpha modifier dont honor this
+				opponentStrums.baseAlpha = 0.35;
 
 			opponentStrums.offsetReceptors = ClientPrefs.middleScroll;
 
