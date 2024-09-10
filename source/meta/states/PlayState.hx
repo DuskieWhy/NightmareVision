@@ -337,7 +337,6 @@ class PlayState extends MusicBeatState
 	@:isVar
 	public var outroDelay(default, set):Float = 0;
 	function set_outroDelay(newDelay:Float) {
-		trace(isStoryMode);
 		if (!isStoryMode) return 0; // Don't change this value if we are in freeplay.
 		return outroDelay = newDelay;
 	}

@@ -51,7 +51,6 @@ function onCountdownTick(){
 
 function onEndSong() {
     // Check to see if horrorland is next up in the song list, and that we are in story mode.
-    trace(PlayState.isStoryMode);
     if (Paths.formatToSongPath(PlayState.SONG.song) == "eggnog" && PlayState.isStoryMode) {
         var blackShit:FlxSprite = new FlxSprite(-FlxG.width * FlxG.camera.zoom,
             -FlxG.height * FlxG.camera.zoom).makeGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.BLACK);
