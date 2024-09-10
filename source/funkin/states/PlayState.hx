@@ -163,7 +163,7 @@ class PlayState extends MusicBeatState
 	@:noCompletion function get_strumLineNotes()
 	{
 		var notes:Array<StrumNote> = [];
-		if(playFields !=null && playFields.length > 0)
+		if(playFields != null && playFields.length > 0)
 		{
 			for(field in playFields.members)
 			{
@@ -327,7 +327,7 @@ class PlayState extends MusicBeatState
 
 	@:noCompletion public function set_cpuControlled(val:Bool)
 	{
-		if(playFields !=null && playFields.members.length > 0)
+		if(playFields != null && playFields.members.length > 0)
 		{
 			for(field in playFields.members)
 			{
@@ -1779,8 +1779,6 @@ class PlayState extends MusicBeatState
 
 		}
 
-		// FlxG.sound.list.add(new FlxSound().loadEmbedded(Paths.inst(PlayState.SONG.song)));
-
 		vocals.volume = 0;
 		FlxG.sound.music.volume = 0;
 
@@ -2395,16 +2393,11 @@ class PlayState extends MusicBeatState
 	function resyncVocals():Void
 	{
 		if(finishTimer != null) return;
-		// final diff = vocals.getDesyncDifference(Conductor.songPosition - Conductor.offset);
-		// trace('diff is' + diff);
 
-		//vocals.pause();
 		vocals.pause();
 
 		FlxG.sound.music.play();
 		Conductor.songPosition = FlxG.sound.music.time;
-		// vocals.time = Conductor.songPosition;
-		// vocals.play();
 
 		vocals.time = Conductor.songPosition;
 		vocals.play(false,Conductor.songPosition);
@@ -2492,14 +2485,16 @@ class PlayState extends MusicBeatState
 			openChartEditor();
 		}
 
-		if (health > healthBounds.max) health = healthBounds.max;
-
 		if (FlxG.keys.anyJustPressed(debugKeysCharacter) && !endingSong && !inCutscene) {
 			persistentUpdate = false;
 			paused = true;
 			cancelMusicFadeTween();
 			MusicBeatState.switchState(new CharacterEditorState(SONG.player2));
 		}
+
+
+		if (health > healthBounds.max) health = healthBounds.max;
+
 
 		if (startingSong)
 		{
