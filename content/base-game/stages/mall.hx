@@ -62,6 +62,12 @@ function onEndSong() {
 
         // Begin our transition!
         new FlxTimer().start(1.5, (_) -> {
+            PlayState.campaignScore += game.songScore;
+            PlayState.campaignMisses += game.songScore;
+
+            PlayState.storyPlaylist.remove(PlayState.storyPlaylist[0]);
+
+            PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0] + CoolUtil.getDifficultyFilePath(), PlayState.storyPlaylist[0]);
             PlayState.cancelMusicFadeTween();
             LoadingState.loadAndSwitchState(new PlayState());
         });
