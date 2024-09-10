@@ -1,9 +1,12 @@
+importClass("meta.states.LoadingState");
+
 var heyTimer:Float;
 var upperBoppers:BGSprite;
 var bottomBoppers:BGSprite;
 var santa:BGSprite;
 
 function onLoad(){
+
     var bg:BGSprite = new BGSprite('christmas/bgWalls', -1000, -500, 0.2, 0.2);
     bg.setGraphicSize(Std.int(bg.width * 0.8));
     bg.updateHitbox();
@@ -44,6 +47,33 @@ function onCountdownTick(){
 
     bottomBoppers.dance(true);
     santa.dance(true);
+}
+
+function onEndSong() {
+    // Check to see if horrorland is next up in the song list, and that we are in story mode.
+    if (Paths.formatToSongPath(PlayState.SONG.song) == "eggnog" && PlayState.isStoryMode) {
+        var blackShit:FlxSprite = new FlxSprite(-FlxG.width * FlxG.camera.zoom,
+            -FlxG.height * FlxG.camera.zoom).makeGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.BLACK);
+        blackShit.scrollFactor.set();
+        blackShit.cameras = [game.camOther];
+        add(blackShit);
+
+        FlxG.sound.play(Paths.sound('Lights_Shut_off'));
+
+        // Begin our transition!
+        new FlxTimer().start(1.5, (_) -> {
+            PlayState.campaignScore += game.songScore;
+            PlayState.campaignMisses += game.songScore;
+
+            PlayState.storyPlaylist.remove(PlayState.storyPlaylist[0]);
+
+            PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0] + CoolUtil.getDifficultyFilePath(), PlayState.storyPlaylist[0]);
+            PlayState.cancelMusicFadeTween();
+            LoadingState.loadAndSwitchState(new PlayState());
+        });
+        
+        return Function_Stop;
+    }
 }
 
 function onBeatHit(){

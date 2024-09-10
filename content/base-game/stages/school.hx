@@ -80,9 +80,106 @@ function onBeatHit(){
     }
 }
 
-// function popupNumScore(rating, comboSpr, note){
-//     rating.scale.set(6,6);
-//     rating.updateHitbox();
-//     comboSpr.scale.set(6,6);
-//     comboSpr.updateHitbox();
-// }
+function doStartCountdown() {
+    if (PlayState.isStoryMode) {
+        if (Paths.formatToSongPath(PlayState.SONG.song) == 'roses')
+            FlxG.sound.play(Paths.sound('ANGRY'));
+    
+        schoolIntro(doof);
+    
+        return Function_Stop;
+    }
+}
+
+function schoolIntro(?dialogueBox:DialogueBox):Void {
+    game.inCutscene = true;
+    var black:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
+    black.scrollFactor.set();
+    black.cameras = [ game.camHUD ];
+    add(black);
+
+    var red:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFFff1b31);
+    red.cameras = [ game.camOther ];
+    red.scrollFactor.set();
+
+    var senpaiEvil:FlxSprite = new FlxSprite();
+    senpaiEvil.frames = Paths.getSparrowAtlas('weeb/senpaiCrazy');
+    senpaiEvil.animation.addByPrefix('idle', 'Senpai Pre Explosion', 24, false);
+    senpaiEvil.setGraphicSize(Std.int(senpaiEvil.width * 6));
+    senpaiEvil.scrollFactor.set();
+    senpaiEvil.updateHitbox();
+    senpaiEvil.screenCenter();
+    senpaiEvil.cameras = [ game.camOther ];
+    senpaiEvil.x += 300;
+
+    var songName:String = Paths.formatToSongPath(PlayState.SONG.song);
+    if (songName == 'roses' || songName == 'thorns')
+    {
+        remove(black);
+
+        if (songName == 'thorns')
+        {
+            add(red);
+            game.camHUD.visible = false;
+        }
+    }
+
+    new FlxTimer().start(0.3, function(tmr:FlxTimer)
+    {
+        black.alpha -= 0.15;
+
+        if (black.alpha > 0)
+        {
+            tmr.reset(0.3);
+        }
+        else
+        {
+            if (dialogueBox != null)
+            {
+                if (Paths.formatToSongPath(PlayState.SONG.song) == 'thorns')
+                {
+                    add(senpaiEvil);
+                    senpaiEvil.alpha = 0;
+                    new FlxTimer().start(0.3, function(swagTimer:FlxTimer)
+                    {
+                        senpaiEvil.alpha += 0.15;
+                        if (senpaiEvil.alpha < 1)
+                        {
+                            swagTimer.reset();
+                        }
+                        else
+                        {
+                            senpaiEvil.animation.play('idle');
+                            FlxG.sound.play(Paths.sound('Senpai_Dies'), 1, false, null, true, function()
+                            {
+                                // Just incase...
+                                senpaiEvil.alpha = 0.001;
+                                red.alpha = 0.001;
+
+                                remove(senpaiEvil);
+                                remove(red);
+                                game.camOther.fade(FlxColor.WHITE, 0.01, true, function()
+                                {
+                                    add(dialogueBox);
+                                    game.camHUD.visible = true;
+                                }, true);
+                            });
+                            new FlxTimer().start(3.2, function(deadTime:FlxTimer)
+                            {
+                                game.camOther.fade(FlxColor.WHITE, 1.6, false);
+                            });
+                        }
+                    });
+                }
+                else
+                {
+                    add(dialogueBox);
+                }
+            }
+            else
+                game.startCountdown();
+
+            remove(black);
+        }
+    });
+}
