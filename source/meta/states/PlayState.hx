@@ -334,13 +334,6 @@ class PlayState extends MusicBeatState
 	public var countdownSounds:Bool = true;
 	public var countdownDelay:Float = 0;
 
-	@:isVar
-	public var outroDelay(default, set):Float = 0;
-	function set_outroDelay(newDelay:Float) {
-		if (!isStoryMode) return 0; // Don't change this value if we are in freeplay.
-		return outroDelay = newDelay;
-	}
-
 	var songLength:Float = 0;
 
 	public var boyfriendCameraOffset:Array<Float> = null;
@@ -4358,15 +4351,8 @@ class PlayState extends MusicBeatState
 					PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0] + difficulty, PlayState.storyPlaylist[0]);
 					FlxG.sound.music.stop();
 
-					if (outroDelay > 0) {
-						new FlxTimer().start(outroDelay, (_) -> {
-							cancelMusicFadeTween();
-							LoadingState.loadAndSwitchState(new PlayState());
-						});
-					} else {
-						cancelMusicFadeTween();
-						LoadingState.loadAndSwitchState(new PlayState());
-					}
+					cancelMusicFadeTween();
+					LoadingState.loadAndSwitchState(new PlayState());
 				}
 			}
 			else
@@ -5669,7 +5655,4 @@ class PlayState extends MusicBeatState
 
 		return super.switchTo(nextState);
 	}
-
-	var curLight:Int = -1;
-	var curLightEvent:Int = -1;
 }

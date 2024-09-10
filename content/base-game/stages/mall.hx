@@ -1,11 +1,11 @@
+importClass("meta.states.LoadingState");
+
 var heyTimer:Float;
 var upperBoppers:BGSprite;
 var bottomBoppers:BGSprite;
 var santa:BGSprite;
 
 function onLoad(){
-    if (Paths.formatToSongPath(PlayState.SONG.song) == "eggnog") 
-        game.outroDelay = 1.5; // Outro delay for storymode.
 
     var bg:BGSprite = new BGSprite('christmas/bgWalls', -1000, -500, 0.2, 0.2);
     bg.setGraphicSize(Std.int(bg.width * 0.8));
@@ -59,6 +59,14 @@ function onEndSong() {
         add(blackShit);
 
         FlxG.sound.play(Paths.sound('Lights_Shut_off'));
+
+        // Begin our transition!
+        new FlxTimer().start(1.5, (_) -> {
+            PlayState.cancelMusicFadeTween();
+            LoadingState.loadAndSwitchState(new PlayState());
+        });
+        
+        return Function_Stop;
     }
 }
 
