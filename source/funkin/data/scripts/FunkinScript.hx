@@ -11,7 +11,7 @@ This is a base class meant to be overridden so you can easily implement custom s
 
 class FunkinScript {
 	public var scriptName:String = '';
-	public var scriptType:String = '';
+	public var scriptType:ScriptType = '';
 	/**
 		Called when the script should be stopped
 	**/
@@ -115,7 +115,7 @@ class FunkinScript {
 interface IFunkinScript
 {
 	public var scriptName:String;
-	public var scriptType:String;
+	public var scriptType:ScriptType;
 	public function set(variable:String, data:Dynamic): Void;
 	public function get(key:String):Dynamic;
 	public function call(func:String, ?args:Array<Dynamic>):Dynamic;

@@ -34,9 +34,8 @@ import sys.io.File;
 
 class HScriptState extends MusicBeatState
 {
-    var script:FunkinHScript;
-    public var instance:HScriptState;
-
+    var script:FunkinIris;
+    
     public function new(script){
         script.call('onLoad', []);
         script.set('script', script);
@@ -46,14 +45,9 @@ class HScriptState extends MusicBeatState
         super();
     }
 
-	override function add(Object:FlxBasic):FlxBasic {
-		return super.add(Object);
-	}
-
     override function create()
     {
-        instance = this;
-        script.set('add', instance.add);
+        script.set('add', this.add);
 
         script.call('create', []);
 

@@ -13,19 +13,20 @@ import crowplexus.iris.Iris;
 @:access(crowplexus.iris.Iris)
 class FunkinIris extends FunkinScript
 {
-	public static final exts:Array<String> = ['hx','hxs','hscript'];
+	public static final exts:Array<String> = ['hx','hxs','hscript',/*base game lol*/'hxc'];
 
-	//culls through and finds the correct extension. whether it be hx or hxs etc
-	public static function findExt(path:String) 
+	public static function getPath(path:String)
 	{
-		for (extension in FunkinHScript.exts) 
+		for (extension in exts) 
 		{
+			if (path.endsWith(extension)) return path;
+
 			final file = '$path.$extension';
 
 			for (i in [#if MODS_ALLOWED Paths.modFolders(file), #end Paths.getSharedPath(file)]) 
 			{
 				if (!FileSystem.exists(i)) continue;
-				return file;
+				return i;
 			}
 		}
 		return path;
@@ -81,11 +82,6 @@ class FunkinIris extends FunkinScript
         _script = null;
 	}
 
-	override function scriptTrace(text:String)
-    {
-		trace(text); 
-	}
-
 	override function set(variable:String, data:Dynamic):Void
 	{
         _script.set(variable,data);
@@ -105,6 +101,49 @@ class FunkinIris extends FunkinScript
     {
         return _script.exists(varName);
     }
+
+	//kept for notescript stuff
+	public function executeFunc(func:String, ?parameters:Array<Dynamic>, ?theObject:Any, ?extraVars:Map<String,Dynamic>):Dynamic
+	{
+		extraVars ??= [];
+
+		if (exists(func))
+		{
+			var daFunc = get(func);
+			if (Reflect.isFunction(daFunc))
+			{
+				var returnVal:Any = null;
+				var defaultShit:Map<String,Dynamic> = [];
+
+				if (theObject != null) extraVars.set("this", theObject);
+				
+				for (key in extraVars.keys())
+				{
+					defaultShit.set(key, get(key));
+					set(key, extraVars.get(key));
+				}
+
+				try
+				{
+					returnVal = Reflect.callMethod(theObject, daFunc, parameters);
+				}
+				catch (e:haxe.Exception)
+				{
+					#if sys
+					Sys.println(e.message);
+					#end
+				}
+
+				for (key in defaultShit.keys())
+				{
+					set(key, defaultShit.get(key));
+				}
+
+				return returnVal;
+			}
+		}
+		return null;
+	}
 
     override function setDefaultVars() 
     {
@@ -127,7 +166,7 @@ class FunkinIris extends FunkinScript
         set('Globals', funkin.data.scripts.Globals);
 
         set("FlxG", flixel.FlxG);
-        set("FlxSprite", funkin.data.scripts.FunkinHScript.HScriptSprite);
+        set("FlxSprite", funkin.data.scripts.ScriptClasses.HScriptSprite);
         set("FlxTypedGroup", flixel.group.FlxGroup.FlxTypedGroup);
         set("FlxCamera", flixel.FlxCamera);
 		set("FlxMath", flixel.math.FlxMath);
@@ -135,7 +174,7 @@ class FunkinIris extends FunkinScript
 		set("FlxTween", flixel.tweens.FlxTween);
 		set("FlxEase", flixel.tweens.FlxEase);
         set("FlxSound", flixel.sound.FlxSound);
-        set('FlxColor',funkin.data.scripts.FunkinHScript.HScriptColor);
+        set('FlxColor',funkin.data.scripts.ScriptClasses.HScriptColor);
         set("FlxRuntimeShader", flixel.addons.display.FlxRuntimeShader);
         
         set("add", FlxG.state.add);
@@ -175,7 +214,7 @@ class FunkinIris extends FunkinScript
 		set("StageData", StageData);
 		set("PlayState", PlayState);
 		set("FunkinLua", FunkinLua);
-		set("FunkinHScript", FunkinHScript);
+		set("FunkinIris", FunkinIris);
 
 
 		if((FlxG.state is PlayState) && PlayState.instance != null)
@@ -195,7 +234,46 @@ class FunkinIris extends FunkinScript
 			});
 
 		}
+
+		//todo rework this
+		set("newShader", function(fragFile:String = null, vertFile:String = null){ // returns a FlxRuntimeShader but with file names lol
+			var runtime:flixel.addons.display.FlxRuntimeShader = null;
+
+			try
+			{				
+				runtime = new flixel.addons.display.FlxRuntimeShader(
+					fragFile==null ? null : Paths.getContent(Paths.modsShaderFragment(fragFile)), 
+					vertFile==null ? null : Paths.getContent(Paths.modsShaderVertex(vertFile))
+				);	
+			}
+			catch(e:Dynamic)
+			{	
+				trace("Shader compilation error:" + e.message);
+			}
+
+			return runtime ?? new flixel.addons.display.FlxRuntimeShader();
+		});
     }
+
+
+	//kill this off soon
+	@:noCompletion
+	public static final noteSkinDefault:String = "
+		// this gets the BF noteskin
+		function bfSkin() { return 'NOTE_assets'; }
+
+		// this gets the DAD noteskin
+		function dadSkin() { return 'NOTE_assets'; }
+
+		// this gets the notesplash skin and offset
+		function noteSplash(offsets){ return 'noteSplashes'; }
+
+		// does ur noteskin have quants ? 
+		function quants() { return true; }
+
+		// offset notes, receptors and sustains
+		function offset(noteOff, strumOff, susOff){}
+	";
 
 }
 

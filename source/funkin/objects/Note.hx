@@ -277,7 +277,7 @@ class Note extends FlxSprite
 					
 					if (noteScript != null && noteScript.scriptType == HSCRIPT)
 					{
-						var noteScript:FunkinHScript = cast noteScript;
+						var noteScript:FunkinIris = cast noteScript;
 						noteScript.executeFunc("setupNote", [this], this);
 					}
 						
@@ -458,7 +458,7 @@ class Note extends FlxSprite
 
 		if (noteScript != null && noteScript.scriptType == HSCRIPT)
 		{
-			var noteScript:FunkinHScript = cast noteScript;
+			var noteScript:FunkinIris = cast noteScript;
 			if (noteScript.executeFunc("onReloadNote", [this, prefix, texture, suffix], this) == Globals.Function_Stop)
 				return;
 		}
@@ -555,14 +555,14 @@ class Note extends FlxSprite
 
 		if (noteScript != null && noteScript.scriptType == HSCRIPT)
 		{
-			var noteScript:FunkinHScript = cast noteScript;
+			var noteScript:FunkinIris = cast noteScript;
 			noteScript.executeFunc("postReloadNote", [this, prefix, texture, suffix], this);
 		}
 	}
 
 	public function loadNoteAnims() {
 		if (noteScript != null && noteScript.scriptType == HSCRIPT){
-			var noteScript:FunkinHScript = cast noteScript;
+			var noteScript:FunkinIris = cast noteScript;
 			if (noteScript.exists("loadNoteAnims") && Reflect.isFunction(noteScript.get("loadNoteAnims"))){
 				noteScript.executeFunc("loadNoteAnims", [this], this, ["super" => _loadNoteAnims]);
 				return;
@@ -574,7 +574,7 @@ class Note extends FlxSprite
 	public function loadPixelNoteAnims() {
 		if (noteScript != null && noteScript.scriptType == HSCRIPT)
 		{
-			var noteScript:FunkinHScript = cast noteScript;
+			var noteScript:FunkinIris = cast noteScript;
 			if (noteScript.exists("loadPixelNoteAnims") && Reflect.isFunction(noteScript.get("loadNoteAnims")))
 			{
 				noteScript.executeFunc("loadPixelNoteAnims", [this], this, ["super" => _loadPixelNoteAnims]);
@@ -653,7 +653,7 @@ class Note extends FlxSprite
 
 		if(!inEditor){
 			if (noteScript != null && noteScript.scriptType == HSCRIPT){
-				var noteScript:FunkinHScript = cast noteScript;
+				var noteScript:FunkinIris = cast noteScript;
 				noteScript.executeFunc("update", [this, elapsed], this);
 			}
 		}

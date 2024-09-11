@@ -35,180 +35,60 @@ class Stage extends FlxTypedGroup<FlxBasic>
 {
 	public var curStageScript:FunkinScript;
 	
-	public var curStage = "stage1";
-	public var stageData:StageFile = {
-		directory: "",
-        isPixelStage: false,
-		defaultZoom: 0.8,
-		boyfriend: [500, 100],
-		girlfriend: [0, 100],
-		opponent: [-500, 100],
-		hide_girlfriend: false,
-		camera_boyfriend: [0, 0],
-		camera_opponent: [0, 0],
-		camera_girlfriend: [0, 0],
-		camera_speed: 1
-	};
-
+	public var curStage = "stage";
+	public var stageData:StageFile = funkin.data.StageData.generateDefault();
 	public var foreground = new FlxTypedGroup<FlxBasic>();
 
 	public function new(?StageName = "stage")
 	{
 		super();
 
-		if (StageName != null)
-			curStage = StageName;
+		if (StageName != null) curStage = StageName;
 		
 		var newStageData = StageData.getStageFile(curStage);
 		if (newStageData != null)
 			stageData = newStageData;
 	}
 
+	function setupScript(s:FunkinScript)
+	{
+
+		curStageScript = s;
+
+		switch (s.scriptType)
+		{
+			case HSCRIPT:
+				s.set("add", add);
+				s.set("stage", this);
+				s.set("foreground", foreground);	
+				s.call("onLoad", [this, foreground]);
+			
+			#if LUA_ALLOWED
+			case LUA:
+				s.call("onCreate", []);
+			#end
+
+		}
+	}
+
 	public function buildStage()
 	{
-		var doPush:Bool = false;
-		var baseScriptFile:String = 'stages/' + curStage;
+		final baseScriptFile:String = 'stages/' + curStage;
 
-		#if LUA_ALLOWED
-		for (ext in FunkinIris.exts.concat(['lua']))
+		var scriptFile = FunkinIris.getPath(baseScriptFile);
+		if (FileSystem.exists(scriptFile))
 		{
-			if (doPush)
-				break;
-			var baseFile = '$baseScriptFile.$ext';
-		#else
-			var baseFile = '$baseScriptFile.hscript';
-		#end
-			var files = [#if MODS_ALLOWED Paths.modFolders(baseFile), #end Paths.getSharedPath(baseFile)];
-			for (file in files)
-			{
-				if (FileSystem.exists(file))
-				{
-					#if LUA_ALLOWED
-					if (FunkinIris.exts.contains(ext)){
-					#end
-						var script = FunkinIris.fromFile(file);
-						curStageScript = script;
-						// hscriptArray.push(script);
-						// stageScripts.push(script);
+			trace('FUCKL');
+			var script = FunkinIris.fromFile(scriptFile);
+			setupScript(script);
 
-						// define variables lolol
-						script.set("add", add);
-						script.set("stage", this);
-						script.set("foreground", foreground);
-						
-						script.call("onLoad", [this, foreground]);
-						doPush = true;
-					#if LUA_ALLOWED
-					} else if (ext == 'lua'){
-						var script = new FunkinLua(file);
-						// luaArray.push(script);
-						// stageScripts.push(script);
-						curStageScript = script;
-						
-						script.call("onCreate", []);
-						trace(script.call('onCreate', []));
-						doPush = true;
-					}
-					else
-					#end
-
-					if (doPush)
-						break;
-				}
-			}
-		#if LUA_ALLOWED
+		}
+		#if LUA_ALLOWED else if (Paths.fileExists('$baseScriptFile.lua',TEXT))
+		{
+			var script = new FunkinLua('$baseScriptFile.lua');
+			setupScript(script);
 		}
 		#end
-		// return this;
-	}
 
-
-	//// Stages of the currently loaded mod.
-	// public static function getStageList(modsOnly = false):Array<String>{
-	// 	var rawList:Null<String> = modsOnly ? null : Paths.txt('data/stageList.txt', true);
-
-	// 	#if MODS_ALLOWED
-	// 	var modsList = Paths.txt('data/stageList.txt', false);
-	// 	if (modsList != null){
-	// 		if (rawList != null)
-	// 			rawList += "\n" + modsList;
-	// 		else
-	// 			rawList = modsList;
-	// 	}
-	// 	#end
-		
-	// 	if (rawList == null)
-	// 		return [];
-
-	// 	var stages:Array<String> = [];
-
-	// 	for (i in rawList.trim().split('\n'))
-	// 	{
-	// 		var modStage = i.trim();
-	// 		if (!stages.contains(modStage))
-	// 			stages.push(modStage);
-	// 	}
-
-	// 	return stages;
-	// }
-
-	/*
-	//// stage -> modDirectory
-	public static function getStageMap():Map<String, String>
-	{
-		var directories:Array<String> = [
-			#if MODS_ALLOWED
-			Paths.mods(Paths.currentModDirectory + '/stages/'),
-			Paths.mods('stages/'),
-			#end
-			Paths.getSharedPath('stages/')
-		];
-
-		var theMap:Map<String, String> = new Map();
-
-		return theMap;
-	}
-	*/
-}
-
-class StageData {
-	public static var forceNextDirectory:String = null;
-
-	public static function loadDirectory(SONG:SwagSong) {
-		var stage:String = '';
-
-		if(SONG.stage != null)
-			stage = SONG.stage;
-		else 
-			stage = 'stage';
-
-		var stageFile:StageFile = getStageFile(stage);
-
-		// preventing crashes
-		forceNextDirectory = stageFile == null ? '' : stageFile.directory;
-	}
-
-	public static function getStageFile(stage:String):StageFile {
-		var rawJson:String = null;
-		var path:String = Paths.getSharedPath('stages/' + stage + '.json');
-
-		#if MODS_ALLOWED
-		var modPath:String = Paths.modFolders('stages/' + stage + '.json');
-
-		if(FileSystem.exists(modPath))
-			rawJson = File.getContent(modPath);
-		else if(FileSystem.exists(path))
-			rawJson = File.getContent(path);
-
-		#else
-		if(Assets.exists(path))
-			rawJson = Assets.getText(path);
-		#end
-		else
-			return null;
-
-		trace(path);
-
-		return cast Json.parse(rawJson);
 	}
 }

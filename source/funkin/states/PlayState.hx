@@ -299,10 +299,10 @@ class PlayState extends MusicBeatState
 	public var noteskinScript:FunkinIris;
 
 	//might make this a map ngl
-	public var script_NOTEOffsets:haxe.ds.Vector<FlxPoint>;
-	public var script_STRUMOffsets:haxe.ds.Vector<FlxPoint>;
-	public var script_SUSTAINOffsets:haxe.ds.Vector<FlxPoint>;
-	public var script_SPLASHOffsets:haxe.ds.Vector<FlxPoint>;
+	public var script_NOTEOffsets:Vector<FlxPoint>;
+	public var script_STRUMOffsets:Vector<FlxPoint>;
+	public var script_SUSTAINOffsets:Vector<FlxPoint>;
+	public var script_SPLASHOffsets:Vector<FlxPoint>;
 
 	private var luaDebugGroup:FlxTypedGroup<DebugLuaText>;
 	public var introSoundsSuffix:String = '';
@@ -818,6 +818,7 @@ class PlayState extends MusicBeatState
 							#end
 						}
 						else{
+
 							for(ext in FunkinIris.exts){
 								if(file.endsWith('.$ext')){
 									var script = FunkinIris.fromFile(folder + file);
@@ -1007,7 +1008,7 @@ class PlayState extends MusicBeatState
 		}
 
 		//since stuff relies on this and we dont want people to actually be able to mess with the default // they can use modsfolder hx to modify it though
-		noteskinScript ??= FunkinIris.fromString(FunkinHScript.noteSkinDefault,'noteskinScript'); //kill this off eventually if its null just dont use it
+		noteskinScript ??= FunkinIris.fromString(FunkinIris.noteSkinDefault,'noteskinScript'); //kill this off eventually if its null just dont use it
 
 		noteskinScript.call("offset", [script_NOTEOffsets, script_STRUMOffsets,script_SUSTAINOffsets]);
 		funkyScripts.push(noteskinScript);

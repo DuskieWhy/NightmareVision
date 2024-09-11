@@ -1356,7 +1356,7 @@ class ChartingState extends MusicBeatState
 									noteTypeIntMap.set(key, fileToCheck);
 
 									if(ext != '.lua'){
-										var script = FunkinHScript.fromFile(path, fileToCheck);
+										var script = FunkinIris.fromFile(path, fileToCheck);
 										notetypeScripts.set(fileToCheck, script);
 									}
 

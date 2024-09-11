@@ -32,41 +32,11 @@ typedef StageFile = {
 class StageData {
 	public static var forceNextDirectory:String = null;
 	public static function loadDirectory(SONG:SwagSong) {
-		var stage:String = '';
-		if(SONG.stage != null) {
-			stage = SONG.stage;
-		} else if(SONG.song != null) {
-			switch (SONG.song.toLowerCase().replace(' ', '-'))
-			{
-				case 'spookeez' | 'south' | 'monster':
-					stage = 'spooky';
-				case 'pico' | 'blammed' | 'philly' | 'philly-nice':
-					stage = 'philly';
-				case 'milf' | 'satin-panties' | 'high':
-					stage = 'limo';
-				case 'cocoa' | 'eggnog':
-					stage = 'mall';
-				case 'winter-horrorland':
-					stage = 'mallEvil';
-				case 'senpai' | 'roses':
-					stage = 'school';
-				case 'thorns':
-					stage = 'schoolEvil';
-				case 'ugh' | 'guns' | 'stress':
-					stage = 'tank';
-				default:
-					stage = 'stage';
-			}
-		} else {
-			stage = 'stage';
-		}
+		var stage:String = SONG.stage ?? 'stage';
 
 		var stageFile:StageFile = getStageFile(stage);
-		if(stageFile == null) { //preventing crashes
-			forceNextDirectory = '';
-		} else {
-			forceNextDirectory = stageFile.directory;
-		}
+		
+		forceNextDirectory = stageFile.directory ?? '';
 	}
 
 	public static function getStageFile(stage:String):StageFile {
@@ -90,5 +60,21 @@ class StageData {
 			return null;
 		}
 		return cast Json.parse(rawJson);
+	}
+
+
+	public static function generateDefault():StageFile return 
+	{
+		directory: "",
+        isPixelStage: false,
+		defaultZoom: 0.8,
+		boyfriend: [500, 100],
+		girlfriend: [0, 100],
+		opponent: [-500, 100],
+		hide_girlfriend: false,
+		camera_boyfriend: [0, 0],
+		camera_opponent: [0, 0],
+		camera_girlfriend: [0, 0],
+		camera_speed: 1
 	}
 }
