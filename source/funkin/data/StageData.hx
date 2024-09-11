@@ -36,7 +36,7 @@ class StageData {
 
 		var stageFile:StageFile = getStageFile(stage);
 		
-		forceNextDirectory = stageFile.directory ?? '';
+		forceNextDirectory = stageFile?.directory ?? '';
 	}
 
 	public static function getStageFile(stage:String):StageFile {

@@ -216,6 +216,8 @@ class FunkinIris extends FunkinScript
 		set("FunkinLua", FunkinLua);
 		set("FunkinIris", FunkinIris);
 
+		set('WindowUtil',funkin.utils.WindowUtil); //temp till i fix some shit
+
 
 		if((FlxG.state is PlayState) && PlayState.instance != null)
 		{
