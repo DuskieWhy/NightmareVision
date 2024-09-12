@@ -94,7 +94,10 @@ class FunkinIris extends FunkinScript
 
 	override function call(func:String, ?args:Array<Dynamic>):Dynamic
 	{
-        return _script.call(func,args)?.returnValue ?? funkin.data.scripts.Globals.Function_Continue;
+		var ret = funkin.data.scripts.Globals.Function_Continue;
+		if (exists(func)) ret = _script.call(func,args).returnValue;
+
+        return ret;
 	}
     
     public function exists(varName:String)

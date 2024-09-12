@@ -609,27 +609,7 @@ class PlayState extends MusicBeatState
 		}
 
 		var gfVersion:String = SONG.gfVersion;
-		if(gfVersion == null || gfVersion.length < 1)
-		{
-			switch (curStage)
-			{
-				case 'limo':
-					gfVersion = 'gf-car';
-				case 'mall' | 'mallEvil':
-					gfVersion = 'gf-christmas';
-				case 'school' | 'schoolEvil':
-					gfVersion = 'gf-pixel';
-				default:
-					gfVersion = 'gf';
-			}
-
-			switch(Paths.formatToSongPath(SONG.song))
-			{
-				case 'stress':
-					gfVersion = 'pico-speaker';
-			}
-			SONG.gfVersion = gfVersion; //Fix for the Chart Editor
-		}
+		if(gfVersion == null || gfVersion.length < 1) SONG.gfVersion = gfVersion = 'gf';
 
 		if (!stageData.hide_girlfriend)
 		{
@@ -641,7 +621,6 @@ class PlayState extends MusicBeatState
 
 			setOnScripts('gf', gf);
 			setOnScripts('gfGroup', gfGroup);
-			// setOnScripts('dadGhost', dadGroup);
 		}
 
 		dad = new Character(0, 0, SONG.player2);
@@ -863,38 +842,6 @@ class PlayState extends MusicBeatState
 					if (gf != null)
 						gf.playAnim('scared', true);
 					boyfriend.playAnim('scared', true);
-
-				case "winter-horrorland":
-					var blackScreen:FlxSprite = new FlxSprite().makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
-					add(blackScreen);
-					blackScreen.scrollFactor.set();
-					camHUD.visible = false;
-					inCutscene = true;
-
-					FlxTween.tween(blackScreen, {alpha: 0}, 0.7, {
-						ease: FlxEase.linear,
-						onComplete: function(twn:FlxTween)
-						{
-							remove(blackScreen);
-						}
-					});
-					FlxG.sound.play(Paths.sound('Lights_Turn_On'));
-					snapCamFollowToPos(400, -2050);
-					FlxG.camera.focusOn(camFollow);
-					FlxG.camera.zoom = 1.5;
-
-					new FlxTimer().start(0.8, function(tmr:FlxTimer)
-					{
-						camHUD.visible = true;
-						remove(blackScreen);
-						FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, 2.5, {
-							ease: FlxEase.quadInOut,
-							onComplete: function(twn:FlxTween)
-							{
-								startCountdown();
-							}
-						});
-					});
 				case 'senpai' | 'roses' | 'thorns':
 					if (daSong == 'roses')
 						FlxG.sound.play(Paths.sound('ANGRY'));
@@ -1547,10 +1494,10 @@ class PlayState extends MusicBeatState
 						case 4:
 					}
 	
-					notes.forEachAlive(function(note:Note) {
-						note.copyAlpha = false;
-						note.alpha = note.multAlpha * note.playField.baseAlpha;
-					});
+					// notes.forEachAlive(function(note:Note) {
+					// 	note.copyAlpha = false;
+					// 	note.alpha = note.multAlpha * note.playField.baseAlpha;
+					// });
 	
 					callOnScripts('onCountdownTick', [swagCounter]);
 	
@@ -2421,7 +2368,8 @@ class PlayState extends MusicBeatState
 			}
 			if (FlxG.keys.justPressed.ONE) {
 				KillNotes();
-				FlxG.sound.music.onComplete();
+				if (FlxG.sound.music.onComplete != null)
+					FlxG.sound.music.onComplete();
 			}
 			if (FlxG.keys.justPressed.TWO) {
 				setSongTime(Conductor.songPosition + 10000);
@@ -3534,18 +3482,6 @@ class PlayState extends MusicBeatState
 					trace('LOADING NEXT SONG');
 					trace(Paths.formatToSongPath(PlayState.storyPlaylist[0]) + difficulty);
 
-					var winterHorrorlandNext = (Paths.formatToSongPath(SONG.song) == "eggnog");
-					if (winterHorrorlandNext)
-					{
-						var blackShit:FlxSprite = new FlxSprite(-FlxG.width * FlxG.camera.zoom,
-							-FlxG.height * FlxG.camera.zoom).makeGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.BLACK);
-						blackShit.scrollFactor.set();
-						add(blackShit);
-						camHUD.visible = false;
-
-						FlxG.sound.play(Paths.sound('Lights_Shut_off'));
-					}
-
 					FlxTransitionableState.skipNextTransIn = true;
 					FlxTransitionableState.skipNextTransOut = true;
 
@@ -3555,15 +3491,9 @@ class PlayState extends MusicBeatState
 					PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0] + difficulty, PlayState.storyPlaylist[0]);
 					FlxG.sound.music.stop();
 
-					if(winterHorrorlandNext) {
-						new FlxTimer().start(1.5, function(tmr:FlxTimer) {
-							cancelMusicFadeTween();
-							LoadingState.loadAndSwitchState(new PlayState());
-						});
-					} else {
-						cancelMusicFadeTween();
-						LoadingState.loadAndSwitchState(new PlayState());
-					}
+					cancelMusicFadeTween();
+					LoadingState.loadAndSwitchState(new PlayState());
+					
 				}
 			}
 			else
@@ -4651,12 +4581,12 @@ class PlayState extends MusicBeatState
 		return Globals.Function_Continue;
 	}
 
-	public function callOnHScripts(event:String, args:Array<Dynamic>, ignoreStops = false, ?exclusions:Array<String>)
+	inline public function callOnHScripts(event:String, args:Array<Dynamic>, ignoreStops = false, ?exclusions:Array<String>)
 	{
 		return callOnScripts(event, args, ignoreStops, exclusions, hscriptArray);
 	}
 
-	public function setOnHScripts(variable:String, arg:Dynamic)
+	inline public function setOnHScripts(variable:String, arg:Dynamic)
 	{
 		return setOnScripts(variable, arg, hscriptArray);
 	}

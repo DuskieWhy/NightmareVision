@@ -1,4 +1,10 @@
 import funkin.objects.BGSprite;
+import funkin.utils.CoolUtil;
+import funkin.states.LoadingState;
+import funkin.data.Song;
+import flixel.addons.transition.FlxTransitionableState;
+import funkin.states.transitions.FixedFlxBGSprite;
+import funkin.states.PlayState;
 
 var heyTimer:Float;
 var upperBoppers:BGSprite;
@@ -55,4 +61,52 @@ function onBeatHit(){
 
     bottomBoppers.dance(true);
     santa.dance(true);
+}
+
+function onEndSong()
+{
+
+    //recreation of the loading shit but soft coded //maybe later make a easier setup
+    if (PlayState.isStoryMode) 
+    {
+        var winterHorrlandNext = (Paths.formatToSongPath(PlayState.SONG.song) == "eggnog");
+        if (!winterHorrlandNext) return Globals.Function_Continue;
+
+
+
+        PlayState.campaignScore += game.songScore;
+        PlayState.campaignMisses += game.songMisses;
+
+        PlayState.storyPlaylist.remove(PlayState.storyPlaylist[0]);
+
+        var difficulty:String = CoolUtil.getDifficultyFilePath();
+
+            
+        var blackShit:FixedFlxBGSprite = new FixedFlxBGSprite();
+        blackShit.color = FlxColor.BLACK;
+        blackShit.scrollFactor.set();
+        foreground.add(blackShit);
+        camHUD.visible = false;
+
+        FlxG.sound.play(Paths.sound('Lights_Shut_off'));
+        
+    
+        FlxTransitionableState.skipNextTransIn = true;
+        FlxTransitionableState.skipNextTransOut = true;
+    
+        PlayState.prevCamFollow = game.camFollow;
+        PlayState.prevCamFollowPos = game.camFollowPos;
+    
+        PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0] + difficulty, PlayState.storyPlaylist[0]);
+        FlxG.sound.music.stop();
+    
+        new FlxTimer().start(1.5, Void-> {
+            PlayState.cancelMusicFadeTween();
+            LoadingState.loadAndSwitchState(new PlayState());
+        });
+    
+        return Globals.Function_Stop;
+    }
+
+
 }

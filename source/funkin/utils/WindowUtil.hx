@@ -32,9 +32,8 @@ class WindowUtil {
     }
 
 
-    static var _windowTween:FlxTween = null;
     public static function setGameDimensions(width:Int,height:Int, cameras:Array<FlxCamera>) {
-        _windowTween?.cancel();
+
 
         var newWidth:Int = width;
         var newHeight:Int = height; 
