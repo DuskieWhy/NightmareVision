@@ -819,29 +819,6 @@ class PlayState extends MusicBeatState
 		{
 			switch (daSong)
 			{
-				case "monster":
-					var whiteScreen:FlxSprite = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.WHITE);
-					add(whiteScreen);
-					whiteScreen.scrollFactor.set();
-					whiteScreen.blend = ADD;
-					camHUD.visible = false;
-					snapCamFollowToPos(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
-					inCutscene = true;
-
-					FlxTween.tween(whiteScreen, {alpha: 0}, 1, {
-						startDelay: 0.1,
-						ease: FlxEase.linear,
-						onComplete: function(twn:FlxTween)
-						{
-							camHUD.visible = true;
-							remove(whiteScreen);
-							startCountdown();
-						}
-					});
-					FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2));
-					if (gf != null)
-						gf.playAnim('scared', true);
-					boyfriend.playAnim('scared', true);
 				case 'senpai' | 'roses' | 'thorns':
 					if (daSong == 'roses')
 						FlxG.sound.play(Paths.sound('ANGRY'));
@@ -3977,6 +3954,8 @@ class PlayState extends MusicBeatState
 				callScript(script, "noteMiss", [daNote]);
 			}
 		}
+
+
 	}
 
 	function noteMissPress(direction:Int = 1, anim:Bool = true):Void //You pressed a key when there was no notes to press for this key
