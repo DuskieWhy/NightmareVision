@@ -62,6 +62,7 @@
 	-->
 
 	<assets path="assets/preload" rename="assets"/>
+	<assets path="assets/fonts" rename="assets"/>
 
 	<library name="videos"        preload="true"/>
 	<library name="songs"         preload="true"/>
