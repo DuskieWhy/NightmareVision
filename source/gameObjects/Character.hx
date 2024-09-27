@@ -132,14 +132,6 @@ class Character extends FlxSprite
 	{
 		super(x, y);
 
-		for(i in 0...4){
-			var ghost = new FlxSprite();
-			ghost.visible = false;
-			ghost.antialiasing = true;
-			ghost.alpha = 0.6;
-			doubleGhosts.push(ghost);
-		}
-
 		#if (haxe >= "4.0.0")
 		animOffsets = new Map();
 		#else
@@ -148,6 +140,14 @@ class Character extends FlxSprite
 		curCharacter = (ClientPrefs.darnell /*&& FlxG.save.data.KUTValue == 2*/) ? 'darnell' : character;
 		this.isPlayer = isPlayer;
 		antialiasing = ClientPrefs.globalAntialiasing;
+
+		for(i in 0...4){
+			var ghost = new FlxSprite();
+			ghost.visible = false;
+			ghost.alpha = 0.6;
+			doubleGhosts.push(ghost);
+		}
+		
 		var library:String = null;
 		switch (curCharacter)
 		{
@@ -544,6 +544,7 @@ class Character extends FlxSprite
 		ghost.flipX = flipX;
 		ghost.flipY = flipY;
 		ghost.alpha = alpha * 0.6;
+		ghost.antialiasing = antialiasing;
 		ghost.visible = true;
 		ghost.color = FlxColor.fromRGB(healthColorArray[0], healthColorArray[1], healthColorArray[2]);
 		ghost.animation.play(AnimName, Force, Reversed, Frame);
