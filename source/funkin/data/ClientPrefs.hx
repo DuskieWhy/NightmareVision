@@ -105,8 +105,6 @@ class ClientPrefs {
 		'note_up'		=> [W, UP],
 		'note_right'	=> [D, RIGHT],
 		'dodge' 		=> [SPACE, NONE],
-		'note_ex1' 		=> [S, NONE],
-		'note_ex2'		=> [L, NONE],
 
 		'ui_left'		=> [A, LEFT],
 		'ui_down'		=> [S, DOWN],
@@ -401,6 +399,7 @@ class ClientPrefs {
 			i++;
 			len = copiedArray.length;
 		}
+		trace(copiedArray);
 		return copiedArray;
 	}
 }

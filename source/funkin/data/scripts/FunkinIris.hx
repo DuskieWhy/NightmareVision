@@ -6,6 +6,7 @@ import funkin.utils.MacroUtil;
 import crowplexus.iris.IrisConfig;
 import crowplexus.iris.Iris;
 
+import funkin.objects.*;
 
 //thank you crow,neeo,tahir
 //wrapper for an iris script to keep the consistency of the whole funkyscript setup this engine got
@@ -13,9 +14,9 @@ import crowplexus.iris.Iris;
 @:access(crowplexus.iris.Iris)
 class FunkinIris extends FunkinScript
 {
-	public static final exts:Array<String> = ['hx','hxs','hscript',/*base game lol*/'hxc'];
+	public static final exts:Array<String> = ['hx','hxs','hscript', /*base game lol*/ 'hxc'];
 
-	public static function getPath(path:String)
+	public static function getPath(path:String, ?global:Bool = true)
 	{
 		for (extension in exts) 
 		{
@@ -23,7 +24,7 @@ class FunkinIris extends FunkinScript
 
 			final file = '$path.$extension';
 
-			for (i in [#if MODS_ALLOWED Paths.modFolders(file), #end Paths.getSharedPath(file)]) 
+			for (i in [Paths.modFolders(file, global), Paths.getSharedPath(file)]) 
 			{
 				if (!FileSystem.exists(i)) continue;
 				return i;
@@ -47,9 +48,23 @@ class FunkinIris extends FunkinScript
     public static function init()
     {
         //for now we are just rebinding em to nothing //will do proper logging later
-        Iris.error = (x,?pos)->{}
-       	Iris.warn = (x,?pos)->{}
-        //Iris.fatal = (x,?pos)->{}
+        Iris.error = (x,?pos)->{
+			trace('ERROR: [${pos.fileName}]: LINE: ${pos.lineNumber}->$x')
+		}
+       	// Iris.warn = (x,?pos)->{}
+        Iris.fatal = (x,?pos)->{
+			trace('FATAL ERROR: [${pos.fileName}]: LINE: ${pos.lineNumber}->$x')
+		}
+
+		//quick test
+		Iris.print = (x,?pos)->{
+			if (PlayState.instance != null)
+			{
+				@:privateAccess
+				PlayState.instance.addTextToDebug('[${pos.fileName}]: LINE: ${pos.lineNumber}->$x');
+			}
+			Iris.logLevel(NONE, x, pos);
+		}
     }
     
     public static var defaultVars:Map<String,Dynamic> = new Map<String, Dynamic>();
@@ -61,7 +76,7 @@ class FunkinIris extends FunkinScript
 		scriptType = ScriptType.HSCRIPT;
 		scriptName = name;
 
-        _script = new Iris(script,{name: name,autoRun: false, autoPreset: false});
+        _script = new Iris(script,{name: name,autoRun: false, autoPreset: true});
 
         setDefaultVars();
 
@@ -152,11 +167,10 @@ class FunkinIris extends FunkinScript
     {
         super.setDefaultVars();
 
-        set("Std", Std);
-		set("Type", Type);
-		set("Math", Math);
-		set("script", this);
 		set("StringTools", StringTools);
+
+		set("Type", Type);
+		set("script", this);
 		set("Dynamic", Dynamic);
 		set('StringMap', haxe.ds.StringMap);
 		set('IntMap', haxe.ds.IntMap);
@@ -179,6 +193,11 @@ class FunkinIris extends FunkinScript
         set("FlxSound", flixel.sound.FlxSound);
         set('FlxColor',funkin.data.scripts.ScriptClasses.HScriptColor);
         set("FlxRuntimeShader", flixel.addons.display.FlxRuntimeShader);
+		set("FlxFlicker", flixel.effects.FlxFlicker);
+		set('FlxSpriteUtil',flixel.util.FlxSpriteUtil);
+		set('AnimateSprite',flxanimate.AnimateSprite);
+		set("FlxBackdrop", flixel.addons.display.FlxBackdrop);
+		set("FlxTiledSprite", flixel.addons.display.FlxTiledSprite);
         
         set("add", FlxG.state.add);
 		set("remove", FlxG.state.remove);
@@ -193,6 +212,7 @@ class FunkinIris extends FunkinScript
 		set("FlxTextAlign", MacroUtil.buildAbstract(flixel.text.FlxText.FlxTextAlign));
 		set('FlxAxes', MacroUtil.buildAbstract(flixel.util.FlxAxes));
 		set('BlendMode', MacroUtil.buildAbstract(openfl.display.BlendMode));
+		set("FlxKey", MacroUtil.buildAbstract(flixel.input.keyboard.FlxKey));
 
 
         //modchart related
@@ -220,6 +240,52 @@ class FunkinIris extends FunkinScript
 		set("FunkinIris", FunkinIris);
 
 		set('WindowUtil',funkin.utils.WindowUtil); //temp till i fix some shit
+
+		// FNF-specific things
+		set("MusicBeatState", funkin.backend.MusicBeatState);
+		set("Paths", Paths);
+		set("Conductor", Conductor);
+		set("Song", Song);
+		set("ClientPrefs", ClientPrefs);
+		set("CoolUtil", CoolUtil);
+		set("StageData", StageData);
+		set("PlayState", PlayState);
+		set("FunkinLua", FunkinLua);
+
+		//objects
+		set("Note", Note);
+		set("Bar", funkin.objects.Bar);
+		set("FunkinVideoSprite",funkin.objects.video.FunkinVideoSprite);
+		set("BackgroundDancer", funkin.objects.stageobjects.BackgroundDancer);
+		set("BackgroundGirls", funkin.objects.stageobjects.BackgroundGirls);
+		set("TankmenBG", funkin.objects.stageobjects.TankmenBG);
+		set("FNFSprite", funkin.objects.FNFSprite);
+		set("HealthIcon", HealthIcon);
+		set("Character", Character);
+		set("NoteSplash", NoteSplash);
+		set("BGSprite", BGSprite);
+		set('SpriteFromSheet',SpriteFromSheet);
+		set("StrumNote", StrumNote);
+		set("Alphabet", Alphabet);
+		set("AttachedSprite", AttachedSprite);
+		set("AttachedText", AttachedText);
+
+		set("CutsceneHandler", funkin.backend.CutsceneHandler);
+
+		//modchart related
+		set("ModManager", funkin.modchart.ModManager);
+		set("SubModifier", funkin.modchart.SubModifier);
+		set("NoteModifier", funkin.modchart.NoteModifier);
+		set("EventTimeline", funkin.modchart.EventTimeline);
+		set("Modifier", funkin.modchart.Modifier);
+		set("StepCallbackEvent", funkin.modchart.events.StepCallbackEvent);
+		set("CallbackEvent", funkin.modchart.events.CallbackEvent);
+		set("ModEvent", funkin.modchart.events.ModEvent);
+		set("EaseEvent", funkin.modchart.events.EaseEvent);
+		set("SetEvent", funkin.modchart.events.SetEvent);
+
+
+		set("GameOverSubstate", funkin.states.substates.GameOverSubstate);
 
 
 		if((FlxG.state is PlayState) && PlayState.instance != null)
@@ -264,6 +330,9 @@ class FunkinIris extends FunkinScript
 	//kill this off soon
 	@:noCompletion
 	public static final noteSkinDefault:String = "
+		// sets the default noteskin
+		function arrowSkin() { return 'NOTE_assets'; }
+
 		// this gets the BF noteskin
 		function bfSkin() { return 'NOTE_assets'; }
 

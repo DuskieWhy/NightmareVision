@@ -73,7 +73,7 @@ class Main extends Sprite
 
 
 		ClientPrefs.loadDefaultKeys();
-		addChild(new FNFGame(gameWidth, gameHeight, #if debug initialState #else Splash #end, framerate, framerate, skipSplash, startFullscreen));
+		addChild(new #if CRASH_HANDLER FNFGame #else FlxGame #end(gameWidth, gameHeight, #if debug initialState #else Splash #end, framerate, framerate, skipSplash, startFullscreen));
 
 		#if !mobile
 		fpsVar = new DebugDisplay(10, 3, 0xFFFFFF);

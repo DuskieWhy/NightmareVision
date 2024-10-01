@@ -22,6 +22,7 @@ typedef SwagSong =
 	var speed:Float;
 
 	var keys:Int;
+	var lanes:Int;
 
 	var player1:String;
 	var player2:String;
@@ -46,6 +47,7 @@ class Song
 	public var stage:String;
 
 	public var keys:Int = 4;
+	public var lanes:Int = 2;
 
 	public var player1:String = 'bf';
 	public var player2:String = 'dad';
@@ -60,6 +62,7 @@ class Song
 		}
 
 		if(songJson.keys == null) songJson.keys = 4;
+		if(songJson.lanes == null) songJson.lanes = 2;
 
 		if(songJson.events == null)
 		{

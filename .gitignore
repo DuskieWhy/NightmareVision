@@ -7,6 +7,7 @@ art/test_x64-debug-officialrelease.bat
 
 
 .haxelib/*
+content/avas_evil_secrets/*
 ### Mac
 .DS_Store
 .icloud

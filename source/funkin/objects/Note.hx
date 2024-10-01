@@ -32,6 +32,7 @@ typedef EventNote = {
 class Note extends FlxSprite
 {
 	public var row:Int = 0;
+	public var lane:Int = 0;
 
 	public var noteScript:FunkinScript;
 
@@ -102,6 +103,8 @@ class Note extends FlxSprite
 	public var isSustainNote:Bool = false;
 	public var noteType(default, set):String = null;
 
+	public var alreadyShifted:Bool = false;
+
 	public var eventName:String = '';
 	public var eventLength:Int = 0;
 	public var eventVal1:String = '';
@@ -125,8 +128,8 @@ class Note extends FlxSprite
 
 	public static var swagWidth:Float = 160 * 0.7;
 	public static var PURP_NOTE:Int = 0;
-	public static var GREEN_NOTE:Int = 2;
 	public static var BLUE_NOTE:Int = 1;
+	public static var GREEN_NOTE:Int = 2;
 	public static var RED_NOTE:Int = 3;
 
 	// Lua shit
@@ -196,14 +199,14 @@ class Note extends FlxSprite
 
 	public function resizeByRatio(ratio:Float) //haha funny twitter shit
 	{
-		if(isSustainNote && !animation.curAnim.name.endsWith('end') && noteData < 4)
+		if(isSustainNote && !animation.curAnim.name.endsWith('end') && noteData < PlayState.SONG.keys)
 		{
 			scale.y *= ratio;
 			baseScaleY = scale.y;
 			updateHitbox();
 		}
 
-		if(isSustainNote && !animation.curAnim.name.endsWith('end') && noteData > 4)
+		if(isSustainNote && !animation.curAnim.name.endsWith('end') && noteData > PlayState.SONG.keys)
 		{
 			scale.y *= ratio / 1.6;
 			baseScaleY = scale.y;
@@ -334,28 +337,9 @@ class Note extends FlxSprite
 			colorSwap = new ColorSwap();
 			shader = colorSwap.shader;
 
-			x += swagWidth * (noteData % 4);
+			x += swagWidth * (noteData % PlayState.SONG.keys);
 			if(!isSustainNote) { //Doing this 'if' check to fix the warnings on Senpai songs
-				var animToPlay:String = '';
-				switch (noteData)
-				{
-					case 0:
-						animToPlay = 'purple';
-					case 1:
-						animToPlay = 'blue';
-					case 2:
-						animToPlay = 'green';
-					case 3:
-						animToPlay = 'red';
-					case 4:
-						animToPlay = 'fx';
-					case 5:
-						animToPlay = 'LLAZER';
-					case 6:
-						animToPlay = 'RLAZER';
-					default: 
-						animToPlay = 'purple';
-				}
+				var animToPlay:String = NoteAnimations.notes[noteData];
 				animation.play(animToPlay + 'Scroll');
 			}
 		}
@@ -375,24 +359,7 @@ class Note extends FlxSprite
 			offsetX += width / 2;
 			copyAngle = false;
 
-			switch (noteData)
-			{
-				case 0:
-					animation.play('purpleholdend');
-				case 1:
-					animation.play('blueholdend');
-				case 2:
-					animation.play('greenholdend');
-				case 3:
-					animation.play('redholdend');
-				case 4:
-					animation.play('fxholdend');
-				case 5:
-					animation.play('LLAZERholdend');
-				case 6:
-					animation.play('RLAZERholdend');
-			}
-
+			animation.play('${NoteAnimations.notes[noteData]}holdend');
 			updateHitbox();
 
 			offsetX -= width / 2;
@@ -402,24 +369,7 @@ class Note extends FlxSprite
 
 			if (prevNote.isSustainNote)
 			{
-				switch (prevNote.noteData)
-				{
-					case 0:
-						prevNote.animation.play('purplehold');
-					case 1:
-						prevNote.animation.play('bluehold');
-					case 2:
-						prevNote.animation.play('greenhold');
-					case 3:
-						prevNote.animation.play('redhold');
-					case 4:
-						prevNote.animation.play('fxhold');
-					case 5:
-						prevNote.animation.play('LLAZERhold');
-					case 6:
-						prevNote.animation.play('RLAZERhold');
-				}
-
+				prevNote.animation.play('${NoteAnimations.notes[noteData]}hold');
 				prevNote.scale.y *= Conductor.stepCrotchet / 100 * 1.05;
 				if(PlayState.instance != null)
 				{
@@ -586,36 +536,15 @@ class Note extends FlxSprite
 
 	function _loadNoteAnims()
 	{
-		animation.addByPrefix('greenScroll', 'green0');
-		animation.addByPrefix('redScroll', 'red0');
-		animation.addByPrefix('blueScroll', 'blue0');
-		animation.addByPrefix('purpleScroll', 'purple0');
+		for(note in 0...PlayState.SONG.keys){
+			var color = NoteAnimations.notes[note];
+			var sus = NoteAnimations.sustains[note];
+			var end = NoteAnimations.sustainEnds[note];
 
-		if(PlayState.SONG.keys > 4){
-			animation.addByPrefix('fxScroll', 'fx0');
-			animation.addByPrefix('LLAZERScroll', 'LLAZER R2L');
-			animation.addByPrefix('RLAZERScroll', 'RLAZER R2L');
-		}
-
-		if (isSustainNote)
-		{
-			animation.addByPrefix('purpleholdend', 'pruple end hold');
-			animation.addByPrefix('greenholdend', 'green hold end');
-			animation.addByPrefix('redholdend', 'red hold end');
-			animation.addByPrefix('blueholdend', 'blue hold end');
-
-			animation.addByPrefix('purplehold', 'purple hold piece');
-			animation.addByPrefix('greenhold', 'green hold piece');
-			animation.addByPrefix('redhold', 'red hold piece');
-			animation.addByPrefix('bluehold', 'blue hold piece');
-
-			if(PlayState.SONG.keys > 4){
-				animation.addByPrefix('fxholdend', 'fx hold end');
-				animation.addByPrefix('fxhold', 'fx hold piece');
-				animation.addByPrefix('LLAZERholdend', 'LLAZER L2R');
-				animation.addByPrefix('LLAZERhold', 'LLAZER HOLD');
-				animation.addByPrefix('RLAZERholdend', 'LLAZER R2L');
-				animation.addByPrefix('RLAZERhold', 'RLAZER HOLD');
+			animation.addByPrefix('${color}Scroll', '${color}0');
+			if(isSustainNote){
+				animation.addByPrefix('${color}hold', sus);
+				animation.addByPrefix('${color}holdend', end);	
 			}
 		}
 
@@ -626,24 +555,14 @@ class Note extends FlxSprite
 	}
 
 	function _loadPixelNoteAnims(){
-		if (isSustainNote)
-		{
-			animation.add('purpleholdend', [PURP_NOTE + 4]);
-			animation.add('greenholdend', [GREEN_NOTE + 4]);
-			animation.add('redholdend', [RED_NOTE + 4]);
-			animation.add('blueholdend', [BLUE_NOTE + 4]);
-
-			animation.add('purplehold', [PURP_NOTE]);
-			animation.add('greenhold', [GREEN_NOTE]);
-			animation.add('redhold', [RED_NOTE]);
-			animation.add('bluehold', [BLUE_NOTE]);
-		}
-		else
-		{
-			animation.add('greenScroll', [GREEN_NOTE + 4]);
-			animation.add('redScroll', [RED_NOTE + 4]);
-			animation.add('blueScroll', [BLUE_NOTE + 4]);
-			animation.add('purpleScroll', [PURP_NOTE + 4]);
+		for(note in 0...PlayState.SONG.keys){
+			var color = NoteAnimations.notes[note];
+			var frame = NoteAnimations.pixelFrames[note];
+			if(isSustainNote){
+				animation.add('${color}holdend', [frame + 4]);
+				animation.add('${color}hold', [frame]);
+			}else
+				animation.add('${color}Scroll', [frame + 4]);
 		}
 	}
 

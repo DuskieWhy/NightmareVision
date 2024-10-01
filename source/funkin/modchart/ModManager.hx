@@ -50,6 +50,7 @@ class ModManager {
 
 
     private var state:PlayState;
+	public var lanes:Int = 2;
 	public var receptors:Array<Array<StrumNote>> = []; // for modifiers to be able to access receptors directly if they need to
 	public var timeline:EventTimeline = new EventTimeline();
 
@@ -112,7 +113,7 @@ class ModManager {
 	public function setValue(modName:String, val:Float, player:Int=-1){
 		if (player == -1)
 		{
-			for (pN in 0...2)
+			for (pN in 0...lanes)
 				setValue(modName, val, pN);
 		}
 		else
@@ -286,8 +287,9 @@ class ModManager {
 	public function queueEase(step:Float, endStep:Float, modName:String, target:Float, style:String = 'linear', player:Int = -1, ?startVal:Float)
 	{
 		if(player==-1){
-			queueEase(step, endStep, modName, target, style, 0);
-			queueEase(step, endStep, modName, target, style, 1);
+			for(p in 0...lanes){
+				queueEase(step, endStep, modName, target, style, p, startVal);
+			}
 		}else{
 			var easeFunc = FlxEase.linear;
 
@@ -300,7 +302,6 @@ class ModManager {
 			
 
 			timeline.addEvent(new EaseEvent(step, endStep, modName, target, easeFunc, player, this));
-
 		}
 	}
 
@@ -308,8 +309,9 @@ class ModManager {
 	{
 		if (player == -1)
 		{
-			queueSet(step, modName, target, 0);
-			queueSet(step, modName, target, 1);
+			for (p in 0...lanes){
+				queueSet(step, modName, target, p);
+			}
 		}
 		else
 			timeline.addEvent(new SetEvent(step, modName, target, player, this));

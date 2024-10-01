@@ -11,6 +11,7 @@ import flixel.math.FlxPoint;
 class PlayField extends FlxTypedGroup<StrumNote> {
     public var owner:Character;
     public var noteHitCallback:(Note, PlayField)->Void;
+    public var noteMissCallback:(Note, PlayField)->Void;
     public var autoPlayed:Bool = false;
     public var isPlayer:Bool = false;
     public var playerControls:Bool = false;

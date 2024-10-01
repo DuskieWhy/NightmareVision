@@ -1,5 +1,6 @@
 package funkin.huds;
 
+import flixel.FlxObject;
 import flixel.util.FlxStringUtil;
 import funkin.objects.Bar;
 import funkin.objects.HealthIcon;
@@ -16,10 +17,17 @@ class PsychHUD extends BaseHUD
 
     var timeTxt:FlxText;
     var timeBar:Bar;
+	var isPixel:Bool = false; // TODO: Figure out how to make this toggle its like 5 am and i dont feel like figuring this out rn
+	var pixelZoom:Float = 6; //idgaf
 
-    override function init() {
+	var ratingPrefix:String = "";
+	var ratingSuffix:String = '';
+	var showRating:Bool = true;
+	var showCombo:Bool = true;
 
-        name = 'PSYCH';
+	// TODO: Make combo shit change for week 6, the ground work is already there so incase someone else wants to come on in and mess w it.
+    override function init() {		
+		name = 'PSYCH';
         
         healthBar = new Bar(0, FlxG.height * (!ClientPrefs.downScroll ? 0.89 : 0.11), 'healthBar', function() return parent.health, parent.healthBounds.min, parent.healthBounds.max);
 		healthBar.screenCenter(X);
@@ -67,17 +75,7 @@ class PsychHUD extends BaseHUD
 		add(timeBar);
 		add(timeTxt);
 
-
-
         onUpdateScore({score: 0, accuracy: 0, misses: 0});
-        
-
-
-
-        
-
-
-
 
         parent.setOnScripts('healthBar', healthBar);
         parent.setOnScripts('iconP1', iconP1);
@@ -85,7 +83,6 @@ class PsychHUD extends BaseHUD
         parent.setOnScripts('scoreTxt', scoreTxt);
         parent.setOnScripts('timeBar', timeBar);
         parent.setOnScripts('timeTxt', timeTxt);
-
     }
 
     override function onSongStart() {
@@ -95,13 +92,11 @@ class PsychHUD extends BaseHUD
 
     override function onUpdateScore(data:ScoreData,missed:Bool = false) 
     {
-
         var str:String = parent.ratingName;
 		if(parent.totalPlayed != 0)
 		{
 			str += ' (${data.accuracy}%) - ${parent.ratingFC}';
-		}
-        
+		}   
 
 		final tempScore:String = 'Score: ${FlxStringUtil.formatMoney(data.score,false)}'
 		+ (!parent.instakillOnMiss ? ' | Misses: ${data.misses}' : "")
@@ -143,7 +138,7 @@ class PsychHUD extends BaseHUD
         var dad = parent.dad;
         var boyfriend = parent.boyfriend;
 		healthBar.setColors(FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]),
-			FlxColor.fromRGB(boyfriend.healthColorArray[0], boyfriend.healthColorArray[1], boyfriend.healthColorArray[2]));
+		FlxColor.fromRGB(boyfriend.healthColorArray[0], boyfriend.healthColorArray[1], boyfriend.healthColorArray[2]));
 	}
 
     override function update(elapsed:Float) {
@@ -151,7 +146,6 @@ class PsychHUD extends BaseHUD
 
         updateIconsPosition();
         updateIconsScale(elapsed);
-
 
         if (!parent.startingSong && !parent.paused && parent.updateTime && !parent.endingSong)
         {
@@ -177,7 +171,6 @@ class PsychHUD extends BaseHUD
 		iconP2.updateHitbox();
     }
 
-
     override function onCharacterChange() {
         reloadHealthBarColors();
         iconP1.changeIcon(parent.boyfriend.healthIcon);
@@ -192,6 +185,117 @@ class PsychHUD extends BaseHUD
 		iconP2.animation.curAnim.curFrame = (healthBar.percent > 80) ? 1 : 0; //If health is over 80%, change opponent icon to frame 1 (losing icon), otherwise, frame 0 (normal)
     }
 
+    override function popUpScore(ratingImage:String, combo:Int) //only uses daRating.image for the moment, ill change this later since I imagine ppl will want to use other parts of the rating im just lazy and wanna get a poc out - Orbyy
+    {
+		var rating:FlxSprite = new FlxSprite();
+		/*
+        if (isPixel) TODO
+		{
+			ratingPrefix = 'pixelUI/';
+			ratingSuffix = '-pixel';
+		}
+		*/
 
-    
+		var coolText:FlxObject = new FlxObject(0, 0);
+		coolText.screenCenter();
+		coolText.x = FlxG.width * 0.35;
+
+		rating.loadGraphic(Paths.image(ratingPrefix + ratingImage + ratingSuffix));
+		rating.screenCenter();
+		rating.x = coolText.x - 40;
+		rating.y -= 60;
+		rating.acceleration.y = 550;
+		rating.velocity.y -= FlxG.random.int(140, 175);
+		rating.velocity.x -= FlxG.random.int(0, 10);
+		rating.visible = (!ClientPrefs.hideHud && showRating);
+		rating.x += ClientPrefs.comboOffset[0];
+		rating.y -= ClientPrefs.comboOffset[1];
+		insert(members.indexOf(timeTxt), rating); //this is really stupid but it fixes a layering issue, find a better work around maybe?
+
+        if(!isPixel)
+		{
+			rating.setGraphicSize(Std.int(rating.width * 0.7));
+			rating.antialiasing = ClientPrefs.globalAntialiasing;
+		}
+		else
+		{
+			rating.setGraphicSize(Std.int(rating.width * pixelZoom * 0.85));
+		}
+		rating.updateHitbox();
+
+		if(!isPixel)
+		{
+			rating.scale.set(0.785, 0.785);
+			FlxTween.tween(rating.scale, {x: 0.7, y: 0.7}, 0.5, {ease: FlxEase.expoOut});
+		}
+
+		var seperatedScore:Array<Int> = [];
+
+		if (combo >= 1000)
+		{
+			seperatedScore.push(Math.floor(combo / 1000) % 10);
+		}
+		seperatedScore.push(Math.floor(combo / 100) % 10);
+		seperatedScore.push(Math.floor(combo / 10) % 10);
+		seperatedScore.push(combo % 10);
+
+        var daLoop:Int = 0;
+		for (i in seperatedScore)
+		{
+			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(ratingPrefix + 'num' + Std.int(i) + ratingSuffix));
+			numScore.screenCenter();
+			numScore.x = coolText.x + (43 * daLoop) - 90;
+			numScore.y += 80;
+
+			numScore.x += ClientPrefs.comboOffset[2];
+			numScore.y -= ClientPrefs.comboOffset[3];
+
+			if (!isPixel)
+			{
+				numScore.antialiasing = ClientPrefs.globalAntialiasing;
+				numScore.setGraphicSize(Std.int(numScore.width * 0.5));
+			}
+			else
+			{
+				numScore.setGraphicSize(Std.int(numScore.width * pixelZoom));
+			}
+			numScore.updateHitbox();
+
+			numScore.acceleration.y = FlxG.random.int(200, 300);
+			numScore.velocity.y -= FlxG.random.int(140, 160);
+			numScore.velocity.x = FlxG.random.float(-5, 5);
+			numScore.visible = (!ClientPrefs.hideHud && showCombo);
+
+			insert(members.indexOf(rating), numScore);
+
+			if (!isPixel)
+			{
+				numScore.scale.set(0.6, 0.6);
+				FlxTween.tween(numScore.scale, {x: 0.5, y: 0.5}, 0.5, {ease: FlxEase.expoOut});
+			}
+			else
+			{
+				numScore.scale.set(6, 6);
+			}
+
+			FlxTween.tween(numScore, {alpha: 0}, 0.2,
+			{
+				onComplete: function(tween:FlxTween) {
+					numScore.destroy();
+				},
+				startDelay: Conductor.crotchet * 0.002
+			});
+
+			daLoop++;
+		}
+
+		FlxTween.tween(rating, {alpha: 0}, 0.2,
+		{
+			onComplete: function(tween:FlxTween) {
+				coolText.destroy();
+				rating.destroy();
+			},
+			startDelay: Conductor.crotchet * 0.001
+		});
+    }
 }

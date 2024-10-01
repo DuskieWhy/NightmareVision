@@ -77,7 +77,8 @@ class StrumNote extends FlxSprite
 		super(x, y);
 
 		var skin:String = 'NOTE_assets';
-		if(PlayState.arrowSkins[player] != null) skin = PlayState.arrowSkins[player];
+		trace(PlayState.arrowSkins[player]);
+		if(PlayState.arrowSkins[player] != null && PlayState.arrowSkins[player] != '' && PlayState.arrowSkins[player] != '0') skin = PlayState.arrowSkins[player];
 		texture = skin; //Load texture and anims
 
 		scrollFactor.set();
@@ -104,30 +105,7 @@ class StrumNote extends FlxSprite
 
 			antialiasing = false;
 			setGraphicSize(Std.int(width * PlayState.daPixelZoom));
-
-			animation.add('green', [6]);
-			animation.add('red', [7]);
-			animation.add('blue', [5]);
-			animation.add('purple', [4]);
-			switch (Math.abs(noteData))
-			{
-				case 0:
-					animation.add('static', [0]);
-					animation.add('pressed', [4, 8], 12, false);
-					animation.add('confirm', [12, 16], 24, false);
-				case 1:
-					animation.add('static', [1]);
-					animation.add('pressed', [5, 9], 12, false);
-					animation.add('confirm', [13, 17], 24, false);
-				case 2:
-					animation.add('static', [2]);
-					animation.add('pressed', [6, 10], 12, false);
-					animation.add('confirm', [14, 18], 12, false);
-				case 3:
-					animation.add('static', [3]);
-					animation.add('pressed', [7, 11], 12, false);
-					animation.add('confirm', [15, 19], 24, false);
-			}
+			loadPixelAnimations();
 		}
 		else
 		{
@@ -139,45 +117,11 @@ class StrumNote extends FlxSprite
 				}
 			}
 			frames = Paths.getSparrowAtlas(br);
-			animation.addByPrefix('green', 'arrowUP');
-			animation.addByPrefix('blue', 'arrowDOWN');
-			animation.addByPrefix('purple', 'arrowLEFT');
-			animation.addByPrefix('red', 'arrowRIGHT');
 
 			antialiasing = ClientPrefs.globalAntialiasing;
 			setGraphicSize(Std.int(width * 0.7));
 
-			switch (Math.abs(noteData))
-			{
-				case 0:
-					animation.addByPrefix('static', 'arrowLEFT');
-					animation.addByPrefix('pressed', 'left press', 24, false);
-					animation.addByPrefix('confirm', 'left confirm', 24, false);
-				case 1:
-					animation.addByPrefix('static', 'arrowDOWN');
-					animation.addByPrefix('pressed', 'down press', 24, false);
-					animation.addByPrefix('confirm', 'down confirm', 24, false);
-				case 2:
-					animation.addByPrefix('static', 'arrowUP');
-					animation.addByPrefix('pressed', 'up press', 24, false);
-					animation.addByPrefix('confirm', 'up confirm', 24, false);
-				case 3:
-					animation.addByPrefix('static', 'arrowRIGHT');
-					animation.addByPrefix('pressed', 'right press', 24, false);
-					animation.addByPrefix('confirm', 'right confirm', 24, false);
-				case 4:
-					animation.addByPrefix('static', 'arrowFX');
-					animation.addByPrefix('pressed', 'fx press', 24, false);
-					animation.addByPrefix('confirm', 'fx confirm', 24, false);
-				case 5:
-					animation.addByPrefix('static', 'arrowKNOB L');
-					animation.addByPrefix('pressed', 'knob l press', 24, false);
-					animation.addByPrefix('confirm', 'knob l confirm', 24, false);
-				case 6:
-					animation.addByPrefix('static', 'arrowKNOB R');
-					animation.addByPrefix('pressed', 'knob r press', 24, false);
-					animation.addByPrefix('confirm', 'knob r confirm', 24, false);
-			}
+			loadAnimations();
 		}
 		defScale.copyFrom(scale);
 		updateHitbox();
@@ -186,6 +130,23 @@ class StrumNote extends FlxSprite
 		{
 			playAnim(lastAnim, true);
 		}
+	}
+	
+	function loadAnimations(){
+		for(note in 0...PlayState.SONG.keys){ animation.addByPrefix(NoteAnimations.notes[note], NoteAnimations.receptors[noteData]); }
+
+		animation.addByPrefix('static', NoteAnimations.receptors[noteData]);
+		animation.addByPrefix('pressed', NoteAnimations.receptorsPress[noteData], 24, false);
+		animation.addByPrefix('confirm', NoteAnimations.receptorsConfirm[noteData], 24, false);
+	}
+	
+	function loadPixelAnimations(){
+		var frame = NoteAnimations.pixelFrames[noteData];
+		for(note in 0...PlayState.SONG.keys){ animation.add(NoteAnimations.notes[note],  [note + 4]);}
+
+		animation.add('static', [frame]);
+		animation.add('pressed', [frame + 4, frame + 8], 12, false);
+		animation.add('confirm', [frame + 12, frame + 16], 24, false);
 	}
 
 	public function postAddedToGroup() {

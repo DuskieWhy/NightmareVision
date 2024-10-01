@@ -38,19 +38,15 @@ class BaseHUD extends FlxTypedContainer<FlxBasic>
     public function sectionHit():Void {}
 
     public function onUpdateScore(data:ScoreData,missed:Bool = false):Void {}
+    public function popUpScore(ratingImage:String, combo:Int):Void {} // Rating only uses daRating.image for now, I plan on probably changing this later so that u can use any aspect of the rating but this is just temporary
     public function onEvent(ev:String,v1:String,v2:String,strumTime:Float):Void {}
 
     public function onCharacterChange() {}
     public function onHealthChange(health:Float) {}
 
-
     public function getVar(obj:String):Dynamic {
         return Reflect.getProperty(this,obj);
     }
-
-    
-
-
 }
 
 //only used for huds so its here

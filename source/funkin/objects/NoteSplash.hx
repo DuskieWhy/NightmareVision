@@ -60,7 +60,7 @@ class NoteSplash extends FlxSprite
 				var animNum:Int = FlxG.random.int(1, 2);
 				animation.play('note' + note + '-' + animNum, true);
 				offset.set(-20, -20);
-				animation.curAnim.frameRate = 24 + FlxG.random.int(-2, 2);
+				// animation.curAnim.frameRate = 24 + FlxG.random.int(-2, 2);
 		}
 
 	}
@@ -69,15 +69,11 @@ class NoteSplash extends FlxSprite
 		frames = Paths.getSparrowAtlas(skin);
 		switch(skin){
 			default:
-				animation.addByPrefix("note0-1", "note splash purple 1", 24, false);
-				animation.addByPrefix("note1-1", "note splash blue 1", 24, false);
-				animation.addByPrefix("note2-1", "note splash green 1", 24, false);
-				animation.addByPrefix("note3-1", "note splash red 1", 24, false);
-
-				animation.addByPrefix("note0-2", "note splash purple 1", 24, false);
-				animation.addByPrefix("note1-2", "note splash blue 1", 24, false);
-				animation.addByPrefix("note2-2", "note splash green 1", 24, false);
-				animation.addByPrefix("note3-2", "note splash red 1", 24, false);
+				for(i in 1...3){
+					for(j in 0...PlayState.SONG.keys){
+						animation.addByPrefix('note$j-$i', '${NoteAnimations.splashes[j]}', 24, false);
+					}
+				}
 		}
 	}
 

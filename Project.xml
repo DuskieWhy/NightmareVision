@@ -87,10 +87,7 @@
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
-	<haxeflag name="-dce no" />
-	
-
-
+	<!-- <haxedef name="CRASH_HANDLER"/> -->
 	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
 
 	<!--Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->

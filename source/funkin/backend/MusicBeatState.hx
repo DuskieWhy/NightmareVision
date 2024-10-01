@@ -8,6 +8,7 @@ import flixel.FlxCamera;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.FlxState;
 import funkin.data.*;
+import funkin.data.scripts.*;
 
 class MusicBeatState extends FlxUIState
 {
@@ -31,6 +32,51 @@ class MusicBeatState extends FlxUIState
 	private var controls(get, never):Controls;
 
 	public static var camBeat:FlxCamera;
+
+	public var scripted:Bool = false;
+	public var scriptName:String = 'Placeholder';
+	public var script:OverrideStateScript;
+
+	public function setOnScript(name:String, varName:Any){
+		if(script != null) script.set(name, varName);
+	}
+
+	public function callOnScript(name:String, vars:Array<Any>, ignoreStops:Bool = false){
+		var returnVal:Dynamic = Globals.Function_Continue;
+		if(script != null){
+			var ret:Dynamic = script.call(name, vars);
+			if (ret == Globals.Function_Halt)
+			{
+				ret = returnVal;
+				if (!ignoreStops) return returnVal;
+			};
+	
+			if (ret != Globals.Function_Continue && ret != null) returnVal = ret;
+			
+			if (returnVal == null) returnVal = Globals.Function_Continue;
+			
+		}
+		return returnVal;	
+	}
+
+	public function hardcoded(){
+		var ok = (script != null && !script.customMenu) || (script == null);
+		return ok;
+	}
+
+	public function setUpScript(s:String = 'Placeholder'){
+		scripted = true;
+		scriptName = s;
+		
+		var scriptFile = FunkinIris.getPath('scripts/menus/$scriptName', false);
+		if(FileSystem.exists(scriptFile)){
+			script = OverrideStateScript.fromFile(scriptFile);
+			trace('$scriptName script [$scriptFile] found!');
+		}else{
+			trace('$scriptName script [$scriptFile] is null!');
+		}
+		callOnScript('onCreate', []);
+	}
 
 	inline function get_controls():Controls
 		return PlayerSettings.player1.controls;
@@ -61,6 +107,8 @@ class MusicBeatState extends FlxUIState
 					rollbackSection();
 			}
 		}
+		
+		callOnScript('onUpdate', [elapsed]);
 
 		if(FlxG.save.data != null) FlxG.save.data.fullscreen = FlxG.fullscreen;
 

@@ -536,7 +536,7 @@ class Paths
 		return modFolders('achievements/' + key + '.json');
 	}*/
 
-	static public function modFolders(key:String) {
+	static public function modFolders(key:String, global:Bool = true) {
 		if(currentModDirectory != null && currentModDirectory.length > 0) {
 			var fileToCheck:String = mods(currentModDirectory + '/' + key);
 			if(FileSystem.exists(fileToCheck)) {
@@ -544,7 +544,10 @@ class Paths
 			}
 		}
 
-		for(mod in getGlobalMods()){
+		var lol = getModDirectories();
+		if(global) lol = getGlobalMods();
+
+		for(mod in lol){
 			var fileToCheck:String = mods(mod + '/' + key);
 			if(FileSystem.exists(fileToCheck))
 				return fileToCheck;

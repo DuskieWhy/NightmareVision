@@ -23,6 +23,7 @@ class Init extends FlxState
 
 	
 		funkin.data.WeekData.loadTheFirstEnabledMod();
+		NoteAnimations.resetToDefault();
 
 		FlxG.game.focusLostFramerate = 60;
 		FlxG.sound.muteKeys = muteKeys;
