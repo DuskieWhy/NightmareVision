@@ -89,6 +89,13 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		option.decimals = 1;
 		option.onChange = onChangeHitsoundVolume;
 
+		var option:Option = new Option('Use Epic Ratings', //Name
+			'If checked, adds Epic Ratings as a bonus judgement above sick (does not affect accuracy, only your score).', //Description
+			'useEpics', //Save data variable name
+			'bool', //Variable type
+			true); //Default value
+		addOption(option);
+
 		var option:Option = new Option('Rating Offset',
 			'Changes how late/early you have to hit for a "Sick!"\nHigher values mean you have to hit later.',
 			'ratingOffset',

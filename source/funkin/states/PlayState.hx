@@ -416,14 +416,16 @@ class PlayState extends MusicBeatState
 		NoteAnimations.resetToDefault();
 
 		// Ratings
-		var rating:Rating = new Rating('epic');
-		rating.ratingMod = 1;
-		rating.score = 500;
-		rating.noteSplash = true;
-		ratingsData.push(rating);
+		if(ClientPrefs.useEpics) {
+			var rating:Rating = new Rating('epic');
+			rating.ratingMod = 1;
+			rating.score = 500;
+			rating.noteSplash = true;
+			ratingsData.push(rating);
+		}
 
 		var rating:Rating = new Rating('sick');
-		rating.ratingMod = 0.9825;
+		rating.ratingMod = 1;
 		rating.score = 350;
 		rating.noteSplash = true;
 		ratingsData.push(rating);
