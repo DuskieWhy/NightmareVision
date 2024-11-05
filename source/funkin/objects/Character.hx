@@ -1,6 +1,6 @@
 package funkin.objects;
 
-import funkin.objects.animateatlas.AtlasFrameMaker;
+import animateatlas.AtlasFrameMaker;
 import funkin.objects.*;
 import funkin.data.*;
 import funkin.states.*;

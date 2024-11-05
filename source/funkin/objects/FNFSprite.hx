@@ -1,6 +1,6 @@
 package funkin.objects;
 
-import funkin.objects.animateatlas.AtlasFrameMaker;
+import animateatlas.AtlasFrameMaker;
 import funkin.objects.*;
 import flixel.FlxSprite;
 import openfl.utils.Assets;

@@ -34,14 +34,18 @@ import sys.io.File;
 
 class HScriptState extends MusicBeatState
 {
-    var script:FunkinIris;
-    
-    public function new(script){
-        script.call('onLoad', []);
+    public static var currentGlobalScript:String;
+
+    public function new(name:String){
+        // if u reset the state it forgets the name lmao
+        if(name != null && name != null) currentGlobalScript = name;
+        trace(currentGlobalScript);
+
+        setUpScript(currentGlobalScript);
+        
+
         script.set('script', script);
-
-        this.script = script;
-
+        
         super();
     }
 
@@ -50,6 +54,7 @@ class HScriptState extends MusicBeatState
         script.set('add', this.add);
 
         script.call('create', []);
+		// setOnScript('persistentUpdate', persistentUpdate);
 
         super.create();
 

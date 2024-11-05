@@ -8,7 +8,7 @@ import llua.Convert;
 #end
 
 import funkin.states.*;
-import funkin.objects.animateatlas.AtlasFrameMaker;
+import animateatlas.AtlasFrameMaker;
 
 import flixel.FlxG;
 import flixel.addons.effects.FlxTrail;
@@ -2626,14 +2626,15 @@ class ModchartText extends FlxText
 
 class DebugLuaText extends FlxText
 {
-	private var disableTime:Float = 6;
+	public var disableTime:Float = 6;
 	public var parentGroup:FlxTypedGroup<DebugLuaText>;
-	public function new(text:String, parentGroup:FlxTypedGroup<DebugLuaText>) {
+	public function new(text:String, parentGroup:FlxTypedGroup<DebugLuaText>,color:FlxColor = FlxColor.WHITE) {
 		this.parentGroup = parentGroup;
 		super(10, 10, 0, text, 16);
-		setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scrollFactor.set();
 		borderSize = 1;
+		this.color = color;
 	}
 
 	override function update(elapsed:Float) {

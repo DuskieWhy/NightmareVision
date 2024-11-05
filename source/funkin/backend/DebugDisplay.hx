@@ -14,6 +14,11 @@ import openfl.display.Sprite;
 **/
 class DebugDisplay extends Sprite
 {
+	public var updating:Bool = true;
+
+	public var lying:Bool = false;
+	public var lyingMemory:Float;
+
 	public var text:TextField;
 	public var underlay:Bitmap;
 	/**
@@ -78,11 +83,14 @@ class DebugDisplay extends Sprite
 
 	inline function updateText():Void 
 	{
-        text.text = 'FPS: $currentFPS • Memory: ${flixel.util.FlxStringUtil.formatBytes(memoryMegas)}';
-		
-		text.textColor = 0xFFFFFFFF;
-		if (currentFPS < FlxG.drawFramerate * 0.5)
-			text.textColor = 0xFFFF0000;
+		if(updating){
+			if(lying) text.text = 'FPS: $currentFPS • Memory: ${flixel.util.FlxStringUtil.formatBytes(lyingMemory)}';
+			else text.text = 'FPS: $currentFPS • Memory: ${flixel.util.FlxStringUtil.formatBytes(memoryMegas)}';
+			
+			text.textColor = 0xFFFFFFFF;
+			if (currentFPS < FlxG.drawFramerate * 0.5)
+				text.textColor = 0xFFFF0000;	
+		}
 	}
 
 	inline function get_memoryMegas():Float {

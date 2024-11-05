@@ -19,6 +19,10 @@ using StringTools;
 
 class StrumNote extends FlxSprite
 {
+	public static var handler:NoteSkinHelper;
+	public static var keys:Int = 4;
+	public var intThing:Int = 0;
+
 	public var vec3Cache:Vector3 = new Vector3(); // for vector3 operations in modchart code
 	public var defScale:FlxPoint = FlxPoint.get(); // for modcharts to keep the scaling
 
@@ -68,6 +72,8 @@ class StrumNote extends FlxSprite
 	}
 
 	public function new(player:Int, x:Float, y:Float, leData:Int, ?parent:PlayField) {
+		// handler = PlayState.noteSkin;
+
 		colorSwap = new ColorSwap();
 		shader = colorSwap.shader;
 		noteData = leData;
@@ -77,8 +83,7 @@ class StrumNote extends FlxSprite
 		super(x, y);
 
 		var skin:String = 'NOTE_assets';
-		trace(PlayState.arrowSkins[player]);
-		if(PlayState.arrowSkins[player] != null && PlayState.arrowSkins[player] != '' && PlayState.arrowSkins[player] != '0') skin = PlayState.arrowSkins[player];
+		skin = NoteSkinHelper.arrowSkins[player];
 		texture = skin; //Load texture and anims
 
 		scrollFactor.set();
@@ -133,20 +138,22 @@ class StrumNote extends FlxSprite
 	}
 	
 	function loadAnimations(){
-		for(note in 0...PlayState.SONG.keys){ animation.addByPrefix(NoteAnimations.notes[note], NoteAnimations.receptors[noteData]); }
-
-		animation.addByPrefix('static', NoteAnimations.receptors[noteData]);
-		animation.addByPrefix('pressed', NoteAnimations.receptorsPress[noteData], 24, false);
-		animation.addByPrefix('confirm', NoteAnimations.receptorsConfirm[noteData], 24, false);
+		// what?
+		// for(note in 0...keys){ animation.addByPrefix(handler.data.noteAnimations[note][0].anim, handler.data.receptorAnimations[noteData][0].anim ); }
+		for(i in 0...handler.data.receptorAnimations[noteData].length){
+			if(handler != null){
+				animation.addByPrefix(handler.data.receptorAnimations[noteData][i].anim, handler.data.receptorAnimations[noteData][i].xmlName, 24, false);
+				addOffset(handler.data.receptorAnimations[noteData][i].anim, handler.data.receptorAnimations[noteData][i].offsets[0], handler.data.receptorAnimations[noteData][i].offsets[1]);	
+			}
+		}
 	}
 	
 	function loadPixelAnimations(){
-		var frame = NoteAnimations.pixelFrames[noteData];
-		for(note in 0...PlayState.SONG.keys){ animation.add(NoteAnimations.notes[note],  [note + 4]);}
+		for(note in 0...keys){ animation.add(handler.data.noteAnimations[note][0].anim,  [note + 4]);}
 
-		animation.add('static', [frame]);
-		animation.add('pressed', [frame + 4, frame + 8], 12, false);
-		animation.add('confirm', [frame + 12, frame + 16], 24, false);
+		animation.add('static', [noteData]);
+		animation.add('pressed', [noteData + 4, noteData + 8], 12, false);
+		animation.add('confirm', [noteData + 12, noteData + 16], 24, false);
 	}
 
 	public function postAddedToGroup() {

@@ -1,5 +1,7 @@
-// not done and not even in use yet.
-// gonna be used for extra key support, that way people can quickly configure the animations for the extra keys instead of having to do some major hard-coded changes
+// STUPID AND GAY
+// IM ONLY LEAVING THIS HERE FOR SAFETY IN CASE I NEED TO GO BACK AND USE IT
+// DONT RELY ON THIS
+// ITS NOT USED ANYWHERE
 package funkin.data;
 
 class NoteAnimations

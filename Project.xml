@@ -62,11 +62,8 @@
 
 	<assets path='content' embed='false' if="MODS_ALLOWED"/>
 
-	<!-- assets path="CHANGELOG.md" rename='changelog.txt' -->
-
 
 	<!-- _______________________________ Libraries ______________________________ -->
-	<!-- <haxelib name="" version=""/> -->
 	<lime version="8.1.1"/>
 	<haxelib name="openfl"/>
 
@@ -87,6 +84,9 @@
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
+	<haxeflag name="--macro" value="include('funkin')" />
+	<haxeflag name="-dce no" />
+	
 	<!-- <haxedef name="CRASH_HANDLER"/> -->
 	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
 

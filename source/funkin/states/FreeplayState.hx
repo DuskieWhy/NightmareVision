@@ -90,6 +90,10 @@ class FreeplayState extends MusicBeatState
 		WeekData.loadTheFirstEnabledMod();
 
 		setUpScript('FreeplayState');
+		setOnScript('SongMetadata', SongMetadata);
+		setOnScript('WeekData', WeekData);
+		setOnScript('songs', songs);
+		setOnScript('persistentUpdate', persistentUpdate);
 
 		if(hardcoded()){
 			bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));

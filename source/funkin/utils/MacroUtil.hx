@@ -38,7 +38,6 @@ class MacroUtil
 
 
     /**
-    * wip???
     * Builds a anon strcture from static uppercase inline variables in an abstract type.
     * ripped from FlxMacroUtil but modified to fit my needs
     * https://code.haxe.org/category/macros/combine-objects.html
@@ -53,11 +52,6 @@ class MacroUtil
 
         switch (type.follow())
         {
-
-            //no enum support yet
-            case TEnum(_.get()=> en,_):
-                
-        
             case TAbstract(_.get() => ab, _):
                 for (f in ab.impl.get().statics.get())
                 {
@@ -84,12 +78,6 @@ class MacroUtil
 
         var finalResult = {expr:EObjectDecl(expressions), pos: Context.currentPos()};
         return macro $b{[macro $finalResult]};
-    }
-
-
-    //KILL EVERYONE
-    public static macro function buildEnumStruct(enu:haxe.macro.Expr) {
-        return macro $v{0};
     }
 
 }

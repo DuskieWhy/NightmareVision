@@ -69,6 +69,9 @@ class MusicBeatState extends FlxUIState
 		scriptName = s;
 		
 		var scriptFile = FunkinIris.getPath('scripts/menus/$scriptName', false);
+		//idk why it needs me to init but whatever ig
+		FunkinIris.init();
+
 		if(FileSystem.exists(scriptFile)){
 			script = OverrideStateScript.fromFile(scriptFile);
 			trace('$scriptName script [$scriptFile] found!');

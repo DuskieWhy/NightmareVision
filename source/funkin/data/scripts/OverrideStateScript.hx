@@ -11,7 +11,7 @@ class OverrideStateScript extends FunkinIris
         return new OverrideStateScript(File.getContent(file), name, additionalVars);
     }
 
-    public function new(script:String, ?name:String = "Script", ?additionalVars:Map<String, Any>)
+    public function new(script:String, ?name:String = "Script", ?custom:Bool = true, ?additionalVars:Map<String, Any>)
     {
         super(script, name, additionalVars);
         

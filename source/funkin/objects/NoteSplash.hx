@@ -9,9 +9,14 @@ import funkin.states.*;
 
 class NoteSplash extends FlxSprite
 {
+	public static var handler:NoteSkinHelper;
+	public static var keys:Int = 4;
+
 	public var colorSwap:HSLColorSwap = null;
 	private var idleAnim:String;
 	private var textureLoaded:String = null;
+
+	var data:Int = 0;
 
 	public function new(x:Float = 0, y:Float = 0, ?note:Int = 0) {
 		super(x, y);
@@ -49,6 +54,7 @@ class NoteSplash extends FlxSprite
 			scale.x *= field.scale;
 			scale.y *= field.scale;
 		}
+		data = note;
 		switch(texture){
 			default:
 				// alpha = 0.6;
@@ -57,22 +63,24 @@ class NoteSplash extends FlxSprite
 				colorSwap.hue = hueColor;
 				colorSwap.saturation = satColor;
 				colorSwap.lightness = brtColor;
-				var animNum:Int = FlxG.random.int(1, 2);
-				animation.play('note' + note + '-' + animNum, true);
+				animation.play('note' + note, true);
 				offset.set(-20, -20);
 				// animation.curAnim.frameRate = 24 + FlxG.random.int(-2, 2);
 		}
 
 	}
 
+	public function playAnim(){
+		animation.play('note' + data, true);
+		trace('animation played on splash $data');
+	}
+
 	function loadAnims(skin:String) {
 		frames = Paths.getSparrowAtlas(skin);
 		switch(skin){
 			default:
-				for(i in 1...3){
-					for(j in 0...PlayState.SONG.keys){
-						animation.addByPrefix('note$j-$i', '${NoteAnimations.splashes[j]}', 24, false);
-					}
+				for(i in 0...keys){
+					animation.addByPrefix(handler.data.noteSplashAnimations[i].anim, handler.data.noteSplashAnimations[i].xmlName, 24, false);
 				}
 		}
 	}

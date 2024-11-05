@@ -17,6 +17,18 @@ class MathUtil {
 		else if (value > max) return min;
 		else return value;
 	}
+	
+	// functions from basegame mathutil.hx, for the soundtray, i'll see if these are rlly necessary later
+
+	public static function coolLerp(base:Float, target:Float, ratio:Float):Float
+	{
+		return base + cameraLerp(ratio) * (target - base);
+	}
+
+	public static function cameraLerp(lerp:Float):Float
+	{
+		return lerp * (FlxG.elapsed / (1 / 60));
+	}
 
 	public static function floorDecimal(value:Float, decimals:Int):Float
 	{

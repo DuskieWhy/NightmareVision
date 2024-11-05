@@ -100,22 +100,6 @@ class OurLittleFriend extends FlxSprite
 		}
 	}
 
-	// #if debug
-	// override function update(elapsed:Float) 
-	// {
-	// 	super.update(elapsed);
-
-	// 	if (FlxG.keys.justPressed.G) buildOffsets();
-	// 	if (FlxG.keys.justPressed.T) sing(0);
-	// 	if (FlxG.keys.justPressed.Y) sing(1);
-	// 	if (FlxG.keys.justPressed.U) sing(2);
-	// 	if (FlxG.keys.justPressed.I) sing(3);
-	// 	if (FlxG.keys.justPressed.O) sing(4);
-	// }
-	// #end
-
-	
-
 	function buildOffsets(?path:String) 
 	{
 		path ??= _offsetPath;
@@ -153,7 +137,6 @@ class ChartingState extends MusicBeatState
 {
 	public static var instance:ChartingState;
 	public var notetypeScripts:Map<String, FunkinScript> = [];
-	public var noteskinScript:FunkinIris;
 
 	public static var noteTypeList:Array<String> = //Used for backwards compatibility with 0.1 - 0.3.2 charts, though, you should add your hardcoded custom note types here too.
 	[
@@ -364,7 +347,9 @@ class ChartingState extends MusicBeatState
 		initialKeyCount = _song.keys;
 		ClientPrefs.loadPrefs();
 
-		// Paths.clearMemory();
+		if(PlayState.noteSkin != null){
+			NoteSkinHelper.setNoteHelpers(PlayState.noteSkin, _song.keys);
+		}
 
 		#if desktop
 		// Updating Discord Rich Presence
@@ -822,6 +807,9 @@ class ChartingState extends MusicBeatState
 
 		var reloadNotesButton:FlxButton = new FlxButton(noteSplashesInputText.x + 5, noteSplashesInputText.y + 20, 'Change Notes', function() {
 			_song.arrowSkin = noteSkinInputText.text;
+
+			trace('noteskin file: "${_song.arrowSkin}"');
+
 			updateGrid();
 		});
 
@@ -854,7 +842,7 @@ class ChartingState extends MusicBeatState
 		tab_group_song.add(new FlxText(gfVersionDropDown.x, gfVersionDropDown.y - 15, 0, 'Girlfriend:'));
 		tab_group_song.add(new FlxText(player1DropDown.x, player1DropDown.y - 15, 0, 'Boyfriend:'));
 		tab_group_song.add(new FlxText(stageDropDown.x, stageDropDown.y - 15, 0, 'Stage:'));
-		tab_group_song.add(new FlxText(noteSkinInputText.x, noteSkinInputText.y - 15, 0, 'Note Texture Script:'));
+		tab_group_song.add(new FlxText(noteSkinInputText.x, noteSkinInputText.y - 15, 0, 'Note Texture:'));
 		// tab_group_song.add(new FlxText(noteSplashesInputText.x, noteSplashesInputText.y - 15, 0, 'Note Splashes Texture:'));
 		tab_group_song.add(player2DropDown);
 		tab_group_song.add(gfVersionDropDown);
@@ -2593,10 +2581,7 @@ class ChartingState extends MusicBeatState
 	function setUIStuffPos(){
 		UI_box.x = FlxG.width / 2;
 		var add = (_song.keys * _song.lanes) - 8;
-		trace(add);
-		trace(GRID_SIZE * add);
 		UI_box.x += (GRID_SIZE * add);
-		trace(UI_box.x);
 	}
 
 	function reloadStrumShit(){
@@ -3102,21 +3087,31 @@ class ChartingState extends MusicBeatState
 		nextRenderedSustains.clear();
 		prevRenderedNotes.clear();
 		prevRenderedSustains.clear();
-		
-		if(_song.arrowSkin != ''){
-			for(ext in FunkinIris.exts){
-				if(noteskinScript == null){
-					if(FileSystem.exists(Paths.modsNoteskin('${_song.arrowSkin}.$ext'))){
-						noteskinScript = FunkinIris.fromFile(Paths.modsNoteskin('${_song.arrowSkin}.$ext'));
-					}else if(FileSystem.exists(Paths.noteskin('${_song.arrowSkin}.$ext'))){
-						//Noteskin doesn't exist in mods, trying assets folder
-						noteskinScript = FunkinIris.fromFile(Paths.noteskin('${_song.arrowSkin}.$ext'));
-					}else{
-						noteskinScript = null;
-					}						
-				}
+
+		var skin:NoteSkinHelper = PlayState.noteSkin;
+		if (_song.arrowSkin != 'default' && _song.arrowSkin != '' && _song.arrowSkin != null)
+		{		
+			if (FileSystem.exists(Paths.modsNoteskin('${_song.arrowSkin}')))
+			{
+				skin = new NoteSkinHelper(Paths.modsNoteskin('${_song.arrowSkin}'));
+			}
+			else if (FileSystem.exists(Paths.noteskin('${_song.arrowSkin}')))
+			{
+				// Noteskin doesn't exist in assets, trying mods folder
+				skin = new NoteSkinHelper(Paths.noteskin('${_song.arrowSkin}'));
 			}
 		}
+		else
+		{
+			if (FileSystem.exists(Paths.modsNoteskin('default')))
+			{
+				skin = new NoteSkinHelper(Paths.modsNoteskin('default'));
+			}
+		}
+
+		if(skin != null)
+			NoteSkinHelper.setNoteHelpers(skin, _song.keys);
+		
 
 		if (_song.notes[curSec].changeBPM && _song.notes[curSec].bpm > 0)
 		{
@@ -3263,15 +3258,16 @@ class ChartingState extends MusicBeatState
 		note.noteData = intendedData % _song.keys;
 		note.alreadyShifted = true;
 
-
 		if(daSus != null) { //Common note
-			if(!Std.isOfType(i[3], String)) //Convert old note type to new note type format
-			{
-				i[3] = noteTypeIntMap.get(i[3]);
-			}
-			if(i.length > (_song.keys - 1) && (i[_song.keys - 1] == null || i[_song.keys - 1].length < 1))
-			{
-				i.remove(i[3]);
+			if(i[3] != null && i[3] != ''){
+				if(!Std.isOfType(i[3], String)) //Convert old note type to new note type format
+				{
+					i[3] = noteTypeIntMap.get(i[3]);
+				}
+				if(i.length > (_song.keys - 1) && (i[_song.keys - 1] == null || i[_song.keys - 1].length < 1))
+				{
+					i.remove(i[3]);
+				}	
 			}
 			note.sustainLength = daSus;
 			note.noteType = i[3];

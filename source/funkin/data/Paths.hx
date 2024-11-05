@@ -178,11 +178,11 @@ class Paths
 	}
 	inline static public function noteskin(key:String, ?library:String)
 	{
-		return getPath('noteskins/$key', TEXT, library);
+		return getPath('noteskins/$key.json', TEXT, library);
 	}
 	inline static public function modsNoteskin(key:String)
 	{
-		return modFolders('noteskins/$key');
+		return modFolders('noteskins/$key.json');
 	}
 	inline static public function shaderFragment(key:String, ?library:String)
 	{
@@ -203,6 +203,7 @@ class Paths
 		#end
 		if (Assets.exists(asset)) return Assets.getText(asset);
 
+		trace('oh no its returning null NOOOO ($asset)');
 		return null;
 	}
 

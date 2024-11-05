@@ -29,8 +29,6 @@ import funkin.backend.Discord.DiscordClient;
 import hxvlc.flixel.*;
 #end
 
-import funkin.data.NoteAnimations;
-
 import funkin.data.Paths;
 import funkin.data.ClientPrefs;
 import funkin.data.Conductor;

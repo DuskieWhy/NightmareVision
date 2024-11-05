@@ -73,7 +73,19 @@ class Main extends Sprite
 
 
 		ClientPrefs.loadDefaultKeys();
-		addChild(new #if CRASH_HANDLER FNFGame #else FlxGame #end(gameWidth, gameHeight, #if debug initialState #else Splash #end, framerate, framerate, skipSplash, startFullscreen));
+
+		var game:#if CRASH_HANDLER FNFGame #else FlxGame #end = new #if CRASH_HANDLER FNFGame #else FlxGame #end(gameWidth, gameHeight, Splash, framerate, framerate, skipSplash, startFullscreen);
+		
+		// FlxG.game._customSoundTray wants just the class, it calls new from
+        // create() in there, which gets called when it's added to stage
+        // which is why it needs to be added before addChild(game) here
+
+		// Also btw game has to be a variable for this to work ig - Orbyy
+
+		@:privateAccess
+        game._customSoundTray = funkin.objects.FunkinSoundTray;
+
+		addChild(game);
 
 		#if !mobile
 		fpsVar = new DebugDisplay(10, 3, 0xFFFFFF);

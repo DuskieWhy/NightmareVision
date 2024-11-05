@@ -1,7 +1,7 @@
 package funkin.states.editors;
 
 
-import funkin.objects.animateatlas.AtlasFrameMaker;
+import animateatlas.AtlasFrameMaker;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -39,6 +39,9 @@ import sys.FileSystem;
 #end
 
 using StringTools;
+
+@:bitmap("assets/images/debugger/cursorCross.png")
+class Crosshair extends openfl.display.BitmapData {}
 
 /**
 	*DEBUG MODE
@@ -98,7 +101,7 @@ class CharacterEditorState extends MusicBeatState
 		charLayer = new FlxTypedGroup<Character>();
 		add(charLayer);
 
-		var pointer:FlxGraphic = FlxGraphic.fromClass(GraphicCursorCross);
+		var pointer:FlxGraphic = FlxGraphic.fromClass(Crosshair);
 		cameraFollowPointer = new FlxSprite().loadGraphic(pointer);
 		cameraFollowPointer.setGraphicSize(40, 40);
 		cameraFollowPointer.updateHitbox();
@@ -1244,8 +1247,6 @@ class CharacterEditorState extends MusicBeatState
 				}
 
 				var controlArray:Array<Bool> = [FlxG.keys.justPressed.LEFT, FlxG.keys.justPressed.RIGHT, FlxG.keys.justPressed.UP, FlxG.keys.justPressed.DOWN];
-
-
 
 				for (i in 0...controlArray.length) {
 					if(controlArray[i]) {

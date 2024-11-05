@@ -31,6 +31,10 @@ typedef EventNote = {
 
 class Note extends FlxSprite
 {
+
+	public static var handler:NoteSkinHelper;
+	public static var keys:Int = 4;
+
 	public var row:Int = 0;
 	public var lane:Int = 0;
 
@@ -199,14 +203,14 @@ class Note extends FlxSprite
 
 	public function resizeByRatio(ratio:Float) //haha funny twitter shit
 	{
-		if(isSustainNote && !animation.curAnim.name.endsWith('end') && noteData < PlayState.SONG.keys)
+		if(isSustainNote && !animation.curAnim.name.endsWith('end') && noteData < keys)
 		{
 			scale.y *= ratio;
 			baseScaleY = scale.y;
 			updateHitbox();
 		}
 
-		if(isSustainNote && !animation.curAnim.name.endsWith('end') && noteData > PlayState.SONG.keys)
+		if(isSustainNote && !animation.curAnim.name.endsWith('end') && noteData > keys)
 		{
 			scale.y *= ratio / 1.6;
 			baseScaleY = scale.y;
@@ -297,6 +301,8 @@ class Note extends FlxSprite
 	{
 		super();
 
+		// handler = PlayState.noteSkin;
+
 		if (prevNote == null)
 			prevNote = this;
 
@@ -337,10 +343,10 @@ class Note extends FlxSprite
 			colorSwap = new ColorSwap();
 			shader = colorSwap.shader;
 
-			x += swagWidth * (noteData % PlayState.SONG.keys);
+			x += swagWidth * (noteData % keys);
 			if(!isSustainNote) { //Doing this 'if' check to fix the warnings on Senpai songs
-				var animToPlay:String = NoteAnimations.notes[noteData];
-				animation.play(animToPlay + 'Scroll');
+				var animToPlay:String = handler.data.noteAnimations[noteData][0].color + "Scroll";
+				animation.play(animToPlay);
 			}
 		}
 
@@ -359,7 +365,7 @@ class Note extends FlxSprite
 			offsetX += width / 2;
 			copyAngle = false;
 
-			animation.play('${NoteAnimations.notes[noteData]}holdend');
+			animation.play(handler.data.noteAnimations[noteData][0].color + "holdend");
 			updateHitbox();
 
 			offsetX -= width / 2;
@@ -369,7 +375,7 @@ class Note extends FlxSprite
 
 			if (prevNote.isSustainNote)
 			{
-				prevNote.animation.play('${NoteAnimations.notes[noteData]}hold');
+				prevNote.animation.play(handler.data.noteAnimations[noteData][0].color + "hold");
 				prevNote.scale.y *= Conductor.stepCrotchet / 100 * 1.05;
 				if(PlayState.instance != null)
 				{
@@ -415,7 +421,7 @@ class Note extends FlxSprite
 
 		var skin:String = texture;
 		if(texture.length < 1) {
-			skin = PlayState.arrowSkins[player];
+			skin = NoteSkinHelper.arrowSkins[player];
 			if(skin == null || skin.length < 1) {
 				skin = 'NOTE_assets';
 			}
@@ -536,15 +542,9 @@ class Note extends FlxSprite
 
 	function _loadNoteAnims()
 	{
-		for(note in 0...PlayState.SONG.keys){
-			var color = NoteAnimations.notes[note];
-			var sus = NoteAnimations.sustains[note];
-			var end = NoteAnimations.sustainEnds[note];
-
-			animation.addByPrefix('${color}Scroll', '${color}0');
-			if(isSustainNote){
-				animation.addByPrefix('${color}hold', sus);
-				animation.addByPrefix('${color}holdend', end);	
+		for(note in 0...keys){
+			for(i in 0...handler.data.noteAnimations[note].length){
+				animation.addByPrefix(handler.data.noteAnimations[note][i].anim, '${handler.data.noteAnimations[note][i].xmlName}0');
 			}
 		}
 
@@ -555,14 +555,14 @@ class Note extends FlxSprite
 	}
 
 	function _loadPixelNoteAnims(){
-		for(note in 0...PlayState.SONG.keys){
-			var color = NoteAnimations.notes[note];
-			var frame = NoteAnimations.pixelFrames[note];
+		for(note in 0...keys){
+			var color = handler.data.noteAnimations[note][0].xmlName;
+
 			if(isSustainNote){
-				animation.add('${color}holdend', [frame + 4]);
-				animation.add('${color}hold', [frame]);
+				animation.add('${color}holdend', [note + 4]);
+				animation.add('${color}hold', [note]);
 			}else
-				animation.add('${color}Scroll', [frame + 4]);
+				animation.add('${color}Scroll', [note + 4]);
 		}
 	}
 
