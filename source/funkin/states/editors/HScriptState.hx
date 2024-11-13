@@ -34,6 +34,7 @@ import sys.io.File;
 
 class HScriptState extends MusicBeatState
 {
+    public var instance:HScriptState;
     public static var currentGlobalScript:String;
 
     public function new(name:String){
@@ -45,13 +46,14 @@ class HScriptState extends MusicBeatState
         
 
         script.set('script', script);
-        
         super();
     }
 
     override function create()
     {
+        instance = this;
         script.set('add', this.add);
+        script.set('game', instance);
 
         script.call('create', []);
 		// setOnScript('persistentUpdate', persistentUpdate);

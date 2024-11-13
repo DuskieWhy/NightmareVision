@@ -1,4 +1,13 @@
-// ill make this documented later
+/*
+
+    For states that already exist that you want to OVERRIDE / MODIFY, make SURE your script name matches the source hx file's name!
+    (ex. MainMenuState, TitleState, FreeplayState, etc)
+
+    if you want the state to be entirely overwritten, run this:
+    function customMenu() { return true; }
+
+    an example state is written below!
+*/
 
 import flixel.text.FlxText;
 
@@ -10,7 +19,7 @@ var custom:Bool = true;
 function customMenu() { return custom; }
 
 function onCreatePost(){
-    Paths.currentModDirectory = 'whatever i will somehow automate this';
+    // Paths.currentModDirectory = 'whatever i will somehow automate this';
 
     test = new FlxSprite().loadGraphic(Paths.image('ok it works'));
     test.scale.set(0.25, 0.25);

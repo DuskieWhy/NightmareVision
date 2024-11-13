@@ -99,7 +99,7 @@ class StrumNote extends FlxSprite
 		{
 			if((ClientPrefs.noteSkin == 'Quants' || ClientPrefs.noteSkin == "QuantStep")){
 				if(Assets.exists(Paths.getPath("images/pixelUI/QUANT" + texture + ".png", IMAGE)) || FileSystem.exists(Paths.modsImages("pixelUI/QUANT" + texture))) {
-					br = "QUANT" + texture;
+					if(handler.data.hasQuants) br = "QUANT" + texture;
 					isQuant=true;
 				}
 			}
@@ -116,7 +116,7 @@ class StrumNote extends FlxSprite
 		{
 			if((ClientPrefs.noteSkin == 'Quants' || ClientPrefs.noteSkin == "QuantStep")){
 				if(Assets.exists(Paths.getPath("images/QUANT" + texture + ".png", IMAGE)) || FileSystem.exists(Paths.modsImages("QUANT" + texture))) {
-					br = "QUANT" + texture;
+					if(handler.data.hasQuants) br = "QUANT" + texture;
 					isQuant=true;
 					trace(br);
 				}

@@ -212,7 +212,7 @@ class FunkinIris extends FunkinScript
 		set('FlxColor', funkin.data.scripts.ScriptClasses.HScriptColor);
 		set("FlxRuntimeShader", flixel.addons.display.FlxRuntimeShader);
 		set("FlxFlicker", flixel.effects.FlxFlicker);
-		set('FlxSpriteUtil', flixel.util.FlxSpriteUtil);
+				set('FlxSpriteUtil', flixel.util.FlxSpriteUtil);
 		set('AnimateSprite', flxanimate.AnimateSprite);
 		set("FlxBackdrop", flixel.addons.display.FlxBackdrop);
 		set("FlxTiledSprite", flixel.addons.display.FlxTiledSprite);
@@ -231,6 +231,7 @@ class FunkinIris extends FunkinScript
 		set('FlxAxes', MacroUtil.buildAbstract(flixel.util.FlxAxes));
 		set('BlendMode', MacroUtil.buildAbstract(openfl.display.BlendMode));
 		set("FlxKey", MacroUtil.buildAbstract(flixel.input.keyboard.FlxKey));
+		set("FlxPoint", MacroUtil.buildAbstract(flixel.math.FlxPoint));
 
 		// modchart related
 		set("ModManager", funkin.modchart.ModManager);

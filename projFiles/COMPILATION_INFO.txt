@@ -1,4 +1,9 @@
-@echo off
+run all these commands and compiling should work :P
+make sure you have haxe 4.3.1 or above!
+
+
 haxelib --global install hmm
 haxelib --global run hmm setup
+hmm init
 hmm install
+haxelib --global set hxvlc 1.5.5
