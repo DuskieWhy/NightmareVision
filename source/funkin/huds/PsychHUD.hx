@@ -17,7 +17,6 @@ class PsychHUD extends BaseHUD
 
     var timeTxt:FlxText;
     var timeBar:Bar;
-	var isPixel:Bool = false; // TODO: Figure out how to make this toggle its like 5 am and i dont feel like figuring this out rn
 	var pixelZoom:Float = 6; //idgaf
 
 	var ratingPrefix:String = "";
@@ -83,6 +82,8 @@ class PsychHUD extends BaseHUD
         parent.setOnScripts('scoreTxt', scoreTxt);
         parent.setOnScripts('timeBar', timeBar);
         parent.setOnScripts('timeTxt', timeTxt);
+		parent.setOnScripts('ratingPrefix', ratingPrefix);
+        parent.setOnScripts('ratingSuffix', ratingSuffix);
     }
 
     override function onSongStart() {
@@ -187,14 +188,7 @@ class PsychHUD extends BaseHUD
 
     override function popUpScore(ratingImage:String, combo:Int) //only uses daRating.image for the moment, ill change this later since I imagine ppl will want to use other parts of the rating im just lazy and wanna get a poc out - Orbyy
     {
-		var rating:FlxSprite = new FlxSprite();
-		/*
-        if (isPixel) TODO
-		{
-			ratingPrefix = 'pixelUI/';
-			ratingSuffix = '-pixel';
-		}
-		*/
+		var rating:FlxSprite = new FlxSprite(); //Todo
 
 		var coolText:FlxObject = new FlxObject(0, 0);
 		coolText.screenCenter();
@@ -212,7 +206,7 @@ class PsychHUD extends BaseHUD
 		rating.y -= ClientPrefs.comboOffset[1];
 		insert(members.indexOf(timeTxt), rating); //this is really stupid but it fixes a layering issue, find a better work around maybe?
 
-        if(!isPixel)
+        if(!PlayState.isPixelStage)
 		{
 			rating.setGraphicSize(Std.int(rating.width * 0.7));
 			rating.antialiasing = ClientPrefs.globalAntialiasing;
@@ -223,7 +217,7 @@ class PsychHUD extends BaseHUD
 		}
 		rating.updateHitbox();
 
-		if(!isPixel)
+		if(!PlayState.isPixelStage)
 		{
 			rating.scale.set(0.785, 0.785);
 			FlxTween.tween(rating.scale, {x: 0.7, y: 0.7}, 0.5, {ease: FlxEase.expoOut});
@@ -250,7 +244,7 @@ class PsychHUD extends BaseHUD
 			numScore.x += ClientPrefs.comboOffset[2];
 			numScore.y -= ClientPrefs.comboOffset[3];
 
-			if (!isPixel)
+			if (!PlayState.isPixelStage)
 			{
 				numScore.antialiasing = ClientPrefs.globalAntialiasing;
 				numScore.setGraphicSize(Std.int(numScore.width * 0.5));
@@ -268,7 +262,7 @@ class PsychHUD extends BaseHUD
 
 			insert(members.indexOf(rating), numScore);
 
-			if (!isPixel)
+			if (!PlayState.isPixelStage)
 			{
 				numScore.scale.set(0.6, 0.6);
 				FlxTween.tween(numScore.scale, {x: 0.5, y: 0.5}, 0.5, {ease: FlxEase.expoOut});

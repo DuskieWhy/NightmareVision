@@ -132,6 +132,11 @@ class Character extends FlxSprite
 	{
 		super(x, y);
 
+		animOffsets = new Map();
+		curCharacter = character;
+		this.isPlayer = isPlayer;
+		antialiasing = ClientPrefs.globalAntialiasing;
+
 		for(i in 0...4){
 			var ghost = new FlxSprite();
 			ghost.visible = false;
@@ -140,10 +145,6 @@ class Character extends FlxSprite
 			doubleGhosts.push(ghost);
 		}
 
-		animOffsets = new Map();
-		curCharacter = character;
-		this.isPlayer = isPlayer;
-		antialiasing = ClientPrefs.globalAntialiasing;
 		var library:String = null;
 		switch (curCharacter)
 		{
@@ -544,6 +545,7 @@ class Character extends FlxSprite
 		ghost.animation.copyFrom(animation);
 		ghost.antialiasing = antialiasing;
 		// ghost.shader = shader;
+		ghost.antialiasing = antialiasing;
 		ghost.x = x;
 		ghost.y = y;
 		ghost.flipX = flipX;

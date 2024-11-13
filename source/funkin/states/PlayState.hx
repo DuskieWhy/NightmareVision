@@ -417,16 +417,14 @@ class PlayState extends MusicBeatState
 		];
 
 		// Ratings
-		if(ClientPrefs.useEpics) {
-			var rating:Rating = new Rating('epic');
-			rating.ratingMod = 1;
-			rating.score = 500;
-			rating.noteSplash = true;
-			ratingsData.push(rating);
-		}
+		var rating:Rating = new Rating('epic');
+		rating.ratingMod = 1;
+		rating.score = 500;
+		rating.noteSplash = true;
+		ratingsData.push(rating);
 
 		var rating:Rating = new Rating('sick');
-		rating.ratingMod = 1;
+		rating.ratingMod = 0.9825;
 		rating.score = 350;
 		rating.noteSplash = true;
 		ratingsData.push(rating);
@@ -668,11 +666,18 @@ class PlayState extends MusicBeatState
 			dialogueJson = DialogueBoxPsych.parseDialogue(file);
 		}
 
-		var file:String = Paths.txt(songName + '/' + songName + 'Dialogue'); // Checks for vanilla/Senpai dialogue
+		final vanillaText: String = songName + '/' + songName + 'Dialogue'; 
+		var file:String = Paths.txt(vanillaText); //Checks for vanilla/Senpai dialogue
 		if (OpenFlAssets.exists(file))
 		{
 			dialogue = CoolUtil.coolTextFile(file);
 		}
+		#if MODS_ALLOWED
+		file = Paths.modFolders('${Paths.currentModDirectory}/data/${vanillaText}.txt');
+		if (file != null) {
+			dialogue = CoolUtil.coolTextFile(file);
+		}
+		#end
 		var doof:DialogueBox = new DialogueBox(false, dialogue);
 		doof.scrollFactor.set();
 		doof.finishThing = startCountdown;
@@ -752,7 +757,7 @@ class PlayState extends MusicBeatState
 		grpNoteSplashes.cameras = [camHUD];
 		notes.cameras = [camHUD];
 		botplayTxt.cameras = [camHUD];
-		doof.cameras = [camHUD];
+		doof.cameras = [camOther];
 
 		setOnScripts('playFields', playFields);
 		setOnScripts('grpNoteSplashes', grpNoteSplashes);
@@ -824,10 +829,6 @@ class PlayState extends MusicBeatState
 		{
 			switch (daSong)
 			{
-				case 'senpai' | 'roses' | 'thorns':
-					if (daSong == 'roses') FlxG.sound.play(Paths.sound('ANGRY'));
-					schoolIntro(doof);
-
 				default:
 					final ret:Dynamic = callOnHScripts("doStartCountdown", []);
 					// trace(ret);
@@ -1243,88 +1244,6 @@ class PlayState extends MusicBeatState
 				startCountdown();
 			}
 		}
-	}
-
-	function schoolIntro(?dialogueBox:DialogueBox):Void
-	{
-		inCutscene = true;
-		var black:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
-		black.scrollFactor.set();
-		add(black);
-
-		var red:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFFff1b31);
-		red.scrollFactor.set();
-
-		var senpaiEvil:FlxSprite = new FlxSprite();
-		senpaiEvil.frames = Paths.getSparrowAtlas('weeb/senpaiCrazy');
-		senpaiEvil.animation.addByPrefix('idle', 'Senpai Pre Explosion', 24, false);
-		senpaiEvil.setGraphicSize(Std.int(senpaiEvil.width * 6));
-		senpaiEvil.scrollFactor.set();
-		senpaiEvil.updateHitbox();
-		senpaiEvil.screenCenter();
-		senpaiEvil.x += 300;
-
-		var songName:String = Paths.formatToSongPath(SONG.song);
-		if (songName == 'roses' || songName == 'thorns')
-		{
-			remove(black);
-
-			if (songName == 'thorns')
-			{
-				add(red);
-				camHUD.visible = false;
-			}
-		}
-
-		new FlxTimer().start(0.3, function(tmr:FlxTimer) {
-			black.alpha -= 0.15;
-
-			if (black.alpha > 0)
-			{
-				tmr.reset(0.3);
-			}
-			else
-			{
-				if (dialogueBox != null)
-				{
-					if (Paths.formatToSongPath(SONG.song) == 'thorns')
-					{
-						add(senpaiEvil);
-						senpaiEvil.alpha = 0;
-						new FlxTimer().start(0.3, function(swagTimer:FlxTimer) {
-							senpaiEvil.alpha += 0.15;
-							if (senpaiEvil.alpha < 1)
-							{
-								swagTimer.reset();
-							}
-							else
-							{
-								senpaiEvil.animation.play('idle');
-								FlxG.sound.play(Paths.sound('Senpai_Dies'), 1, false, null, true, function() {
-									remove(senpaiEvil);
-									remove(red);
-									FlxG.camera.fade(FlxColor.WHITE, 0.01, true, function() {
-										add(dialogueBox);
-										camHUD.visible = true;
-									}, true);
-								});
-								new FlxTimer().start(3.2, function(deadTime:FlxTimer) {
-									FlxG.camera.fade(FlxColor.WHITE, 1.6, false);
-								});
-							}
-						});
-					}
-					else
-					{
-						add(dialogueBox);
-					}
-				}
-				else
-					startCountdown();
-
-				remove(black);
-			}
-		});
 	}
 
 	var startTimer:FlxTimer;
@@ -4688,6 +4607,7 @@ class PlayState extends MusicBeatState
 		var quantsAllowed = noteSkin.data.hasQuants;
 
 		if (isQuant && quantsAllowed) skin = 'QUANT$skin';
+		// trace(skin);
 
 		var hue:Float = ClientPrefs.arrowHSV[data % 4][0] / 360;
 		var sat:Float = ClientPrefs.arrowHSV[data % 4][1] / 100;

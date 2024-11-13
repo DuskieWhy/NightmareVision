@@ -1,3 +1,4 @@
+// importClass("meta.states.LoadingState");
 import funkin.objects.BGSprite;
 import funkin.utils.CoolUtil;
 import funkin.states.LoadingState;
@@ -12,6 +13,7 @@ var bottomBoppers:BGSprite;
 var santa:BGSprite;
 
 function onLoad(){
+
     var bg:BGSprite = new BGSprite('christmas/bgWalls', -1000, -500, 0.2, 0.2);
     bg.setGraphicSize(Std.int(bg.width * 0.8));
     bg.updateHitbox();
@@ -54,6 +56,33 @@ function onCountdownTick(){
     santa.dance(true);
 }
 
+function onEndSong() {
+    // Check to see if horrorland is next up in the song list, and that we are in story mode.
+    if (Paths.formatToSongPath(PlayState.SONG.song) == "eggnog" && PlayState.isStoryMode) {
+        var blackShit:FlxSprite = new FlxSprite(-FlxG.width * FlxG.camera.zoom,
+            -FlxG.height * FlxG.camera.zoom).makeGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.BLACK);
+        blackShit.scrollFactor.set();
+        blackShit.cameras = [game.camOther];
+        add(blackShit);
+
+        FlxG.sound.play(Paths.sound('Lights_Shut_off'));
+
+        // Begin our transition!
+        new FlxTimer().start(1.5, (_) -> {
+            PlayState.campaignScore += game.songScore;
+            PlayState.campaignMisses += game.songScore;
+
+            PlayState.storyPlaylist.remove(PlayState.storyPlaylist[0]);
+
+            PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0] + CoolUtil.getDifficultyFilePath(), PlayState.storyPlaylist[0]);
+            PlayState.cancelMusicFadeTween();
+            LoadingState.loadAndSwitchState(new PlayState());
+        });
+        
+        return Function_Stop;
+    }
+}
+
 function onBeatHit(){
     if(!ClientPrefs.lowQuality) {
         upperBoppers.dance(true);
@@ -61,52 +90,4 @@ function onBeatHit(){
 
     bottomBoppers.dance(true);
     santa.dance(true);
-}
-
-function onEndSong()
-{
-
-    //recreation of the loading shit but soft coded //maybe later make a easier setup
-    if (PlayState.isStoryMode) 
-    {
-        var winterHorrlandNext = (Paths.formatToSongPath(PlayState.SONG.song) == "eggnog");
-        if (!winterHorrlandNext) return Globals.Function_Continue;
-
-
-
-        PlayState.campaignScore += game.songScore;
-        PlayState.campaignMisses += game.songMisses;
-
-        PlayState.storyPlaylist.remove(PlayState.storyPlaylist[0]);
-
-        var difficulty:String = CoolUtil.getDifficultyFilePath();
-
-            
-        var blackShit:FixedFlxBGSprite = new FixedFlxBGSprite();
-        blackShit.color = FlxColor.BLACK;
-        blackShit.scrollFactor.set();
-        foreground.add(blackShit);
-        camHUD.visible = false;
-
-        FlxG.sound.play(Paths.sound('Lights_Shut_off'));
-        
-    
-        FlxTransitionableState.skipNextTransIn = true;
-        FlxTransitionableState.skipNextTransOut = true;
-    
-        PlayState.prevCamFollow = game.camFollow;
-        PlayState.prevCamFollowPos = game.camFollowPos;
-    
-        PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0] + difficulty, PlayState.storyPlaylist[0]);
-        FlxG.sound.music.stop();
-    
-        new FlxTimer().start(1.5, Void-> {
-            PlayState.cancelMusicFadeTween();
-            LoadingState.loadAndSwitchState(new PlayState());
-        });
-    
-        return Globals.Function_Stop;
-    }
-
-
 }

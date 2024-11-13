@@ -1,6 +1,5 @@
 import funkin.objects.BGSprite;
 import funkin.states.substates.GameOverSubstate;
-import funkin.objects.FNFSprite.CrowdAnim;
 import funkin.objects.stageobjects.TankmenBG;
 
 var tankWatchtower:BGSprite;
@@ -11,6 +10,11 @@ var chart:SONG.SwagSong = null;
 var picoAnims:Array<CrowdAnim> = [];
 var anims:Array<String> = ['shoot1', 'shoot2', 'shoot3', 'shoot4'];
 
+typedef CrowdAnim = {
+	var time:Float;
+	var data:Int;
+	var length:Int;
+}
 
 function onLoad(){
     var sky:BGSprite = new BGSprite('tankSky', -400, -400, 0, 0);
@@ -62,15 +66,12 @@ function onLoad(){
     add(ground);
     moveTank();
 
-    foregroundSprites = new FlxTypedGroup();
-    foreground.add(foregroundSprites);
-
-    foregroundSprites.add(new BGSprite('tank0', -500, 650, 1.7, 1.5, ['fg']));
-    if(!ClientPrefs.lowQuality) foregroundSprites.add(new BGSprite('tank1', -300, 750, 2, 0.2, ['fg']));
-    foregroundSprites.add(new BGSprite('tank2', 450, 940, 1.5, 1.5, ['foreground']));
-    if(!ClientPrefs.lowQuality) foregroundSprites.add(new BGSprite('tank4', 1300, 900, 1.5, 1.5, ['fg']));
-    foregroundSprites.add(new BGSprite('tank5', 1620, 700, 1.5, 1.5, ['fg']));
-    if(!ClientPrefs.lowQuality) foregroundSprites.add(new BGSprite('tank3', 1300, 1200, 3.5, 2.5, ['fg']));
+    foreground.add(new BGSprite('tank0', -500, 650, 1.7, 1.5, ['fg']));
+    if(!ClientPrefs.lowQuality) foreground.add(new BGSprite('tank1', -300, 750, 2, 0.2, ['fg']));
+    foreground.add(new BGSprite('tank2', 450, 940, 1.5, 1.5, ['foreground']));
+    if(!ClientPrefs.lowQuality) foreground.add(new BGSprite('tank4', 1300, 900, 1.5, 1.5, ['fg']));
+    foreground.add(new BGSprite('tank5', 1620, 700, 1.5, 1.5, ['fg']));
+    if(!ClientPrefs.lowQuality) foreground.add(new BGSprite('tank3', 1300, 1200, 3.5, 2.5, ['fg']));
     GameOverSubstate.resetVariables();
 }
 
@@ -152,7 +153,7 @@ function moveTank(?elapsed:Float = 0)
 
 function onBeatHit(){
     tankWatchtower.dance();
-    for(obj in foreground){ obj.dance(); }
+    for(obj in foreground){ if(obj != null) obj.dance(); }
 }
 
 function deathAnimStart(volume){
@@ -160,7 +161,6 @@ function deathAnimStart(volume){
 }
 
 function deathAnimStartPost(volume){
-    trace('script');
     FlxG.sound.music.volume = 0.2;
     var exclude:Array<Int> = [];
     //if(!ClientPrefs.cursing) exclude = [1, 3, 8, 13, 17, 21];

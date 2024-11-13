@@ -1,6 +1,3 @@
-import funkin.objects.BGSprite;
-import funkin.states.transitions.FixedFlxBGSprite;
-
 function onLoad(){
     var bg:BGSprite = new BGSprite('christmas/evilBG', -400, -500, 0.2, 0.2);
     bg.setGraphicSize(Std.int(bg.width * 0.8));
@@ -17,8 +14,7 @@ function onLoad(){
 var allowCountdown:Bool = false;
 function onStartCountdown(){
     if(!allowCountdown){
-        var blackScreen:FixedFlxBGSprite = new FixedFlxBGSprite();
-        blackScreen.color = FlxColor.BLACK;
+        var blackScreen:FlxSprite = new FlxSprite().makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
         add(blackScreen);
         blackScreen.scrollFactor.set();
         game.camHUD.visible = false;
