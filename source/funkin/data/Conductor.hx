@@ -20,7 +20,7 @@ typedef BPMChangeEvent =
 
 class Conductor
 {
-	public static var bpm:Float = 100;
+	public static var bpm(default, set):Float = 100;
 	public static var visualPosition:Float = 0;
 	public static var crotchet:Float = ((60 / bpm) * 1000); // beats in milliseconds
 	public static var stepCrotchet:Float = crotchet / 4; // steps in milliseconds
@@ -47,22 +47,7 @@ class Conductor
 
 	public static var bpmChangeMap:Array<BPMChangeEvent> = [];
 
-	public function new()
-	{
-	}
-
-	public static function judgeNote(note:Note, diff:Float=0):Rating // die
-	{
-		var data:Array<Rating> = PlayState.instance.ratingsData; //shortening cuz fuck u
-		for(i in 0...data.length-1) //skips last window (Shit)
-		{
-			if (diff <= data[i].hitWindow)
-			{
-				return data[i];
-			}
-		}
-		return data[data.length - 1];
-	}
+	public function new() {}
 
 	inline public static function beatToNoteRow(beat:Float):Int{
 		return Math.round(beat*Conductor.ROWS_PER_BEAT);
@@ -182,39 +167,20 @@ class Conductor
 		return (60/bpm)*1000;
 	}
 
-	public static function changeBPM(newBpm:Float)
-	{
-		bpm = newBpm;
+	// just gotta make this clear: this is compile time errors
+	// in the future you're probably gonna want to have *this* but for scripts
+	// I currently cannot be bothered to do this, since its way out of the scope of what i planned for this Pull Request
+	// @crowplexus (commit c64f62cc)
 
-		crotchet = calculateCrochet(bpm);
+	@:deprecated("Conductor.judgeNote is deprecated, please use Rating.judgeNote")
+	public static function judgeNote(note:Note, diff:Float = 0):Rating return funkin.data.Rating.judgeNote(note, diff);
+	@:deprecated("Conductor.changeBPM is deprecated, please use Conductor.bpm = value;")
+	public static function changeBPM(newBpm:Float) return bpm = newBpm;
+
+	public static function set_bpm(v:Float)
+	{
+		crotchet = calculateCrochet(v);
 		stepCrotchet = crotchet / 4;
-	}
-}
-
-class Rating
-{
-	public var name:String = '';
-	public var image:String = '';
-	public var counter:String = '';
-	public var hitWindow:Null<Int> = 0; //ms
-	public var ratingMod:Float = 1;
-	public var score:Int = 350;
-	public var noteSplash:Bool = true;
-
-	public function new(name:String)
-	{
-		this.name = name;
-		this.image = name;
-		this.counter = name + 's';
-		this.hitWindow = Reflect.field(ClientPrefs, name + 'Window');
-		if(hitWindow == null)
-		{
-			hitWindow = 0;
-		}
-	}
-
-	public function increase(blah:Int = 1)
-	{
-		Reflect.setField(PlayState.instance, counter, Reflect.field(PlayState.instance, counter) + blah);
+		return bpm = v;
 	}
 }

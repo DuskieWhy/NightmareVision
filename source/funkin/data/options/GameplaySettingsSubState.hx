@@ -100,62 +100,38 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		option.maxValue = 30;
 		addOption(option);
 
-		var option:Option = new Option('Epic! Hit Window',
-		'Changes the amount of time you have\nfor hitting a "Epic!" in milliseconds.',
-		'epicWindow',
-		'int',
-		22);
-		option.displayFormat = '%vms';
-		option.scrollSpeed = 1;
-		option.minValue = 15;
-		option.maxValue = 22;
-		addOption(option);
+		// Display Name, Variable (in ClientPrefs), Minimum Valeu, Maximum Value, Scroll Speed (when holding down Left/Right)
+		addHitWindowOption("Epic!", "epicWindow", 15.0, 22.5, 15);
+		addHitWindowOption("Sick!", "sickWindow", 15.0, 45.0, 30);
+		addHitWindowOption("Good", "goodWindow", 15.0, 90.0, 60);
+		addHitWindowOption("Bad", "badWindow", 15.0, 135.0, 90);
 
-		var option:Option = new Option('Sick! Hit Window',
-			'Changes the amount of time you have\nfor hitting a "Sick!" in milliseconds.',
-			'sickWindow',
-			'int',
-			45);
-		option.displayFormat = '%vms';
-		option.scrollSpeed = 15;
-		option.minValue = 15;
-		option.maxValue = 45;
-		addOption(option);
-
-		var option:Option = new Option('Good Hit Window',
-			'Changes the amount of time you have\nfor hitting a "Good" in milliseconds.',
-			'goodWindow',
-			'int',
-			90);
-		option.displayFormat = '%vms';
-		option.scrollSpeed = 30;
-		option.minValue = 15;
-		option.maxValue = 90;
-		addOption(option);
-
-		var option:Option = new Option('Bad Hit Window',
-			'Changes the amount of time you have\nfor hitting a "Bad" in milliseconds.',
-			'badWindow',
-			'int',
-			135);
-		option.displayFormat = '%vms';
-		option.scrollSpeed = 60;
-		option.minValue = 15;
-		option.maxValue = 135;
-		addOption(option);
-
+		// this is usually 166.67 - AKA: Shit Window
+		// i won't change this to be an actual Shit window because it'd break too much to be worth it
 		var option:Option = new Option('Safe Frames',
 			'Changes how many frames you have for\nhitting a note earlier or late.',
 			'safeFrames',
 			'float',
 			10);
 		option.scrollSpeed = 5;
-		option.minValue = 2;
-		option.maxValue = 10;
+		option.minValue = 2.0;
+		option.maxValue = 10.0;
 		option.changeValue = 0.1;
 		addOption(option);
 
 		super();
+	}
+
+	function addHitWindowOption(dName:String, prefID:String, min:Float = 15.0, max:Float = 200.0, scrollSpeed: Float = 15) {
+		var option:Option = new Option('$dName Hit Window',
+			'Changes the amount of time you have\nfor hitting a "$dName" in milliseconds.',
+			prefID, 'float', max);
+		option.displayFormat = '%vms';
+		option.scrollSpeed = scrollSpeed;
+		option.minValue = min;
+		option.maxValue = max;
+		option.changeValue = 0.1;
+		addOption(option);
 	}
 
 	function onChangeHitsoundVolume()

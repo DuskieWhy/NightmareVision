@@ -211,7 +211,7 @@ class TitleState extends MusicBeatState
 			}
 		}
 
-		Conductor.changeBPM(titleJSON.bpm);
+		Conductor.bpm = titleJSON.bpm;
 		persistentUpdate = true;
 
 		if(hardcoded() && callOnScript('onStartIntro', []) != Globals.Function_Stop){

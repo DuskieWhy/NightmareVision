@@ -32,7 +32,12 @@ class ClientPrefs {
 	public static var hideHud:Bool = false;
 	public static var camMovement:Bool = true;
 	public static var noteOffset:Int = 0;
-	public static var arrowHSV:Array<Array<Int>> = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
+	public static var arrowHSV:Array<Array<Int>> = [
+		[0, 0, 0], // Purple
+		[0, 0, 0], // Blue
+		[0, 0, 0], // Green
+		[0, 0, 0]// Red
+	];
 	public static var quantHSV:Array<Array<Int>> = [
 		[0, -20, 0], // 4th
 		[-130, -20, 0], // 8th
@@ -91,11 +96,14 @@ class ClientPrefs {
 
 	public static var comboOffset:Array<Int> = [0, 0, 0, 0];
 	public static var ratingOffset:Int = 0;
-	public static var epicWindow:Int = 22;
-	public static var sickWindow:Int = 45;
-	public static var goodWindow:Int = 90;
-	public static var badWindow:Int = 135;
-	public static var safeFrames:Float = 10;
+
+	// uses Judge Four timings from etterna
+	public static var epicWindow:Float = 22.5;
+	public static var sickWindow:Float = 45.0;
+	public static var goodWindow:Float = 90.0;
+	public static var badWindow:Float = 135.0;
+
+	public static var safeFrames:Float = 10.0;
 
 	//Every key has two binds, add your key bind down here and then add your control on options/ControlsSubState.hx and Controls.hx
 	public static var keyBinds:Map<String, Array<FlxKey>> = [

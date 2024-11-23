@@ -29,7 +29,6 @@ import funkin.data.Song.SwagSong;
 import flixel.util.FlxSave;
 import funkin.data.StageData;
 import funkin.objects.DialogueBoxPsych;
-import funkin.data.Conductor.Rating;
 import funkin.objects.*;
 import funkin.data.*;
 import funkin.states.*;
@@ -483,26 +482,18 @@ class PlayState extends MusicBeatState
 
 		if (SONG == null) SONG = Song.loadFromJson('tutorial');
 
+		Conductor.bpm = SONG.bpm;
 		Conductor.mapBPMChanges(SONG);
-		Conductor.changeBPM(SONG.bpm);
 
 		arrowSkin = SONG.arrowSkin;
 
 		initnoteSkining();
 
 		#if desktop
+		// String that contains the current difficulty name
 		storyDifficultyText = CoolUtil.difficulties[storyDifficulty];
-
 		// String that contains the mode defined here so it isn't necessary to call changePresence for each mode
-		if (isStoryMode)
-		{
-			detailsText = "null";
-		}
-		else
-		{
-			detailsText = "null";
-		}
-
+		detailsText = isStoryMode ? "Story Mode" : "Freeplay";
 		// String for when the game is paused
 		detailsPausedText = "Paused - " + detailsText;
 		#end
@@ -1710,7 +1701,7 @@ class PlayState extends MusicBeatState
 		}
 
 		var songData = SONG;
-		Conductor.changeBPM(songData.bpm);
+		Conductor.bpm = songData.bpm;
 
 		curSong = songData.song;
 
@@ -3696,13 +3687,10 @@ class PlayState extends MusicBeatState
 
 		vocals.playerVolume = 1;
 		var placement:String = Std.string(combo);
-		var score:Int = 350;
-
+		
 		// tryna do MS based judgment due to popular demand
-		var daRating:Rating = Conductor.judgeNote(note, noteDiff);
-		var ratingNum:Int = 0;
-
-		score = daRating.score;
+		var daRating:Rating = Rating.judgeNote(note, noteDiff);
+		var judgeScore:Int = daRating.score;
 
 		totalNotesHit += daRating.ratingMod;
 		note.ratingMod = daRating.ratingMod;
@@ -3710,15 +3698,12 @@ class PlayState extends MusicBeatState
 		note.rating = daRating.name;
 
 		if (daRating.noteSplash && !note.noteSplashDisabled)
-		{
 			spawnNoteSplashOnNote(note);
-		}
 
 		var field:PlayField = note.playField;
-
 		if (!practiceMode && !field.autoPlayed)
 		{
-			if (defaultScoreAddition) songScore += score;
+			if (defaultScoreAddition) songScore += judgeScore;
 			if (!note.ratingDisabled)
 			{
 				songHits++;
@@ -4782,7 +4767,7 @@ class PlayState extends MusicBeatState
 		{
 			if (SONG.notes[curSection].changeBPM)
 			{
-				Conductor.changeBPM(SONG.notes[curSection].bpm);
+				Conductor.bpm = SONG.notes[curSection].bpm;
 				setOnScripts('curBpm', Conductor.bpm);
 				setOnScripts('crotchet', Conductor.crotchet);
 				setOnScripts('stepCrotchet', Conductor.stepCrotchet);
@@ -4963,20 +4948,25 @@ class PlayState extends MusicBeatState
 					}
 				}
 			}
-
-			// Rating FC
-			ratingFC = "";
-			if (epics > 0) ratingFC = "KFC";
-			if (sicks > 0) ratingFC = "SFC";
-			if (goods > 0) ratingFC = "GFC";
-			if (bads > 0 || shits > 0) ratingFC = "FC";
-			if (songMisses > 0 && songMisses < 10) ratingFC = "SDCB";
-			else if (songMisses >= 10) ratingFC = "Clear";
+			updateRatingFC();
 		}
-		updateScoreBar(badHit);
 		setOnLuas('rating', ratingPercent);
 		setOnLuas('ratingName', ratingName);
 		setOnLuas('ratingFC', ratingFC);
+		updateScoreBar(badHit);
+	}
+
+	// so you can override this in HScript
+	// e.g: PlayState.instance.updateRatingFC = function() { ... }
+	public dynamic function updateRatingFC() {
+		// Rating FC
+		ratingFC = "";
+		if (epics > 0) ratingFC = "KFC";
+		if (sicks > 0) ratingFC = "SFC";
+		if (goods > 0) ratingFC = "GFC";
+		if (bads > 0 || shits > 0) ratingFC = "FC";
+		if (songMisses > 0 && songMisses < 10) ratingFC = "SDCB";
+		else if (songMisses >= 10) ratingFC = "Clear";
 	}
 
 	override public function startOutro(onOutroComplete:() -> Void)
