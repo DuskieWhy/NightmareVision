@@ -1,34 +1,5 @@
 package meta.data.options;
 
-#if desktop
-import meta.data.Discord.DiscordClient;
-#end
-import openfl.text.TextField;
-import flixel.FlxCamera;
-import flixel.FlxG;
-import flixel.FlxSprite;
-import flixel.addons.display.FlxGridOverlay;
-import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.math.FlxMath;
-import flixel.text.FlxText;
-import flixel.util.FlxColor;
-import lime.utils.Assets;
-import flixel.FlxSubState;
-import openfl.text.TextField;
-import flixel.FlxG;
-import flixel.FlxSprite;
-import flixel.util.FlxSave;
-import haxe.Json;
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
-import flixel.util.FlxTimer;
-import flixel.input.keyboard.FlxKey;
-import flixel.graphics.FlxGraphic;
-import openfl.Lib;
-import meta.data.*;
-
-using StringTools;
-
 class NoteSettingsSubState extends BaseOptionsMenu
 {
 	public function new()
@@ -45,20 +16,13 @@ class NoteSettingsSubState extends BaseOptionsMenu
 		); //Default value
 		addOption(option);
 
-		var option:Option = new Option('Customize',
+		var option:Option = new Option('Customize note colours',
 			'Change your note colours\n[Press Enter]',
 			'',
 			'button',
 			true);
 		option.callback = function(){
-			switch(ClientPrefs.noteSkin){
-				case 'Quants':
-					openSubState(new QuantNotesSubState());
-				case 'QuantStep':
-					openSubState(new QuantNotesSubState());
-				default:
-					openSubState(new NotesSubState());
-			}
+			openSubState(new NotesSubState());
 		}
 		addOption(option);
 
