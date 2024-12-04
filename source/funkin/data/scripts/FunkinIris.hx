@@ -6,19 +6,40 @@ import crowplexus.iris.IrisConfig;
 import crowplexus.iris.Iris;
 import funkin.objects.*;
 
+class InterpEX extends crowplexus.hscript.Interp 
+{
+	override function makeIterator(v: Dynamic): Iterator<Dynamic> 
+	{
+		#if ((flash && !flash9) || (php && !php7 && haxe_ver < '4.0.0'))
+		if (v.iterator != null)
+			v = v.iterator();
+		#else
+		//DATA CHANGE //does a null check because this crashes on debug build
+		if (v.iterator != null) try v = v.iterator() catch (e:Dynamic) {};
+		#end
+		if (v.hasNext == null || v.next == null)
+			error(EInvalidIterator(v));
+		return v;
+	}
+}
+
+
+
+
 // thank you crow,neeo
 // wrapper for an iris script to keep the consistency of the whole funkyscript setup this engine got
 @:access(crowplexus.iris.Iris)
 @:access(funkin.states.PlayState)
 class FunkinIris extends FunkinScript
 {
-	public static final exts:Array<String> = ['hx', 'hxs', 'hscript','hxc'];
+	public static final exts:Array<String> = ['hx', 'hxs', 'hscript', 'hxc'];
 
 	public static function getPath(path:String, ?global:Bool = true)
 	{
 		for (extension in exts)
 		{
 			if (path.endsWith(extension)) return path;
+
 
 			final file = '$path.$extension';
 
@@ -43,22 +64,35 @@ class FunkinIris extends FunkinScript
 		return new FunkinIris(File.getContent(file), name, additionalVars);
 	}
 
-	public static function init()
+	public static function InitLogger()
 	{
+		Iris.warn = (x, ?pos) -> {
+			final message:String = '[${pos.fileName}]: WARN: ${pos.lineNumber} -> $x';
+			PlayState.instance?.addTextToDebug(message, FlxColor.YELLOW);
+
+			FlxG.log.warn(message);
+			// trace(message);
+
+			Iris.logLevel(ERROR, x, pos);
+		}
 
 		Iris.error = (x, ?pos) -> {
-			PlayState.instance?.addTextToDebug('[${pos.fileName}]: ERROR: ${pos.lineNumber} -> $x',FlxColor.RED);
-			#if debug
-			FlxG.log.error('[${pos.fileName}]: ERROR: ${pos.lineNumber} -> $x');
-			#else
-			trace('ERROR ON [${pos.fileName}]: ${pos.lineNumber} -> $x');
-			#end
-			
+			final message:String = '[${pos.fileName}]: ERROR: ${pos.lineNumber} -> $x';
+			PlayState.instance?.addTextToDebug(message, FlxColor.RED);
+
+			FlxG.log.error(message);
+			// trace(message);
+
 			Iris.logLevel(NONE, x, pos);
 		}
 
 		Iris.print = (x, ?pos) -> {
-			PlayState.instance?.addTextToDebug('[${pos.fileName}]: TRACE: ${pos.lineNumber} -> $x');
+			final message:String = '[${pos.fileName}]: TRACE: ${pos.lineNumber} -> $x';
+			PlayState.instance?.addTextToDebug(message);
+
+			// FlxG.log.add(message);
+
+			// trace(message);
 
 			Iris.logLevel(NONE, x, pos);
 		}
@@ -75,7 +109,9 @@ class FunkinIris extends FunkinScript
 		scriptType = ScriptType.HSCRIPT;
 		scriptName = name;
 
-		_script = new Iris(script, {name: name, autoRun: false, autoPreset: true});
+		_script = new Iris(script, {name: name, autoRun: false, autoPreset: false});
+		_script.interp = new InterpEX();
+		_script.interp.showPosOnLog = false;
 
 		setDefaultVars();
 
@@ -125,7 +161,7 @@ class FunkinIris extends FunkinScript
 
 	override function call(func:String, ?args:Array<Dynamic>):Dynamic
 	{
-		var ret = funkin.data.scripts.Globals.Function_Continue;
+		var ret:Dynamic = funkin.data.scripts.Globals.Function_Continue;
 		if (exists(func)) ret = _script.call(func, args)?.returnValue ?? funkin.data.scripts.Globals.Function_Continue;
 
 		return ret;
@@ -181,6 +217,7 @@ class FunkinIris extends FunkinScript
 
 	override function setDefaultVars()
 	{
+		_script.preset();
 		super.setDefaultVars();
 
 		set("StringTools", StringTools);
@@ -188,9 +225,10 @@ class FunkinIris extends FunkinScript
 		set("Type", Type);
 		set("script", this);
 		set("Dynamic", Dynamic);
-		set('Map',  MacroUtil.buildAbstract(Map));
+		// set('Map',  MacroUtil.buildAbstract(Map));
 		set('StringMap', haxe.ds.StringMap);
 		set('IntMap', haxe.ds.IntMap);
+		set('ObjectMap', haxe.ds.ObjectMap);
 
 		set("Main", Main);
 		set("Lib", openfl.Lib);
@@ -212,7 +250,7 @@ class FunkinIris extends FunkinScript
 		set('FlxColor', funkin.data.scripts.ScriptClasses.HScriptColor);
 		set("FlxRuntimeShader", flixel.addons.display.FlxRuntimeShader);
 		set("FlxFlicker", flixel.effects.FlxFlicker);
-				set('FlxSpriteUtil', flixel.util.FlxSpriteUtil);
+		set('FlxSpriteUtil', flixel.util.FlxSpriteUtil);
 		set('AnimateSprite', flxanimate.AnimateSprite);
 		set("FlxBackdrop", flixel.addons.display.FlxBackdrop);
 		set("FlxTiledSprite", flixel.addons.display.FlxTiledSprite);
@@ -231,7 +269,9 @@ class FunkinIris extends FunkinScript
 		set('FlxAxes', MacroUtil.buildAbstract(flixel.util.FlxAxes));
 		set('BlendMode', MacroUtil.buildAbstract(openfl.display.BlendMode));
 		set("FlxKey", MacroUtil.buildAbstract(flixel.input.keyboard.FlxKey));
-		set("FlxPoint", MacroUtil.buildAbstract(flixel.math.FlxPoint));
+
+		set('FlxPoint', flixel.math.FlxPoint.FlxBasePoint); // redirects to flxbasepoint because thats all flxpoints are
+		set("FlxBasePoint", flixel.math.FlxPoint.FlxBasePoint);
 
 		// modchart related
 		set("ModManager", funkin.modchart.ModManager);
@@ -303,6 +343,7 @@ class FunkinIris extends FunkinScript
 		set("SetEvent", funkin.modchart.events.SetEvent);
 
 		set("GameOverSubstate", funkin.states.substates.GameOverSubstate);
+		set("GameOverVideoSubstate", funkin.states.substates.GameOverVideoSubstate);
 
 		if ((FlxG.state is PlayState) && PlayState.instance != null)
 		{
@@ -316,8 +357,7 @@ class FunkinIris extends FunkinScript
 			set('setGlobalFunc', (name:String, func:Dynamic) -> state.variables.set(name, func));
 			set('callGlobalFunc', (name:String, ?args:Dynamic) -> {
 				if (state.variables.exists(name)) return state.variables.get(name)(args);
-				else
-					return null;
+				else return null;
 			});
 		}
 
@@ -338,26 +378,4 @@ class FunkinIris extends FunkinScript
 			return runtime ?? new flixel.addons.display.FlxRuntimeShader();
 		});
 	}
-
-	// kill this off soon
-	@:noCompletion
-	public static final noteSkinDefault:String = "
-		// sets the default noteskin
-		function arrowSkin() { return 'NOTE_assets'; }
-
-		// this gets the BF noteskin
-		function bfSkin() { return 'NOTE_assets'; }
-
-		// this gets the DAD noteskin
-		function dadSkin() { return 'NOTE_assets'; }
-
-		// this gets the notesplash skin and offset
-		function noteSplash(offsets){ return 'noteSplashes'; }
-
-		// does ur noteskin have quants ? 
-		function quants() { return true; }
-
-		// offset notes, receptors and sustains
-		function offset(noteOff, strumOff, susOff){}
-	";
 }

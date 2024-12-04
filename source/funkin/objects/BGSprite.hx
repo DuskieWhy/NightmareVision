@@ -1,28 +1,33 @@
 package funkin.objects;
 
 import flixel.FlxSprite;
-import flixel.graphics.frames.FlxAtlasFrames;
-import funkin.data.*;
-import funkin.states.*;
 
 class BGSprite extends FlxSprite
 {
 	private var idleAnim:String;
-	public function new(image:String, x:Float = 0, y:Float = 0, ?scrollX:Float = 1, ?scrollY:Float = 1, ?animArray:Array<String> = null, ?loop:Bool = false) {
+
+	public function new(image:String, x:Float = 0, y:Float = 0, ?scrollX:Float = 1, ?scrollY:Float = 1, ?animArray:Array<String> = null, ?loop:Bool = false)
+	{
 		super(x, y);
 
-		if (animArray != null) {
+		if (animArray != null)
+		{
 			frames = Paths.getSparrowAtlas(image);
-			for (i in 0...animArray.length) {
+			for (i in 0...animArray.length)
+			{
 				var anim:String = animArray[i];
 				animation.addByPrefix(anim, anim, 24, loop);
-				if(idleAnim == null) {
+				if (idleAnim == null)
+				{
 					idleAnim = anim;
 					animation.play(anim);
 				}
 			}
-		} else {
-			if(image != null) {
+		}
+		else
+		{
+			if (image != null)
+			{
 				loadGraphic(Paths.image(image));
 			}
 			active = false;
@@ -31,8 +36,10 @@ class BGSprite extends FlxSprite
 		antialiasing = ClientPrefs.globalAntialiasing;
 	}
 
-	public function dance(?forceplay:Bool = false) {
-		if(idleAnim != null) {
+	public function dance(?forceplay:Bool = false)
+	{
+		if (idleAnim != null)
+		{
 			animation.play(idleAnim, forceplay);
 		}
 	}

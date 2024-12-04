@@ -1,6 +1,5 @@
 package funkin.states.transitions;
 
-
 import funkin.backend.BaseTransitionState;
 import flixel.util.FlxGradient;
 import flixel.FlxSprite;
@@ -12,76 +11,77 @@ import flixel.util.FlxTimer;
 import flixel.FlxG;
 import flixel.util.FlxColor;
 
-
-//the regular swipe transition used in fnf
+// the regular swipe transition used in fnf
 class SwipeTransition extends BaseTransitionState
 {
+	var gradientFill:FlxSprite;
+	var gradient:FlxSprite;
 
-  var gradientFill:FlxSprite;
-  var gradient:FlxSprite;
+	public override function destroy():Void
+	{
+		super.destroy();
+		if (gradient != null) gradient.destroy();
+		if (gradientFill != null) gradientFill.destroy();
+		gradient = null;
+		gradientFill = null;
+	}
 
-  public override function destroy():Void
-  {
-    super.destroy();
-    if(gradient!=null) gradient.destroy();
-    if(gradientFill!=null) gradientFill.destroy();
-    gradient=null;
-    gradientFill=null;
+	public override function update(elapsed:Float)
+	{
+		if (gradientFill != null && gradient != null)
+		{
+			switch (status)
+			{
+				case IN_TO:
+					gradientFill.y = gradient.y - gradient.height;
+				case OUT_OF:
+					gradientFill.y = gradient.y + gradient.height;
+				default:
+			}
+		}
+		super.update(elapsed);
+	}
 
-  }
+	override function create()
+	{
+		var cam = FlxG.cameras.list[FlxG.cameras.list.length - 1];
+		cameras = [cam];
 
-  public override function update(elapsed:Float){
-    if(gradientFill!=null && gradient!=null){
-      switch(status){
-        case IN_TO:
-          gradientFill.y = gradient.y - gradient.height;
-        case OUT_OF:
-          gradientFill.y = gradient.y + gradient.height;
-        default:
-      }
-    }
-    super.update(elapsed);
-  }
+		var yStart:Float = 0;
+		var yEnd:Float = 0;
+		var duration:Float = .48;
+		var angle:Int = 90;
+		var zoom:Float = FlxMath.bound(cam.zoom, 0.001);
+		var width:Int = Math.ceil(cam.width / zoom);
+		var height:Int = Math.ceil(cam.height / zoom);
 
-  override function create() {
-    var cam = FlxG.cameras.list[FlxG.cameras.list.length - 1];
-    cameras = [cam];
+		yStart = -height;
+		yEnd = height;
 
-    var yStart:Float = 0;
-    var yEnd:Float = 0;
-    var duration:Float = .48;
-    var angle:Int = 90;
-    var zoom:Float = FlxMath.bound(cam.zoom,0.001);
-    var width:Int = Math.ceil(cam.width/zoom);
-    var height:Int = Math.ceil(cam.height/zoom);
+		switch (status)
+		{
+			case IN_TO:
+			case OUT_OF:
+				angle = 270;
+				duration = .6;
+			default:
+				// trace("bruh");
+		}
 
-    yStart = -height;
-    yEnd = height;
+		gradient = FlxGradient.createGradientFlxSprite(1, height, [FlxColor.BLACK, FlxColor.TRANSPARENT], 1, angle);
+		gradient.scale.x = width;
+		gradient.scrollFactor.set();
+		gradient.screenCenter(X);
+		gradient.y = yStart;
 
-    switch(status){
-      case IN_TO:
-      case OUT_OF:
-        angle=270;
-        duration = .6;
-      default:
-        //trace("bruh");
-      }
+		gradientFill = new FlxSprite().makeScaledGraphic(width, height, FlxColor.BLACK);
+		gradientFill.screenCenter(X);
+		gradientFill.scrollFactor.set();
+		add(gradientFill);
+		add(gradient);
 
-    gradient = FlxGradient.createGradientFlxSprite(1, height, [FlxColor.BLACK, FlxColor.TRANSPARENT], 1, angle);
-    gradient.scale.x = width;
-    gradient.scrollFactor.set();
-    gradient.screenCenter(X);
-    gradient.y = yStart;
+		FlxTween.tween(gradient, {y: yEnd}, duration, {onComplete: Void -> onFinish()});
 
-    gradientFill = new FlxSprite().makeScaledGraphic(width,height,FlxColor.BLACK);
-    gradientFill.screenCenter(X);
-    gradientFill.scrollFactor.set();
-    add(gradientFill);
-    add(gradient);
-
-    FlxTween.tween(gradient, {y: yEnd},duration,{onComplete: Void->onFinish()});
-
-    super.create();
-  }
-
+		super.create();
+	}
 }

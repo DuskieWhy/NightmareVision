@@ -1,17 +1,17 @@
 package funkin.data;
 
+import funkin.utils.DifficultyUtil;
 import flixel.FlxG;
 
 using StringTools;
 
 class Highscore
 {
-	public static var songRankData:Map<String,SongScoreData> = new Map();
+	public static var songRankData:Map<String, SongScoreData> = new Map();
 
 	public static var weekScores:Map<String, Int> = new Map();
 	public static var songScores:Map<String, Int> = new Map();
 	public static var songRating:Map<String, Float> = new Map();
-
 
 	public static function resetSong(song:String, diff:Int = 0):Void
 	{
@@ -30,15 +30,18 @@ class Highscore
 	{
 		var daSong:String = formatSong(song, diff);
 
-		if (songScores.exists(daSong)) {
-			if (songScores.get(daSong) < score) {
+		if (songScores.exists(daSong))
+		{
+			if (songScores.get(daSong) < score)
+			{
 				setScore(daSong, score);
-				if(rating >= 0) setRating(daSong, rating);
+				if (rating >= 0) setRating(daSong, rating);
 			}
 		}
-		else {
+		else
+		{
 			setScore(daSong, score);
-			if(rating >= 0) setRating(daSong, rating);
+			if (rating >= 0) setRating(daSong, rating);
 		}
 	}
 
@@ -48,11 +51,9 @@ class Highscore
 
 		if (weekScores.exists(daWeek))
 		{
-			if (weekScores.get(daWeek) < score)
-				setWeekScore(daWeek, score);
+			if (weekScores.get(daWeek) < score) setWeekScore(daWeek, score);
 		}
-		else
-			setWeekScore(daWeek, score);
+		else setWeekScore(daWeek, score);
 	}
 
 	/**
@@ -65,6 +66,7 @@ class Highscore
 		FlxG.save.data.songScores = songScores;
 		FlxG.save.flush();
 	}
+
 	static function setWeekScore(week:String, score:Int):Void
 	{
 		// Reminder that I don't need to format this song, it should come formatted!
@@ -83,14 +85,13 @@ class Highscore
 
 	public static function formatSong(song:String, diff:Int):String
 	{
-		return Paths.formatToSongPath(song) + CoolUtil.getDifficultyFilePath(diff);
+		return Paths.formatToSongPath(song) + DifficultyUtil.getDifficultyFilePath(diff);
 	}
 
 	public static function getScore(song:String, diff:Int):Int
 	{
 		var daSong:String = formatSong(song, diff);
-		if (!songScores.exists(daSong))
-			setScore(daSong, 0);
+		if (!songScores.exists(daSong)) setScore(daSong, 0);
 
 		return songScores.get(daSong);
 	}
@@ -98,8 +99,7 @@ class Highscore
 	public static function getRating(song:String, diff:Int):Float
 	{
 		var daSong:String = formatSong(song, diff);
-		if (!songRating.exists(daSong))
-			setRating(daSong, 0);
+		if (!songRating.exists(daSong)) setRating(daSong, 0);
 
 		return songRating.get(daSong);
 	}
@@ -107,8 +107,7 @@ class Highscore
 	public static function getWeekScore(week:String, diff:Int):Int
 	{
 		var daWeek:String = formatSong(week, diff);
-		if (!weekScores.exists(daWeek))
-			setWeekScore(daWeek, 0);
+		if (!weekScores.exists(daWeek)) setWeekScore(daWeek, 0);
 
 		return weekScores.get(daWeek);
 	}
@@ -130,13 +129,14 @@ class Highscore
 	}
 }
 
-typedef SongScoreData = {
+typedef SongScoreData =
+{
 	songScore:Int,
 	songRating:Float,
 	songFC:FCLevel
 }
 
-enum abstract FCLevel(Int) to Int from Int 
+enum abstract FCLevel(Int) to Int from Int
 {
 	var PFC:Int = 2;
 	var FC:Int = 1;

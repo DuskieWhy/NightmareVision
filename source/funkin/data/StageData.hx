@@ -7,13 +7,10 @@ import sys.FileSystem;
 import openfl.utils.Assets;
 #end
 import haxe.Json;
-import haxe.format.JsonParser;
 import funkin.data.Song;
-import funkin.states.*;
 
-using StringTools;
-
-typedef StageFile = {
+typedef StageFile =
+{
 	var directory:String;
 	var defaultZoom:Float;
 	var isPixelStage:Bool;
@@ -29,52 +26,59 @@ typedef StageFile = {
 	var camera_speed:Null<Float>;
 }
 
-class StageData {
+class StageData
+{
 	public static var forceNextDirectory:String = null;
-	public static function loadDirectory(SONG:SwagSong) {
+
+	public static function loadDirectory(SONG:SwagSong)
+	{
 		var stage:String = SONG.stage ?? 'stage';
 
 		var stageFile:StageFile = getStageFile(stage);
-		
+
 		forceNextDirectory = stageFile?.directory ?? '';
 	}
 
-	public static function getStageFile(stage:String):StageFile {
+	public static function getStageFile(stage:String):StageFile
+	{
 		var rawJson:String = null;
 		var path:String = Paths.getSharedPath('stages/' + stage + '.json');
 
 		#if MODS_ALLOWED
 		var modPath:String = Paths.modFolders('stages/' + stage + '.json');
-		if(FileSystem.exists(modPath)) {
+		if (FileSystem.exists(modPath))
+		{
 			rawJson = File.getContent(modPath);
-		} else if(FileSystem.exists(path)) {
+		}
+		else if (FileSystem.exists(path))
+		{
 			rawJson = File.getContent(path);
 		}
 		#else
-		if(Assets.exists(path)) {
+		if (Assets.exists(path))
+		{
 			rawJson = Assets.getText(path);
 		}
 		#end
-		else
-		{
-			return null;
-		}
+	else
+	{
+		return null;
+	}
 		return cast Json.parse(rawJson);
 	}
 
-
-	public static function generateDefault():StageFile return 
-	{
-		directory: "",
-        isPixelStage: false,
-		defaultZoom: 0.8,
-		boyfriend: [500, 100],
-		girlfriend: [0, 100],
-		opponent: [-500, 100],
-		hide_girlfriend: false,
-		camera_boyfriend: [0, 0],
-		camera_opponent: [0, 0],
-		camera_girlfriend: [0, 0],
-		camera_speed: 1
-	}
+	public static function generateDefault():StageFile return
+		{
+			directory: "",
+			isPixelStage: false,
+			defaultZoom: 0.8,
+			boyfriend: [500, 100],
+			girlfriend: [0, 100],
+			opponent: [-500, 100],
+			hide_girlfriend: false,
+			camera_boyfriend: [0, 0],
+			camera_opponent: [0, 0],
+			camera_girlfriend: [0, 0],
+			camera_speed: 1
+		}
 }

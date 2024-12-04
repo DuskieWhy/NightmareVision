@@ -1,12 +1,8 @@
 package funkin.backend;
 
 import funkin.backend.PlayerSettings;
-import funkin.data.Conductor.BPMChangeEvent;
 import funkin.data.*;
-import flixel.FlxG;
 import flixel.FlxSubState;
-import flixel.FlxBasic;
-import flixel.FlxSprite;
 
 class MusicBeatSubstate extends FlxSubState
 {
@@ -25,20 +21,17 @@ class MusicBeatSubstate extends FlxSubState
 	private var curDecBeat:Float = 0;
 	private var controls(get, never):Controls;
 
-	inline function get_controls():Controls
-		return PlayerSettings.player1.controls;
+	inline function get_controls():Controls return PlayerSettings.player1.controls;
 
 	override function update(elapsed:Float)
 	{
-		//everyStep();
+		// everyStep();
 		var oldStep:Int = curStep;
 
 		updateCurStep();
 		updateBeat();
 
-		if (oldStep != curStep && curStep > 0)
-			stepHit();
-
+		if (oldStep != curStep && curStep > 0) stepHit();
 
 		super.update(elapsed);
 	}
@@ -46,7 +39,7 @@ class MusicBeatSubstate extends FlxSubState
 	private function updateBeat():Void
 	{
 		curBeat = Math.floor(curStep / 4);
-		curDecBeat = curDecStep/4;
+		curDecBeat = curDecStep / 4;
 	}
 
 	private function updateCurStep():Void
@@ -60,12 +53,11 @@ class MusicBeatSubstate extends FlxSubState
 
 	public function stepHit():Void
 	{
-		if (curStep % 4 == 0)
-			beatHit();
+		if (curStep % 4 == 0) beatHit();
 	}
 
 	public function beatHit():Void
 	{
-		//do literally nothing dumbass
+		// do literally nothing dumbass
 	}
 }

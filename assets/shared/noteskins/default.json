@@ -274,7 +274,7 @@
 			}
 		]
 	],
-	"hasQuants": false,
+	"hasQuants": true,
 	"noteSplashSkin": "noteSplashes",
 	"globalSkin": "NOTE_assets",
 	"opponentSkin": "NOTE_assets"

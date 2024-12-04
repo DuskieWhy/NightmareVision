@@ -1,10 +1,9 @@
-package; 
+package;
 
 import flixel.FlxState;
 import flixel.FlxG;
 import flixel.input.keyboard.FlxKey;
 import lime.app.Application;
-import funkin.backend.Discord.DiscordClient;
 
 class Init extends FlxState
 {
@@ -14,14 +13,13 @@ class Init extends FlxState
 
 	override public function create():Void
 	{
-		funkin.data.scripts.FunkinIris.init();
+		funkin.data.scripts.FunkinIris.InitLogger();
 
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
 
 		Paths.pushGlobalMods();
 
-	
 		funkin.data.WeekData.loadTheFirstEnabledMod();
 
 		FlxG.game.focusLostFramerate = 60;
@@ -36,13 +34,13 @@ class Init extends FlxState
 
 		FlxG.save.bind('funkin', CoolUtil.getSavePath());
 
-		ClientPrefs.loadPrefs();	
+		ClientPrefs.loadPrefs();
 
 		funkin.data.Highscore.load();
 
 		funkin.objects.video.FunkinVideoSprite.init();
 
-		if(FlxG.save.data != null && FlxG.save.data.fullscreen) FlxG.fullscreen = FlxG.save.data.fullscreen;
+		if (FlxG.save.data != null && FlxG.save.data.fullscreen) FlxG.fullscreen = FlxG.save.data.fullscreen;
 		if (FlxG.save.data.weekCompleted != null) funkin.states.StoryMenuState.weekCompleted = FlxG.save.data.weekCompleted;
 
 		FlxG.mouse.visible = false;
@@ -54,7 +52,7 @@ class Init extends FlxState
 		if (!DiscordClient.isInitialized)
 		{
 			DiscordClient.initialize();
-			Application.current.onExit.add((ec)->{DiscordClient.shutdown();});
+			Application.current.onExit.add((ec) -> DiscordClient.shutdown());
 		}
 		#end
 
@@ -63,5 +61,3 @@ class Init extends FlxState
 		FlxG.switchState(new funkin.states.TitleState());
 	}
 }
-
-

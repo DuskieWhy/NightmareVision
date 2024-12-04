@@ -4,37 +4,39 @@ import funkin.utils.CameraUtil;
 import flixel.system.FlxBGSprite;
 import funkin.backend.BaseTransitionState;
 
+// simple fade transition between states
+class FadeTransition extends BaseTransitionState
+{
+	var sprite:FixedFlxBGSprite;
 
-//simple fade transition between states
-class FadeTransition extends BaseTransitionState {
+	override function create()
+	{
+		cameras = [CameraUtil.lastCamera];
 
-    var sprite:FixedFlxBGSprite;
+		sprite = new FixedFlxBGSprite();
+		sprite.color = FlxColor.BLACK;
+		add(sprite);
 
-    override function create() {
-        cameras = [CameraUtil.lastCamera];
+		sprite.alpha = status == IN_TO ? 0 : 1;
+		final desiredAlpha = status == IN_TO ? 1 : 0;
+		final time = status == IN_TO ? 0.48 : 0.8;
 
-        sprite = new FixedFlxBGSprite();
-        sprite.color = FlxColor.BLACK;
-        add(sprite);
+		FlxTween.tween(sprite, {alpha: desiredAlpha}, time, {onComplete: Void -> onFinish()});
 
-        sprite.alpha = status == IN_TO ? 0 : 1;
-        final desiredAlpha = status == IN_TO ? 1 : 0;
-        final time = status == IN_TO ? 0.48 : 0.8;
+		super.create();
+	}
 
-        FlxTween.tween(sprite, {alpha: desiredAlpha},time,{onComplete: Void->onFinish()});
-        
-        super.create();
-    }
-
-    override function destroy() {
-        super.destroy();
-        if (sprite != null) sprite.destroy();
-        sprite = null;
-    }
+	override function destroy()
+	{
+		super.destroy();
+		if (sprite != null) sprite.destroy();
+		sprite = null;
+	}
 }
 
-class FixedFlxBGSprite extends FlxBGSprite {
-    @:access(flixel.FlxCamera)
+class FixedFlxBGSprite extends FlxBGSprite
+{
+	@:access(flixel.FlxCamera)
 	override public function draw():Void
 	{
 		for (camera in getCamerasLegacy())
@@ -46,7 +48,7 @@ class FixedFlxBGSprite extends FlxBGSprite {
 
 			_matrix.identity();
 			_matrix.scale(camera.viewWidth, camera.viewHeight);
-            _matrix.translate(camera.viewMarginLeft, camera.viewMarginTop);
+			_matrix.translate(camera.viewMarginLeft, camera.viewMarginTop);
 			camera.drawPixels(frame, _matrix, colorTransform);
 
 			#if FLX_DEBUG

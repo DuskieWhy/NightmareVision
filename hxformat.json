@@ -9,11 +9,12 @@
 		"rightCurly": "both"
 	  },
 	"sameLine": {
+		"functionBody": "same",
 		"ifBody": "same",
 		"ifElse": "next",
+		"elseBody": "same",
 		"doWhile": "next",
 		"tryBody": "next",
 		"tryCatch": "next"
 	}
-	
 }

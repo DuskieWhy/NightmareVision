@@ -1,14 +1,9 @@
 package funkin.objects.shader;
 
 import flixel.system.FlxAssets.FlxShader;
-import openfl.display.BitmapData;
-import openfl.display.ShaderInput;
-import openfl.utils.Assets;
-import flixel.FlxG;
-import openfl.Lib;
-
 class DistortGlitchShader extends FlxShader // https://www.shadertoy.com/view/ldjGzV and https://www.shadertoy.com/view/Ms23DR and https://www.shadertoy.com/view/MsXGD4 and https://www.shadertoy.com/view/Xtccz4
-{  @:glFragmentSource('
+{
+	@:glFragmentSource('
 #pragma header
 
 uniform float iTime;
@@ -175,9 +170,8 @@ precision highp float;
             gl_FragColor = vec4(r, g, b, 1.0) * (1.0 - bnMask - bnMask2) + (whiteNoise + blockNoise + blockNoise2 - waveNoise);
           }
   ')
-    public function new()
-        {
-          super();
-        }
-}//haMBURGERCHEESBEUBRGER!!!!!!!!
-      
+	public function new()
+	{
+		super();
+	}
+} // haMBURGERCHEESBEUBRGER!!!!!!!!

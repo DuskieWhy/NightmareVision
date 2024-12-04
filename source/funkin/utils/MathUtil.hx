@@ -1,12 +1,11 @@
 package funkin.utils;
 
-
-class MathUtil {
-    
-    /**
+class MathUtil
+{
+	/**
 		FlxMath.lerp but accounts for FPS.
 	**/
-	public static inline function fpsLerp(v1:Float,v2:Float,ratio:Float) return FlxMath.lerp(v1,v2,ratio * 60 * FlxG.elapsed); 
+	public static inline function fpsLerp(v1:Float, v2:Float, ratio:Float) return FlxMath.lerp(v1, v2, ratio * 60 * FlxG.elapsed);
 
 	/**
 		crude version of FlxMath.wrap. supports floats though
@@ -17,23 +16,10 @@ class MathUtil {
 		else if (value > max) return min;
 		else return value;
 	}
-	
-	// functions from basegame mathutil.hx, for the soundtray, i'll see if these are rlly necessary later
-
-	public static function coolLerp(base:Float, target:Float, ratio:Float):Float
-	{
-		return base + cameraLerp(ratio) * (target - base);
-	}
-
-	public static function cameraLerp(lerp:Float):Float
-	{
-		return lerp * (FlxG.elapsed / (1 / 60));
-	}
 
 	public static function floorDecimal(value:Float, decimals:Int):Float
 	{
-		if(decimals < 1)
-			return Math.floor(value);
+		if (decimals < 1) return Math.floor(value);
 
 		var tempMult:Float = 1;
 		for (i in 0...decimals)
@@ -49,5 +35,21 @@ class MathUtil {
 		return [for (i in min...max) i];
 	}
 
-}
+	public function intClamp(input:Int, min:Int, max:Int):Int
+	{
+		if (input < min) input = min;
+		if (input > max) input = max;
+		return input;
+	}
 
+	public static function betterLerp(a:Float, b:Float, ratio:Float)
+	{
+		if (a == b) return b;
+		if (Math.abs(b - a) < 0.001) // not the best
+		{
+			return b;
+		}
+
+		return fpsLerp(a, b, ratio);
+	}
+}

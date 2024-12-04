@@ -13,17 +13,19 @@ class NoteSplash extends FlxSprite
 	public static var keys:Int = 4;
 
 	public var colorSwap:HSLColorSwap = null;
+
 	private var idleAnim:String;
 	private var textureLoaded:String = null;
 
-	var data:Int = 0;
+	public var data:Int = 0;
 
-	public function new(x:Float = 0, y:Float = 0, ?note:Int = 0) {
+	public function new(x:Float = 0, y:Float = 0, ?note:Int = 0)
+	{
 		super(x, y);
 
 		var skin:String = 'noteSplashes';
 
-		if(PlayState.SONG.splashSkin != null && PlayState.SONG.splashSkin.length > 0) skin = PlayState.SONG.splashSkin;
+		if (PlayState.SONG.splashSkin != null && PlayState.SONG.splashSkin.length > 0) skin = PlayState.SONG.splashSkin;
 
 		loadAnims(skin);
 
@@ -34,32 +36,35 @@ class NoteSplash extends FlxSprite
 		antialiasing = ClientPrefs.globalAntialiasing;
 	}
 
-	public function setupNoteSplash(x:Float, y:Float, note:Int = 0, texture:String = null, hueColor:Float = 0, satColor:Float = 0, brtColor:Float = 0, ?field:PlayField) {
-		//scale.set(1, 1);
-		if (field!=null)
-			setPosition(x - field.members[note].swagWidth * 0.95, y - field.members[note].swagWidth * 0.95);
-		else
-			setPosition(x - Note.swagWidth * 0.95, y - Note.swagWidth);
-		
+	public function setupNoteSplash(x:Float, y:Float, note:Int = 0, texture:String = null, hueColor:Float = 0, satColor:Float = 0, brtColor:Float = 0,
+			?field:PlayField)
+	{
+		// scale.set(1, 1);
+		if (field != null) setPosition(x - field.members[note].swagWidth * 0.95, y - field.members[note].swagWidth * 0.95);
+		else setPosition(x - Note.swagWidth * 0.95, y - Note.swagWidth);
 
-		if(texture == null) {
+		if (texture == null)
+		{
 			texture = 'noteSplashes';
-			if(PlayState.SONG.splashSkin != null && PlayState.SONG.splashSkin.length > 0) texture = PlayState.SONG.splashSkin;
+			if (PlayState.SONG.splashSkin != null && PlayState.SONG.splashSkin.length > 0) texture = PlayState.SONG.splashSkin;
 		}
 
-		if(textureLoaded != texture) {
+		if (textureLoaded != texture)
+		{
 			loadAnims(texture);
 		}
-		if(field!=null){
+		if (field != null)
+		{
 			scale.x *= field.scale;
 			scale.y *= field.scale;
 		}
 		data = note;
-		switch(texture){
+		switch (texture)
+		{
 			default:
 				// alpha = 0.6;
 				alpha = 1;
-				antialiasing=true;
+				antialiasing = true;
 				colorSwap.hue = hueColor;
 				colorSwap.saturation = satColor;
 				colorSwap.lightness = brtColor;
@@ -67,26 +72,29 @@ class NoteSplash extends FlxSprite
 				offset.set(-20, -20);
 				// animation.curAnim.frameRate = 24 + FlxG.random.int(-2, 2);
 		}
-
 	}
 
-	public function playAnim(){
+	public function playAnim()
+	{
 		animation.play('note' + data, true);
-		trace('animation played on splash $data');
 	}
 
-	function loadAnims(skin:String) {
+	function loadAnims(skin:String)
+	{
 		frames = Paths.getSparrowAtlas(skin);
-		switch(skin){
+		switch (skin)
+		{
 			default:
-				for(i in 0...keys){
+				for (i in 0...keys)
+				{
 					animation.addByPrefix(handler.data.noteSplashAnimations[i].anim, handler.data.noteSplashAnimations[i].xmlName, 24, false);
 				}
 		}
 	}
 
-	override function update(elapsed:Float) {
-		if(animation.curAnim != null)if(animation.curAnim.finished) kill();
+	override function update(elapsed:Float)
+	{
+		if (animation.curAnim != null) if (animation.curAnim.finished) kill();
 
 		super.update(elapsed);
 	}

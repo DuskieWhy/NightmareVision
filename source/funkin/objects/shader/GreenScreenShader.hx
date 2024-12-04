@@ -2,18 +2,10 @@
 package funkin.objects.shader;
 
 import flixel.system.FlxAssets.FlxShader;
-import openfl.display.BitmapData;
-import openfl.display.ShaderInput;
-import openfl.utils.Assets;
-import flixel.FlxG;
-import openfl.Lib;
-
-// TODO: maybe make a GreenScreenSprite or whatever
 
 class GreenScreenShader extends FlxShader // https://www.shadertoy.com/view/4dX3WN
 {
-
-  @:glFragmentSource('
+	@:glFragmentSource('
     #pragma header
     vec3 rgb2hsv(vec3 rgb)
     {
@@ -71,8 +63,8 @@ class GreenScreenShader extends FlxShader // https://www.shadertoy.com/view/4dX3
     }
 
   ')
-  public function new()
-  {
-    super();
-  }
+	public function new()
+	{
+		super();
+	}
 }
