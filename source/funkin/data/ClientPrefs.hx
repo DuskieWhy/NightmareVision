@@ -53,6 +53,8 @@ class ClientPrefs
 	@saveVar public static var camFollowsCharacters:Bool = true;
 	
 	// gameplay ------------------------------------------------------------------------//
+	@saveVar public static var newSustains:Bool = true;
+	
 	@saveVar public static var controllerMode:Bool = false;
 	
 	@saveVar public static var mechanics:Bool = true;
