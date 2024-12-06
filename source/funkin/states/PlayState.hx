@@ -3885,6 +3885,7 @@ class PlayState extends MusicBeatState
 				if (!daNote.playField.autoPlayed && daNote.playField.inControl && daNote.playField.playerControls)
 				{
 					if (daNote.isSustainNote
+						&& !daNote.blockHit
 						&& controlHoldArray[daNote.noteData]
 						&& daNote.canBeHit
 						&& !daNote.tooLate
