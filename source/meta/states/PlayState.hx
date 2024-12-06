@@ -562,8 +562,9 @@ class PlayState extends MusicBeatState
 		healthLoss = ClientPrefs.getGameplaySetting('healthloss', 1);
 		instakillOnMiss = ClientPrefs.getGameplaySetting('instakill', false);
 		practiceMode = ClientPrefs.getGameplaySetting('practice', false);
-		cpuControlled = false; //ClientPrefs.getGameplaySetting('botplay', false);
+		cpuControlled = ClientPrefs.getGameplaySetting('botplay', false);
         // ^^ i dont think theres a way to toggle cpucontrolled in menus????? so im doing this
+			// well now there is. lmfaoo.
 
 		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = new FlxCamera();
@@ -2607,6 +2608,7 @@ class PlayState extends MusicBeatState
 
 						var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrotchet * susNote) + (Conductor.stepCrotchet / FlxMath.roundDecimal(songSpeed, 2)), daNoteData, oldNote, true, false, gottaHitNote ? 0 : 1);
 						sustainNote.mustPress = gottaHitNote;
+						if (ClientPrefs.newSustains) sustainNote.blockHit = true; //stops you from holding a note without key pressing first
 						sustainNote.gfNote = swagNote.gfNote;
 						sustainNote.noteType = type;
 						if(!sustainNote.alive)
@@ -4768,9 +4770,18 @@ class PlayState extends MusicBeatState
 			{
 				// hold note functions
 				if(!daNote.playField.autoPlayed && daNote.playField.inControl && daNote.playField.playerControls){
-					if (daNote.isSustainNote && controlHoldArray[daNote.noteData] && daNote.canBeHit && !daNote.tooLate && !daNote.wasGoodHit || (daNote.doAutoSustain && daNote.noteData > 4)) {
+					if (daNote.isSustainNote && controlHoldArray[daNote.noteData] && daNote.canBeHit && !daNote.tooLate && !daNote.wasGoodHit && !daNote.blockHit || (daNote.doAutoSustain && daNote.noteData > 4)) {
 						daNote.playField.noteHitCallback(daNote, daNote.playField);
 					}
+				}
+
+				if(ClientPrefs.newSustains)
+				{
+					//hold note drop
+					if (daNote.mustPress && !cpuControlled && daNote.isSustainNote && !daNote.blockHit && !daNote.ignoreNote && !controlHoldArray[daNote.noteData] && !endingSong
+						&& (daNote.tooLate || !daNote.wasGoodHit)) {
+							noteMiss(daNote);
+					};
 				}
 			});
 
@@ -4866,6 +4877,31 @@ class PlayState extends MusicBeatState
 			else
 			{
 				callScript(script, "noteMiss", [daNote]);
+			}
+		}
+
+		if(ClientPrefs.newSustains)
+		{
+			//hold note missing stuff, makes the hold unhittable (and kills it, might make it just transparent if i can fix some stuff)
+			if(daNote.isSustainNote)
+			{
+				var tail = daNote.parent.tail;
+				for (note in tail) {
+					note.blockHit = true;
+					note.ignoreNote = true;
+					note.alpha = 0.3;
+					note.copyAlpha = false;
+				}
+			}
+			else
+			{
+				var tail = daNote.tail;
+				for (note in tail) {
+					note.blockHit = true;
+					note.ignoreNote = true;
+					note.alpha = 0.3;
+					note.copyAlpha = false;
+				}
 			}
 		}
 	}
@@ -5161,6 +5197,14 @@ class PlayState extends MusicBeatState
 
 			note.wasGoodHit = true;
 			vocals.volume = 1;
+
+			if(ClientPrefs.newSustains)
+			{
+				if (!note.isSustainNote) {
+					for (sus in note.tail)
+						sus.blockHit = false; //makes the hold note active when you press the base note
+				}
+			}
 
 			if(note.noteData > 4)
 			{
