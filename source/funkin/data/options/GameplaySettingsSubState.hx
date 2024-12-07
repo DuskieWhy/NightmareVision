@@ -33,6 +33,10 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			'ghostTapping', 'bool', true);
 		addOption(option);
 
+		var option:Option = new Option('New Hold Notes', "If checked, hold notes will only be able to give you one miss, and will be dropped instantly if you let go too early.\nDisable for \"classic\" gameplay.",
+			'newSustains', 'bool', true);
+		addOption(option);
+
 		var option:Option = new Option('Disable Reset Button', "If checked, pressing Reset won't do anything.", 'noReset', 'bool', false);
 		addOption(option);
 
