@@ -29,12 +29,22 @@ class MathUtil
 		return newValue / tempMult;
 	}
 
-	inline public static function numberArray(?min:Int, max:Int):Array<Int>
+	/**
+		Makes a number array
+		* @param	min starting number. default is 0
+		* @param	max ending number
+		* @return the new array
+	**/
+	inline public static function numberArray(min:Int = 0, max:Int):Array<Int>
 	{
-		if (min == null) min = 0;
 		return [for (i in min...max) i];
 	}
 
+	/**
+		Clamps/Bounds a value. for Ints though.
+		* @param	input the value to clamp
+		* @return The clamped Value
+	**/
 	public function intClamp(input:Int, min:Int, max:Int):Int
 	{
 		if (input < min) input = min;

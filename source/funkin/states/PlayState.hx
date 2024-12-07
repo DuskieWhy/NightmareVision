@@ -3312,7 +3312,6 @@ class PlayState extends MusicBeatState
 							}
 						});
 				}
-
 			case 'Camera Zoom Chain':
 				var split1:Array<String> = value1.split(',');
 				var gameZoom:Float = Std.parseFloat(split1[0].trim());

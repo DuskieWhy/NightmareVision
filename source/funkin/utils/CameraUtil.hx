@@ -9,12 +9,17 @@ import openfl.filters.ShaderFilter;
 class CameraUtil
 {
 	/**
-		gets the last camera in the stack
+		returns the last camera in the list
 	**/
 	public static var lastCamera(get, never):FlxCamera;
 
 	static function get_lastCamera():FlxCamera return FlxG.cameras.list[FlxG.cameras.list.length - 1];
 
+	/**
+		convenient function to making a camera and adding it to the stack as well
+		* @param	add	whether it should be automatically added to the stack
+		* @return	The new Camera
+	**/
 	public static inline function quickCreateCam(add:Bool = true):FlxCamera
 	{
 		var cam = new FlxCamera();
@@ -25,9 +30,13 @@ class CameraUtil
 		return cam;
 	}
 
-	public static function addShader(shader:FlxShader, ?camera:FlxCamera, forced:Bool = false)
+	/**
+		function to easily apply a shader to a camera
+		* @param	shader	the shader to be applied
+		* @param	camera	the camera to apply the filter to. default is the first camera
+	**/
+	public static function addShader(shader:FlxShader, ?camera:FlxCamera)
 	{
-		// if (!ClientPrefs.shaders && !forced) return;
 		if (camera == null) camera = FlxG.camera;
 
 		var filter:ShaderFilter = new ShaderFilter(shader);
@@ -35,6 +44,12 @@ class CameraUtil
 		camera.filters.push(filter);
 	}
 
+	/**
+		function to easily remove a shader to a camera
+		* @param	shader	the shader to be removed
+		* @param	camera	the camera to remove the filter from. default is the first camera
+		* @return	whether the camera removal was successful
+	**/
 	public static function removeShader(shader:FlxShader, ?camera:FlxCamera):Bool
 	{
 		if (camera == null) camera = FlxG.camera;
@@ -55,6 +70,13 @@ class CameraUtil
 		return false;
 	}
 
+	/**
+		inserts the camera to a specific index in the stack
+		* @param	idx	the position to insert the camera in
+		* @param	camera	the camera to insert
+		* @param	defDraw	whether it should be set as a default draw target
+		* @return	whether the camera removal was successful
+	**/
 	public static function insertFlxCamera(idx:Int, camera:FlxCamera, defDraw:Bool = false)
 	{
 		var cameras = [
@@ -72,5 +94,7 @@ class CameraUtil
 
 		for (i in cameras)
 			FlxG.cameras.add(i.cam, i.defaultDraw);
+
+		return camera;
 	}
 }
