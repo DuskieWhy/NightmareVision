@@ -3271,7 +3271,8 @@ class ChartingState extends MusicBeatState
 			// get last bpm
 			var daBPM:Float = _song.bpm;
 			for (i in 0...curSec)
-				if (_song.notes[i].changeBPM) daBPM = _song.notes[i].bpm;
+				if (_song.notes[i].changeBPM)
+					daBPM = _song.notes[i].bpm;
 			Conductor.bpm = daBPM;
 		}
 

@@ -179,12 +179,21 @@ class Conductor
 		return (60 / bpm) * 1000;
 	}
 
+	// just gotta make this clear: this is compile time errors
+	// in the future you're probably gonna want to have *this* but for scripts
+	// I currently cannot be bothered to do this, since its way out of the scope of what i planned for this Pull Request
+	// @crowplexus (commit c64f62cc)
+
+	@:deprecated("Conductor.judgeNote is deprecated, please use Rating.judgeNote")
+	public static function judgeNote(note:Note, diff:Float = 0):Rating return funkin.data.Rating.judgeNote(note, diff);
+	@:deprecated("Conductor.changeBPM is deprecated, please use Conductor.bpm = value;")
+	public static function changeBPM(newBpm:Float) return bpm = newBpm;
+
 	static function set_bpm(value:Float):Float
 	{
 		bpm = value;
 		crotchet = calculateCrochet(bpm);
 		stepCrotchet = crotchet / 4;
-
 		return bpm;
 	}
 }

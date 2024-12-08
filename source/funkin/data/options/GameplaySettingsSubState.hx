@@ -71,6 +71,18 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		super();
 	}
 
+	function addHitWindowOption(dName:String, prefID:String, min:Float = 15.0, max:Float = 200.0, scrollSpeed: Float = 15) {
+		var option:Option = new Option('$dName Hit Window',
+			'Changes the amount of time you have\nfor hitting a "$dName" in milliseconds.',
+			prefID, 'float', max);
+		option.displayFormat = '%vms';
+		option.scrollSpeed = scrollSpeed;
+		option.minValue = min;
+		option.maxValue = max;
+		option.changeValue = 0.1;
+		addOption(option);
+	}
+
 	function onChangeHitsoundVolume()
 	{
 		FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.hitsoundVolume);

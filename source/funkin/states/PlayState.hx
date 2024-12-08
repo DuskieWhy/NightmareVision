@@ -466,17 +466,11 @@ class PlayState extends MusicBeatState
 		initNoteSkinning();
 
 		#if desktop
-		storyDifficultyText = DifficultyUtil.difficulties[storyDifficulty];
-
+		// String that contains the current difficulty name
+		storyDifficultyText = CoolUtil.difficulties[storyDifficulty];
 		// String that contains the mode defined here so it isn't necessary to call changePresence for each mode
-		if (isStoryMode) //fix this again
-		{
-			// detailsText = "";
-		}
-		else
-		{
-			// detailsText = "";
-		}
+		detailsText = isStoryMode ? "Story Mode" : "Freeplay";
+		storyDifficultyText = DifficultyUtil.difficulties[storyDifficulty];
 
 		// String for when the game is paused
 		detailsPausedText = "Paused - " + detailsText;
@@ -3687,12 +3681,8 @@ class PlayState extends MusicBeatState
 
 	function popUpScore(note:Note = null):Void
 	{
+    vocals.playerVolume = 1;
 		var noteDiff:Float = Math.abs(note.strumTime - Conductor.songPosition + ClientPrefs.ratingOffset);
-		// trace(noteDiff, ' ' + Math.abs(note.strumTime - Conductor.songPosition));
-
-		vocals.playerVolume = 1;
-		var placement:String = Std.string(combo);
-
 		// tryna do MS based judgment due to popular demand
 		var daRating:Rating = Rating.judgeNote(note, noteDiff);
 		var judgeScore:Int = daRating.score;
@@ -3703,12 +3693,9 @@ class PlayState extends MusicBeatState
 		note.rating = daRating.name;
 
 		if (daRating.noteSplash && !note.noteSplashDisabled)
-		{
 			spawnNoteSplashOnNote(note);
-		}
 
 		var field:PlayField = note.playField;
-
 		if (!practiceMode && !field.autoPlayed)
 		{
 			if (defaultScoreAddition) songScore += judgeScore;
@@ -4958,29 +4945,26 @@ class PlayState extends MusicBeatState
 					}
 				}
 			}
-
-
 			updateRatingFC();
 		}
-
 		setOnLuas('rating', ratingPercent);
 		setOnLuas('ratingName', ratingName);
 		setOnLuas('ratingFC', ratingFC);
 		updateScoreBar(badHit);
 	}
 
-		// so you can override this in HScript
-	// e.g: PlayState.instance.updateRatingFC = function() { ... }
-		public dynamic function updateRatingFC() {
-			// Rating FC
-			ratingFC = "";
-			if (epics > 0) ratingFC = "KFC";
-			if (sicks > 0) ratingFC = "SFC";
-			if (goods > 0) ratingFC = "GFC";
-			if (bads > 0 || shits > 0) ratingFC = "FC";
-			if (songMisses > 0 && songMisses < 10) ratingFC = "SDCB";
-			else if (songMisses >= 10) ratingFC = "Clear";
-		}
+  // so you can override this in HScript
+  // e.g: PlayState.instance.updateRatingFC = function() { ... }
+  public dynamic function updateRatingFC() {
+    // Rating FC
+    ratingFC = "";
+    if (epics > 0) ratingFC = "KFC";
+    if (sicks > 0) ratingFC = "SFC";
+    if (goods > 0) ratingFC = "GFC";
+    if (bads > 0 || shits > 0) ratingFC = "FC";
+    if (songMisses > 0 && songMisses < 10) ratingFC = "SDCB";
+    else if (songMisses >= 10) ratingFC = "Clear";
+  }
 
 	override public function startOutro(onOutroComplete:() -> Void)
 	{
