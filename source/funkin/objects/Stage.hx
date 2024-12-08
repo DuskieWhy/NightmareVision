@@ -34,25 +34,22 @@ import openfl.utils.Assets;
 class Stage extends FlxTypedGroup<FlxBasic>
 {
 	public var curStageScript:FunkinScript;
-	
+
 	public var curStage = "stage";
 	public var stageData:StageFile = funkin.data.StageData.generateDefault();
-	public var foreground = new FlxTypedGroup<FlxBasic>();
 
-	public function new(?StageName = "stage")
+	public function new(stageName:String = "stage")
 	{
 		super();
 
-		if (StageName != null) curStage = StageName;
-		
+		curStage = stageName;
+
 		var newStageData = StageData.getStageFile(curStage);
-		if (newStageData != null)
-			stageData = newStageData;
+		if (newStageData != null) stageData = newStageData;
 	}
 
 	function setupScript(s:FunkinScript)
 	{
-
 		curStageScript = s;
 
 		switch (s.scriptType)
@@ -60,14 +57,12 @@ class Stage extends FlxTypedGroup<FlxBasic>
 			case HSCRIPT:
 				s.set("add", add);
 				s.set("stage", this);
-				s.set("foreground", foreground);	
-				s.call("onLoad", [this, foreground]);
-			
+				s.call("onLoad");
+
 			#if LUA_ALLOWED
 			case LUA:
 				s.call("onCreate", []);
 			#end
-
 		}
 	}
 
@@ -81,14 +76,13 @@ class Stage extends FlxTypedGroup<FlxBasic>
 			trace('FUCKL');
 			var script = FunkinIris.fromFile(scriptFile);
 			setupScript(script);
-
 		}
-		#if LUA_ALLOWED else if (Paths.fileExists('$baseScriptFile.lua',TEXT))
+		#if LUA_ALLOWED
+		else if (Paths.fileExists('$baseScriptFile.lua', TEXT))
 		{
 			var script = new FunkinLua('$baseScriptFile.lua');
 			setupScript(script);
 		}
 		#end
-
 	}
 }

@@ -1,10 +1,5 @@
-### FNF-Specific
-# File used for the NG API. Should not be shared with others.
-APIStuff.hx
-art/build_x32-officialrelease.bat
-art/build_x64-officialrelease.bat
-art/test_x64-debug-officialrelease.bat
 
+dump/*
 
 .haxelib/*
 content/avas_evil_secrets/*
@@ -13,6 +8,7 @@ content/avas_evil_secrets/*
 .icloud
 
 ### VS Code
+vscode-project.hxml
 export/*
 .vscode/*
 *.code-workspace

@@ -1,22 +1,20 @@
 package funkin.objects;
 
 import flixel.FlxSprite;
-import flixel.util.FlxColor;
-import flixel.FlxG;
-import meta.data.*;
 
 class GradientBump extends FlxSprite
 {
 	public var originalY:Float;
 	public var originalHeight:Int = 400;
 	public var intendedAlpha:Float = 1;
+
 	public function new(x:Float, y:Float)
 	{
 		super(x, y);
 		originalY = y;
 
 		loadGraphic(Paths.image('gradient'));
-		scrollFactor.set(0,1);
+		scrollFactor.set(0, 1);
 		setGraphicSize(3000, originalHeight);
 		updateHitbox();
 	}
@@ -24,7 +22,7 @@ class GradientBump extends FlxSprite
 	override function update(elapsed:Float)
 	{
 		var newHeight:Int = Math.round(height - 1000 * elapsed);
-		if(newHeight > 0)
+		if (newHeight > 0)
 		{
 			alpha = intendedAlpha;
 			setGraphicSize(3000, newHeight);

@@ -1,7 +1,6 @@
 package funkin.objects;
 
 import flixel.FlxSprite;
-import funkin.data.*;
 
 using StringTools;
 
@@ -20,11 +19,14 @@ class AttachedSprite extends FlxSprite
 	public function new(?file:String = null, ?anim:String = null, ?library:String = null, ?loop:Bool = false)
 	{
 		super();
-		if(anim != null) {
+		if (anim != null)
+		{
 			frames = Paths.getSparrowAtlas(file, library);
 			animation.addByPrefix('idle', anim, 24, loop);
 			animation.play('idle');
-		} else if(file != null) {
+		}
+		else if (file != null)
+		{
 			loadGraphic(Paths.image(file));
 		}
 		antialiasing = ClientPrefs.globalAntialiasing;
@@ -35,18 +37,16 @@ class AttachedSprite extends FlxSprite
 	{
 		super.update(elapsed);
 
-		if (sprTracker != null) {
+		if (sprTracker != null)
+		{
 			setPosition(sprTracker.x + xAdd, sprTracker.y + yAdd);
 			scrollFactor.set(sprTracker.scrollFactor.x, sprTracker.scrollFactor.y);
 
-			if(copyAngle)
-				angle = sprTracker.angle + angleAdd;
+			if (copyAngle) angle = sprTracker.angle + angleAdd;
 
-			if(copyAlpha)
-				alpha = sprTracker.alpha * alphaMult;
+			if (copyAlpha) alpha = sprTracker.alpha * alphaMult;
 
-			if(copyVisible) 
-				visible = sprTracker.visible;
+			if (copyVisible) visible = sprTracker.visible;
 		}
 	}
 }

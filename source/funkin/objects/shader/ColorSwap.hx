@@ -1,11 +1,9 @@
 package funkin.objects.shader;
 
-import flixel.FlxG;
 import flixel.system.FlxAssets.FlxShader;
-import math.Vector3;
-import funkin.modchart.*;
 
-class ColorSwap {
+class ColorSwap
+{
 	public var shader(default, null):ColorSwapShader = new ColorSwapShader();
 	public var hue(default, set):Float = 0;
 	public var saturation(default, set):Float = 0;
@@ -14,34 +12,37 @@ class ColorSwap {
 	public var flash(default, set):Float = 0;
 
 	private function set_daAlpha(value:Float)
-		{
-			daAlpha = value;
-			shader.daAlpha.value[0] = daAlpha;
-			// trace(daAlpha);
-			// what
-			return daAlpha;
-		}
-	
+	{
+		daAlpha = value;
+		shader.daAlpha.value[0] = daAlpha;
+		// trace(daAlpha);
+		// what
+		return daAlpha;
+	}
+
 	private function set_flash(value:Float)
-		{
-			flash = value;
-			shader.flash.value[0] = flash;
-			return flash;
-		}
-		
-	private function set_hue(value:Float) {
+	{
+		flash = value;
+		shader.flash.value[0] = flash;
+		return flash;
+	}
+
+	private function set_hue(value:Float)
+	{
 		hue = value;
 		shader.uTime.value[0] = hue;
 		return hue;
 	}
 
-	private function set_saturation(value:Float) {
+	private function set_saturation(value:Float)
+	{
 		saturation = value;
 		shader.uTime.value[1] = saturation;
 		return saturation;
 	}
 
-	private function set_brightness(value:Float) {
+	private function set_brightness(value:Float)
+	{
 		brightness = value;
 		shader.uTime.value[2] = brightness;
 		return brightness;
@@ -56,7 +57,8 @@ class ColorSwap {
 	}
 }
 
-class ColorSwapShader extends FlxShader {
+class ColorSwapShader extends FlxShader
+{
 	@:glFragmentSource('
 		varying float openfl_Alphav;
 		varying vec4 openfl_ColorMultiplierv;
@@ -237,7 +239,6 @@ class ColorSwapShader extends FlxShader {
 				openfl_ColorMultiplierv = colorMultiplier;
 			}
 		}')
-
 	public function new()
 	{
 		super();

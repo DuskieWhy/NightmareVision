@@ -1,10 +1,7 @@
 package funkin.objects.stageobjects;
- 
-import flixel.FlxSprite;
-import flixel.graphics.frames.FlxAtlasFrames;
-import funkin.data.*;
 
-@:keep
+import flixel.FlxSprite;
+
 class BackgroundDancer extends FlxSprite
 {
 	public function new(x:Float, y:Float)
@@ -24,9 +21,7 @@ class BackgroundDancer extends FlxSprite
 	{
 		danceDir = !danceDir;
 
-		if (danceDir)
-			animation.play('danceRight', true);
-		else
-			animation.play('danceLeft', true);
+		if (danceDir) animation.play('danceRight', true);
+		else animation.play('danceLeft', true);
 	}
 }

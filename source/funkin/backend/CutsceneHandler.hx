@@ -1,24 +1,10 @@
 package funkin.backend;
 
-import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxBasic;
-import flixel.FlxObject;
 import flixel.FlxSprite;
-import flixel.graphics.atlas.FlxAtlas;
-import flixel.graphics.frames.FlxAtlasFrames;
-import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.system.FlxSound;
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
-import flixel.util.FlxTimer;
-import flixel.group.FlxSpriteGroup;
-import animateatlas.AtlasFrameMaker;
 import flixel.util.FlxSort;
-import funkin.data.*;
-import funkin.states.*;
 import funkin.states.PlayState;
-
 
 class CutsceneHandler extends FlxBasic
 {
@@ -29,39 +15,40 @@ class CutsceneHandler extends FlxBasic
 	public var endTime:Float = 0;
 	public var objects:Array<FlxSprite> = [];
 	public var music:String = null;
+
 	public function new()
 	{
 		super();
 
-		timer(0, function()
-		{
-			if(music != null)
+		timer(0, function() {
+			if (music != null)
 			{
 				FlxG.sound.playMusic(Paths.music(music), 0, false);
 				FlxG.sound.music.fadeIn();
 			}
-			if(onStart != null) onStart();
+			if (onStart != null) onStart();
 		});
 		PlayState.instance.add(this);
 	}
 
 	private var cutsceneTime:Float = 0;
 	private var firstFrame:Bool = false;
+
 	override function update(elapsed)
 	{
 		super.update(elapsed);
 
-		if(FlxG.state != PlayState.instance || !firstFrame)
+		if (FlxG.state != PlayState.instance || !firstFrame)
 		{
 			firstFrame = true;
 			return;
 		}
 
 		cutsceneTime += elapsed;
-		if(endTime <= cutsceneTime)
+		if (endTime <= cutsceneTime)
 		{
 			finishCallback();
-			if(finishCallback2 != null) finishCallback2();
+			if (finishCallback2 != null) finishCallback2();
 
 			for (spr in objects)
 			{
@@ -69,13 +56,13 @@ class CutsceneHandler extends FlxBasic
 				PlayState.instance.remove(spr);
 				spr.destroy();
 			}
-			
+
 			kill();
 			destroy();
 			PlayState.instance.remove(this);
 		}
-		
-		while(timedEvents.length > 0 && timedEvents[0][0] <= cutsceneTime)
+
+		while (timedEvents.length > 0 && timedEvents[0][0] <= cutsceneTime)
 		{
 			timedEvents[0][1]();
 			timedEvents.splice(0, 1);

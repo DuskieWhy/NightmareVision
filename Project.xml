@@ -21,7 +21,7 @@
 	<!-- ____________________________ Window Settings ___________________________ -->
 
 	<!--These window settings apply to all targets-->
-	<window width="1280" height="720" fps="0" background="#000000" hardware="true" vsync="false" />
+	<window width="1280" height="720" fps="60" background="#000000" hardware="true" vsync="false" />
 
 	<!--HTML5-specific-->
 	<window if="html5" resizable="true" />
@@ -48,13 +48,11 @@
 	<define name="LUA_ALLOWED" if="desktop" />
 	<define name="VIDEOS_ALLOWED" if="cpp" />
 	<define name="DISCORD_ALLOWED" if="cpp"/>
-	
-	<define name="hscriptPos" if="debug" />
 
-	<assets path='assets/embeds' rename='assets' embed="true" />
+	<assets path='assets/embeds' 		rename='assets'			embed="true" />
 	<assets path="assets/fonts" />
-	<assets path="assets/shared"        exclude="*.ogg" if="web"/>
-	<assets path="assets/shared"        exclude="*.mp3" unless="web"/>
+	<assets path="assets/shared"        exclude="*.ogg" 		if="web"/>
+	<assets path="assets/shared"        exclude="*.mp3" 		unless="web"/>
 	<assets path="assets/videos"        library="videos"        if="VIDEOS_ALLOWED"/>
 
 	<library name="videos"        preload="true" if="VIDEOS_ALLOWED"/>
@@ -62,9 +60,16 @@
 
 	<assets path='content' embed='false' if="MODS_ALLOWED"/>
 
+	<!-- OpenAL config --> 	<!-- appreciate you cyn0x8 and smokey for finding this -->
+	<section if="desktop">
+		<assets path="projFiles/alsoft.ini" rename="alsoft.ini" type="text" if="windows"/>
+		<assets path="projFiles/alsoft.ini" rename="alsoft.conf" type="text" unless="windows"/>
+	</section>
+
 
 	<!-- _______________________________ Libraries ______________________________ -->
-	<lime version="8.1.1"/>
+
+	<lime version="8.1.3"/>
 	<haxelib name="openfl"/>
 
 	<haxelib name="flixel"/>
@@ -72,22 +77,38 @@
 	<haxelib name="flixel-ui"/>
 	<haxelib name="flixel-tools"/>
 	<haxelib name="flxanimate"/>
-	<haxelib name="compiletime"/>
 	
-	<haxedev set='webgl' />
-	<haxelib name="hscript" />
-	<haxelib name="hscript-iris" />
+	<haxedev set='webgl'/>
+	<haxelib name="hscript"/>
+	<haxelib name="hscript-iris"/>
+	<define name="hscriptPos"/>
 
 	<haxelib name="linc_luajit" if="LUA_ALLOWED"/>
 	<haxelib name="discord_rpc" if="DISCORD_ALLOWED"/>
 	<haxelib name="hxvlc" if="VIDEOS_ALLOWED"/>
 
+
+	<!-- ______________________________ macros _____________________________ -->
+
+	<haxeflag name="--macro" value="addMetadata('@:build(funkin.utils.MacroUtil.buildFlxSprite())', 'flixel.FlxSprite')" />
+	<haxeflag name="--macro" value="addMetadata('@:build(funkin.utils.MacroUtil.buildFlxBasic())', 'flixel.FlxBasic')" />
+	
+	<haxeflag name="--macro" value="include('funkin')" />
+	<haxeflag name="--macro" value="include('flixel.addons.effects')" />
+	<haxeflag name="-dce no" />
+
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
-	<haxeflag name="--macro" value="include('funkin')" />
-	<haxeflag name="-dce no" />
+	<haxedef name="CRASH_HANDLER"/>
+
+	<haxedef name="HXCPP_CHECK_POINTER" if="CRASH_HANDLER" />
+	<haxedef name="HXCPP_STACK_LINE" if="CRASH_HANDLER" />
+	<haxedef name="HXCPP_STACK_TRACE" if="CRASH_HANDLER" />
+
 	
-	<!-- <haxedef name="CRASH_HANDLER"/> -->
+	<define name="DISABLE_TRACES" if="desktop release"/>
+
+
 	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
 
 	<!--Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
@@ -97,15 +118,16 @@
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
 
 	<!-- <haxedef name="FLX_NO_PITCH" /> -->
+
+	<haxedef name="message.reporting" value="pretty" />
 	
 	<haxedef name="no-deprecation-warnings"/>
+
 	<!-- <haxelib name="markdown" /> -->
 	<!-- <haxelib name="HtmlParser" /> -->
 
 	<!--In case you want to use nape with flixel-->
 	<!--<haxelib name="nape-haxe4" />-->
-
-
 
 	<!--Enable the Flixel core recording system-->
 	<!--<haxedef name="FLX_RECORD" />-->
@@ -129,6 +151,7 @@
 	<!--<haxedef name="FLX_NO_SOUND_SYSTEM" />-->
 
 	<!--Disable the Flixel core focus lost screen-->
+	
 
 
 	<!-- _________________________________ Custom _______________________________ -->

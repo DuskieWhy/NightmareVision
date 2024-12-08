@@ -1,30 +1,34 @@
 package funkin.data.scripts;
 
-import flixel.FlxBasic;
-import flixel.FlxSprite;
+import funkin.utils.DifficultyUtil;
 import funkin.states.*;
 
 using StringTools;
-/**
-This is a base class meant to be overridden so you can easily implement custom script types
-**/
 
-class FunkinScript {
+/**
+	This is a base class meant to be overridden so you can easily implement custom script types
+**/
+class FunkinScript
+{
 	public var scriptName:String = '';
 	public var scriptType:ScriptType = '';
+
 	/**
 		Called when the script should be stopped
 	**/
-	public function stop(){
+	public function stop()
+	{
 		throw new haxe.exceptions.NotImplementedException();
 	}
 
 	/**
 		Called to output debug information
 	**/
-	public function scriptTrace(text:String){
+	public function scriptTrace(text:String)
+	{
 		trace(text); // wow for once its not NotImplementedException
 	}
+
 	/**
 		Called to set a variable defined in the script
 	**/
@@ -53,7 +57,8 @@ class FunkinScript {
 		Helper function
 		Sets a bunch of basic variables for the script depending on the state
 	**/
-	function setDefaultVars(){
+	function setDefaultVars()
+	{
 		var currentState = flixel.FlxG.state;
 		if ((currentState is PlayState))
 		{
@@ -66,7 +71,7 @@ class FunkinScript {
 			set('weekRaw', PlayState.storyWeek);
 			set('seenCutscene', PlayState.seenCutscene);
 			set('week', WeekData.weeksList[PlayState.storyWeek]);
-			set('difficultyName', CoolUtil.difficulties[PlayState.storyDifficulty]);
+			set('difficultyName', DifficultyUtil.difficulties[PlayState.storyDifficulty]);
 			set('songLength', flixel.FlxG.sound.music.length);
 			set('healthGainMult', PlayState.instance.healthGain);
 			set('healthLossMult', PlayState.instance.healthLoss);
@@ -81,7 +86,7 @@ class FunkinScript {
 		{
 			set("inPlaystate", false);
 		}
-		
+
 		set('inGameOver', false);
 		set('downscroll', ClientPrefs.downScroll);
 		set('middlescroll', ClientPrefs.middleScroll);
@@ -108,7 +113,7 @@ class FunkinScript {
 		set('curStep', 0);
 		set('curDecBeat', 0);
 		set('curDecStep', 0);
-		set('version', MainMenuState.psychEngineVersion.trim());
+		set('version', Main.NM_VERSION.trim());
 	}
 }
 
@@ -116,7 +121,7 @@ interface IFunkinScript
 {
 	public var scriptName:String;
 	public var scriptType:ScriptType;
-	public function set(variable:String, data:Dynamic): Void;
+	public function set(variable:String, data:Dynamic):Void;
 	public function get(key:String):Dynamic;
 	public function call(func:String, ?args:Array<Dynamic>):Dynamic;
 	public function stop():Void;
@@ -126,5 +131,4 @@ enum abstract ScriptType(String) to String from String
 {
 	public var LUA:String = 'lua';
 	public var HSCRIPT:String = 'hscript';
-	
 }

@@ -2,15 +2,15 @@ package funkin.objects.stageobjects;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.graphics.frames.FlxAtlasFrames;
-import funkin.data.*;
 
 class TankmenBG extends FlxSprite
 {
 	public static var animationNotes:Array<Dynamic> = [];
+
 	private var tankSpeed:Float;
 	private var endingOffset:Float;
 	private var goingRight:Bool;
+
 	public var strumTime:Float;
 
 	public function new(x:Float, y:Float, facingRight:Bool)
@@ -49,23 +49,21 @@ class TankmenBG extends FlxSprite
 
 		visible = (x > -0.5 * FlxG.width && x < 1.2 * FlxG.width);
 
-		if(animation.curAnim.name == "run")
+		if (animation.curAnim.name == "run")
 		{
 			var speed:Float = (Conductor.songPosition - strumTime) * tankSpeed;
-			if(goingRight)
-				x = (0.02 * FlxG.width - endingOffset) + speed;
-			else
-				x = (0.74 * FlxG.width + endingOffset) - speed;
+			if (goingRight) x = (0.02 * FlxG.width - endingOffset) + speed;
+			else x = (0.74 * FlxG.width + endingOffset) - speed;
 		}
-		else if(animation.curAnim.finished)
+		else if (animation.curAnim.finished)
 		{
 			kill();
 		}
 
-		if(Conductor.songPosition > strumTime)
+		if (Conductor.songPosition > strumTime)
 		{
 			animation.play('shot');
-			if(goingRight)
+			if (goingRight)
 			{
 				offset.x = 300;
 				offset.y = 200;

@@ -3,7 +3,8 @@ package funkin.objects.shader;
 import flixel.system.FlxAssets.FlxShader;
 
 // https://www.shadertoy.com/view/MscGzl
-class GlitchShaderA extends FlxShader {
+class GlitchShaderA extends FlxShader
+{
 	@:isVar
 	public var amount(get, set):Float = 0;
 
@@ -16,6 +17,7 @@ class GlitchShaderA extends FlxShader {
 	{
 		return GlitchAmount.value[0] = val;
 	}
+
 	@:glFragmentSource('
         #pragma header
         uniform vec2 iResolution;
@@ -55,24 +57,31 @@ class GlitchShaderA extends FlxShader {
                             (0.5 - (dot(color, postColor) - 1.5)) * amount);
         }
     ')
-    public function new() {
-        super();
+	public function new()
+	{
+		super();
 		GlitchAmount.value = [0];
-        iResolution.value = [0, 0];
+		iResolution.value = [0, 0];
 		iTime.value = [0];
-    }
+	}
 }
 
 // https://www.shadertoy.com/view/4dtGzl
-class GlitchShaderB extends FlxShader {
-    @:isVar
-    public var amount(get, set):Float = 0;
-    function get_amount(){
-        return Amount.value[0];
-    }	function set_amount(val:Float)
+class GlitchShaderB extends FlxShader
+{
+	@:isVar
+	public var amount(get, set):Float = 0;
+
+	function get_amount()
+	{
+		return Amount.value[0];
+	}
+
+	function set_amount(val:Float)
 	{
 		return Amount.value[0] = val;
 	}
+
 	@:glFragmentSource('
     #pragma header
     #define PI 3.14159265
@@ -183,14 +192,17 @@ void main()
 }
 
     ')
-    public function new() {
-        super();
+	public function new()
+	{
+		super();
 		Amount.value = [0];
 		iTime.value = [0];
 		iResolution.value = [0, 0];
-    }
+	}
 }
-class Fuck extends FlxShader {
+
+class Fuck extends FlxShader
+{
 	@:isVar
 	public var amount(get, set):Float = 0;
 	@:isVar
@@ -216,8 +228,7 @@ class Fuck extends FlxShader {
 		return SPEED.value[0] = val;
 	}
 
-
-    @:glFragmentSource('
+	@:glFragmentSource('
     #pragma header
     //inputs
     uniform float AMT; //0 - 1 glitch amount
@@ -279,10 +290,11 @@ void main()
 	gl_FragColor = outCol;
 }
 ')
-    public function new(){
-        super();
+	public function new()
+	{
+		super();
 		AMT.value = [0];
 		SPEED.value = [0.6];
-        iTime.value = [0];
-    }
+		iTime.value = [0];
+	}
 }

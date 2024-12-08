@@ -1,10 +1,11 @@
 package funkin.objects.shader;
 
 import flixel.system.FlxAssets.FlxShader;
+
 using StringTools;
 
-
-class FuckScorp extends FlxShader {
+class FuckScorp extends FlxShader
+{
 	@:glFragmentSource('
 #pragma header
 
@@ -205,10 +206,10 @@ void main()
 	gl_FragColor = color;
 }
 ')
-
 	var topPrefix:String = "";
 
-	public function new() {
+	public function new()
+	{
 		topPrefix = "#version 120\n\n";
 		__glSourceDirty = true;
 
@@ -220,16 +221,20 @@ void main()
 
 	public var interlace(get, set):Bool;
 
-	function get_interlace() {
+	function get_interlace()
+	{
 		return this.uInterlace.value[0] == 1.0;
 	}
-	function set_interlace(val:Bool) {
+
+	function set_interlace(val:Bool)
+	{
 		this.uInterlace.value[0] = val ? 1.0 : 0.0;
 		return val;
 	}
 
-	override function __updateGL() {
-		//this.uFrame.value[0]++;
+	override function __updateGL()
+	{
+		// this.uFrame.value[0]++;
 		this.uFrame.value[0] = (this.uFrame.value[0] + 1) % 2;
 
 		super.__updateGL();
@@ -251,7 +256,6 @@ void main()
 			__processGLData(glVertexSource, "uniform");
 			__processGLData(glFragmentSource, "uniform");
 		}
-
 		@:privateAccess if (__context != null && program == null)
 		{
 			var gl = __context.gl;

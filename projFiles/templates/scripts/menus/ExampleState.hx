@@ -6,7 +6,7 @@ import funkin.states.editors.HScriptState;
     Make SURE that you import HScriptState (as shown above) if you want to access the state!
     
         Example of switching:
-         MusicBeatState.switchState(new HscriptState('StateName'));
+         FlxG.switchState(new HscriptState('StateName'));
 
 **/
 

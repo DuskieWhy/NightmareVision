@@ -1,4 +1,5 @@
 package funkin.modchart.modifiers;
+
 import flixel.math.FlxRect;
 import funkin.modchart.Modifier.ModifierOrder;
 import flixel.FlxSprite;
@@ -8,68 +9,59 @@ import math.Vector3;
 import funkin.states.*;
 import funkin.objects.*;
 
-class ReverseModifier extends NoteModifier {
+class ReverseModifier extends NoteModifier
+{
 	inline function lerp(a:Float, b:Float, c:Float)
 	{
 		return a + (b - a) * c;
 	}
-	override function getOrder()return REVERSE;
-    override function getName()return 'reverse';
 
-    public function getReverseValue(dir:Int, player:Int, ?scrolling=false){
-        var suffix = '';
-        if(scrolling==true)suffix='Scroll';
-        var receptors = modMgr.receptors[player];
-        var kNum = receptors.length;
-        var val:Float = 0;
-        if(dir>=kNum/2)
-            val += getSubmodValue("split" + suffix,player);
+	override function getOrder() return REVERSE;
 
-        if((dir%2)==1)
-            val += getSubmodValue("alternate" + suffix,player);
+	override function getName() return 'reverse';
 
-        var first = kNum/4;
-        var last = kNum-1-first;
+	public function getReverseValue(dir:Int, player:Int, ?scrolling = false)
+	{
+		var suffix = '';
+		if (scrolling == true) suffix = 'Scroll';
+		var receptors = modMgr.receptors[player];
+		var kNum = receptors.length;
+		var val:Float = 0;
+		if (dir >= kNum / 2) val += getSubmodValue("split" + suffix, player);
 
-        if(dir>=first && dir<=last)
-            val += getSubmodValue("cross" + suffix,player);
-        
+		if ((dir % 2) == 1) val += getSubmodValue("alternate" + suffix, player);
 
-        if(suffix=='')
-            val += getValue(player) + getSubmodValue("reverse" + Std.string(dir),player);
-        else
-            val += getSubmodValue("reverse" + suffix,player);
-        
+		var first = kNum / 4;
+		var last = kNum - 1 - first;
 
-        if(getSubmodValue("unboundedReverse",player)==0){
-            val %=2;
-            if(val>1)val=2-val;
-        }
+		if (dir >= first && dir <= last) val += getSubmodValue("cross" + suffix, player);
 
+		if (suffix == '') val += getValue(player) + getSubmodValue("reverse" + Std.string(dir), player);
+		else val += getSubmodValue("reverse" + suffix, player);
 
+		if (getSubmodValue("unboundedReverse", player) == 0)
+		{
+			val %= 2;
+			if (val > 1) val = 2 - val;
+		}
 
+		if (ClientPrefs.downScroll) val = 1 - val;
 
-        if(ClientPrefs.downScroll)
-            val = 1-val;
+		return val;
+	}
 
-        return val;
-    }
+	public function getScrollReversePerc(dir:Int, player:Int) return getReverseValue(dir, player) * 100;
 
-    public function getScrollReversePerc(dir:Int, player:Int)
-        return getReverseValue(dir,player) * 100;
+	override function shouldExecute(player:Int, val:Float) return true;
 
-	override function shouldExecute(player:Int,val:Float)
-        return true;
+	override function ignoreUpdateNote() return false;
 
-	override function ignoreUpdateNote()
-		return false;
-    
 	override function updateNote(beat:Float, daNote:Note, pos:Vector3, player:Int)
 	{
 		if (daNote.isSustainNote)
 		{
 			var y = pos.y + daNote.offsetY;
-            var revPerc = getReverseValue(daNote.noteData, player);
+			var revPerc = getReverseValue(daNote.noteData, player);
 			var strumLine = modMgr.receptors[player][daNote.noteData];
 			var shitGotHit = (strumLine.sustainReduce
 				&& daNote.isSustainNote
@@ -77,7 +69,7 @@ class ReverseModifier extends NoteModifier {
 				&& (!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit))));
 			if (shitGotHit)
 			{
-				var center:Float = strumLine.y + Note.swagWidth* 0.5;
+				var center:Float = strumLine.y + Note.swagWidth * 0.5;
 				if (revPerc >= 0.5)
 				{
 					if (y - daNote.offset.y * daNote.scale.y + daNote.height >= center)
@@ -102,52 +94,65 @@ class ReverseModifier extends NoteModifier {
 				}
 			}
 		}
-    }
+	}
+
 	override function getPos(time:Float, visualDiff:Float, timeDiff:Float, beat:Float, pos:Vector3, data:Int, player:Int, obj:FlxSprite)
 	{
-        var perc = getReverseValue(data, player);
+		var perc = getReverseValue(data, player);
 		var shift = CoolUtil.scale(perc, 0, 1, 50, FlxG.height - 150);
 		var mult = CoolUtil.scale(perc, 0, 1, 1, -1);
-		shift = CoolUtil.scale(getSubmodValue("centered", player), 0, 1, shift, (FlxG.height/2) - 56);
+		shift = CoolUtil.scale(getSubmodValue("centered", player), 0, 1, shift, (FlxG.height / 2) - 56);
 
 		pos.y = shift + (visualDiff * mult);
 
 		// TODO: rewrite this, I don't like this and I feel it could be solved better by changing the note's origin instead -neb
 		// also move it to Reverse modifier
-        if((obj is Note)){
-            var note:Note = cast obj;
-            if (note.isSustainNote && perc > 0)
-            {
-                var daY = pos.y;
+		if ((obj is Note))
+		{
+			var note:Note = cast obj;
+			if (note.isSustainNote && perc > 0)
+			{
+				var daY = pos.y;
 				var fakeCrochet:Float = (60 / PlayState.SONG.bpm) * 1000;
-                var songSpeed:Float = PlayState.instance.songSpeed * note.multSpeed;
-                if (note.animation.curAnim.name.endsWith('end'))
-                {
+				var songSpeed:Float = PlayState.instance.songSpeed * note.multSpeed;
+				if (note.animation.curAnim.name.endsWith('end'))
+				{
 					daY += 10.5 * (fakeCrochet * 0.0025) * 1.5 * songSpeed + (46 * (songSpeed - 1));
 					daY -= 46 * (1 - (fakeCrochet / 600)) * songSpeed;
-                    /*if (PlayState.isPixelStage)
-						daY += 8;
-                    else*/
-						daY -= 19;
-                }
-				daY += (Note.swagWidth* 0.5) - (60.5 * (songSpeed - 1));
+					/*if (PlayState.isPixelStage)
+							daY += 8;
+						else */
+					daY -= 19;
+				}
+				daY += (Note.swagWidth * 0.5) - (60.5 * (songSpeed - 1));
 				daY += 27.5 * ((PlayState.SONG.bpm * 0.01) - 1) * (songSpeed - 1);
 
 				pos.y = lerp(pos.y, daY, perc);
-            }
-        }
+			}
+		}
 
 		return pos;
 	}
 
-    override function getSubmods(){
-        var subMods:Array<String> = ["cross", "split", "alternate", "reverseScroll", "crossScroll", "splitScroll", "alternateScroll", "centered", "unboundedReverse"];
+	override function getSubmods()
+	{
+		var subMods:Array<String> = [
+			"cross",
+			"split",
+			"alternate",
+			"reverseScroll",
+			"crossScroll",
+			"splitScroll",
+			"alternateScroll",
+			"centered",
+			"unboundedReverse"
+		];
 
-        var receptors = modMgr.receptors[0];
+		var receptors = modMgr.receptors[0];
 		for (i in 0...PlayState.SONG.keys)
 		{
-            subMods.push('reverse${i}');
-        }
-        return subMods;
-    }
+			subMods.push('reverse${i}');
+		}
+		return subMods;
+	}
 }

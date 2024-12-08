@@ -1,8 +1,8 @@
 // @author Nebula_Zorua
-
 package funkin.modchart.events;
 
-class ModEvent extends BaseEvent {
+class ModEvent extends BaseEvent
+{
 	public var modName:String = '';
 	public var endVal:Float = 0;
 	public var player:Int = -1;

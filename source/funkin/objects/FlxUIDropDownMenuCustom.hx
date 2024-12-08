@@ -20,20 +20,16 @@ import flixel.addons.ui.FlxUIAssets;
 import flixel.addons.ui.StrNameLabel;
 import flixel.addons.ui.FlxUI;
 
-
 /*
 
-THIS IS AN EDIT OF FlxUIDropDownMenu I'VE MADE BECAUSE I'M TIRED OF IT NOT SUPPORTING SCROLLING UP/DOWN
-BAH!
+	THIS IS AN EDIT OF FlxUIDropDownMenu I'VE MADE BECAUSE I'M TIRED OF IT NOT SUPPORTING SCROLLING UP/DOWN
+	BAH!
 
-The differences are the following:
-* Support to scrolling up/down with mouse wheel or arrow keys
-* THe default drop direction is "Down" instead of "Automatic"
+	The differences are the following:
+	* Support to scrolling up/down with mouse wheel or arrow keys
+	* THe default drop direction is "Down" instead of "Automatic"
 
-*/
-
-
-
+ */
 /**
  * @author larsiusprime
  */
@@ -54,7 +50,8 @@ class FlxUIDropDownMenuCustom extends FlxUIGroup implements IFlxUIWidget impleme
 	private var _selectedId:String;
 	private var _selectedLabel:String;
 
-	private var currentScroll:Int = 0; //Handles the scrolling
+	private var currentScroll:Int = 0; // Handles the scrolling
+
 	public var canScroll:Bool = true;
 
 	private function get_selectedId():String
@@ -64,8 +61,7 @@ class FlxUIDropDownMenuCustom extends FlxUIGroup implements IFlxUIWidget impleme
 
 	private function set_selectedId(str:String):String
 	{
-		if (_selectedId == str)
-			return str;
+		if (_selectedId == str) return str;
 
 		var i:Int = 0;
 		for (btn in list)
@@ -98,8 +94,7 @@ class FlxUIDropDownMenuCustom extends FlxUIGroup implements IFlxUIWidget impleme
 
 	private function set_selectedLabel(str:String):String
 	{
-		if (_selectedLabel == str)
-			return str;
+		if (_selectedLabel == str) return str;
 
 		var i:Int = 0;
 		for (btn in list)
@@ -174,8 +169,7 @@ class FlxUIDropDownMenuCustom extends FlxUIGroup implements IFlxUIWidget impleme
 		header = Header;
 		dropPanel = DropPanel;
 
-		if (header == null)
-			header = new FlxUIDropDownHeader();
+		if (header == null) header = new FlxUIDropDownHeader();
 
 		if (dropPanel == null)
 		{
@@ -222,22 +216,23 @@ class FlxUIDropDownMenuCustom extends FlxUIGroup implements IFlxUIWidget impleme
 	{
 		var buttonHeight = header.background.height;
 		dropPanel.y = header.background.y;
-		if (dropsUp())
-			dropPanel.y -= getPanelHeight();
-		else
-			dropPanel.y += buttonHeight;
+		if (dropsUp()) dropPanel.y -= getPanelHeight();
+		else dropPanel.y += buttonHeight;
 
 		var offset = dropPanel.y;
-		for (i in 0...currentScroll) { //Hides buttons that goes before the current scroll
+		for (i in 0...currentScroll)
+		{ // Hides buttons that goes before the current scroll
 			var button:FlxUIButton = list[i];
-			if(button != null) {
+			if (button != null)
+			{
 				button.y = -99999;
 			}
 		}
 		for (i in currentScroll...list.length)
 		{
 			var button:FlxUIButton = list[i];
-			if(button != null) {
+			if (button != null)
+			{
 				button.y = offset;
 				offset += buttonHeight;
 			}
@@ -433,17 +428,20 @@ class FlxUIDropDownMenuCustom extends FlxUIGroup implements IFlxUIWidget impleme
 		#if FLX_MOUSE
 		if (dropPanel.visible)
 		{
-			if(list.length > 1 && canScroll) {
-				if(FlxG.mouse.wheel > 0 || FlxG.keys.justPressed.UP) {
+			if (list.length > 1 && canScroll)
+			{
+				if (FlxG.mouse.wheel > 0 || FlxG.keys.justPressed.UP)
+				{
 					// Go up
 					--currentScroll;
-					if(currentScroll < 0) currentScroll = 0;
+					if (currentScroll < 0) currentScroll = 0;
 					updateButtonPositions();
 				}
-				else if (FlxG.mouse.wheel < 0 || FlxG.keys.justPressed.DOWN) {
+				else if (FlxG.mouse.wheel < 0 || FlxG.keys.justPressed.DOWN)
+				{
 					// Go down
 					currentScroll++;
-					if(currentScroll >= list.length) currentScroll = list.length-1;
+					if (currentScroll >= list.length) currentScroll = list.length - 1;
 					updateButtonPositions();
 				}
 			}
@@ -476,7 +474,8 @@ class FlxUIDropDownMenuCustom extends FlxUIGroup implements IFlxUIWidget impleme
 		}
 
 		dropPanel.visible = b;
-		if(currentScroll != 0) {
+		if (currentScroll != 0)
+		{
 			currentScroll = 0;
 			updateButtonPositions();
 		}

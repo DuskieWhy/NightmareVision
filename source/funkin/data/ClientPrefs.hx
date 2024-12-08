@@ -5,18 +5,16 @@ import flixel.FlxG;
 import flixel.util.FlxSave;
 import flixel.util.FlxColor;
 import flixel.input.keyboard.FlxKey;
-import flixel.graphics.FlxGraphic;
 import funkin.data.*;
-import funkin.states.*;
 import funkin.data.Controls.KeyboardScheme;
 
-class ClientPrefs {
-
+class ClientPrefs
+{
 	//-----------------------------------------//
 	public static var gpuCaching:Bool = true;
 
-	//we need to rethink the loading cuz the current setup does not work the best
-	public static var loadingThreads:Int = Math.floor(Std.parseInt(Sys.getEnv("NUMBER_OF_PROCESSORS"))/2);
+	// we need to rethink the loading cuz the current setup does not work the best
+	public static var loadingThreads:Int = Math.floor(Std.parseInt(Sys.getEnv("NUMBER_OF_PROCESSORS")) / 2);
 	public static var multicoreLoading:Bool = false;
 
 	public static var downScroll:Bool = false;
@@ -49,7 +47,7 @@ class ClientPrefs {
 		[-80, -20, 0], // 48th
 		[160, -15, 0], // 64th
 		[-120, -70, -35], // 96th
-		[-120, -70, -35]// 192nd
+		[-120, -70, -35] // 192nd
 	];
 	public static var quantStepmania:Array<Array<Int>> = [
 		[10, -20, 0], // 4th
@@ -62,7 +60,7 @@ class ClientPrefs {
 		[-35, 50, 30], // 48th
 		[160, -15, 0], // 64th
 		[-120, -70, -35], // 96th
-		[-120, -70, -35]// 192nd
+		[-120, -70, -35] // 192nd
 	];
 	public static var ghostTapping:Bool = true;
 	public static var timeBarType:String = 'Time Left';
@@ -102,34 +100,29 @@ class ClientPrefs {
 	public static var sickWindow:Float = 45.0;
 	public static var goodWindow:Float = 90.0;
 	public static var badWindow:Float = 135.0;
-
 	public static var safeFrames:Float = 10.0;
 
-	//Every key has two binds, add your key bind down here and then add your control on options/ControlsSubState.hx and Controls.hx
+	// Every key has two binds, add your key bind down here and then add your control on options/ControlsSubState.hx and Controls.hx
 	public static var keyBinds:Map<String, Array<FlxKey>> = [
-		//Key Bind, Name for ControlsSubState
-		'note_left'		=> [A, LEFT],
-		'note_down'		=> [S, DOWN],
-		'note_up'		=> [W, UP],
-		'note_right'	=> [D, RIGHT],
-		'dodge' 		=> [SPACE, NONE],
-
-		'ui_left'		=> [A, LEFT],
-		'ui_down'		=> [S, DOWN],
-		'ui_up'			=> [W, UP],
-		'ui_right'		=> [D, RIGHT],
-
-		'accept'		=> [SPACE, ENTER],
-		'back'			=> [BACKSPACE, ESCAPE],
-		'pause'			=> [ENTER, ESCAPE],
-		'reset'			=> [R, NONE],
-
-		'volume_mute'	=> [ZERO, NONE],
-		'volume_up'		=> [NUMPADPLUS, PLUS],
-		'volume_down'	=> [NUMPADMINUS, MINUS],
-
-		'debug_1'		=> [SEVEN, NONE],
-		'debug_2'		=> [EIGHT, NONE]
+		// Key Bind, Name for ControlsSubState
+		'note_left' => [A, LEFT],
+		'note_down' => [S, DOWN],
+		'note_up' => [W, UP],
+		'note_right' => [D, RIGHT],
+		'dodge' => [SPACE, NONE],
+		'ui_left' => [A, LEFT],
+		'ui_down' => [S, DOWN],
+		'ui_up' => [W, UP],
+		'ui_right' => [D, RIGHT],
+		'accept' => [SPACE, ENTER],
+		'back' => [BACKSPACE, ESCAPE],
+		'pause' => [ENTER, ESCAPE],
+		'reset' => [R, NONE],
+		'volume_mute' => [ZERO, NONE],
+		'volume_up' => [NUMPADPLUS, PLUS],
+		'volume_down' => [NUMPADMINUS, MINUS],
+		'debug_1' => [SEVEN, NONE],
+		'debug_2' => [EIGHT, NONE]
 	];
 	public static var editorUIColor:FlxColor = FlxColor.fromRGB(102, 163, 255);
 	public static var editorGradColors:Array<FlxColor> = [FlxColor.fromRGB(83, 21, 78), FlxColor.fromRGB(21, 62, 83)];
@@ -138,19 +131,24 @@ class ClientPrefs {
 
 	public static var chartPresetList:Array<String> = ["Default"];
 	public static var chartPresets:Map<String, Array<Dynamic>> = [
-		"Default" => [[FlxColor.fromRGB(0,0,0), FlxColor.fromRGB(0,0,0)], false, [FlxColor.fromRGB(255,255,255), FlxColor.fromRGB(210, 210, 210)], FlxColor.fromRGB(250,250,250)]
+		"Default" => [
+			[FlxColor.fromRGB(0, 0, 0), FlxColor.fromRGB(0, 0, 0)],
+			false,
+			[FlxColor.fromRGB(255, 255, 255), FlxColor.fromRGB(210, 210, 210)],
+			FlxColor.fromRGB(250, 250, 250)
+		]
 	];
 
 	public static var defaultKeys:Map<String, Array<FlxKey>> = null;
 
-	public static function loadDefaultKeys() {
+	public static function loadDefaultKeys()
+	{
 		defaultKeys = keyBinds.copy();
-		//trace(defaultKeys);
+		// trace(defaultKeys);
 	}
 
-	public static function saveSettings() {
-
-
+	public static function saveSettings()
+	{
 		FlxG.save.data.gpuCaching = gpuCaching;
 		FlxG.save.data.editorGradColors = editorGradColors;
 		FlxG.save.data.editorBoxColors = editorBoxColors;
@@ -201,155 +199,198 @@ class ClientPrefs {
 		FlxG.save.flush();
 
 		var save:FlxSave = new FlxSave();
-		save.bind('controls_v2', 'ninjamuffin99'); //Placing this in a separate save so that it can be manually deleted without removing your Score and stuff
+		save.bind('controls_v2', 'ninjamuffin99'); // Placing this in a separate save so that it can be manually deleted without removing your Score and stuff
 		save.data.customControls = keyBinds;
 		save.flush();
 		FlxG.log.add("Settings saved!");
 	}
 
-	public static function loadPrefs() {
-
+	public static function loadPrefs()
+	{
 		if (FlxG.save.data.gpuCaching != null) FlxG.save.data.gpuCaching = gpuCaching;
-		
-		if(FlxG.save.data.editorGradColors != null){
+
+		if (FlxG.save.data.editorGradColors != null)
+		{
 			editorGradColors = FlxG.save.data.editorGradColors;
 		}
-		if(FlxG.save.data.editorBoxColors != null){
+		if (FlxG.save.data.editorBoxColors != null)
+		{
 			editorBoxColors = FlxG.save.data.editorBoxColors;
 		}
-		if(FlxG.save.data.editorUIColor != null){
+		if (FlxG.save.data.editorUIColor != null)
+		{
 			editorUIColor = FlxG.save.data.editorUIColor;
 		}
-		if(FlxG.save.data.editorGradVis != null){
+		if (FlxG.save.data.editorGradVis != null)
+		{
 			editorGradVis = FlxG.save.data.editorGradVis;
 		}
-		if(FlxG.save.data.chartPresetList != null){
+		if (FlxG.save.data.chartPresetList != null)
+		{
 			chartPresetList = FlxG.save.data.chartPresetList;
 		}
-		if(FlxG.save.data.chartPresets != null){
+		if (FlxG.save.data.chartPresets != null)
+		{
 			chartPresets = FlxG.save.data.chartPresets;
 		}
-		if(FlxG.save.data.downScroll != null) {
+		if (FlxG.save.data.downScroll != null)
+		{
 			downScroll = FlxG.save.data.downScroll;
 		}
-		if(FlxG.save.data.middleScroll != null) {
+		if (FlxG.save.data.middleScroll != null)
+		{
 			middleScroll = FlxG.save.data.middleScroll;
 		}
-		if(FlxG.save.data.opponentStrums != null) {
+		if (FlxG.save.data.opponentStrums != null)
+		{
 			opponentStrums = FlxG.save.data.opponentStrums;
 		}
-		if(FlxG.save.data.showFPS != null) {
+		if (FlxG.save.data.showFPS != null)
+		{
 			showFPS = FlxG.save.data.showFPS;
-			if(Main.fpsVar != null) {
+			if (Main.fpsVar != null)
+			{
 				Main.fpsVar.visible = showFPS;
 			}
 		}
-		if(FlxG.save.data.flashing != null) {
+		if (FlxG.save.data.flashing != null)
+		{
 			flashing = FlxG.save.data.flashing;
 		}
-		if(FlxG.save.data.globalAntialiasing != null) {
+		if (FlxG.save.data.globalAntialiasing != null)
+		{
 			globalAntialiasing = FlxG.save.data.globalAntialiasing;
 		}
-		if(FlxG.save.data.noteSplashes != null) {
+		if (FlxG.save.data.noteSplashes != null)
+		{
 			noteSplashes = FlxG.save.data.noteSplashes;
 		}
-		if(FlxG.save.data.lowQuality != null) {
+		if (FlxG.save.data.lowQuality != null)
+		{
 			lowQuality = FlxG.save.data.lowQuality;
 		}
-		if(FlxG.save.data.framerate == null) {
+		if (FlxG.save.data.framerate == null)
+		{
 			framerate = Std.int(FlxMath.bound(FlxG.stage.application.window.displayMode.refreshRate, 60, 240));
 		}
-		if(FlxG.save.data.framerate != null) {
-
+		if (FlxG.save.data.framerate != null)
+		{
 			framerate = FlxG.save.data.framerate;
-			if(framerate > FlxG.drawFramerate) {
+			if (framerate > FlxG.drawFramerate)
+			{
 				FlxG.updateFramerate = framerate;
 				FlxG.drawFramerate = framerate;
-			} else {
+			}
+			else
+			{
 				FlxG.drawFramerate = framerate;
 				FlxG.updateFramerate = framerate;
 			}
 		}
 
-		if(FlxG.save.data.camZooms != null) {
+		if (FlxG.save.data.camZooms != null)
+		{
 			camZooms = FlxG.save.data.camZooms;
 		}
-		if(FlxG.save.data.hideHud != null) {
+		if (FlxG.save.data.hideHud != null)
+		{
 			hideHud = FlxG.save.data.hideHud;
 		}
-		if(FlxG.save.data.multicoreLoading != null) {
+		if (FlxG.save.data.multicoreLoading != null)
+		{
 			multicoreLoading = FlxG.save.data.multicoreLoading;
 		}
 		if (FlxG.save.data.camMovement != null)
 		{
 			camMovement = FlxG.save.data.camMovement;
 		}
-		if(FlxG.save.data.loadingThreads != null) {
+		if (FlxG.save.data.loadingThreads != null)
+		{
 			loadingThreads = FlxG.save.data.loadingThreads;
-			if(loadingThreads > Math.floor(Std.parseInt(Sys.getEnv("NUMBER_OF_PROCESSORS")))){
+			if (loadingThreads > Math.floor(Std.parseInt(Sys.getEnv("NUMBER_OF_PROCESSORS"))))
+			{
 				loadingThreads = Math.floor(Std.parseInt(Sys.getEnv("NUMBER_OF_PROCESSORS")));
 				FlxG.save.data.loadingThreads = loadingThreads;
 			}
 		}
-		if(FlxG.save.data.noteOffset != null) {
+		if (FlxG.save.data.noteOffset != null)
+		{
 			noteOffset = FlxG.save.data.noteOffset;
 		}
-		if(FlxG.save.data.arrowHSV != null) {
+		if (FlxG.save.data.arrowHSV != null)
+		{
 			arrowHSV = FlxG.save.data.arrowHSV;
 		}
-		if(FlxG.save.data.quantHSV != null) {
+		if (FlxG.save.data.quantHSV != null)
+		{
 			quantHSV = FlxG.save.data.quantHSV;
 		}
-		if(FlxG.save.data.noteSkin != null) {
+		if (FlxG.save.data.noteSkin != null)
+		{
 			noteSkin = FlxG.save.data.noteSkin;
 		}
-		if(FlxG.save.data.ghostTapping != null) {
+		if (FlxG.save.data.ghostTapping != null)
+		{
 			ghostTapping = FlxG.save.data.ghostTapping;
 		}
-		if(FlxG.save.data.timeBarType != null) {
+		if (FlxG.save.data.timeBarType != null)
+		{
 			timeBarType = FlxG.save.data.timeBarType;
 		}
-		if(FlxG.save.data.scoreZoom != null) {
+		if (FlxG.save.data.scoreZoom != null)
+		{
 			scoreZoom = FlxG.save.data.scoreZoom;
 		}
-		if(FlxG.save.data.noReset != null) {
+		if (FlxG.save.data.noReset != null)
+		{
 			noReset = FlxG.save.data.noReset;
 		}
-		if(FlxG.save.data.healthBarAlpha != null) {
+		if (FlxG.save.data.healthBarAlpha != null)
+		{
 			healthBarAlpha = FlxG.save.data.healthBarAlpha;
 		}
-		if(FlxG.save.data.comboOffset != null) {
+		if (FlxG.save.data.comboOffset != null)
+		{
 			comboOffset = FlxG.save.data.comboOffset;
 		}
 
-		if(FlxG.save.data.ratingOffset != null) {
+		if (FlxG.save.data.ratingOffset != null)
+		{
 			ratingOffset = FlxG.save.data.ratingOffset;
 		}
-		if(FlxG.save.data.epicWindow != null) {
+		if (FlxG.save.data.epicWindow != null)
+		{
 			epicWindow = FlxG.save.data.epicWindow;
 		}
-		if(FlxG.save.data.sickWindow != null) {
+		if (FlxG.save.data.sickWindow != null)
+		{
 			sickWindow = FlxG.save.data.sickWindow;
 		}
-		if(FlxG.save.data.goodWindow != null) {
+		if (FlxG.save.data.goodWindow != null)
+		{
 			goodWindow = FlxG.save.data.goodWindow;
 		}
-		if(FlxG.save.data.badWindow != null) {
+		if (FlxG.save.data.badWindow != null)
+		{
 			badWindow = FlxG.save.data.badWindow;
 		}
-		if(FlxG.save.data.safeFrames != null) {
+		if (FlxG.save.data.safeFrames != null)
+		{
 			safeFrames = FlxG.save.data.safeFrames;
 		}
-		if(FlxG.save.data.controllerMode != null) {
+		if (FlxG.save.data.controllerMode != null)
+		{
 			controllerMode = FlxG.save.data.controllerMode;
 		}
-		if(FlxG.save.data.hitsoundVolume != null) {
+		if (FlxG.save.data.hitsoundVolume != null)
+		{
 			hitsoundVolume = FlxG.save.data.hitsoundVolume;
 		}
-		if(FlxG.save.data.pauseMusic != null) {
+		if (FlxG.save.data.pauseMusic != null)
+		{
 			pauseMusic = FlxG.save.data.pauseMusic;
 		}
-		if(FlxG.save.data.gameplaySettings != null)
+		if (FlxG.save.data.gameplaySettings != null)
 		{
 			var savedMap:Map<String, Dynamic> = FlxG.save.data.gameplaySettings;
 			for (name => value in savedMap)
@@ -359,7 +400,7 @@ class ClientPrefs {
 		}
 
 		// flixel automatically saves your volume!
-		if(FlxG.save.data.volume != null)
+		if (FlxG.save.data.volume != null)
 		{
 			FlxG.sound.volume = FlxG.save.data.volume;
 		}
@@ -370,20 +411,24 @@ class ClientPrefs {
 
 		var save:FlxSave = new FlxSave();
 		save.bind('controls_v2', 'ninjamuffin99');
-		if(save != null && save.data.customControls != null) {
+		if (save != null && save.data.customControls != null)
+		{
 			var loadedControls:Map<String, Array<FlxKey>> = save.data.customControls;
-			for (control => keys in loadedControls) {
+			for (control => keys in loadedControls)
+			{
 				keyBinds.set(control, keys);
 			}
 			reloadControls();
 		}
 	}
 
-	inline public static function getGameplaySetting(name:String, defaultValue:Dynamic):Dynamic {
+	inline public static function getGameplaySetting(name:String, defaultValue:Dynamic):Dynamic
+	{
 		return /*PlayState.isStoryMode ? defaultValue : */ (gameplaySettings.exists(name) ? gameplaySettings.get(name) : defaultValue);
 	}
 
-	public static function reloadControls() {
+	public static function reloadControls()
+	{
 		PlayerSettings.player1.controls.setKeyboardScheme(KeyboardScheme.Solo);
 
 		FlxG.sound.muteKeys = Init.muteKeys;
@@ -392,22 +437,25 @@ class ClientPrefs {
 		Init.muteKeys = copyKey(keyBinds.get('volume_mute'));
 		Init.volumeDownKeys = copyKey(keyBinds.get('volume_down'));
 		Init.volumeUpKeys = copyKey(keyBinds.get('volume_up'));
-
 	}
-	public static function copyKey(arrayToCopy:Array<FlxKey>):Array<FlxKey> {
+
+	public static function copyKey(arrayToCopy:Array<FlxKey>):Array<FlxKey>
+	{
 		var copiedArray:Array<FlxKey> = arrayToCopy.copy();
 		var i:Int = 0;
 		var len:Int = copiedArray.length;
 
-		while (i < len) {
-			if(copiedArray[i] == NONE) {
+		while (i < len)
+		{
+			if (copiedArray[i] == NONE)
+			{
 				copiedArray.remove(NONE);
 				--i;
 			}
 			i++;
 			len = copiedArray.length;
 		}
-		trace(copiedArray);
+		// trace(copiedArray);
 		return copiedArray;
 	}
 }
