@@ -343,6 +343,10 @@ class PlayState extends MusicBeatState
 
 	public var playHUD:BaseHUD = null;
 
+
+	public var soundMode:String = ''; //crude setup but its done quick. essentially make this = "SWAP" in the case the vocals ALSO contain the inst. it will mute the inst track when vocals play and vice versa
+
+
 	@:noCompletion public function set_cpuControlled(val:Bool)
 	{
 		if (playFields != null && playFields.members.length > 0)
@@ -1575,6 +1579,9 @@ class PlayState extends MusicBeatState
 		FlxG.sound.music.onComplete = finishSong.bind(false);
 		vocals.play();
 		vocals.volume = 1;
+
+		FlxG.sound.music.volume = soundMode == "SWAP" ? 0 : 1;
+
 
 		if (startOnTime > 0)
 		{
@@ -3691,6 +3698,9 @@ class PlayState extends MusicBeatState
 		// trace(noteDiff, ' ' + Math.abs(note.strumTime - Conductor.songPosition));
 
 		vocals.playerVolume = 1;
+		
+		if (soundMode == 'SWAP') FlxG.sound.music.volume = 0;
+
 		var placement:String = Std.string(combo);
 
 		// tryna do MS based judgment due to popular demand
@@ -3952,6 +3962,9 @@ class PlayState extends MusicBeatState
 
 		combo = 0;
 		health -= daNote.missHealth * healthLoss;
+
+		if (soundMode == 'SWAP') FlxG.sound.music.volume = 1;
+
 		if (instakillOnMiss)
 		{
 			vocals.playerVolume = 0;
@@ -4137,6 +4150,8 @@ class PlayState extends MusicBeatState
 
 		if (SONG.needsVoices)
 		{
+			if (soundMode == 'SWAP') FlxG.sound.music.volume = 0;
+			
 			if (vocals.opponentVocals.length == 0) vocals.playerVolume = 1;
 			else vocals.opponentVolume = 1;
 		}
