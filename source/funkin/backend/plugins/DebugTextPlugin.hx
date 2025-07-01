@@ -8,17 +8,20 @@ import flixel.addons.transition.FlxTransitionableState;
 /**
  * Plugin that shows debug content in game without the need of a console
  */
+@:nullSafety
 class DebugTextPlugin extends FlxTypedGroup<DebugText>
 {
-	static var instance:DebugTextPlugin;
+	static var instance:Null<DebugTextPlugin> = null;
 	
 	public static function init()
 	{
-		FlxG.plugins.addPlugin(instance = new DebugTextPlugin());
+		if (instance == null) FlxG.plugins.addPlugin(instance = new DebugTextPlugin());
 	}
 	
 	public static function addText(message:String, colour:FlxColor = FlxColor.WHITE)
 	{
+		if (instance == null) return;
+		
 		var text = instance.recycle(DebugText, () -> new DebugText(message, colour));
 		text.text = message;
 		text.color = colour;

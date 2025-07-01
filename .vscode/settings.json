@@ -2,6 +2,7 @@
     "files.associations": {
         "*.hscript": "haxe",
         "*.hxs": "haxe",
+        ".hxpkg": "json"
     },
     "lime.targetConfigurations": [
         {
@@ -20,7 +21,7 @@
     ],
     "[haxe]": {
 		"editor.formatOnSave": true,
-		"editor.formatOnSaveMode":"modifications",
+		"editor.formatOnSaveMode":"file",
 		"editor.formatOnPaste": false,
 		"editor.codeActionsOnSave": {
 			"source.sortImports": "never"

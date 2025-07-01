@@ -14,7 +14,7 @@ class AchievementsMenuState extends MusicBeatState
 	
 	override function create()
 	{
-		#if desktop
+		#if DISCORD_ALLOWED
 		DiscordClient.changePresence("Achievements Menu", null);
 		#end
 		

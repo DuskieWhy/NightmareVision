@@ -9,6 +9,7 @@ import openfl.display.BitmapData;
 import openfl.media.Sound;
 
 @:access(openfl.display.BitmapData)
+@:nullSafety
 class FunkinCache
 {
 	/**
@@ -37,7 +38,7 @@ class FunkinCache
 			}
 		}
 		// flags everything to be cleared out next unused memory clear
-		localTrackedAssets = [];
+		localTrackedAssets.resize(0);
 		openfl.Assets.cache.clear("songs");
 	}
 	
@@ -63,13 +64,13 @@ class FunkinCache
 	
 	public function new() {}
 	
-	public var currentTrackedGraphics:Map<String, FlxGraphic> = [];
+	public final currentTrackedGraphics:Map<String, FlxGraphic> = [];
 	
-	public var currentTrackedSounds:Map<String, Sound> = [];
+	public final currentTrackedSounds:Map<String, Sound> = [];
 	
-	public var localTrackedAssets:Array<String> = [];
+	public final localTrackedAssets:Array<String> = [];
 	
-	public var dumpExclusions:Array<String> = ['assets/music/freakyMenu.${Paths.SOUND_EXT}'];
+	public final dumpExclusions:Array<String> = ['assets/music/freakyMenu.${Paths.SOUND_EXT}'];
 	
 	public function excludeAsset(key:String)
 	{
@@ -82,10 +83,10 @@ class FunkinCache
 	 * frees its gpu texture as well.
 	 * @param graphic 
 	 */
-	public function disposeGraphic(graphic:FlxGraphic)
+	public function disposeGraphic(graphic:Null<FlxGraphic>)
 	{
 		if (graphic != null && graphic.bitmap != null && graphic.bitmap.__texture != null) graphic.bitmap.__texture.dispose();
-		FlxG.bitmap.remove(graphic);
+		@:nullSafety(Off) FlxG.bitmap.remove(graphic);
 	}
 	
 	/**
@@ -105,8 +106,13 @@ class FunkinCache
 			}
 			bitmap.getSurface();
 			bitmap.disposeImage();
-			bitmap.image.data = null;
-			bitmap.image = null;
+			
+			@:nullSafety(Off)
+			{
+				bitmap.image.data = null;
+				bitmap.image = null;
+			}
+			
 			bitmap.readable = true;
 		}
 		
@@ -125,6 +131,6 @@ class FunkinCache
 		
 		localTrackedAssets.push(key);
 		
-		return currentTrackedSounds.get(key);
+		return sound;
 	}
 }

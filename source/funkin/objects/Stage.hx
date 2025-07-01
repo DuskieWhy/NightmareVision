@@ -1,5 +1,6 @@
 package funkin.objects;
 
+import flixel.group.FlxContainer.FlxTypedContainer;
 import flixel.FlxBasic;
 import flixel.group.FlxGroup.FlxTypedGroup;
 
@@ -7,9 +8,10 @@ import funkin.scripts.*;
 import funkin.data.StageData.StageFile;
 import funkin.data.StageData;
 
-class Stage extends FlxTypedGroup<FlxBasic>
+@:nullSafety
+class Stage extends FlxTypedContainer<FlxBasic>
 {
-	public var curStageScript:FunkinScript;
+	public var curStageScript:Null<FunkinScript>;
 	
 	public var curStage = "stage";
 	public var stageData:StageFile = funkin.data.StageData.generateDefault();
@@ -24,20 +26,20 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		if (newStageData != null) stageData = newStageData;
 	}
 	
-	function setupScript(s:FunkinScript)
+	function setupScript(script:FunkinScript)
 	{
-		curStageScript = s;
+		curStageScript = script;
 		
-		switch (s.scriptType)
+		switch (script.scriptType)
 		{
 			case HSCRIPT:
-				s.set("add", add);
-				s.set("stage", this);
-				s.call("onLoad");
+				script.set("add", add);
+				script.set("stage", this);
+				script.call("onLoad");
 				
 			case LUA:
 				#if LUA_ALLOWED
-				s.call("onCreate", []);
+				script.call("onCreate", []);
 				#end
 		}
 	}
@@ -76,6 +78,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		}
 		setupScript(script);
 	}
+	
 	function buildLUA(scriptFile:String = '')
 	{
 		var script = new FunkinLua(scriptFile);

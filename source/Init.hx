@@ -70,7 +70,7 @@ class Init extends FlxState
 		FlxG.signals.preStateSwitch.add((cast FlxG.scaleMode : funkin.backend.FunkinRatioScaleMode).resetSize);
 		
 		if (FlxG.save.data.weekCompleted != null) funkin.states.StoryMenuState.weekCompleted = FlxG.save.data.weekCompleted;
-
+		
 		#if FEATURE_DEBUG_TRACY
 		funkin.utils.WindowUtil.initTracy();
 		#end
@@ -88,6 +88,7 @@ class Init extends FlxState
 		final nextState:Class<FlxState> = Main.startMeta.skipSplash ? Main.startMeta.initialState : Splash;
 		FlxG.switchState(() -> Type.createInstance(nextState, []));
 	}
+	
 	function addPlugins()
 	{
 		FlxG.plugins.drawOnTop = true;

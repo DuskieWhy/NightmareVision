@@ -76,8 +76,8 @@
 
 	<haxelib name="flxanimate"/>
 
-	<haxelib name="haxeui-core" />
-	<haxelib name="haxeui-flixel" />
+	<!-- <haxelib name="haxeui-core" /> -->
+	<!-- <haxelib name="haxeui-flixel" /> -->
 	
 	<haxelib name="hscript-iris"/>
 

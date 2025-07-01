@@ -10,11 +10,14 @@ import flixel.addons.transition.FlxTransitionableState;
  * 
  * press F6 to reload and refresh memory
  */
+@:nullSafety
 class HotReloadPlugin extends FlxBasic
 {
+	static var instance:Null<HotReloadPlugin> = null;
+	
 	public static function init()
 	{
-		FlxG.plugins.addPlugin(new HotReloadPlugin());
+		if (instance == null) FlxG.plugins.addPlugin(instance = new HotReloadPlugin());
 	}
 	
 	public function new()

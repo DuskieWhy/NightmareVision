@@ -7,9 +7,11 @@ import flixel.FlxBasic;
  */
 class FullScreenPlugin extends FlxBasic
 {
+	static var instance:Null<FullScreenPlugin> = null;
+	
 	public static function init()
 	{
-		FlxG.plugins.addPlugin(new FullScreenPlugin());
+		if (instance == null) FlxG.plugins.addPlugin(instance = new FullScreenPlugin());
 	}
 	
 	public function new()

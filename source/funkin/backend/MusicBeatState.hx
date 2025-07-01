@@ -17,8 +17,8 @@ class MusicBeatState extends FlxUIState
 	static final _defaultTransState:Class<BaseTransitionState> = SwipeTransition;
 	
 	// change these to change the transition
-	public static var transitionInState:Class<BaseTransitionState> = null;
-	public static var transitionOutState:Class<BaseTransitionState> = null;
+	public static var transitionInState:Null<Class<BaseTransitionState>> = null;
+	public static var transitionOutState:Null<Class<BaseTransitionState>> = null;
 	
 	public function new() super();
 	
@@ -64,7 +64,6 @@ class MusicBeatState extends FlxUIState
 			
 			script.addScript(tScript);
 			scripted = true;
-
 		}
 		else
 		{

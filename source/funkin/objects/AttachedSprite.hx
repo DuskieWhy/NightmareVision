@@ -2,9 +2,11 @@ package funkin.objects;
 
 import flixel.FlxSprite;
 
+@:nullSafety
 class AttachedSprite extends FlxSprite
 {
-	public var sprTracker:FlxSprite;
+	public var sprTracker:Null<FlxSprite> = null;
+	
 	public var xAdd:Float = 0;
 	public var yAdd:Float = 0;
 	public var angleAdd:Float = 0;
@@ -14,17 +16,19 @@ class AttachedSprite extends FlxSprite
 	public var copyAlpha:Bool = true;
 	public var copyVisible:Bool = false;
 	
-	public function new(?file:String = null, ?anim:String = null, ?library:String = null, ?loop:Bool = false)
+	public function new(?file:String, ?anim:String, ?library:String, loop:Bool = false)
 	{
 		super();
 		if (anim != null)
 		{
+			@:nullSafety(Off)
 			frames = Paths.getSparrowAtlas(file, library);
 			animation.addByPrefix('idle', anim, 24, loop);
 			animation.play('idle');
 		}
 		else if (file != null)
 		{
+			@:nullSafety(Off)
 			loadGraphic(Paths.image(file));
 		}
 		antialiasing = ClientPrefs.globalAntialiasing;
