@@ -4,7 +4,7 @@ Havee fun with NightmareVision V1! (***[follow me on twitter](https://twitter.co
 
 ![](https://github.com/DuskieWhy/NightmareVision/blob/V1/assets/game/images/branding/NMV.png)
 
-## Special thanks too...
+## Special thanks to...
 
 * ShadowMario and Co. for [Psych engine](https://github.com/ShadowMario/FNF-PsychEngine)
 
