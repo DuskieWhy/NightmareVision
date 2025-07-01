@@ -1,9 +1,3 @@
-main todo
-
-make the character editor better
-texture atlas support in char editor
-
-
 ## How to compile NV Engine
 
 ### Download the prerequisites... (skip this if you already have compiled any fnf project, or any flixel project basically lol)
