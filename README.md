@@ -8,7 +8,7 @@ Havee fun with NightmareVision V1! (***[follow me on twitter](https://twitter.co
 
 * ShadowMario and Co. for [Psych engine](https://github.com/ShadowMario/FNF-PsychEngine)
 
-* Nebula_Zorua for the [specific Psych fork](https://github.com/nebulazorua/exe-psych-fork) NMV is built off
+* Nebula_Zorua for the [specific Psych fork](https://github.com/nebulazorua/exe-psych-fork) NMV is built off and for the Modchart backend
 
 * Rozebud for the chart editor little buddies ([Check out their engine too](https://github.com/ThatRozebudDude/FPS-Plus-Public))
 
