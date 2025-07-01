@@ -21,10 +21,7 @@
 	<!-- ____________________________ Window Settings ___________________________ -->
 
 	<!--These window settings apply to all targets-->
-	<window width="1280" height="720" fps="" background="#000000" hardware="true" vsync="false" />
-
-	<!--HTML5-specific-->
-	<window if="html5" resizable="true" />
+	<window width="1280" height="720" fps="60" background="#000000" hardware="true" vsync="false" />
 
 	<!--Desktop-specific-->
 	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" vsync="false"/>
@@ -37,81 +34,102 @@
 
 	<!-- _____________________________ Path Settings ____________________________ -->
 
+	<classpath name="source" />
+
+	<!--Fixes hxvlc using global rather than local. you will need to use hmm/hxpkg to compile this project though-->
+	<setenv name="HAXEPATH" value="./"/>
+
 	<set name="BUILD_DIR" value="export/debug" if="debug" />
 	<set name="BUILD_DIR" value="export/release" unless="debug" />
 	<set name="BUILD_DIR" value="export/32bit" if="32bits" />
+	<set name="BUILD_DIR" value="${BUILD_DIR}-tracy" if="FEATURE_DEBUG_TRACY"/>
 
-	<classpath name="source" />
+	<!-- _____________________________ Engine Config Settings ____________________________ -->
+
+	<!-- <define name="ASSET_REDIRECT" if="debug" /> -->
 	
-	<!-- PSYCH ENGINE CUSTOMIZATION -->
+	<!--ENGINE CUSTOMIZATION-->
 	<define name="MODS_ALLOWED" if="desktop" />
-	<define name="LUA_ALLOWED" if="desktop" />
-	<!-- <define name="ACHIEVEMENTS_ALLOWED" /> FUCK YOUUUU-->
+	<define name="LUA_ALLOWED" if="cpp" />
 	<define name="VIDEOS_ALLOWED" if="cpp" />
 	<define name="DISCORD_ALLOWED" if="cpp"/>
 
-	<!-- OOPPSSS HAHA -->
-	<!-- define name="HIT_SINGLE"/ -->
-
-	<!-- <define name="EMBED_FILES"/> -->
-
-	<!-- <assets path="assets/embeds/songs" rename= "assets/songs" library="songs" embed="true" if="EMBED_FILES"/>
-	<assets path="assets/embeds/songs" rename= "assets/songs" library="songs" embed="false" unless="EMBED_FILES"/>
-
-	<assets path="assets/embeds" rename= "assets" embed="true" if="EMBED_FILES"/>
-	<assets path="assets/embeds" rename= "assets" embed="false" unless="EMBED_FILES"/> -->
-
-	
-	<define name="hscriptPos" if="debug" />
-
-	<assets path="assets/preload" rename="assets"/>
-
-	<library name="videos"        preload="true" />
-	<library name="songs"         preload="true" />
-	<library name="shared"        preload="true" />
-	
-	<assets path="assets/videos"        library="videos" if="VIDEOS_ALLOWED"/>
-	<assets path="assets/songs"         library="songs" unless="HIT_SINGLE"/>
-	<assets path="assets/shared"        library="shared"/>
+	<assets path='assets/embeds' rename='assets' embed="true" />
+	<assets path="assets/game" rename="assets"/>
 
 	<assets path='content' embed='false' if="MODS_ALLOWED"/>
 
+	<!--OpenAL config--> 	<!-- appreciate you cyn0x8 and smokey for finding this -->
+	<section if="desktop">
+		<assets path="projFiles/alsoft.ini" rename="alsoft.ini" type="text" if="windows"/>
+		<assets path="projFiles/alsoft.ini" rename="alsoft.conf" type="text" unless="windows"/>
+	</section>
 
-	<!-- <template path='mods' /> -->
+	<!-- _______________________________ Haxe libraries ______________________________ -->
+
+	<!--Core engine libraries-->
+	<haxelib name="openfl"/>
+
+	<haxelib name="flixel"/>
+	<haxelib name="flixel-addons"/>
+	<haxelib name="flixel-ui"/>
+
+	<haxelib name="flxanimate"/>
+
+	<haxelib name="haxeui-core" />
+	<haxelib name="haxeui-flixel" />
 	
-	<!-- assets path="CHANGELOG.md" rename='changelog.txt' -->
+	<haxelib name="hscript-iris"/>
 
-	<!-- NOTE FOR FUTURE SELF SINCE FONTS ARE ALWAYS FUCKY 
-		TO FIX ONE OF THEM, I CONVERTED IT TO OTF. DUNNO IF YOU NEED TO
-		THEN UHHH I USED THE NAME OF THE FONT WITH SETFORMAT() ON THE TEXT!!!
-		NOT USING A DIRECT THING TO THE ASSET!!!
-	-->
-
-
-
-	<assets path="assets/fonts" embed='true'/>
-	<!-- _______________________________ Libraries ______________________________ -->
-	<!-- <haxelib name="" version=""/> -->
-	<lime version="8.1.1"/>
-	<haxelib name="openfl" version="9.2.2"/>
-
-	<haxelib name="flixel" version="5.2.2" />
-	<haxelib name="flixel-addons" version="2.10.0"/>
-	<haxelib name="flixel-ui" version="2.5.0"/>
-	<haxelib name="flixel-tools" version="1.5.1"/>
-	<haxelib name="flxanimate" version="3.0.4"/>
-
-	<haxedev set='webgl' />
-	<haxelib name="hscript" />
-
+	<!--Extra Libraries-->
 	<haxelib name="linc_luajit" if="LUA_ALLOWED"/>
-	<haxelib name="faxe" if='switch'/>
 	<haxelib name="discord_rpc" if="DISCORD_ALLOWED"/>
-	<haxelib name="away3d"/>
 	<haxelib name="hxvlc" if="VIDEOS_ALLOWED"/>
 
-	<!-- <haxedef name="FLX_NO_PITCH" /> -->
+	<!-- ______________________________ macros _____________________________ -->
 
+	<haxeflag name="--macro" value="addMetadata('@:build(funkin.backend.macro.FlxMacro.buildFlxSprite())', 'flixel.FlxSprite')" />
+	<haxeflag name="--macro" value="addMetadata('@:build(funkin.backend.macro.FlxMacro.buildFlxBasic())', 'flixel.FlxBasic')" />
+	
+	<haxeflag name="--macro" value="include('funkin')" />
+	<haxeflag name="--macro" value="include('flixel.addons',true,['flixel.addons.nape.*','flixel.addons.editors.*'])" />
+	<haxeflag name="-dce no" />
+
+	<!-- ______________________________ Haxedefines _____________________________ -->
+
+	<!--Needed for haxeui-->
+	<haxedef name="haxeui_dont_impose_base_class"/>
+
+	<!--Needed for better error reporting with hscript-->
+	<define name="hscriptPos"/>
+
+	<!--Tracy profiler stuff-->
+	<section if="FEATURE_DEBUG_TRACY">
+		<haxedef name="HXCPP_TELEMETRY"/>
+		<haxedef name="HXCPP_TRACY"/>
+		<haxedef name="HXCPP_TRACY_MEMORY"/>
+		<haxedef name="HXCPP_TRACY_ON_DEMAND"/>
+		<haxedef name="absolute-paths"/>
+		<!-- <haxedef name="HXCPP_TRACY_INCLUDE_CALLSTACKS"/> -->
+	</section>
+
+	<!--Enable for better crash handling/reporting-->
+	<haxedef name="CRASH_HANDLER" if="desktop release"/>
+
+	<haxedef name="HXCPP_CHECK_POINTER" if="CRASH_HANDLER" />
+	<haxedef name="HXCPP_STACK_LINE" if="CRASH_HANDLER" />
+	<haxedef name="HXCPP_STACK_TRACE" if="CRASH_HANDLER" />
+
+	<!--Disables all tracing abilities. Enable this for a small performance improvement-->
+	<!-- <define name="DISABLE_TRACES" if="desktop release"/> -->
+
+	<!--Needed for lua-->
+	<haxedef name="NO_PRECOMPILED_HEADERS" if="LUA_ALLOWED"/>
+
+	<!--Remove the legacy health system-->
+	<haxedef name="FLX_NO_HEALTH" />
+
+	<!--Disable the Flixel core focus lost screen-->
 	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
 
 	<!--Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
@@ -119,15 +137,14 @@
 
 	<!--Enable this for Nape release builds for a serious peformance improvement-->
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
-	
+
+	<!--For haxe 4.3.0 and newer cleaner error reporting-->
+	<haxedef name="message.reporting" value="pretty" />
+
+	<!--For haxe 4.3.0 and newer disables warnings-->
 	<haxedef name="no-deprecation-warnings"/>
-	<!-- <haxelib name="markdown" /> -->
-	<!-- <haxelib name="HtmlParser" /> -->
 
-	<!--In case you want to use nape with flixel-->
-	<!--<haxelib name="nape-haxe4" />-->
-
-	<!-- ______________________________ Haxedefines _____________________________ -->
+	<!-- <haxedef name="FLX_NO_PITCH" /> -->
 
 	<!--Enable the Flixel core recording system-->
 	<!--<haxedef name="FLX_RECORD" />-->
@@ -138,27 +155,17 @@
 	<!--Disable the native cursor API on Flash-->
 	<!--<haxedef name="FLX_NO_NATIVE_CURSOR" />-->
 
-	<!--Optimise inputs, be careful you will get null errors if you don't use conditionals in your game-->
-	<!-- <haxedef name="FLX_NO_MOUSE" if="mobile" /> -->
-	<!-- <haxedef name="FLX_NO_KEYBOARD" if="mobile" /> -->
-	<!-- <haxedef name="FLX_NO_TOUCH" if="desktop" /> -->
-	<!--<haxedef name="FLX_NO_GAMEPAD" />-->
-
 	<!--Disable the Flixel core sound tray-->
 	<!--<haxedef name="FLX_NO_SOUND_TRAY" />-->
 
 	<!--Disable the Flixel sound management code-->
 	<!--<haxedef name="FLX_NO_SOUND_SYSTEM" />-->
 
-	<!--Disable the Flixel core focus lost screen-->
-
-
 	<!-- _________________________________ Custom _______________________________ -->
 
-	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
-	
 	<icon path="projFiles/icon/icon16.png" size='16'/>
 	<icon path="projFiles/icon/icon32.png" size='32'/>
 	<icon path="projFiles/icon/icon64.png" size='64'/>
 	<icon path="projFiles/icon/iconOG.png" />
+
 </project>

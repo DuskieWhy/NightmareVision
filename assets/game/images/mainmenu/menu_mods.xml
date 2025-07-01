@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Funkin Packer v0.1.3 https://neeeoo.github.io/funkin-packer/
+-->
+<TextureAtlas imagePath="menu_mods.png" width="804" height="541">
+	<SubTexture name="mods basic0000" x="365" y="401" width="355" height="139" frameX="-0" frameY="-1" frameWidth="355" frameHeight="140"/>
+	<SubTexture name="mods basic0001" x="365" y="401" width="355" height="139" frameX="-0" frameY="-1" frameWidth="355" frameHeight="140"/>
+	<SubTexture name="mods basic0002" x="365" y="401" width="355" height="139" frameX="-0" frameY="-1" frameWidth="355" frameHeight="140"/>
+	<SubTexture name="mods basic0003" x="0" y="401" width="355" height="140" frameX="-0" frameY="-0" frameWidth="355" frameHeight="140"/>
+	<SubTexture name="mods basic0004" x="0" y="401" width="355" height="140" frameX="-0" frameY="-0" frameWidth="355" frameHeight="140"/>
+	<SubTexture name="mods basic0005" x="0" y="401" width="355" height="140" frameX="-0" frameY="-0" frameWidth="355" frameHeight="140"/>
+	<SubTexture name="mods basic0006" x="411" y="199" width="353" height="139" frameX="-1" frameY="-1" frameWidth="355" frameHeight="140"/>
+	<SubTexture name="mods basic0007" x="411" y="199" width="353" height="139" frameX="-1" frameY="-1" frameWidth="355" frameHeight="140"/>
+	<SubTexture name="mods basic0008" x="411" y="199" width="353" height="139" frameX="-1" frameY="-1" frameWidth="355" frameHeight="140"/>
+	<SubTexture name="mods white0000" x="0" y="0" width="395" height="192" frameX="-0" frameY="-1" frameWidth="401" frameHeight="193"/>
+	<SubTexture name="mods white0001" x="0" y="202" width="401" height="189" frameX="-0" frameY="-0" frameWidth="401" frameHeight="193"/>
+	<SubTexture name="mods white0002" x="405" y="0" width="399" height="189" frameX="-0" frameY="-1" frameWidth="401" frameHeight="193"/>
+</TextureAtlas>

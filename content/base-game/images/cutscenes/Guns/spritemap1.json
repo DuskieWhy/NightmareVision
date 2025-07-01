@@ -1,0 +1,36 @@
+﻿{"ATLAS": {"SPRITES":[ 
+{"SPRITE" : {"name": "0000","x":923,"y":237,"w":88,"h":116,"rotated": false}},
+{"SPRITE" : {"name": "0001","x":642,"y":472,"w":121,"h":131,"rotated": false}},
+{"SPRITE" : {"name": "0002","x":2,"y":2,"w":377,"h":426,"rotated": false}},
+{"SPRITE" : {"name": "0003","x":478,"y":472,"w":164,"h":163,"rotated": false}},
+{"SPRITE" : {"name": "0004","x":923,"y":353,"w":88,"h":116,"rotated": false}},
+{"SPRITE" : {"name": "0005","x":200,"y":428,"w":136,"h":200,"rotated": false}},
+{"SPRITE" : {"name": "0006","x":336,"y":472,"w":142,"h":190,"rotated": false}},
+{"SPRITE" : {"name": "0007","x":851,"y":566,"w":72,"h":43,"rotated": false}},
+{"SPRITE" : {"name": "0008","x":652,"y":237,"w":271,"h":235,"rotated": false}},
+{"SPRITE" : {"name": "0009","x":666,"y":2,"w":273,"h":235,"rotated": false}},
+{"SPRITE" : {"name": "0010","x":379,"y":2,"w":287,"h":235,"rotated": false}},
+{"SPRITE" : {"name": "0011","x":857,"y":472,"w":42,"h":94,"rotated": true}},
+{"SPRITE" : {"name": "0012","x":763,"y":472,"w":94,"h":44,"rotated": false}},
+{"SPRITE" : {"name": "0013","x":965,"y":469,"w":46,"h":91,"rotated": true}},
+{"SPRITE" : {"name": "0014","x":939,"y":164,"w":61,"h":54,"rotated": false}},
+{"SPRITE" : {"name": "0015","x":2,"y":573,"w":48,"h":46,"rotated": false}},
+{"SPRITE" : {"name": "0016","x":763,"y":516,"w":88,"h":42,"rotated": false}},
+{"SPRITE" : {"name": "0017","x":923,"y":469,"w":42,"h":103,"rotated": true}},
+{"SPRITE" : {"name": "0018","x":923,"y":572,"w":32,"h":94,"rotated": true}},
+{"SPRITE" : {"name": "0019","x":939,"y":109,"w":79,"h":55,"rotated": false}},
+{"SPRITE" : {"name": "0020","x":763,"y":558,"w":88,"h":40,"rotated": false}},
+{"SPRITE" : {"name": "0021","x":965,"y":560,"w":44,"h":71,"rotated": true}},
+{"SPRITE" : {"name": "0022","x":939,"y":2,"w":54,"h":107,"rotated": true}},
+{"SPRITE" : {"name": "0023","x":379,"y":237,"w":273,"h":235,"rotated": false}},
+{"SPRITE" : {"name": "0024","x":2,"y":428,"w":198,"h":145,"rotated": false}}
+]},
+"meta": {
+"app": "Adobe Animate",
+"version": "23.0.0.407",
+"image": "spritemap1.png",
+"format": "RGBA8888",
+"size": {"w":1020,"h":668},
+"resolution": "1"
+}
+}

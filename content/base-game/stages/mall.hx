@@ -1,4 +1,4 @@
-importClass("meta.states.LoadingState");
+
 
 var heyTimer:Float;
 var upperBoppers:BGSprite;
@@ -55,21 +55,21 @@ function onEndSong() {
         var blackShit:FlxSprite = new FlxSprite(-FlxG.width * FlxG.camera.zoom,
             -FlxG.height * FlxG.camera.zoom).makeGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.BLACK);
         blackShit.scrollFactor.set();
-        blackShit.cameras = [game.camOther];
+        blackShit.cameras = [camOther];
         add(blackShit);
 
         FlxG.sound.play(Paths.sound('Lights_Shut_off'));
 
         // Begin our transition!
         new FlxTimer().start(1.5, (_) -> {
-            PlayState.campaignScore += game.songScore;
-            PlayState.campaignMisses += game.songScore;
+            PlayState.campaignScore += songScore;
+            PlayState.campaignMisses += songScore;
 
             PlayState.storyPlaylist.remove(PlayState.storyPlaylist[0]);
 
             PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0] + CoolUtil.getDifficultyFilePath(), PlayState.storyPlaylist[0]);
-            PlayState.cancelMusicFadeTween();
-            LoadingState.loadAndSwitchState(new PlayState());
+            CoolUtil.cancelMusicFadeTween();
+            CoolUtil.loadAndSwitchState(new PlayState());
         });
         
         return Function_Stop;

@@ -1,113 +1,101 @@
-package; 
+package;
 
-import flixel.util.FlxSave;
-import meta.states.MainMenuState;
-import meta.states.MusicBeatState;
-import meta.states.KUTValueHandler;
-import meta.states.substate.FadeTransitionSubstate;
+import lime.app.Application;
+
 import flixel.FlxState;
 import flixel.FlxG;
 import flixel.input.keyboard.FlxKey;
-import flixel.addons.transition.FlxTransitionableState;
-import lime.app.Application;
-import meta.data.Discord.DiscordClient;
 
+import funkin.Mods;
 
+/**
+ * Initiation state that prepares backend classes and returns to menus when finished
+ * 
+ * There is no need to open this beyond the first time
+ */
 class Init extends FlxState
 {
+	/**
+	 * Contains keys that mute the game volume
+	 * 
+	 * default is `0`
+	 */
 	public static var muteKeys:Array<FlxKey> = [FlxKey.ZERO];
+	
+	/**
+	 * Contains keys that turn down the game volume
+	 * 
+	 * default is `-`
+	 */
 	public static var volumeDownKeys:Array<FlxKey> = [FlxKey.NUMPADMINUS, FlxKey.MINUS];
+	
+	/**
+	 * Contains keys that turn up the game volume
+	 * 
+	 * default is `+`
+	 */
 	public static var volumeUpKeys:Array<FlxKey> = [FlxKey.NUMPADPLUS, FlxKey.PLUS];
-
+	
 	override public function create():Void
 	{
-		meta.data.scripts.FunkinHScript.init();
-
-		Paths.clearStoredMemory();
-		Paths.clearUnusedMemory();
-
-		Paths.pushGlobalMods();
-		meta.data.WeekData.loadTheFirstEnabledMod();
-
+		funkin.backend.PlayerSettings.init();
+		
+		ClientPrefs.load();
+		
+		funkin.data.Highscore.load();
+		
+		funkin.scripts.FunkinIris.init();
+		
+		#if VIDEOS_ALLOWED
+		funkin.video.FunkinVideoSprite.init();
+		#end
+		
+		addPlugins();
+		
+		#if MODS_ALLOWED
+		Mods.pushGlobalMods();
+		#end
+		
+		funkin.data.WeekData.loadTheFirstEnabledMod();
+		
 		FlxG.game.focusLostFramerate = 60;
 		FlxG.sound.muteKeys = muteKeys;
 		FlxG.sound.volumeDownKeys = volumeDownKeys;
 		FlxG.sound.volumeUpKeys = volumeUpKeys;
 		FlxG.keys.preventDefaultKeys = [TAB];
-
+		
 		FlxG.mouse.visible = false;
-		meta.data.PlayerSettings.init();
+		
+		FlxG.scaleMode = new funkin.backend.FunkinRatioScaleMode();
+		FlxG.signals.preStateSwitch.add((cast FlxG.scaleMode : funkin.backend.FunkinRatioScaleMode).resetSize);
+		
+		if (FlxG.save.data.weekCompleted != null) funkin.states.StoryMenuState.weekCompleted = FlxG.save.data.weekCompleted;
 
-		super.create();
-
-		setSaveBind();
-
-		ClientPrefs.loadPrefs();	
-
-		Highscore.load();
-
-
-		#if (hxvlc < "1.4.1")
-		hxvlc.libvlc.Handle.init();
-        #else
-		hxvlc.util.Handle.init();
+		#if FEATURE_DEBUG_TRACY
+		funkin.utils.WindowUtil.initTracy();
 		#end
-
-		if(FlxG.save.data != null && FlxG.save.data.fullscreen) FlxG.fullscreen = FlxG.save.data.fullscreen;
-		if (FlxG.save.data.weekCompleted != null) meta.states.StoryMenuState.weekCompleted = FlxG.save.data.weekCompleted;
-
-		FlxG.mouse.visible = false;
-
-		FlxTransitionableState.defaultTransIn = FadeTransitionSubstate;
-		FlxTransitionableState.defaultTransOut = FadeTransitionSubstate;
-
-		#if desktop
+		
+		#if DISCORD_ALLOWED
 		if (!DiscordClient.isInitialized)
 		{
 			DiscordClient.initialize();
-			Application.current.onExit.add((ec)->{DiscordClient.shutdown();});
+			Application.current.onExit.add((ec) -> DiscordClient.shutdown());
 		}
 		#end
-
-		#if HIT_SINGLE FlxG.switchState(new KUTValueHandler()); #else FlxG.switchState(new meta.states.TitleState()); #end
+		
+		super.create();
+		
+		final nextState:Class<FlxState> = Main.startMeta.skipSplash ? Main.startMeta.initialState : Splash;
+		FlxG.switchState(() -> Type.createInstance(nextState, []));
 	}
-
-	//lalala
-	public static function SwitchToPrimaryMenu(?cl:Class<FlxState>) 
+	function addPlugins()
 	{
-		#if HIT_SINGLE MusicBeatState.switchState(new meta.states.HitSingleMenu()); #else
-        #if (haxe >= "4.3.0")
-		cl ??= MainMenuState;
-        #else
-		cl = cl == null ? MainMenuState : cl;
-        #end
-		MusicBeatState.switchState(cast (Type.createInstance(cl,[]),FlxState));//no but what the fuck
-		#end
-
+		FlxG.plugins.drawOnTop = true;
+		
+		funkin.backend.plugins.HotReloadPlugin.init();
+		
+		funkin.backend.plugins.DebugTextPlugin.init();
+		
+		funkin.backend.plugins.FullScreenPlugin.init();
 	}
-
-	static function setSaveBind() {
-		var prevSave = new FlxSave();
-		prevSave.bind('funkin','ninjamuffin99');
-		var prevData = prevSave.data;
-
-		function validPath(str:String):String return str.replace(' ','-');
-		@:privateAccess 
-			FlxG.save.bind('funkin', validPath('${FlxG.stage.application.meta.get('company')}/${flixel.util.FlxSave.validate(FlxG.stage.application.meta.get('file'))}'));
-
-		var nextData = FlxG.save.data;
-
-		prevData.garnData = prevData.garnData == null ? [] : prevData.garnData;
-		nextData.garnData = nextData.garnData == null ? [] : nextData.garnData;
-
-		if ((nextData.garnData.length < prevData.garnData.length) && nextData.garnTransfer == null) {
-			
-			FlxG.save.data.garnData = prevData.garnData;
-			FlxG.save.data.garnTransfer = true;
-			FlxG.save.flush();
-		}
-	}
-
 }
-
-

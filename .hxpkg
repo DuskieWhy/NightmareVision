@@ -1,0 +1,70 @@
+[
+	{
+		"profile": "default",
+		"pkgs": [
+			{
+				"name": "flixel",
+				"version": "6.1.0"
+			},
+			{
+				"name": "flixel-addons",
+				"version": "3.3.2"
+			},
+			{
+				"name": "flixel-ui",
+				"version": "2.6.4"
+			},
+			{
+				"name": "flxanimate",
+				"link": "https://github.com/FixedData/flxanimate",
+				"branch": "778d59b20ad7f358a1a32fac76fded4012258471"
+			},
+			{
+				"name": "hscript"
+			},
+			{
+				"name": "hscript-iris",
+				"version": "1.1.3"
+			},
+			{
+				"name": "hxcpp-debug-server"
+			},
+			{
+				"name": "hxcpp",
+				"link": "https://github.com/HaxeFoundation/hxcpp",
+				"branch": "8268ef2d518b1e7c8e8494114d0bdf6b5bc4147d"
+			},
+			{
+				"name": "hxvlc",
+				"version": "2.0.1"
+			},
+			{
+				"name": "lime",
+				"version": "8.1.3"
+			},
+			{
+				"name": "openfl",
+				"version": "9.4.1"
+			},
+			{
+				"name": "linc_luajit",
+				"link": "https://github.com/superpowers04/linc_luajit.git",
+				"branch": "daf0664aee99aa8b8d6bdd1eda993a1c3a399067"
+			},
+			{
+				"name": "discord_rpc",
+				"link": "https://github.com/Aidan63/linc_discord-rpc"
+			},
+			{
+				"name": "haxeui-flixel",
+				"link": "https://github.com/haxeui/haxeui-flixel.git",
+				"branch": "b899a4c7d7318c5ff2b1bb645fbc73728fad1ac9"
+			},
+			{
+				"name": "haxeui-core",
+				"link": "https://github.com/haxeui/haxeui-core.git",
+				"branch": "99d5d035e7120ce027256b117a25625c53b488dc"
+			}
+		]
+	}
+]

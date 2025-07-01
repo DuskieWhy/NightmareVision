@@ -1,11 +1,22 @@
+import funkin.objects.BGSprite;
+import funkin.states.substates.GameOverSubstate;
+import funkin.objects.stageobjects.TankmenBG;
+
 var tankWatchtower:BGSprite;
 var tankGround:BGSprite;
-var tankmanRun:FlxTypedGroup<TankmenBG> = [];
-var foregroundSprites:FlxTypedGroup<BGSprite> = [];
+var tankmanRun:FlxTypedGroup;
+var foregroundSprites:FlxTypedGroup;
 var chart:SONG.SwagSong = null;
-var picoAnims:Array<FNFSprite.CrowdAnim> = [];
+var picoAnims:Array<CrowdAnim> = [];
 var anims:Array<String> = ['shoot1', 'shoot2', 'shoot3', 'shoot4'];
 
+var boppers:Array<FlxSprite> = [];
+
+typedef CrowdAnim = {
+	var time:Float;
+	var data:Int;
+	var length:Int;
+}
 
 function onLoad(){
     var sky:BGSprite = new BGSprite('tankSky', -400, -400, 0, 0);
@@ -48,7 +59,7 @@ function onLoad(){
     tankGround = new BGSprite('tankRolling', 300, 300, 0.5, 0.5,['BG tank w lighting'], true);
     add(tankGround);
 
-    tankmanRun = createTypedGroup();
+    tankmanRun = new FlxTypedGroup();
     add(tankmanRun);
 
     var ground:BGSprite = new BGSprite('tankGround', -420, -150);
@@ -57,21 +68,54 @@ function onLoad(){
     add(ground);
     moveTank();
 
-    foregroundSprites.add(new BGSprite('tank0', -500, 650, 1.7, 1.5, ['fg']));
-    if(!ClientPrefs.lowQuality) foregroundSprites.add(new BGSprite('tank1', -300, 750, 2, 0.2, ['fg']));
-    foregroundSprites.add(new BGSprite('tank2', 450, 940, 1.5, 1.5, ['foreground']));
-    if(!ClientPrefs.lowQuality) foregroundSprites.add(new BGSprite('tank4', 1300, 900, 1.5, 1.5, ['fg']));
-    foregroundSprites.add(new BGSprite('tank5', 1620, 700, 1.5, 1.5, ['fg']));
-    if(!ClientPrefs.lowQuality) foregroundSprites.add(new BGSprite('tank3', 1300, 1200, 3.5, 2.5, ['fg']));
+    var tank0 = new BGSprite('tank0', -500, 650, 1.7, 1.5, ['fg']);
+    tank0.zIndex = 999;
+    add(tank0);
+
+    var tank2 = new BGSprite('tank2', 450, 940, 1.5, 1.5, ['foreground']);
+    tank2.zIndex = 999;
+    add(tank2);
+
+    var tank4 = new BGSprite('tank5', 1620, 700, 1.5, 1.5, ['fg']);
+    tank4.zIndex = 999;
+    add(tank4);
+
+    boppers = [tank0,tank2,tank4];
+
+    if (!ClientPrefs.lowQuality)
+    {
+        var tank1 = new BGSprite('tank1', -300, 750, 2, 0.2, ['fg']);
+        tank1.zIndex = 999;
+        add(tank1);
+        boppers.push(tank1);
+
+        var tank3 = new BGSprite('tank4', 1300, 900, 1.5, 1.5, ['fg']);
+        tank3.zIndex = 999;
+        add(tank3);
+        boppers.push(tank3);
+
+        var tank5 = new BGSprite('tank3', 1300, 1200, 3.5, 2.5, ['fg']);
+        tank5.zIndex = 999;
+        add(tank5);
+        boppers.push(tank5);
+    }
+
+
+    // foreground.add(new BGSprite('tank0', -500, 650, 1.7, 1.5, ['fg']));
+    // if(!ClientPrefs.lowQuality) foreground.add(new BGSprite('tank1', -300, 750, 2, 0.2, ['fg']));
+    // foreground.add(new BGSprite('tank2', 450, 940, 1.5, 1.5, ['foreground']));
+    // if(!ClientPrefs.lowQuality) foreground.add(new BGSprite('tank4', 1300, 900, 1.5, 1.5, ['fg']));
+    // foreground.add(new BGSprite('tank5', 1620, 700, 1.5, 1.5, ['fg']));
+    // if(!ClientPrefs.lowQuality) foreground.add(new BGSprite('tank3', 1300, 1200, 3.5, 2.5, ['fg']));
     GameOverSubstate.resetVariables();
 }
 
 function onCreatePost(){
-    if(game.curSong.toLowerCase() == 'stress') {
+    if(curSong.toLowerCase() == 'stress') {
         GameOverSubstate.characterName = 'bf-holding-gf-dead';
 
 
-        game.gf.skipDance = true;
+        gf.skipDance = true;
         chart = Song.loadFromJson('picospeaker', 'stress', true);
         if(chart!=null){ 
             for(section in chart.notes){
@@ -86,7 +130,7 @@ function onCreatePost(){
         }
         TankmenBG.animationNotes = chart.notes;
         
-        game.gf.playAnim("shoot1");
+        gf.playAnim("shoot1");
 
         if(!ClientPrefs.lowQuality)
         {
@@ -132,7 +176,7 @@ var tankAngle:Float = FlxG.random.int(-90, 45);
 
 function moveTank(?elapsed:Float = 0)
 {
-    if(!game.inCutscene)
+    if(!inCutscene)
     {
         tankAngle += elapsed * tankSpeed;
         tankGround.angle = tankAngle - 90 + 15;
@@ -142,9 +186,14 @@ function moveTank(?elapsed:Float = 0)
     }
 }
 
-function onBeatHit(){
+function onBeatHit()
+{
     tankWatchtower.dance();
-    for(obj in foreground){ obj.dance(); }
+
+    for (i in boppers)
+    {
+        if(i != null) i.dance();
+    }
 }
 
 function deathAnimStart(volume){
@@ -152,7 +201,6 @@ function deathAnimStart(volume){
 }
 
 function deathAnimStartPost(volume){
-    trace('script');
     FlxG.sound.music.volume = 0.2;
     var exclude:Array<Int> = [];
     //if(!ClientPrefs.cursing) exclude = [1, 3, 8, 13, 17, 21];
@@ -165,306 +213,251 @@ function deathAnimStartPost(volume){
     });
 }
 
-// var allowCountdown:Bool = false;
-// function onStartCountdown(){
-//     if(!allowCountdown){
-//         tankIntro();
-//         return Function_Stop;
-//     }
-// }
+var allowCountdown:Bool = !PlayState.isStoryMode;
+function onStartCountdown(){
+    if(!allowCountdown){
+        tankIntro();
+        return Function_Stop;
+    }
+}
 
-// function tankIntro(){
-//     var cutsceneHandler:CutsceneHandler = new CutsceneHandler();
+function tankIntro(){
 
-//     var songName:String = game.curSong.toLowerCase();
-//     trace(songName);
-//     game.dadGroup.alpha = 0.00001;
-//     game.camHUD.visible = false;
-//     //inCutscene = true; //this would stop the camera movement, oops
+    var songName:String = curSong.toLowerCase();
+    dadGroup.alpha = 0.00001;
+    camHUD.visible = false;
+    snapCamToPos(dad.x + 280, dad.y + 170, true);
 
-//     var tankman:FlxSprite = new FlxSprite(-20, 320);
-//     tankman.frames = Paths.getSparrowAtlas('cutscenes/stress');
-//     tankman.antialiasing = ClientPrefs.globalAntialiasing;
-//     addBehindDad(tankman);
-//     cutsceneHandler.push(tankman);
+    switch(songName){
+        case 'ugh':
+            var tankman = new AnimateSprite(415, 565, Paths.textureAtlas('cutscenes/Ugh'));
+            tankman.anim.addBySymbol('Well', 'TANK TALK 1 P1', 0, 0, 24);
+            tankman.anim.addBySymbol('Kill', 'TANK TALK 1 P2', 0, 0, 24);
+            tankman.antialiasing = true;
+            add(tankman);
+            tankman.anim.play('Well');
+            // tankman.anim.pause();
 
-    // var tankman2:FlxSprite = new FlxSprite(16, 312);
-    // tankman2.antialiasing = ClientPrefs.globalAntialiasing;
-    // tankman2.alpha = 0.000001;
-    // cutsceneHandler.push(tankman2);
-    // var gfDance:FlxSprite = new FlxSprite(gf.x - 107, gf.y + 140);
-    // gfDance.antialiasing = ClientPrefs.globalAntialiasing;
-    // cutsceneHandler.push(gfDance);
-    // var gfCutscene:FlxSprite = new FlxSprite(gf.x - 104, gf.y + 122);
-    // gfCutscene.antialiasing = ClientPrefs.globalAntialiasing;
-    // cutsceneHandler.push(gfCutscene);
-    // var picoCutscene:FlxSprite = new FlxSprite(gf.x - 849, gf.y - 264);
-    // picoCutscene.antialiasing = ClientPrefs.globalAntialiasing;
-    // cutsceneHandler.push(picoCutscene);
-    // var boyfriendCutscene:FlxSprite = new FlxSprite(boyfriend.x + 5, boyfriend.y + 20);
-    // boyfriendCutscene.antialiasing = ClientPrefs.globalAntialiasing;
-    // cutsceneHandler.push(boyfriendCutscene);
+            // FlxG.sound.play(Paths.music('DISTORTO'));
+            FlxG.sound.playMusic(Paths.music('DISTORTO'));
+            FlxG.sound.play(Paths.sound('wellWellWell'));
 
-    // cutsceneHandler.finishCallback = function(){
-    //     trace('no');
-    // }
+            FlxG.camera.zoom *= 1.2;
 
-    // cutsceneHandler.finishCallback = function()
-    // {
-    //     var timeForStuff:Float = Conductor.crochet / 1000 * 4.5;
-    //     FlxG.sound.music.fadeOut(timeForStuff);
-    //     FlxTween.tween(FlxG.camera, {zoom: game.defaultCamZoom}, timeForStuff, {ease: FlxEase.quadInOut});
-    //     game.moveCamera(true);
-    //     game.startCountdown();
+            FlxTimer.wait(3, ()->{
+                isCameraOnForcedPos = true;
+                camFollow.x += 550;
+                camFollow.y += 50;
+            });
 
-    //     game.dadGroup.alpha = 1;
-    //     game.camHUD.visible = true;
-    //     game.boyfriend.animation.finishCallback = null;
-    //     game.gf.animation.finishCallback = null;
-    //     game.gf.dance();
-    // };
+            FlxTimer.wait(4.5, ()->{
+                boyfriend.playAnim('singUP', true);
+                boyfriend.specialAnim = true;
+                FlxG.sound.play(Paths.sound('bfBeep'));
+            });
 
-    // game.camFollow.set(dad.x + 280, dad.y + 170);
-    // switch(songName)
-    // {
-    //     case 'ugh':
-    //         cutsceneHandler.endTime = 12;
-    //         cutsceneHandler.music = 'DISTORTO';
-    //         game.precacheList.set('wellWellWell', 'sound');
-    //         game.precacheList.set('killYou', 'sound');
-    //         game.precacheList.set('bfBeep', 'sound');
+            FlxTimer.wait(6, ()->{
+                camFollow.x -= 550;
+                camFollow.y -= 50;
 
-    //         var wellWellWell:FlxSound = new FlxSound().loadEmbedded(Paths.sound('wellWellWell'));
-    //         FlxG.sound.list.add(wellWellWell);
+                tankman.anim.play('Kill');
+                FlxG.sound.play(Paths.sound('killYou'));
+            });
 
-    //         tankman.animation.addByPrefix('wellWell', 'TANK TALK 1 P1', 24, false);
-    //         tankman.animation.addByPrefix('killYou', 'TANK TALK 1 P2', 24, false);
-    //         tankman.animation.play('wellWell', true);
-    //         FlxG.camera.zoom *= 1.2;
+            FlxTimer.wait(12, ()->{ 
+                tankman.visible = false;
+                tankman.destroy();
+                endScene();
+            });
+        case 'guns':
+            var tankman = new AnimateSprite(415, 565, Paths.textureAtlas('cutscenes/Guns'));
+            tankman.anim.addBySymbol('tight', 'TANK TALK 2', 0, 0, 24);
+            tankman.antialiasing = true;
+            add(tankman);
 
-    //         // Well well well, what do we got here?
-    //         cutsceneHandler.timer(0.1, function()
-    //         {
-    //             wellWellWell.play(true);
-    //         });
+            tankman.anim.play('tight');
+            FlxG.sound.play(Paths.sound('tankSong2'));
+            FlxG.sound.playMusic(Paths.music('DISTORTO'));
 
-    //         // Move camera to BF
-    //         cutsceneHandler.timer(3, function()
-    //         {
-    //             game.camFollow.x += 750;
-    //             game.camFollow.y += 100;
-    //         });
+            FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom * 1.2}, 4, {ease: FlxEase.quadInOut});
+            FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom * 1.2 * 1.2}, 0.5, {ease: FlxEase.quadInOut, startDelay: 4});
+            FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom * 1.2}, 1, {ease: FlxEase.quadInOut, startDelay: 4.5});
 
-    //         // Beep!
-    //         cutsceneHandler.timer(4.5, function()
-    //         {
-    //             game.boyfriend.playAnim('singUP', true);
-    //             game.boyfriend.specialAnim = true;
-    //             FlxG.sound.play(Paths.sound('bfBeep'));
-    //         });
+            FlxTimer.wait(4, ()->{
+                gf.playAnim('sad', true);
+                gf.animation.finishCallback = function(name:String)
+                {
+                    gf.playAnim('sad', true);
+                };
+            });
 
-    //         // Move camera to Tankman
-    //         cutsceneHandler.timer(6, function()
-    //         {
-    //             game.camFollow.x -= 750;
-    //             game.camFollow.y -= 100;
+            tankman.anim.onComplete.add(()->{ 
+                tankman.visible = false;
+                tankman.destroy();
+                endScene();
+            });
+        case 'stress':
+            gfGroup.alpha = 0.00001;
+            boyfriendGroup.alpha = 0.00001;
 
-    //             // We should just kill you but... what the hell, it's been a boring day... let's see what you've got!
-    //             tankman.animation.play('killYou', true);
-    //             FlxG.sound.play(Paths.sound('killYou'));
-    //         });
+            var tankman = new AnimateSprite(415, 565, Paths.textureAtlas('cutscenes/Stress'));
+            tankman.anim.addBySymbol('FUCK', 'TANK TALK 3 P1 UNCUT', 0, 0, 24);
+            tankman.anim.addBySymbol('pico', 'TANK TALK 3 P2 UNCUT', 0, 0, 24);
+            tankman.antialiasing = true;        
+            stage.add(tankman);
 
-        // case 'guns':
-        //     cutsceneHandler.endTime = 11.5;
-        //     cutsceneHandler.music = 'DISTORTO';
-        //     tankman.x += 40;
-        //     tankman.y += 10;
-        //     precacheList.set('tankSong2', 'sound');
+            var gfDance:FlxSprite = new FlxSprite(gf.x - 107, gf.y + 140);
+            gfDance.antialiasing = ClientPrefs.globalAntialiasing;
 
-        //     var tightBars:FlxSound = new FlxSound().loadEmbedded(Paths.sound('tankSong2'));
-        //     FlxG.sound.list.add(tightBars);
+            var gfCutscene:FlxSprite = new FlxSprite(gf.x - 104, gf.y + 122);
+            gfCutscene.antialiasing = ClientPrefs.globalAntialiasing;
 
-        //     tankman.animation.addByPrefix('tightBars', 'TANK TALK 2', 24, false);
-        //     tankman.animation.play('tightBars', true);
-        //     game.boyfriend.animation.curAnim.finish();
+            if (!ClientPrefs.lowQuality)
+            {
+                gfDance.frames = Paths.getSparrowAtlas('characters/gfTankmen');
+                gfDance.animation.addByPrefix('dance', 'GF Dancing at Gunpoint', 24, true);
+                gfDance.animation.play('dance', true);
+                stage.add(gfDance);
+            }
 
-        //     cutsceneHandler.onStart = function()
-        //     {
-        //         tightBars.play(true);
-        //         FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom * 1.2}, 4, {ease: FlxEase.quadInOut});
-        //         FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom * 1.2 * 1.2}, 0.5, {ease: FlxEase.quadInOut, startDelay: 4});
-        //         FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom * 1.2}, 1, {ease: FlxEase.quadInOut, startDelay: 4.5});
-        //     };
+            gfCutscene.frames = Paths.getSparrowAtlas('cutscenes/stressGF');
+            gfCutscene.animation.addByPrefix('dieBitch', 'GF STARTS TO TURN PART 1', 24, false);
+            gfCutscene.animation.addByPrefix('getRektLmao', 'GF STARTS TO TURN PART 2', 24, false);
+            gfCutscene.animation.play('dieBitch', true);
+            gfCutscene.animation.pause();
+            gfCutscene.alpha = 0;
+            stage.add(gfCutscene);
 
-        //     cutsceneHandler.timer(4, function()
-        //     {
-        //         game.gf.playAnim('sad', true);
-        //         game.gf.animation.finishCallback = function(name:String)
-        //         {
-        //             game.gf.playAnim('sad', true);
-        //         };
-        //     });
+            picoCutscene = new AnimateSprite(gf.x - 849, gf.y - 264, Paths.textureAtlas('cutscenes/stressPico'));
+            picoCutscene.anim.addBySymbol('anim', 'Pico Badass', 0, 0, 24);
+            picoCutscene.antialiasing = ClientPrefs.globalAntialiasing;
+            picoCutscene.alpha = 0;
+            stage.add(picoCutscene);
 
-        // case 'stress':
-        //     cutsceneHandler.endTime = 35.5;
-        //     tankman.x -= 54;
-        //     tankman.y -= 14;
-        //     game.gfGroup.alpha = 0.00001;
-        //     game.boyfriendGroup.alpha = 0.00001;
-        //     game.camFollow.set(dad.x + 400, dad.y + 170);
-        //     FlxTween.tween(FlxG.camera, {zoom: 0.9 * 1.2}, 1, {ease: FlxEase.quadInOut});
-        //     foregroundSprites.forEach(function(spr:BGSprite)
-        //     {
-        //         spr.y += 100;
-        //     });
-        //     game.precacheList.set('stressCutscene', 'sound');
+            var boyfriendCutscene:FlxSprite = new FlxSprite(boyfriend.x + 5, boyfriend.y + 20);
+            boyfriendCutscene.antialiasing = ClientPrefs.globalAntialiasing;
+            boyfriendCutscene.frames = Paths.getSparrowAtlas('characters/BOYFRIEND');
+            boyfriendCutscene.animation.addByPrefix('idle', 'BF idle dance', 24, false);
+            boyfriendCutscene.animation.play('idle', true);
+            boyfriendCutscene.animation.curAnim.finish();
+            stage.add(boyfriendCutscene);
 
-        //     tankman2.frames = Paths.getSparrowAtlas('cutscenes/stress2');
-        //     addBehindDad(tankman2);
+            gfDance.zIndex = 1;
+            gfCutscene.zIndex = 2;
+            picoCutscene.zIndex = 3;
+            boyfriendCutscene.zIndex = 5;
+            gfGroup.zIndex = 6;
+            tankman.zIndex = 7;
+            dadGroup.zIndex = 8;
+            boyfriendGroup.zIndex = 9;
+            refreshZ();
 
-        //     if (!ClientPrefs.lowQuality)
-        //     {
-        //         gfDance.frames = Paths.getSparrowAtlas('characters/gfTankmen');
-        //         gfDance.animation.addByPrefix('dance', 'GF Dancing at Gunpoint', 24, true);
-        //         gfDance.animation.play('dance', true);
-        //         addBehindGF(gfDance);
-        //     }
+            var stressScene = new FlxSound().loadEmbedded(Paths.sound('stressCutscene'));
+            FlxG.sound.list.add(stressScene);
 
-        //     gfCutscene.frames = Paths.getSparrowAtlas('cutscenes/stressGF');
-        //     gfCutscene.animation.addByPrefix('dieBitch', 'GF STARTS TO TURN PART 1', 24, false);
-        //     gfCutscene.animation.addByPrefix('getRektLmao', 'GF STARTS TO TURN PART 2', 24, false);
-        //     gfCutscene.animation.play('dieBitch', true);
-        //     gfCutscene.animation.pause();
-        //     addBehindGF(gfCutscene);
-        //     if (!ClientPrefs.lowQuality)
-        //     {
-        //         gfCutscene.alpha = 0.00001;
-        //     }
+            FlxG.sound.playMusic(Paths.music('klaskii-romper'), 0.2);
+            FlxG.sound.music.fadeIn(2, 0.0125, 0.1);
 
-        //     picoCutscene.frames = AtlasFrameMaker.construct('cutscenes/stressPico');
-        //     picoCutscene.animation.addByPrefix('anim', 'Pico Badass', 24, false);
-        //     addBehindGF(picoCutscene);
-        //     picoCutscene.alpha = 0.00001;
 
-        //     boyfriendCutscene.frames = Paths.getSparrowAtlas('characters/BOYFRIEND');
-        //     boyfriendCutscene.animation.addByPrefix('idle', 'BF idle dance', 24, false);
-        //     boyfriendCutscene.animation.play('idle', true);
-        //     boyfriendCutscene.animation.curAnim.finish();
-        //     addBehindBF(boyfriendCutscene);
+            FlxTimer.wait(0.1, ()->{
+                stressScene.play();
+                tankman.anim.play('FUCK');
+            });
+            snapCamToPos(dad.x + 400, dad.y + 170);
+            FlxTween.tween(FlxG.camera, {zoom: 0.9 * 1.2}, 1, {ease: FlxEase.quadInOut});
 
-        //     var cutsceneSnd:FlxSound = new FlxSound().loadEmbedded(Paths.sound('stressCutscene'));
-        //     FlxG.sound.list.add(cutsceneSnd);
+            FlxTimer.wait(15.2, ()->{
+                FlxTween.tween(camFollow, {x: 650, y: 300}, 1, {ease: FlxEase.sineOut});
+                FlxTween.tween(FlxG.camera, {zoom: 0.9 * 1.2 * 1.2}, 2.25, {ease: FlxEase.quadInOut});
+                gfDance.visible = false;
+                gfCutscene.alpha = 1;
+                gfCutscene.animation.play('dieBitch', true);
+                gfCutscene.animation.finishCallback = function(name:String)
+                {
+                    if(name == 'dieBitch') //Next part
+                    {
+                        gfCutscene.animation.play('getRektLmao', true);
+                        gfCutscene.offset.set(224, 445);
+                    }
+                    else
+                    {
+                        gfCutscene.visible = false;
+                        picoCutscene.alpha = 1;
+                        picoCutscene.anim.play('anim');
 
-        //     tankman.animation.addByPrefix('godEffingDamnIt', 'TANK TALK 3', 24, false);
-        //     tankman.animation.play('godEffingDamnIt', true);
+                        boyfriendGroup.alpha = 1;
+                        boyfriendCutscene.visible = false;
+                        boyfriend.playAnim('bfCatch', true);
+                        boyfriend.animation.finishCallback = function(name:String)
+                        {
+                            if(name != 'idle')
+                            {
+                                boyfriend.playAnim('idle', true);
+                                boyfriend.animation.curAnim.finish(); //Instantly goes to last frame
+                            }
+                        };
 
-        //     var calledTimes:Int = 0;
-        //     var zoomBack:Void->Void = function()
-        //     {
-        //         var camPosX:Float = 630;
-        //         var camPosY:Float = 425;
-        //         game.camFollow.set(camPosX, camPosY);
-        //         game.camFollowPos.setPosition(camPosX, camPosY);
-        //         FlxG.camera.zoom = 0.8;
-        //         cameraSpeed = 1;
+                        picoCutscene.anim.onComplete.add(()->{
+                            picoCutscene.visible = false;
+                            gfGroup.alpha = 1;
+                        });
+                        gfCutscene.animation.finishCallback = null;
+                    }
+                }
+            });
 
-        //         calledTimes++;
-        //         if (calledTimes > 1)
-        //         {
-        //             foregroundSprites.forEach(function(spr:BGSprite)
-        //             {
-        //                 spr.y -= 100;
-        //             });
-        //         }
-        //     }
+            FlxTimer.wait(17.5, zoomBack);
+            FlxTimer.wait(19.5, ()->{ tankman.anim.play('pico', true); });
+            FlxTimer.wait(20, ()->{ camFollow.setPosition(dad.x + 500, dad.y + 170); });
+            FlxTimer.wait(31.2, ()->{
+                boyfriend.playAnim('singUPmiss', true);
+                boyfriend.animation.finishCallback = function(name:String)
+                {
+                    if (name == 'singUPmiss')
+                    {
+                        boyfriend.playAnim('idle', true);
+                        boyfriend.animation.curAnim.finish(); //Instantly goes to last frame
+                    }
+                };
 
-        //     cutsceneHandler.onStart = function()
-        //     {
-        //         cutsceneSnd.play(true);
-        //     };
+                camFollow.setPosition(boyfriend.x + 280, boyfriend.y + 200);
+                cameraSpeed = 12;
+                FlxTween.tween(FlxG.camera, {zoom: 2}, 0.25, {ease: FlxEase.elasticOut});
+            });
+            FlxTimer.wait(32.2, ()->{
+                snapCamToPos(630, 425);
+                FlxG.camera.zoom = 0.8;
+            });
 
-        //     cutsceneHandler.timer(15.2, function()
-        //     {
-        //         FlxTween.tween(game.camFollow, {x: 650, y: 300}, 1, {ease: FlxEase.sineOut});
-        //         FlxTween.tween(FlxG.camera, {zoom: 0.9 * 1.2 * 1.2}, 2.25, {ease: FlxEase.quadInOut});
+            FlxTimer.wait(35, ()->{
+                for(i in [tankman, gfDance, gfCutscene, boyfriendCutscene]){
+                    i.visible = false;
+                    i.destroy();
+                }
+                endScene();
+            });
+    }
+}
 
-        //         gfDance.visible = false;
-        //         gfCutscene.alpha = 1;
-        //         gfCutscene.animation.play('dieBitch', true);
-        //         gfCutscene.animation.finishCallback = function(name:String)
-        //         {
-        //             if(name == 'dieBitch') //Next part
-        //             {
-        //                 gfCutscene.animation.play('getRektLmao', true);
-        //                 gfCutscene.offset.set(224, 445);
-        //             }
-        //             else
-        //             {
-        //                 gfCutscene.visible = false;
-        //                 picoCutscene.alpha = 1;
-        //                 picoCutscene.animation.play('anim', true);
 
-        //                 boyfriendGroup.alpha = 1;
-        //                 boyfriendCutscene.visible = false;
-        //                 boyfriend.playAnim('bfCatch', true);
-        //                 boyfriend.animation.finishCallback = function(name:String)
-        //                 {
-        //                     if(name != 'idle')
-        //                     {
-        //                         game.boyfriend.playAnim('idle', true);
-        //                         game.boyfriend.animation.curAnim.finish(); //Instantly goes to last frame
-        //                     }
-        //                 };
+function endScene(){
+    isCameraOnForcedPos = false;
+    camZooming = true;
+    dadGroup.alpha = 1;
+    FlxG.sound.music.stop();
+    camHUD.visible = true;
+    allowCountdown = true;
+    cameraSpeed = 1;
+    startCountdown();
+}
 
-        //                 picoCutscene.animation.finishCallback = function(name:String)
-        //                 {
-        //                     picoCutscene.visible = false;
-        //                     game.gfGroup.alpha = 1;
-        //                     picoCutscene.animation.finishCallback = null;
-        //                 };
-        //                 gfCutscene.animation.finishCallback = null;
-        //             }
-        //         };
-        //     });
+var calledTimes:Int = 0;
+function zoomBack(){        
+    var camPosX:Float = 630;
+    var camPosY:Float = 425;
+    camFollow.setPosition(camPosX, camPosY);
+    FlxG.camera.zoom = 0.8;
+    cameraSpeed = 1;
 
-        //     cutsceneHandler.timer(17.5, function()
-        //     {
-        //         zoomBack();
-        //     });
-
-        //     cutsceneHandler.timer(19.5, function()
-        //     {
-        //         tankman2.animation.addByPrefix('lookWhoItIs', 'TANK TALK 3', 24, false);
-        //         tankman2.animation.play('lookWhoItIs', true);
-        //         tankman2.alpha = 1;
-        //         tankman.visible = false;
-        //     });
-
-        //     cutsceneHandler.timer(20, function()
-        //     {
-        //         game.camFollow.set(dad.x + 500, dad.y + 170);
-        //     });
-
-        //     cutsceneHandler.timer(31.2, function()
-        //     {
-        //         game.boyfriend.playAnim('singUPmiss', true);
-        //         game.boyfriend.animation.finishCallback = function(name:String)
-        //         {
-        //             if (name == 'singUPmiss')
-        //             {
-        //                 game.boyfriend.playAnim('idle', true);
-        //                 game.boyfriend.animation.curAnim.finish(); //Instantly goes to last frame
-        //             }
-        //         };
-
-        //         game.camFollow.set(game.boyfriend.x + 280, game.boyfriend.y + 200);
-        //         cameraSpeed = 12;
-        //         FlxTween.tween(FlxG.camera, {zoom: 0.9 * 1.2 * 1.2}, 0.25, {ease: FlxEase.elasticOut});
-        //     });
-
-        //     cutsceneHandler.timer(32.2, function()
-        //     {
-        //         zoomBack();
-        //     });
-    // }
-// }
+    calledTimes += 1;
+}

@@ -17,8 +17,8 @@ function onStartCountdown(){
         var blackScreen:FlxSprite = new FlxSprite().makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
         add(blackScreen);
         blackScreen.scrollFactor.set();
-        game.camHUD.visible = false;
-        game.inCutscene = true;
+        camHUD.visible = false;
+        inCutscene = true;
 
         FlxTween.tween(blackScreen, {alpha: 0}, 0.7, {
             ease: FlxEase.linear,
@@ -27,21 +27,19 @@ function onStartCountdown(){
             }
         });
         FlxG.sound.play(Paths.sound('Lights_Turn_On'));
-        game.snapCamFollowToPos(400, -2050);
-        FlxG.camera.focusOn(game.camFollow);
+        snapCamToPos(400, -2050);
         FlxG.camera.zoom = 1.5;
 
         new FlxTimer().start(0.8, function(tmr:FlxTimer)
         {
-            game.camHUD.visible = true;
-            remove(blackScreen);
-            FlxTween.tween(FlxG.camera, {zoom: game.defaultCamZoom}, 2.5, {
+            camHUD.visible = true;
+            FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, 2.5, {
                 ease: FlxEase.quadInOut,
                 onComplete: function(twn:FlxTween)
                 {
                     allowCountdown = true;
-                    game.inCutscene = false;
-                    game.startCountdown();
+                    inCutscene = false;
+                    startCountdown();
                 }
             });
         });

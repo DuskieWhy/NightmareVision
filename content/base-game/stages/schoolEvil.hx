@@ -23,6 +23,11 @@ function onLoad(){
     }
 }
 
+function onCreatePost(){
+    playHUD.ratingPrefix = 'pixelUI/';
+	playHUD.ratingSuffix = '-pixel';
+}
+
 function onUpdate(elapsed){
     if(!ClientPrefs.lowQuality && bgGhouls.animation.curAnim.finished) {
         bgGhouls.visible = false;
@@ -37,8 +42,10 @@ function onEvent(eventName, value1, value2){
     }
 }
 
-function doStartCountdown() {
-    if (PlayState.isStoryMode) {
+var a = false;
+function onStartCountdown() {
+    if(!a && PlayState.isStoryMode){
+        a = true;
         if (Paths.formatToSongPath(PlayState.SONG.song) == 'roses')
             FlxG.sound.play(Paths.sound('ANGRY'));
     
@@ -48,15 +55,17 @@ function doStartCountdown() {
     }
 }
 
-function schoolIntro(?dialogueBox:DialogueBox):Void {
-    game.inCutscene = true;
+function schoolIntro(dialogueBox) {
+    inCutscene = true;
+    snapCamToPos(600, 550);
+
     var black:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
     black.scrollFactor.set();
-    black.cameras = [ game.camHUD ];
+    black.cameras = [ camHUD ];
     add(black);
 
     var red:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFFff1b31);
-    red.cameras = [ game.camOther ];
+    red.cameras = [ camOther ];
     red.scrollFactor.set();
 
     var senpaiEvil:FlxSprite = new FlxSprite();
@@ -66,7 +75,7 @@ function schoolIntro(?dialogueBox:DialogueBox):Void {
     senpaiEvil.scrollFactor.set();
     senpaiEvil.updateHitbox();
     senpaiEvil.screenCenter();
-    senpaiEvil.cameras = [ game.camOther ];
+    senpaiEvil.cameras = [ camOther ];
     senpaiEvil.x += 300;
 
     var songName:String = Paths.formatToSongPath(PlayState.SONG.song);
@@ -77,7 +86,7 @@ function schoolIntro(?dialogueBox:DialogueBox):Void {
         if (songName == 'thorns')
         {
             add(red);
-            game.camHUD.visible = false;
+            camHUD.visible = false;
         }
     }
 
@@ -115,15 +124,15 @@ function schoolIntro(?dialogueBox:DialogueBox):Void {
 
                                 remove(senpaiEvil);
                                 remove(red);
-                                game.camOther.fade(FlxColor.WHITE, 0.01, true, function()
+                                camOther.fade(FlxColor.WHITE, 0.01, true, function()
                                 {
                                     add(dialogueBox);
-                                    game.camHUD.visible = true;
+                                    camHUD.visible = true;
                                 }, true);
                             });
                             new FlxTimer().start(3.2, function(deadTime:FlxTimer)
                             {
-                                game.camOther.fade(FlxColor.WHITE, 1.6, false);
+                                camOther.fade(FlxColor.WHITE, 1.6, false);
                             });
                         }
                     });
@@ -134,7 +143,7 @@ function schoolIntro(?dialogueBox:DialogueBox):Void {
                 }
             }
             else
-                game.startCountdown();
+                startCountdown();
 
             remove(black);
         }

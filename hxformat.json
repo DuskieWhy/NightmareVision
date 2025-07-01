@@ -1,16 +1,47 @@
 {
+	"wrapping": {"maxLineLength": 200,"arrayWrap": {"defaultWrap": "keep"}},
 	"lineEnds": {
+		"anonFunctionCurly": {
+		  "emptyCurly": "break",
+		  "leftCurly": "after",
+		  "rightCurly": "both"
+		},
 		"leftCurly": "both",
-		"rightCurly": "both",
-		"emptyCurly": "break",
-		"objectLiteralCurly": {
-			"leftCurly": "after"
-		}
-	},
+		"rightCurly": "both"
+	  },
 	"sameLine": {
+		"functionBody": "same",
+		"ifBody": "same",
 		"ifElse": "next",
+		"elseBody": "same",
 		"doWhile": "next",
 		"tryBody": "next",
 		"tryCatch": "next"
+	},
+	"indentation":{
+		"character": "tab",
+
+		"trailingWhitespace": true
+	},
+
+	"emptyLines": {
+		"importAndUsing": {
+			"betweenImportsLevel": "firstLevelPackage",
+			"betweenImports": 1,
+			"beforeUsing": 1,
+			"beforeType": 1
+		},
+		
+		"maxAnywhereInFile": 1,
+		
+		"afterPackage": 1,
+		
+		"finalNewline": true
+	},
+
+	"whitespace": {
+		"compressSuccessiveParenthesis": true,
+		
+		"addLineCommentSpace": true
 	}
 }

@@ -1,4 +1,7 @@
-addHaxeLibrary('BackgroundDancer', 'gameObjects');
+
+import funkin.objects.stageobjects.BackgroundDancer;
+import funkin.objects.BGSprite;
+
 var grpLimoDancers:Array<BackgroundDancer> = [];
 var grpLimoParticles:Array<BGSprite> = [];
 var limo:BGSprite;
@@ -70,7 +73,7 @@ function resetLimoKill():Void
 
 function killHenchmen():Void
 {
-    if(!ClientPrefs.lowQuality && ClientPrefs.violence) {
+    if(!ClientPrefs.lowQuality) {
         if(limoKillingState < 1) {
             limoMetalPole.x = -400;
             limoMetalPole.visible = true;
@@ -106,8 +109,8 @@ function fastCarDrive()
 }
 
 function onCreatePost(){
-    game.addBehindBF(limo);
-    game.addBehindGF(fastCar);
+    addBehindBF(limo);
+    addBehindGF(fastCar);
     resetFastCar();
 }
 
@@ -184,7 +187,7 @@ function onUpdate(elapsed){
                 }
 
             case 4:
-                bgLimo.x = FlxMath.lerp(bgLimo.x, -150, CoolUtil.boundTo(elapsed * 9, 0, 1));
+                bgLimo.x = FlxMath.lerp(bgLimo.x, -150, FlxMath.bound(elapsed * 9, 0, 1));
                 if(Math.round(bgLimo.x) == -150) {
                     bgLimo.x = -150;
                     limoKillingState = 0;

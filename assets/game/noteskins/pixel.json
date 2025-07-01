@@ -1,0 +1,294 @@
+{
+	"extraSkin": "pixelUI/NOTE_assets",
+	"singAnimations": [
+		"singLEFT",
+		"singDOWN",
+		"singUP",
+		"singRIGHT"
+	],
+	"splashesEnabled": false,
+	"playerSkin": "pixelUI/NOTE_assets",
+	"receptorAnimations": [
+		[
+			{
+				"xmlName": "arrowLEFT",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "static"
+			},
+			{
+				"xmlName": "left press",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "pressed"
+			},
+			{
+				"xmlName": "left confirm",
+				"offsets": [
+					-1,
+					-1
+				],
+				"looping": false,
+				"anim": "confirm"
+			}
+		],
+		[
+			{
+				"xmlName": "arrowDOWN",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "static"
+			},
+			{
+				"xmlName": "down press",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "pressed"
+			},
+			{
+				"xmlName": "down confirm",
+				"offsets": [
+					-2,
+					0
+				],
+				"looping": false,
+				"anim": "confirm"
+			}
+		],
+		[
+			{
+				"xmlName": "arrowUP",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "static"
+			},
+			{
+				"xmlName": "up press",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "pressed"
+			},
+			{
+				"xmlName": "up confirm",
+				"offsets": [
+					-1,
+					-1
+				],
+				"looping": false,
+				"anim": "confirm"
+			}
+		],
+		[
+			{
+				"xmlName": "arrowRIGHT",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "static"
+			},
+			{
+				"xmlName": "right press",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "pressed"
+			},
+			{
+				"xmlName": "right confirm",
+				"offsets": [
+					-1,
+					0
+				],
+				"looping": false,
+				"anim": "confirm"
+			}
+		]
+	],
+	"noteSplashAnimations": [
+		{
+			"xmlName": "note splash purple",
+			"offsets": [
+				0,
+				0
+			],
+			"anim": "note0"
+		},
+		{
+			"xmlName": "note splash blue",
+			"offsets": [
+				0,
+				0
+			],
+			"anim": "note1"
+		},
+		{
+			"xmlName": "note splash green",
+			"offsets": [
+				0,
+				0
+			],
+			"anim": "note2"
+		},
+		{
+			"xmlName": "note splash red",
+			"offsets": [
+				0,
+				0
+			],
+			"anim": "note3"
+		}
+	],
+	"noteAnimations": [
+		[
+			{
+				"xmlName": "purple",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "scroll0"
+			},
+			{
+				"xmlName": "purple hold piece",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "hold0"
+			},
+			{
+				"xmlName": "pruple end hold",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "holdend0"
+			}
+		],
+		[
+			{
+				"xmlName": "blue",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "scroll1"
+			},
+			{
+				"xmlName": "blue hold piece",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "hold1"
+			},
+			{
+				"xmlName": "blue hold end",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "holdend1"
+			}
+		],
+		[
+			{
+				"xmlName": "green",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "scroll2"
+			},
+			{
+				"xmlName": "green hold piece",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "hold2"
+			},
+			{
+				"xmlName": "green hold end",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "holdend2"
+			}
+		],
+		[
+			{
+				"xmlName": "red",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "scroll3"
+			},
+			{
+				"xmlName": "red hold piece",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "hold3"
+			},
+			{
+				"xmlName": "red hold end",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "holdend3"
+			}
+		]
+	],
+	"pixelSize": [
+		4,
+		5
+	],
+	"hasQuants": true,
+	"noteSplashSkin": "noteSplashes",
+	"isQuants": false,
+	"globalSkin": "pixelUI/NOTE_assets",
+	"antialiasing": false,
+	"isPixel": true,
+	"opponentSkin": "pixelUI/NOTE_assets",
+	"scale": 5.99999999999999,
+	"sustainSuffix": "ENDS"
+}

@@ -1,0 +1,29 @@
+{
+    "files.associations": {
+        "*.hscript": "haxe",
+        "*.hxs": "haxe",
+    },
+    "lime.targetConfigurations": [
+        {
+            "label": "Windows / Debug (Forced ANSI)",
+            "target": "windows",
+            "args": [
+                "-debug",
+                "-DFORCED_ANSI"
+            ]
+        },
+        {
+            "label": "Windows / Debug (Tracy)",
+            "target": "windows",
+            "args": ["-debug", "-DFEATURE_DEBUG_TRACY"]
+        }
+    ],
+    "[haxe]": {
+		"editor.formatOnSave": true,
+		"editor.formatOnSaveMode":"modifications",
+		"editor.formatOnPaste": false,
+		"editor.codeActionsOnSave": {
+			"source.sortImports": "never"
+		}
+	},
+}

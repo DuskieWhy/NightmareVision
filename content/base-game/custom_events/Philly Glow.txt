@@ -1,0 +1,4 @@
+Exclusive to Week 3
+Value 1: 0/1/2 = OFF/ON/Reset Gradient
+
+No, i won't add it to other weeks.

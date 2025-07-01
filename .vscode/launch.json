@@ -8,6 +8,13 @@
             "name": "Lime",
             "type": "lime",
             "request": "launch"
-        }
+        },
+        {
+			"name": "HXCPP (Windows/Tracy)",
+			"type": "hxcpp",
+			"request": "launch",
+			"preLaunchTask": "lime: build windows -debug -DFEATURE_DEBUG_TRACY",
+			"program": "${workspaceFolder}/export/debug-tracy/windows/bin/Friday n Fnightfunkin.exe"
+		}
     ]
 }

@@ -1,3 +1,7 @@
+
+import funkin.objects.BGSprite;
+
+
 var phillyLightsColors:Array<FlxColor>;
 var phillyWindow:BGSprite;
 var phillyStreet:BGSprite;
@@ -114,8 +118,8 @@ function onUpdate(elapsed){
         }
 
     }
-    phillyWindow.alpha = FlxMath.lerp(phillyWindow.alpha, 0, CoolUtil.boundTo(elapsed * 3.2, 0, 1));
-    // game.boyfriend.angle += 5;
+    phillyWindow.alpha = FlxMath.lerp(phillyWindow.alpha, 0, FlxMath.bound(elapsed * 3.2, 0, 1));
+    // boyfriend.angle += 5;
 }
 
 var curLight:Int = -1;
@@ -130,12 +134,10 @@ function onBeatHit(){
     if (!trainMoving)
         trainCooldown += 1;
 
-    if (game.curBeat % 4 == 0)
-    {
+    if (curBeat % 4 == 0)
         randomizeLights();
-    }
 
-    if (game.curBeat % 8 == 4 && FlxG.random.bool(30) && !trainMoving && trainCooldown > 8)
+    if (curBeat % 8 == 4 && FlxG.random.bool(30) && !trainMoving && trainCooldown > 8)
     {
         trainCooldown = FlxG.random.int(-4, 0);
         trainStart();
