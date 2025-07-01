@@ -1,4 +1,18 @@
-## How to compile NV Engine
+helloe we hit single
+
+Havee fun with NightmareVision V1! (***[follow me on twitter](https://twitter.com/DuskieWhy)***)
+
+![](https://github.com/DuskieWhy/NightmareVision/blob/V1/assets/game/images/branding/NMV.png)
+
+## Special thanks too...
+
+* ShadowMario and Co. for [Psych engine](https://github.com/ShadowMario/FNF-PsychEngine)
+
+* Nebula_Zorua for the [specific Psych fork](https://github.com/nebulazorua/exe-psych-fork) NMV is built off
+
+* Rozebud for the chart editor little buddies ([Check out their engine too](https://github.com/ThatRozebudDude/FPS-Plus-Public))
+
+## How to compile NMV Engine
 
 ### Download the prerequisites... (skip this if you already have compiled any fnf project, or any flixel project basically lol)
 
@@ -26,11 +40,3 @@ In a cmd within the project directory, in order run...
 
 
 After that is complete, run `lime test windows` and you should be compiling
-
-
-helloe we hit single
-
-
-Havee fun with NightmareVision V1! (***[follow me on twitter](https://twitter.com/DuskieWhy)***)
-
-![](https://github.com/DuskieWhy/NM_Private/blob/main/assets/game/images/branding/NMV.png)

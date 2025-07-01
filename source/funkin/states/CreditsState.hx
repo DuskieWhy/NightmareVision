@@ -84,7 +84,7 @@ class CreditsState extends MusicBeatState
 			[
 				'NebulaZorua',
 				'neb',
-				'Modchart backend creator',
+				'Creator of the Psych Engine fork NMV is based off, Made the Modchart backend',
 				'https://twitter.com/Nebula_Zorua',
 				'0xB300B3'
 			],
@@ -107,7 +107,7 @@ class CreditsState extends MusicBeatState
 			[
 				'Infry',
 				'infry',
-				'made the little guys in chart editor',
+				'Made little buddies for the chart editor',
 				'https://twitter.com/Isetaaaaa',
 				'0x8d00df'
 			],
@@ -115,14 +115,14 @@ class CreditsState extends MusicBeatState
 			[
 				'Rozebud',
 				'rozebud',
-				'made the original little chart guys',
+				'Made the original chart little buddies',
 				'https://twitter.com/Isetaaaaa',
 				'0x800000'
 			],
 			[
 				'riconuts',
 				'riconuts',
-				'made the stage implementation setup',
+				'Made the stage implementation setup',
 				'https://twitter.com/Isetaaaaa',
 				'0x700b98'
 			],
