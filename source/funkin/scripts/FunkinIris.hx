@@ -8,8 +8,9 @@ import funkin.backend.plugins.DebugTextPlugin;
 import funkin.scripts.FunkinScript;
 import funkin.objects.*;
 
-// thank you crow,neeo
+
 // wrapper for an iris script to keep the consistency of the whole funkyscript setup this engine got
+// will be replaced later when im not lazy
 @:access(crowplexus.iris.Iris)
 @:access(funkin.states.PlayState)
 class FunkinIris extends FunkinScript
