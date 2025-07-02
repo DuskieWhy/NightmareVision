@@ -179,7 +179,7 @@ class PlayState extends MusicBeatState
 	public var stage:Stage;
 	
 	public var doof:DialogueBox;
-
+	
 	public static var isPixelStage:Bool = false;
 	public static var SONG:SwagSong = null;
 	public static var isStoryMode:Bool = false;
@@ -2275,16 +2275,12 @@ class PlayState extends MusicBeatState
 		if (controls.PAUSE && startedCountdown && canPause)
 		{
 			final ret:Dynamic = callOnScripts('onPause', []);
-			if (ret != Globals.Function_Stop)
-				openPauseMenu();
-
+			if (ret != Globals.Function_Stop) openPauseMenu();
 		}
 		
-		if (FlxG.keys.anyJustPressed(debugKeysChart) && !endingSong && !inCutscene)
-		openChartEditor();
+		if (FlxG.keys.anyJustPressed(debugKeysChart) && !endingSong && !inCutscene) openChartEditor();
 		
-		if (FlxG.keys.justPressed.NINE)
-			openNoteskinEditor();
+		if (FlxG.keys.justPressed.NINE) openNoteskinEditor();
 		if (FlxG.keys.justPressed.F4 && vocals != null && FlxG.sound.music != null) resyncVocals();
 		
 		if (FlxG.keys.anyJustPressed(debugKeysCharacter) && !endingSong && !inCutscene)
@@ -2524,10 +2520,10 @@ class PlayState extends MusicBeatState
 					
 					if (deg != 0) daNote.mAngle = (deg + 90);
 					else daNote.mAngle = 0;
-
+					
 					daNote.x += script_SUSTAINOffsets[daNote.noteData].x;
 					daNote.y += script_SUSTAINOffsets[daNote.noteData].y;
-					if (daNote.animation.curAnim.name.endsWith('end'))
+					if (daNote.animation.curAnim.name.endsWith('end${daNote.noteData}'))
 					{
 						daNote.x += script_SUSTAINENDOffsets[daNote.noteData].x;
 						daNote.y += script_SUSTAINENDOffsets[daNote.noteData].y;
