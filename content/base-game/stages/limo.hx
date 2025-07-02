@@ -63,7 +63,7 @@ function onLoad()
 	
 	fastCar = new BGSprite('limo/fastCarLol', -300, 160);
 	fastCar.active = true;
-	// fastCar.zIndex = 5;
+	fastCar.zIndex = 5;
 	
 	add(limo);
 	add(fastCar);
@@ -76,8 +76,6 @@ function onCreatePost()
 	dadGroup.zIndex = 8;
 	boyfriendGroup.zIndex = 8;
 	gfGroup.zIndex = 6;
-	
-	// refreshZ();
 	
 	resetFastCar();
 }
