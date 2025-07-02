@@ -13,6 +13,13 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+  # For release builds
+  workflow_call:
+    inputs:
+      buildFlags:
+        required: false
+        type: string
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -27,34 +34,28 @@ jobs:
 
       - uses: krdlab/setup-haxe@master
         with:
-          haxe-version: 4.2.0
+          haxe-version: 4.3.7
       # Runs a set of commands using the runners shell
       - name: Install Haxelib
         run: |
           haxelib setup ~/haxelib
           haxelib install hxcpp > /dev/null
-          haxelib install lime
-          haxelib install openfl
-          haxelib --never install flixel
-          haxelib run lime setup flixel
-          haxelib run lime setup
-          haxelib install flixel-tools
-          haxelib install flixel-ui
-          haxelib install flixel-addons
-          haxelib install tjson
-          haxelib install hxjsonast
-          haxelib git linc_luajit https://github.com/nebulazorua/linc_luajit
-          haxelib install hscript
-          haxelib git hscript-ex https://github.com/ianharrigan/hscript-ex
-          haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
-          haxelib install hxcpp-debug-server
+          haxelib install hxpkg --global
+          haxelib run hxpkg setup --global
+          hxpkg install
           haxelib list
-      - name: Create Version Tag
-        run: echo "${{github.run_id}}" > VERSION
+      - name: Compile hxcpp
+        run: |
+          cd ~/haxelib/hxcpp/git/tools/run
+          haxe compile.hxml
+          cd ..
+          cd ./hxcpp
+          haxe compile.hxml
+          cd ../..
       - name: Compile
-        run: haxelib run lime build Project.xml linux --app-version="4.0.0-${{ github.run_id}}"
+        run: haxelib run lime build Project.xml linux -D ${{ inputs.buildFlags }}
       - name: Publish Artifact
-        uses: actions/upload-artifact@v2.2.4
+        uses: actions/upload-artifact@main
         with:
           name: linuxBuild
           path: 'export/release/linux/bin' 
@@ -67,75 +68,98 @@ jobs:
 
       - uses: krdlab/setup-haxe@master
         with:
-          haxe-version: 4.2.0
+          haxe-version: 4.3.7
       # Runs a set of commands using the runners shell
       - name: Install Haxelib
         run: |
           haxelib setup C:/haxelib
           haxelib install hxcpp > nul
-          haxelib install lime
-          haxelib install openfl
-          haxelib --never install flixel
-          haxelib run lime setup flixel
-          haxelib run lime setup
-          haxelib install flixel-tools
-          haxelib install flixel-ui
-          haxelib install flixel-addons
-          haxelib install tjson
-          haxelib install hxjsonast
-          haxelib git linc_luajit https://github.com/nebulazorua/linc_luajit
-          haxelib install hscript 
-          haxelib git hscript-ex https://github.com/ianharrigan/hscript-ex
-          haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
-          haxelib install hxcpp-debug-server
+          haxelib install hxpkg --global
+          haxelib run hxpkg setup --global
+          hxpkg install
           haxelib list
         shell: cmd
-      - name: Create Version Tag
-        run: echo "${{github.run_id}}" > VERSION
+      - name: Compile hxcpp
+        run: |
+          cd C:/haxelib/hxcpp/git/tools/run
+          haxe compile.hxml
+          cd ..
+          cd ./hxcpp
+          haxe compile.hxml
+          cd ../..
       - name: Compile
-        run: haxelib run lime build windows --app-version="4.0.0-${{ github.run_id}}"
+        run: haxelib run lime build windows -D ${{ inputs.buildFlags }}
       - name: Publish Artifact
-        uses: actions/upload-artifact@v2.2.4
+        uses: actions/upload-artifact@main
         with:
           name: windowsBuild
           path: export/release/windows/bin
-  buildMac:
-    runs-on: macos-12
+  buildMacIntel:
+    runs-on: macos-15
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@main
 
       - uses: krdlab/setup-haxe@master
         with:
-          haxe-version: 4.2.0
+          haxe-version: 4.3.7
       # Runs a set of commands using the runners shell
       - name: Install Haxelib
         run: |
           haxelib setup ~/haxelib
-          haxelib install hxcpp > /dev/null
-          haxelib install lime
-          haxelib install openfl
-          haxelib --never install flixel
-          haxelib run lime setup flixel
-          haxelib run lime setup
-          haxelib install flixel-tools
-          haxelib install flixel-ui
-          haxelib install flixel-addons
-          haxelib install tjson
-          haxelib install hxjsonast
-          haxelib git linc_luajit https://github.com/nebulazorua/linc_luajit
-          haxelib install hscript
-          haxelib git hscript-ex https://github.com/ianharrigan/hscript-ex
-          haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
-          haxelib install hxcpp-debug-server
-          haxelib list
-      - name: Create Version Tag
-        run: echo "${{github.run_id}}" > VERSION
+          haxelib install hxcpp > /dev/null --quiet
+          haxelib install hxpkg --global
+          haxelib run hxpkg setup --global
+          hxpkg install
+      - name: Compile hxcpp
+        run: |
+          cd ~/haxelib/hxcpp/git/tools/run
+          haxe compile.hxml
+          cd ..
+          cd ./hxcpp
+          haxe compile.hxml
+          cd ../..
       - name: Compile
-        run: haxelib run lime build mac --app-version="4.0.0-${{ github.run_id}}"
+        run: |
+          haxelib run lime build mac -64 -D ${{ inputs.buildFlags || 'commit' }} -D HXCPP_M64
       - name: Publish Artifact
-        uses: actions/upload-artifact@v2.2.4
+        uses: actions/upload-artifact@main
         with:
-          name: macBuild
+          name: macBuild-intel
+          path: export/release/macos/bin
+
+  buildMacArm:
+    runs-on: macos-15
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@main
+
+      - uses: krdlab/setup-haxe@master
+        with:
+          haxe-version: 4.3.7
+      # Runs a set of commands using the runners shell
+      - name: Install Haxelib
+        run: |
+          haxelib setup ~/haxelib
+          haxelib install hxcpp > /dev/null --quiet
+          haxelib install hxpkg --global
+          haxelib run hxpkg setup --global
+          hxpkg install
+      - name: Compile hxcpp
+        run: |
+          cd ~/haxelib/hxcpp/git/tools/run
+          haxe compile.hxml
+          cd ..
+          cd ./hxcpp
+          haxe compile.hxml
+          cd ../..
+      - name: Compile
+        run: |
+          haxelib run lime build mac -arm64 -D ${{ inputs.buildFlags }} -D HXCPP_ARM64
+      - name: Publish Artifact
+        uses: actions/upload-artifact@main
+        with:
+          name: macBuild-arm
           path: export/release/macos/bin

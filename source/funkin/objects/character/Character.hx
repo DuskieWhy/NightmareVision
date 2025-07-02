@@ -162,8 +162,7 @@ class Character extends FlxSprite
 		
 		curCharacter = character;
 		this.isPlayer = isPlayer;
-
-		trace(skipCreate);
+		
 		if (!skipCreate) createNow();
 	}
 	
@@ -229,8 +228,6 @@ class Character extends FlxSprite
 		
 		flipX = (json.flip_x != isPlayer);
 		originalFlipX = (json.flip_x == true);
-		
-		trace('char: ' + curCharacter + ' flip: ' + flipX + ' isPlayer: ' + isPlayer + ' jsonFlipX: ' + json.flip_x);
 		
 		loadGraphicFromType(imageFile, spriteType);
 		
@@ -593,7 +590,7 @@ class Character extends FlxSprite
 	{
 		return isAnimNull() ? 0 : (animation.curAnim.curFrame = value);
 	}
-
+	
 	public function getAnimNumFrames():Int return isAnimNull() ? 0 : animation.curAnim.numFrames;
 	
 	/**
