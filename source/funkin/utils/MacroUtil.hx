@@ -12,7 +12,7 @@ using Lambda;
 class MacroUtil
 {
 	/**
-	 * enforces the use of haxe 4.3
+	 * enforces the use of haxe 4.3.4
 	 */
 	public static macro function haxeVersionEnforcement()
 	{

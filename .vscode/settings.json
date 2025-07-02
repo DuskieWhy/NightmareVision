@@ -16,15 +16,52 @@
         {
             "label": "Windows / Debug (Tracy)",
             "target": "windows",
-            "args": ["-debug", "-DFEATURE_DEBUG_TRACY"]
-        }
+            "args": [
+                "-debug",
+                "-DFEATURE_DEBUG_TRACY"
+            ]
+        },
+        {
+            "label": "Windows / Debug (ASSET_REDIRECT & Forced ANSI)",
+            "target": "windows",
+            "args": [
+                "-debug",
+                "-DASSET_REDIRECT",
+                "-DFORCED_ANSI"
+            ]
+        },
+        {
+            "label": "hl / Debug (Forced ANSI)",
+            "target": "hl",
+            "args": [
+                "-debug",
+                "-DFORCED_ANSI"
+            ]
+        },
+        {
+            "label": "hl / Debug (ASSET_REDIRECT)",
+            "target": "hl",
+            "args": [
+                "-debug",
+                "-DASSET_REDIRECT"
+            ]
+        },
+                {
+            "label": "hl / Debug (ASSET_REDIRECT & Forced ANSI)",
+            "target": "hl",
+            "args": [
+                "-debug",
+                "-DASSET_REDIRECT",
+                "-DFORCED_ANSI"
+            ]
+        },
     ],
     "[haxe]": {
-		"editor.formatOnSave": true,
-		"editor.formatOnSaveMode":"file",
-		"editor.formatOnPaste": false,
-		"editor.codeActionsOnSave": {
-			"source.sortImports": "never"
-		}
-	},
+        "editor.formatOnSave": true,
+        "editor.formatOnSaveMode": "file",
+        "editor.formatOnPaste": false,
+        "editor.codeActionsOnSave": {
+            "source.sortImports": "never"
+        }
+    },
 }
