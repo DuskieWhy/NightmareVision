@@ -230,8 +230,6 @@ function onUpdate(elapsed)
 				grpLimoDancers[i].x = (370 * i) + bgLimo.x + 280;
 			}
 		}
-		
-		FlxG.watch.addQuick("Limo Speed", limoSpeed);
 	}
 }
 
