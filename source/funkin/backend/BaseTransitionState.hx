@@ -7,7 +7,7 @@ class BaseTransitionState extends MusicBeatSubstate
 {
 	public var finishCallback:Void->Void = null;
 	
-	var status:TransitionStatus;
+	final status:TransitionStatus;
 	
 	public function new(status:TransitionStatus, ?finishCallback:Void->Void)
 	{

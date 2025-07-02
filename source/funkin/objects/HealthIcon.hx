@@ -4,10 +4,12 @@ import flixel.FlxSprite;
 
 class HealthIcon extends FlxSprite
 {
-	public var sprTracker:FlxSprite;
+	public var sprTracker:Null<FlxSprite> = null;
 	
-	private var isPlayer:Bool = false;
-	private var char:String = '';
+	var iconOffsets:Array<Float> = [0, 0];
+	
+	var isPlayer:Bool = false;
+	var char:String = '';
 	
 	public function new(char:String = 'bf', isPlayer:Bool = false)
 	{
@@ -23,8 +25,6 @@ class HealthIcon extends FlxSprite
 		
 		if (sprTracker != null) setPosition(sprTracker.x + sprTracker.width + 10, sprTracker.y - 30);
 	}
-	
-	var iconOffsets:Array<Float> = [0, 0];
 	
 	public function changeIcon(char:String)
 	{

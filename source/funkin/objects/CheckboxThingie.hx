@@ -4,17 +4,18 @@ import flixel.FlxSprite;
 
 class CheckboxThingie extends FlxSprite
 {
-	public var sprTracker:FlxSprite;
+	public var sprTracker:Null<FlxSprite> = null;
 	public var daValue(default, set):Bool;
 	public var copyAlpha:Bool = true;
 	public var offsetX:Float = 0;
 	public var offsetY:Float = 0;
 	
-	public function new(x:Float = 0, y:Float = 0, ?checked = false)
+	public function new(x:Float = 0, y:Float = 0, checked = false)
 	{
 		super(x, y);
 		
 		frames = Paths.getSparrowAtlas('checkboxanim');
+		
 		animation.addByPrefix("unchecked", "checkbox0", 24, false);
 		animation.addByPrefix("unchecking", "checkbox anim reverse", 24, false);
 		animation.addByPrefix("checking", "checkbox anim0", 24, false);
@@ -26,6 +27,7 @@ class CheckboxThingie extends FlxSprite
 		
 		animationFinished(checked ? 'checking' : 'unchecking');
 		animation.onFinish.add(animationFinished);
+		
 		daValue = checked;
 	}
 	

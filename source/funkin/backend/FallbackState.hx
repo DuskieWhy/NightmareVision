@@ -1,10 +1,11 @@
 package funkin.backend;
 
+@:nullSafety
 class FallbackState extends MusicBeatState
 {
-	var warningMessage:String;
+	final warningMessage:String;
 	
-	var continueCallback:Void->Void;
+	final continueCallback:Void->Void;
 	
 	public function new(warningMessage:String, continueCallback:Void->Void)
 	{
@@ -15,6 +16,7 @@ class FallbackState extends MusicBeatState
 	
 	override function create()
 	{
+		@:nullSafety(Off)
 		var bg = new FlxSprite().loadGraphic(Paths.image('uhoh'));
 		bg.setGraphicSize(FlxG.width, FlxG.height);
 		bg.updateHitbox();

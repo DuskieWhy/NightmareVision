@@ -4,9 +4,9 @@ import flixel.FlxSprite;
 
 class BGSprite extends FlxSprite
 {
-	private var idleAnim:String;
+	var idleAnim:Null<String> = null;
 	
-	public function new(image:String, x:Float = 0, y:Float = 0, ?scrollX:Float = 1, ?scrollY:Float = 1, ?animArray:Array<String> = null, ?loop:Bool = false)
+	public function new(?image:String, x:Float = 0, y:Float = 0, scrollX:Float = 1, scrollY:Float = 1, ?animArray:Array<String>, loop:Bool = false)
 	{
 		super(x, y);
 		

@@ -319,10 +319,8 @@ class Note extends FlxSprite
 			shader = colorSwap.shader;
 			
 			x += swagWidth * (noteData % keys);
-			if (!isSustainNote)
-			animation.play('scroll$noteData');
+			if (!isSustainNote) animation.play('scroll$noteData');
 		}
-
 		
 		if (prevNote != null) prevNote.nextNote = this;
 		
@@ -518,7 +516,7 @@ class Note extends FlxSprite
 		for (i in 0...handler.data.noteAnimations[noteData].length)
 		{
 			var anim = handler.data.noteAnimations[noteData][i];
-			animation.addByPrefix(anim.anim, '${anim.xmlName}0', 24, true);			
+			animation.addByPrefix(anim.anim, '${anim.xmlName}0', 24, true);
 		}
 		
 		setGraphicSize(Std.int(width * handler.data.scale));
@@ -550,7 +548,7 @@ class Note extends FlxSprite
 			}
 		}
 		
-		colorSwap.daAlpha = (alphaMod * alphaMod2) * (playField?.baseAlpha ?? 1);
+		colorSwap.daAlpha = (alphaMod * alphaMod2) * (playField?.baseAlpha ?? 1.0);
 		
 		var actualHitbox:Float = hitbox * earlyHitMult;
 		
@@ -584,6 +582,7 @@ class Note extends FlxSprite
 		if (frames != null) frame = frames.frames[animation.frameIndex];
 		return rect;
 	}
+	
 	function handleAlias()
 	{
 		antialiasing = handler.data.antialiasing;

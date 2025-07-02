@@ -115,11 +115,11 @@ class FunkinSoundTray extends FlxSoundTray
 	function checkAntialiasing()
 	{
 		// Apply anti-aliasing according to the Psych save file
-		if (cast(__children[0], Bitmap).smoothing != ClientPrefs.globalAntialiasing)
+		if ((cast __children[0] : Bitmap).smoothing != ClientPrefs.globalAntialiasing)
 		{
 			for (child in __children)
 			{
-				cast(child, Bitmap).smoothing = ClientPrefs.globalAntialiasing;
+				(cast child : Bitmap).smoothing = ClientPrefs.globalAntialiasing;
 			}
 		}
 	}
@@ -161,6 +161,7 @@ class FunkinSoundTray extends FlxSoundTray
 			
 		checkAntialiasing();
 	}
+	
 	#if (flixel > "6.0.0")
 	override function showAnim(volume:Float, ?sound:FlxSoundAsset, duration:Float = 1.0, label:String = "VOLUME") {}
 	

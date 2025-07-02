@@ -39,11 +39,10 @@ class CameraUtil
 	**/
 	public static function addShader(shader:FlxShader, ?camera:FlxCamera, forced:Bool = false)
 	{
-		// if (!ClientPrefs.shaders && !forced) return;
-		if (camera == null) camera = FlxG.camera;
+		camera ??= FlxG.camera;
+		camera.filters ??= [];
 		
-		var filter:ShaderFilter = new ShaderFilter(shader);
-		if (camera.filters == null) camera.filters = [];
+		final filter:ShaderFilter = new ShaderFilter(shader);
 		camera.filters.push(filter);
 	}
 	
@@ -55,7 +54,7 @@ class CameraUtil
 	**/
 	public static function removeShader(shader:FlxShader, ?camera:FlxCamera):Bool
 	{
-		if (camera == null) camera = FlxG.camera;
+		camera ??= FlxG.camera;
 		if (camera.filters == null) return false;
 		
 		for (i in camera.filters)

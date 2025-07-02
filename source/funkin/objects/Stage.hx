@@ -11,7 +11,7 @@ import funkin.data.StageData;
 @:nullSafety
 class Stage extends FlxTypedContainer<FlxBasic>
 {
-	public var curStageScript:Null<FunkinScript>;
+	public var curStageScript:Null<FunkinScript> = null;
 	
 	public var curStage = "stage";
 	public var stageData:StageFile = funkin.data.StageData.generateDefault();
