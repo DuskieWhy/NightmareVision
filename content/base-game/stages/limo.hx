@@ -1,4 +1,3 @@
-
 import funkin.objects.stageobjects.BackgroundDancer;
 import funkin.objects.BGSprite;
 
@@ -16,14 +15,14 @@ var limoSpeed:Float = 0;
 var limoKillingState:Int = 0;
 function onLoad(){
     var skyBG:BGSprite = new BGSprite('limo/limoSunset', -120, -50, 0.1, 0.1);
-    add(skyBG);
+    insert(0, skyBG);
 
     if(!ClientPrefs.lowQuality) {
         limoMetalPole = new BGSprite('gore/metalPole', -500, 220, 0.4, 0.4);
-        add(limoMetalPole);
+        insert(1, limoMetalPole);
 
         bgLimo = new BGSprite('limo/bgLimo', -150, 480, 0.4, 0.4, ['background limo pink'], true);
-        add(bgLimo);
+        insert(3, bgLimo);
 
         // limoCorpse = new BGSprite('gore/noooooo', -500, limoMetalPole.y - 130, 0.4, 0.4, ['Henchmen on rail'], true);
         // add(limoCorpse);
@@ -40,7 +39,7 @@ function onLoad(){
         }
 
         limoLight = new BGSprite('gore/coldHeartKiller', limoMetalPole.x - 180, limoMetalPole.y - 80, 0.4, 0.4);
-        add(limoLight);
+        insert(2, limoLight);
 
         //PRECACHE BLOOD
         var particle:BGSprite = new BGSprite('gore/stupidBlood', -400, -400, 0.4, 0.4, ['blood'], false);
@@ -50,7 +49,8 @@ function onLoad(){
         // resetLimoKill();
     }
 
-    limo = new BGSprite('limo/limoDrive', -120, 550, 1, 1, ['Limo stage'], true);
+    limo = new BGSprite('limo/limoDrive', -120, 550, 1, 1, ['Limo stage'], false);
+    
 
     fastCar = new BGSprite('limo/fastCarLol', -300, 160);
     fastCar.active = true;
@@ -96,7 +96,6 @@ function resetFastCar():Void
 var carTimer:FlxTimer;
 function fastCarDrive()
 {
-    //trace('Car drive');
     FlxG.sound.play(Paths.soundRandom('carPass', 0, 1), 0.7);
 
     fastCar.velocity.x = (FlxG.random.int(170, 220) / FlxG.elapsed) * 3;
@@ -109,8 +108,9 @@ function fastCarDrive()
 }
 
 function onCreatePost(){
-    addBehindBF(limo);
     addBehindGF(fastCar);
+    insert(4, limo);
+    
     resetFastCar();
 }
 
