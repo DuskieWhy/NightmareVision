@@ -207,7 +207,7 @@ class CoolUtil
 	/**
 	 * Opens a windows alert
 	 */
-	public static function doPopUp(title:String, description:String)
+	public static function doPopUp(title:String, description:String = '')
 	{
 		FlxG.stage.window.alert(description, title);
 		trace(description);
@@ -218,8 +218,9 @@ class CoolUtil
 	 * 
 	 * Faster than using getProperty
 	 */
-	public static function getEaseFromString(ease:String = 'linear')
+	public static function getEaseFromString(ease:Null<String>)
 	{
+		if (ease == null) return FlxEase.linear;
 		return switch (ease.toLowerCase().trim())
 		{
 			case 'backin': FlxEase.backIn;
@@ -285,6 +286,7 @@ class CoolUtil
 		if (FlxG.sound.music != null)
 		{
 			FlxG.sound.music.fadeTween?.cancel();
+			@:nullSafety(Off)
 			FlxG.sound.music.fadeTween = null;
 		}
 	}
@@ -295,7 +297,7 @@ class CoolUtil
 	public static inline function loadAndSwitchState(target:NextState, stopMusic:Bool = false)
 	{
 		var directory:Null<String> = null;
-		var weekDir:String = StageData.forceNextDirectory;
+		var weekDir:Null<String> = StageData.forceNextDirectory;
 		StageData.forceNextDirectory = null;
 		
 		if (weekDir != null && weekDir.length > 0 && weekDir != '') directory = weekDir;

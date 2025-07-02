@@ -23,7 +23,7 @@ typedef StageFile =
 
 class StageData
 {
-	public static var forceNextDirectory:String = null;
+	public static var forceNextDirectory:Null<String> = null;
 	
 	public static function loadDirectory(SONG:SwagSong)
 	{
