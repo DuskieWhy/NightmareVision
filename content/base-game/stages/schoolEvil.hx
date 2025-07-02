@@ -38,7 +38,6 @@ function onEvent(eventName, value1, value2){
     if(eventName == 'Trigger BG Ghouls') {
         bgGhouls.dance(true);
         bgGhouls.visible = true;
-        trace('Triggered BG Ghouls');
     }
 }
 
