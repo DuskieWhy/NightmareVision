@@ -21,7 +21,7 @@ class Splash extends FlxState
 	{
 		_cachedAutoPause = FlxG.autoPause;
 		FlxG.autoPause = false;
-
+		
 		FlxTimer.wait(1, () -> {
 			#if VIDEOS_ALLOWED
 			var video = new FunkinVideoSprite();
@@ -65,38 +65,38 @@ class Splash extends FlxState
 		logo.visible = false;
 		add(logo);
 		
-		spriteEvents = new FlxTimer().start(1, (t0:FlxTimer) -> {
-			new FlxTimer().start(0.25, (t1:FlxTimer) -> {
-				FlxG.sound.volume = 1;
-				FlxG.sound.play(Paths.sound('intro'));
-				logo.visible = true;
-				logo.scale.set(0.2, 1.25);
-				new FlxTimer().start(0.06125, (t2:FlxTimer) -> {
-					logo.scale.set(1.25, 0.5);
-					new FlxTimer().start(0.06125, (t3:FlxTimer) -> {
+		spriteEvents = new FlxTimer().start(1, (stupidFuckingTimer:FlxTimer) -> {
+			var step = 0;
+			new FlxTimer().start(0.25, (t:FlxTimer) -> {
+				switch (step++)
+				{
+					case 0:
+						FlxG.sound.volume = 1;
+						FlxG.sound.play(Paths.sound('intro'));
+						logo.visible = true;
+						logo.scale.set(0.2, 1.25);
+						t.reset(0.06125);
+					case 1:
+						logo.scale.set(1.25, 0.5);
+						t.reset(0.06125);
+					case 2:
 						logo.scale.set(1.125, 1.125);
-						FlxTween.tween(logo.scale, {x: 1, y: 1}, 0.25,
+						FlxTween.tween(logo.scale, {x: 1, y: 1}, 0.25, {ease: FlxEase.elasticOut});
+						t.reset(1.25);
+					case 3:
+						FlxTween.tween(logo.scale, {x: 0.2, y: 0.2}, 1.5, {ease: FlxEase.quadIn});
+						FlxTween.tween(logo, {alpha: 0}, 1.5,
 							{
-								ease: FlxEase.elasticOut,
+								ease: FlxEase.quadIn,
 								onComplete: (t:FlxTween) -> {
-									new FlxTimer().start(1, (t5:FlxTimer) -> {
-										FlxTween.tween(logo.scale, {x: 0.2, y: 0.2}, 1.5, {ease: FlxEase.quadIn});
-										FlxTween.tween(logo, {alpha: 0}, 1.5,
-											{
-												ease: FlxEase.quadIn,
-												onComplete: (t:FlxTween) -> {
-													FlxTimer.wait(0.8, finish);
-												}
-											});
-									});
+									FlxTimer.wait(0.8, finish);
 								}
 							});
-					});
-				});
+				}
 			});
 		});
 	}
-
+	
 	function finish()
 	{
 		if (spriteEvents != null)
