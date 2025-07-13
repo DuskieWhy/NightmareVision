@@ -50,11 +50,11 @@ class Stage extends FlxTypedContainer<FlxBasic>
 		
 		final luaPath = Paths.getPath('$baseScriptFile.lua', TEXT, null, true);
 		
-		var scriptFile = FunkinIris.getPath(baseScriptFile);
+		var scriptFile = FunkinHScript.getPath(baseScriptFile);
 		if (FunkinAssets.exists(scriptFile)) buildHX(scriptFile);
 		else
 		{
-			scriptFile = FunkinIris.getPath('stages/$curStage');
+			scriptFile = FunkinHScript.getPath('stages/$curStage');
 			buildHX(scriptFile);
 		}
 		
@@ -70,7 +70,7 @@ class Stage extends FlxTypedContainer<FlxBasic>
 	
 	function buildHX(scriptFile:String = '')
 	{
-		var script = FunkinIris.fromFile(scriptFile);
+		var script = FunkinHScript.fromFile(scriptFile);
 		if (script.__garbage)
 		{
 			script = FlxDestroyUtil.destroy(script);

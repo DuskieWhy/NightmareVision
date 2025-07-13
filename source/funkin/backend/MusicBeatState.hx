@@ -51,11 +51,11 @@ class MusicBeatState extends FlxUIState
 		
 		scriptName = s;
 		
-		var scriptFile = FunkinIris.getPath('scripts/menus/$scriptName');
+		var scriptFile = FunkinHScript.getPath('scripts/menus/$scriptName');
 		
 		if (FunkinAssets.exists(scriptFile))
 		{
-			var tScript = FunkinIris.fromFile(scriptFile);
+			var tScript = FunkinHScript.fromFile(scriptFile);
 			if (tScript.__garbage)
 			{
 				tScript = FlxDestroyUtil.destroy(tScript);

@@ -6,7 +6,7 @@ import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 import funkin.scripts.Globals;
 
 /**
- * Container of `FunkinIris` instances
+ * Container of `FunkinHScript` instances
  * 
  * NOT DONE
  * 
@@ -31,9 +31,9 @@ class HScriptGroup implements IFlxDestroyable
 	}
 	
 	/**
-	 * array of all `FunkinIris` instances
+	 * array of all `FunkinHScript` instances
 	 */
-	public var members:Array<FunkinIris> = [];
+	public var members:Array<FunkinHScript> = [];
 	
 	public function new()
 	{
@@ -44,7 +44,7 @@ class HScriptGroup implements IFlxDestroyable
 	 * Adds a new script to the group
 	 * @param script 
 	 */
-	public function addScript(script:FunkinIris)
+	public function addScript(script:FunkinHScript)
 	{
 		if (script == null) return;
 		script.interp.parent = parent;

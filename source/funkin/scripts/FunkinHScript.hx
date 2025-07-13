@@ -8,12 +8,11 @@ import funkin.backend.plugins.DebugTextPlugin;
 import funkin.scripts.FunkinScript;
 import funkin.objects.*;
 
-
 // wrapper for an iris script to keep the consistency of the whole funkyscript setup this engine got
 // will be replaced later when im not lazy
 @:access(crowplexus.iris.Iris)
 @:access(funkin.states.PlayState)
-class FunkinIris extends FunkinScript
+class FunkinHScript extends FunkinScript
 {
 	/**
 	 * List of all accepted hscript extensions
@@ -65,18 +64,18 @@ class FunkinIris extends FunkinScript
 	}
 	
 	/**
-	 * Creates a new `FunkinIris` from a string
+	 * Creates a new `FunkinHScript` from a string
 	 * @param script 
 	 * @param name 
 	 * @param additionalVars 
 	 */
 	public static function fromString(script:String, ?name:String = "Script", ?additionalVars:Map<String, Any>)
 	{
-		return new FunkinIris(script, name, additionalVars);
+		return new FunkinHScript(script, name, additionalVars);
 	}
 	
 	/**
-	 * Creates a new `FunkinIris` from a filepath
+	 * Creates a new `FunkinHScript` from a filepath
 	 * 
 	 * @param file 
 	 * @param name 
@@ -86,7 +85,7 @@ class FunkinIris extends FunkinScript
 	{
 		name ??= file;
 		
-		return new FunkinIris(FunkinAssets.getContent(file), name, additionalVars);
+		return new FunkinHScript(FunkinAssets.getContent(file), name, additionalVars);
 	}
 	
 	/**
@@ -292,7 +291,7 @@ class FunkinIris extends FunkinScript
 		set("StageData", funkin.data.StageData);
 		set("PlayState", PlayState);
 		set("FunkinLua", FunkinLua);
-		set("FunkinIris", FunkinIris);
+		set("FunkinHScript", FunkinHScript);
 		set('WindowUtil', funkin.utils.WindowUtil); // temp till i fix some shit
 		set('Globals', funkin.scripts.Globals);
 		

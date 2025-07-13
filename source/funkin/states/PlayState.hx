@@ -374,7 +374,7 @@ class PlayState extends MusicBeatState
 	
 	public var luaArray:Array<FunkinLua> = [];
 	public var funkyScripts:Array<FunkinScript> = [];
-	public var hscriptArray:Array<FunkinIris> = []; // will be replaced with hscriptgroups eventually
+	public var hscriptArray:Array<FunkinHScript> = []; // will be replaced with hscriptgroups eventually
 	
 	public var notetypeScripts:Map<String, FunkinScript> = []; // custom notetypes for scriptVer '1'
 	public var eventScripts:Map<String, FunkinScript> = []; // custom events for scriptVer '1'
@@ -651,11 +651,11 @@ class PlayState extends MusicBeatState
 						}
 						else
 						{
-							for (ext in FunkinIris.H_EXTS)
+							for (ext in FunkinHScript.H_EXTS)
 							{
 								if (file.endsWith('.$ext'))
 								{
-									var script = initFunkinIris(folder + file);
+									var script = initFunkinHScript(folder + file);
 									if (script != null)
 									{
 										filesPushed.push(file);
@@ -860,11 +860,11 @@ class PlayState extends MusicBeatState
 						}
 						else
 						{
-							for (ext in FunkinIris.H_EXTS)
+							for (ext in FunkinHScript.H_EXTS)
 							{
 								if (file.endsWith('.$ext'))
 								{
-									var sc = initFunkinIris(folder + file);
+									var sc = initFunkinHScript(folder + file);
 									if (sc != null)
 									{
 										filesPushed.push(file);
@@ -1056,7 +1056,7 @@ class PlayState extends MusicBeatState
 	function startCharacterScript(name:String, char:Character)
 	{
 		final luaPath = Paths.getPath('characters/$name.lua', TEXT, null, true);
-		final hscriptPath = FunkinIris.getPath('characters/$name');
+		final hscriptPath = FunkinHScript.getPath('characters/$name');
 		
 		if (FunkinAssets.exists(luaPath, TEXT))
 		{
@@ -1070,18 +1070,18 @@ class PlayState extends MusicBeatState
 		}
 		else if (FunkinAssets.exists(hscriptPath, TEXT))
 		{
-			initFunkinIris(hscriptPath);
+			initFunkinHScript(hscriptPath);
 		}
 	}
 	
-	function initFunkinIris(filePath:String, ?name:String)
+	function initFunkinHScript(filePath:String, ?name:String)
 	{
 		for (i in hscriptArray)
 		{
 			if (i.scriptName == filePath) return null; // script is already in dont add it twice
 		}
 		
-		var script:FunkinIris = FunkinIris.fromFile(filePath);
+		var script:FunkinHScript = FunkinHScript.fromFile(filePath);
 		if (script.__garbage)
 		{
 			script = FlxDestroyUtil.destroy(script);
@@ -1666,7 +1666,7 @@ class PlayState extends MusicBeatState
 			var doPush:Bool = false;
 			var baseScriptFile:String = 'custom_notetypes/' + notetype;
 			var exts = [#if LUA_ALLOWED "lua" #end];
-			for (e in FunkinIris.H_EXTS)
+			for (e in FunkinHScript.H_EXTS)
 				exts.push(e);
 			for (ext in exts)
 			{
@@ -1687,7 +1687,7 @@ class PlayState extends MusicBeatState
 						}
 						else
 						{
-							var script = initFunkinIris(file, notetype);
+							var script = initFunkinHScript(file, notetype);
 							if (script != null)
 							{
 								notetypeScripts.set(notetype, script);
@@ -1714,7 +1714,7 @@ class PlayState extends MusicBeatState
 		{
 			var doPush:Bool = false;
 			var baseScriptFile:String = 'custom_events/' + event;
-			var exts = [#if LUA_ALLOWED "lua" #end].concat(FunkinIris.H_EXTS);
+			var exts = [#if LUA_ALLOWED "lua" #end].concat(FunkinHScript.H_EXTS);
 			for (ext in exts)
 			{
 				if (doPush) break;
@@ -1736,7 +1736,7 @@ class PlayState extends MusicBeatState
 						}
 						else
 						{
-							var script = initFunkinIris(file, event);
+							var script = initFunkinHScript(file, event);
 							if (script != null)
 							{
 								eventScripts.set(event, script);

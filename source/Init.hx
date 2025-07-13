@@ -44,7 +44,7 @@ class Init extends FlxState
 		
 		funkin.data.Highscore.load();
 		
-		funkin.scripts.FunkinIris.init();
+		funkin.scripts.FunkinHScript.init();
 		
 		#if VIDEOS_ALLOWED
 		funkin.video.FunkinVideoSprite.init();

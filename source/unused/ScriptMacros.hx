@@ -81,7 +81,7 @@ class ScriptMacros
 			{
 				name: "__script",
 				access: [haxe.macro.Expr.Access.APrivate],
-				kind: FVar(macro :funkin.scripts.FunkinIris, macro $v{null}),
+				kind: FVar(macro :funkin.scripts.FunkinHScript, macro $v{null}),
 				pos: position,
 			});
 			
@@ -98,13 +98,13 @@ class ScriptMacros
 							var clName = Type.getClassName(Type.getClass(this));
 							if (clName.contains('.')) clName = clName.substr(clName.lastIndexOf('.') + 1, clName.length);
 							
-							var scriptFile = funkin.scripts.FunkinIris.getPath('scripts/menus/' + clName, false);
+							var scriptFile = funkin.scripts.FunkinHScript.getPath('scripts/menus/' + clName, false);
 							
 							var found = sys.FileSystem.exists(scriptFile);
 							
 							if (found)
 							{
-								this.__script = funkin.scripts.FunkinIris.fromFile(scriptFile);
+								this.__script = funkin.scripts.FunkinHScript.fromFile(scriptFile);
 								this.__script.set('game', FlxG.state);
 							}
 							

@@ -1,6 +1,6 @@
 package funkin.scripting;
 
-import funkin.scripts.FunkinIris;
+import funkin.scripts.FunkinHScript;
 
 /**
  * Class that handles plugin like scripts.
@@ -12,7 +12,7 @@ class HScriptManager
 	/**
 	 * All scripts loaded by name
 	 */
-	public static final loadedScripts:Map<String, FunkinIris> = [];
+	public static final loadedScripts:Map<String, FunkinHScript> = [];
 	
 	/**
 	 * Populates scripts for use
