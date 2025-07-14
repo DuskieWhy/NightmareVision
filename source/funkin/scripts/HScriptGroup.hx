@@ -1,5 +1,7 @@
 package funkin.scripts;
 
+import extensions.InterpEx;
+
 import flixel.util.FlxDestroyUtil;
 import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 
@@ -24,7 +26,8 @@ class HScriptGroup implements IFlxDestroyable
 		parent = value;
 		for (i in members)
 		{
-			i.interp.parent = parent;
+			@:privateAccess
+			(cast i.interp : InterpEx).parent = parent;
 		}
 		
 		return parent;
@@ -47,7 +50,8 @@ class HScriptGroup implements IFlxDestroyable
 	public function addScript(script:FunkinHScript)
 	{
 		if (script == null) return;
-		script.interp.parent = parent;
+		@:privateAccess
+		(cast script.interp : InterpEx).parent = parent;
 		members.push(script);
 	}
 	
@@ -67,7 +71,7 @@ class HScriptGroup implements IFlxDestroyable
 		var returnVal:Dynamic = Globals.Function_Continue;
 		for (i in members)
 		{
-			if (exclusions.contains(i.scriptName))
+			if (exclusions.contains(i.name))
 			{
 				continue;
 			}
@@ -90,7 +94,7 @@ class HScriptGroup implements IFlxDestroyable
 	{
 		for (i in members)
 		{
-			if (scriptName == i.scriptName) return i;
+			if (scriptName == i.name) return i;
 		}
 		
 		return null;

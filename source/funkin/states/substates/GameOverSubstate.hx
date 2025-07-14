@@ -18,7 +18,7 @@ import funkin.objects.character.CharacterBuilder;
 class GameOverSubstate extends MusicBeatSubstate
 {
 	/**
-	 * Static reference to the substate. Used for `FunkinLua`.
+	 * Static reference to the substate. Used for scripting purposes.
 	 */
 	public static var instance:Null<GameOverSubstate> = null;
 	

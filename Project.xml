@@ -50,7 +50,6 @@
 	
 	<!--ENGINE CUSTOMIZATION-->
 	<define name="MODS_ALLOWED" if="desktop" />
-	<define name="LUA_ALLOWED" if="cpp" />
 	<define name="VIDEOS_ALLOWED" if="cpp" />
 	<define name="DISCORD_ALLOWED" if="cpp"/>
 
@@ -81,8 +80,6 @@
 	
 	<haxelib name="hscript-iris"/>
 
-	<!--Extra Libraries-->
-	<haxelib name="linc_luajit" if="LUA_ALLOWED"/>
 	<haxelib name="discord_rpc" if="DISCORD_ALLOWED"/>
 	<haxelib name="hxvlc" if="VIDEOS_ALLOWED"/>
 
@@ -122,9 +119,6 @@
 
 	<!--Disables all tracing abilities. Enable this for a small performance improvement-->
 	<!-- <define name="DISABLE_TRACES" if="desktop release"/> -->
-
-	<!--Needed for lua-->
-	<haxedef name="NO_PRECOMPILED_HEADERS" if="LUA_ALLOWED"/>
 
 	<!--Remove the legacy health system-->
 	<haxedef name="FLX_NO_HEALTH" />

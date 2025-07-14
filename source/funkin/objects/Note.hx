@@ -29,7 +29,7 @@ class Note extends FlxSprite
 	public var row:Int = 0;
 	public var lane:Int = 0;
 	
-	public var noteScript:FunkinScript;
+	public var noteScript:FunkinHScript;
 	
 	public static var quants:Array<Int> = [4, // quarter note
 		8, // eight
@@ -266,9 +266,8 @@ class Note extends FlxSprite
 					if (!inEditor) noteScript = PlayState.instance.notetypeScripts.get(value);
 					else noteScript = ChartingState.instance.notetypeScripts.get(value);
 					
-					if (noteScript != null && noteScript.scriptType == HSCRIPT)
+					if (noteScript != null)
 					{
-						var noteScript:FunkinHScript = cast noteScript;
 						noteScript.executeFunc("setupNote", [this], this);
 					}
 			}
@@ -386,9 +385,8 @@ class Note extends FlxSprite
 		if (texture == null) texture = '';
 		if (suffix == null) suffix = '';
 		
-		if (noteScript != null && noteScript.scriptType == HSCRIPT)
+		if (noteScript != null)
 		{
-			var noteScript:FunkinHScript = cast noteScript;
 			if (noteScript.executeFunc("onReloadNote", [this, prefix, texture, suffix], this) == Globals.Function_Stop) return;
 		}
 		
@@ -454,7 +452,6 @@ class Note extends FlxSprite
 		{
 			frames = Paths.getSparrowAtlas(blahblah);
 			loadNoteAnims();
-			handleAlias();
 		}
 		if (isSustainNote)
 		{
@@ -474,20 +471,18 @@ class Note extends FlxSprite
 			baseScaleY = scale.y;
 		}
 		
-		handleAlias();
+		antialiasing = ClientPrefs.globalAntialiasing && handler.data.antialiasing;
 		
-		if (noteScript != null && noteScript.scriptType == HSCRIPT)
+		if (noteScript != null)
 		{
-			var noteScript:FunkinHScript = cast noteScript;
 			noteScript.executeFunc("postReloadNote", [this, prefix, texture, suffix], this);
 		}
 	}
 	
 	public function loadNoteAnims()
 	{
-		if (noteScript != null && noteScript.scriptType == HSCRIPT)
+		if (noteScript != null)
 		{
-			var noteScript:FunkinHScript = cast noteScript;
 			if (noteScript.exists("loadNoteAnims") && Reflect.isFunction(noteScript.get("loadNoteAnims")))
 			{
 				noteScript.executeFunc("loadNoteAnims", [this], this, ["super" => _loadNoteAnims]);
@@ -499,9 +494,8 @@ class Note extends FlxSprite
 	
 	public function loadPixelNoteAnims()
 	{
-		if (noteScript != null && noteScript.scriptType == HSCRIPT)
+		if (noteScript != null)
 		{
-			var noteScript:FunkinHScript = cast noteScript;
 			if (noteScript.exists("loadPixelNoteAnims") && Reflect.isFunction(noteScript.get("loadNoteAnims")))
 			{
 				noteScript.executeFunc("loadPixelNoteAnims", [this], this, ["super" => _loadPixelNoteAnims]);
@@ -541,9 +535,8 @@ class Note extends FlxSprite
 		
 		if (!inEditor)
 		{
-			if (noteScript != null && noteScript.scriptType == HSCRIPT)
+			if (noteScript != null)
 			{
-				var noteScript:FunkinHScript = cast noteScript;
 				noteScript.executeFunc("update", [this, elapsed], this);
 			}
 		}
@@ -581,11 +574,5 @@ class Note extends FlxSprite
 		clipRect = rect;
 		if (frames != null) frame = frames.frames[animation.frameIndex];
 		return rect;
-	}
-	
-	function handleAlias()
-	{
-		antialiasing = handler.data.antialiasing;
-		if (handler.data.antialiasing) antialiasing = ClientPrefs.globalAntialiasing;
 	}
 }

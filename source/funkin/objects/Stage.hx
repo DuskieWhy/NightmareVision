@@ -11,7 +11,7 @@ import funkin.data.StageData;
 @:nullSafety
 class Stage extends FlxTypedContainer<FlxBasic>
 {
-	public var curStageScript:Null<FunkinScript> = null;
+	public var curStageScript:Null<FunkinHScript> = null;
 	
 	public var curStage = "stage";
 	public var stageData:StageFile = funkin.data.StageData.generateDefault();
@@ -24,24 +24,6 @@ class Stage extends FlxTypedContainer<FlxBasic>
 		
 		var newStageData = StageData.getStageFile(curStage);
 		if (newStageData != null) stageData = newStageData;
-	}
-	
-	function setupScript(script:FunkinScript)
-	{
-		curStageScript = script;
-		
-		switch (script.scriptType)
-		{
-			case HSCRIPT:
-				script.set("add", add);
-				script.set("stage", this);
-				script.call("onLoad");
-				
-			case LUA:
-				#if LUA_ALLOWED
-				script.call("onCreate", []);
-				#end
-		}
 	}
 	
 	public function buildStage()
@@ -57,15 +39,6 @@ class Stage extends FlxTypedContainer<FlxBasic>
 			scriptFile = FunkinHScript.getPath('stages/$curStage');
 			buildHX(scriptFile);
 		}
-		
-		#if LUA_ALLOWED
-		if (Paths.fileExists('$baseScriptFile.lua', TEXT)) buildLUA(luaPath);
-		else
-		{
-			var luaPath2 = Paths.getPath('stages/$curStage.lua', TEXT, null, true);
-			if (Paths.fileExists(luaPath2, TEXT)) buildLUA(luaPath2);
-		}
-		#end
 	}
 	
 	function buildHX(scriptFile:String = '')
@@ -76,12 +49,9 @@ class Stage extends FlxTypedContainer<FlxBasic>
 			script = FlxDestroyUtil.destroy(script);
 			return;
 		}
-		setupScript(script);
-	}
-	
-	function buildLUA(scriptFile:String = '')
-	{
-		var script = new FunkinLua(scriptFile);
-		setupScript(script);
+		curStageScript = script;
+		script.set("add", add);
+		script.set("stage", this);
+		script.call("onLoad");
 	}
 }

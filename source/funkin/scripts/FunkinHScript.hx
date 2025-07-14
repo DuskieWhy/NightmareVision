@@ -5,14 +5,13 @@ import crowplexus.iris.Iris;
 import extensions.InterpEx;
 
 import funkin.backend.plugins.DebugTextPlugin;
-import funkin.scripts.FunkinScript;
 import funkin.objects.*;
 
 // wrapper for an iris script to keep the consistency of the whole funkyscript setup this engine got
 // will be replaced later when im not lazy
 @:access(crowplexus.iris.Iris)
 @:access(funkin.states.PlayState)
-class FunkinHScript extends FunkinScript
+class FunkinHScript extends Iris implements IFlxDestroyable
 {
 	/**
 	 * List of all accepted hscript extensions
@@ -89,28 +88,17 @@ class FunkinHScript extends FunkinScript
 	}
 	
 	/**
-	 * 	The hscript instance 
-	 */
-	public var irisInstance:Iris;
-	
-	/**
 	 * is true if parsing failed
 	 */
 	@:noCompletion public var __garbage:Bool = false;
 	
-	public var interp(get, never):InterpEx;
-	
-	function get_interp() return cast irisInstance.interp;
-	
 	public function new(script:String, ?name:String = "Script", ?additionalVars:Map<String, Any>)
 	{
-		scriptType = ScriptType.HSCRIPT;
-		scriptName = name;
+		super(script, {name: name, autoRun: false, autoPreset: false});
 		
-		irisInstance = new Iris(script, {name: name, autoRun: false, autoPreset: false});
-		irisInstance.interp = new InterpEx(FlxG.state);
+		interp = new InterpEx(FlxG.state);
 		
-		setDefaultVars();
+		preset();
 		
 		if (additionalVars != null)
 		{
@@ -129,49 +117,22 @@ class FunkinHScript extends FunkinScript
 		var ret:Dynamic = null;
 		try
 		{
-			ret = irisInstance.execute();
+			ret = execute();
 		}
 		catch (e)
 		{
 			__garbage = true;
-			Logger.log('[${scriptName}]: PARSING ERROR: $e', ERROR, true);
+			Logger.log('[${name}]: PARSING ERROR: $e', ERROR, true);
 		}
 		return ret;
 	}
 	
-	@:inheritDoc
-	override function destroy()
-	{
-		if (irisInstance == null) return;
-		
-		irisInstance.destroy();
-		irisInstance = null;
-	}
-	
-	@:inheritDoc
-	override function set(variable:String, data:Dynamic):Void
-	{
-		irisInstance.set(variable, data);
-	}
-	
-	@:inheritDoc
-	override function get(key:String):Dynamic
-	{
-		return irisInstance.get(key);
-	}
-	
-	@:inheritDoc
-	override function call(func:String, ?args:Array<Dynamic>):Dynamic
+	override function call(func:String, ?args:Array<Dynamic>)
 	{
 		var ret:Dynamic = funkin.scripts.Globals.Function_Continue;
-		if (exists(func)) ret = irisInstance.call(func, args)?.returnValue ?? funkin.scripts.Globals.Function_Continue;
+		if (exists(func)) ret = super.call(func, args)?.returnValue ?? funkin.scripts.Globals.Function_Continue;
 		
 		return ret;
-	}
-	
-	public function exists(varName:String)
-	{
-		return irisInstance.exists(varName);
 	}
 	
 	// kept for notescript stuff
@@ -218,11 +179,63 @@ class FunkinHScript extends FunkinScript
 	}
 	
 	@:inheritDoc
-	override function setDefaultVars()
+	override function preset()
 	{
-		irisInstance.preset();
+		super.preset();
 		
-		super.setDefaultVars();
+		var currentState = flixel.FlxG.state;
+		if ((currentState is PlayState))
+		{
+			set("inPlaystate", true);
+			set('bpm', PlayState.SONG.bpm);
+			set('scrollSpeed', PlayState.SONG.speed);
+			set('songName', PlayState.SONG.song);
+			set('isStoryMode', PlayState.isStoryMode);
+			set('difficulty', PlayState.storyDifficulty);
+			set('weekRaw', PlayState.storyWeek);
+			set('seenCutscene', PlayState.seenCutscene);
+			set('week', funkin.data.WeekData.weeksList[PlayState.storyWeek]);
+			set('difficultyName', funkin.backend.Difficulty.difficulties[PlayState.storyDifficulty]);
+			set('songLength', flixel.FlxG.sound.music.length);
+			set('healthGainMult', PlayState.instance.healthGain);
+			set('healthLossMult', PlayState.instance.healthLoss);
+			set('instakillOnMiss', PlayState.instance.instakillOnMiss);
+			set('botPlay', PlayState.instance.cpuControlled);
+			set('practice', PlayState.instance.practiceMode);
+			set('startedCountdown', false);
+		}
+		else
+		{
+			set("inPlaystate", false);
+		}
+		
+		set('inGameOver', false);
+		set('downscroll', ClientPrefs.downScroll);
+		set('middlescroll', ClientPrefs.middleScroll);
+		set('framerate', ClientPrefs.framerate);
+		set('ghostTapping', ClientPrefs.ghostTapping);
+		set('hideHud', ClientPrefs.hideHud);
+		set('timeBarType', ClientPrefs.timeBarType);
+		set('scoreZoom', ClientPrefs.scoreZoom);
+		set('cameraZoomOnBeat', ClientPrefs.camZooms);
+		set('flashingLights', ClientPrefs.flashing);
+		set('noteOffset', ClientPrefs.noteOffset);
+		set('healthBarAlpha', ClientPrefs.healthBarAlpha);
+		set('noResetButton', ClientPrefs.noReset);
+		set('lowQuality', ClientPrefs.lowQuality);
+		set("scriptName", name);
+		
+		set('curBpm', Conductor.bpm);
+		set('crotchet', Conductor.crotchet);
+		set('stepCrotchet', Conductor.stepCrotchet);
+		set('Function_Halt', Globals.Function_Halt);
+		set('Function_Stop', Globals.Function_Stop);
+		set('Function_Continue', Globals.Function_Continue);
+		set('curBeat', 0);
+		set('curStep', 0);
+		set('curDecBeat', 0);
+		set('curDecStep', 0);
+		set('version', Main.NMV_VERSION.trim());
 		
 		set("StringTools", StringTools);
 		
@@ -290,7 +303,6 @@ class FunkinHScript extends FunkinScript
 		set("CoolUtil", funkin.utils.CoolUtil);
 		set("StageData", funkin.data.StageData);
 		set("PlayState", PlayState);
-		set("FunkinLua", FunkinLua);
 		set("FunkinHScript", FunkinHScript);
 		set('WindowUtil', funkin.utils.WindowUtil); // temp till i fix some shit
 		set('Globals', funkin.scripts.Globals);

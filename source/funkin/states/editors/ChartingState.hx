@@ -120,7 +120,7 @@ class ChartingState extends MusicBeatState
 {
 	public static var instance:ChartingState;
 	
-	public var notetypeScripts:Map<String, FunkinScript> = [];
+	public var notetypeScripts:Map<String, FunkinHScript> = [];
 	
 	public static var noteTypeList:Array<String> = // Used for backwards compatibility with 0.1 - 0.3.2 charts, though, you should add your hardcoded custom note types here too.
 		[
@@ -1394,14 +1394,6 @@ class ChartingState extends MusicBeatState
 			directories.push(Paths.mods(mod + '/custom_notetypes/'));
 		#end
 		
-		var exts:Array<String> = [
-			#if LUA_ALLOWED
-			".lua",
-			#end
-			".hscript",
-			".hx",
-			".hxs"
-		];
 		for (i in 0...directories.length)
 		{
 			var directory:String = directories[i];
@@ -1412,7 +1404,7 @@ class ChartingState extends MusicBeatState
 					var path = haxe.io.Path.join([directory, file]);
 					if (!FileSystem.isDirectory(path))
 					{
-						for (ext in exts)
+						for (ext in FunkinHScript.H_EXTS)
 						{
 							if (file.endsWith(ext))
 							{
@@ -1473,7 +1465,7 @@ class ChartingState extends MusicBeatState
 		var tab_group_event = new FlxUI(null, UI_box);
 		tab_group_event.name = 'Events';
 		
-		#if LUA_ALLOWED
+		#if MODS_ALLOWED
 		var eventPushedMap:Map<String, Bool> = new Map<String, Bool>();
 		var directories:Array<String> = [];
 		
