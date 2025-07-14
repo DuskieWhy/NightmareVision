@@ -340,13 +340,12 @@ class ChartingState extends MusicBeatState
 					bpm: 100.0,
 					needsVoices: true,
 					arrowSkin: 'default',
-					splashSkin: 'noteSplashes', // idk it would crash if i didn't
+					splashSkin: 'noteSplashes',
 					player1: 'bf',
 					player2: 'bf',
 					gfVersion: 'gf',
 					speed: 1,
 					stage: 'stage',
-					validScore: false,
 					keys: 4,
 					lanes: 2
 				};

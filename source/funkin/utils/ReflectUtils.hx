@@ -4,9 +4,9 @@ import funkin.scripts.Globals;
 
 class ReflectUtils
 {
-	public static function getPropertyLoop(split:Array<String>, ?checkForTextsToo:Bool = true, ?getProperty:Bool = true):Dynamic
+	public static function getPropertyLoop(split:Array<String>, ?getProperty:Bool = true):Dynamic
 	{
-		var object:Dynamic = getObjectDirectly(split[0], checkForTextsToo);
+		var object:Dynamic = getObjectDirectly(split[0]);
 		var end = split.length;
 		if (getProperty) end = split.length - 1;
 		
@@ -17,9 +17,9 @@ class ReflectUtils
 		return object;
 	}
 	
-	public static function getObjectDirectly(objectName:String, ?checkForTextsToo:Bool = true):Dynamic
+	public static function getObjectDirectly(objectName:String):Dynamic
 	{
-		var object:Dynamic = PlayState.instance.getLuaObject(objectName, checkForTextsToo);
+		var object:Dynamic = PlayState.instance.getModchartObject(objectName);
 		
 		if (object == null) object = getVarInArray(Globals.getInstance(), objectName);
 		

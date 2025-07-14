@@ -127,14 +127,6 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		return ret;
 	}
 	
-	override function call(func:String, ?args:Array<Dynamic>)
-	{
-		var ret:Dynamic = funkin.scripts.Globals.Function_Continue;
-		if (exists(func)) ret = super.call(func, args)?.returnValue ?? funkin.scripts.Globals.Function_Continue;
-		
-		return ret;
-	}
-	
 	// kept for notescript stuff
 	public function executeFunc(func:String, ?parameters:Array<Dynamic>, ?theObject:Any, ?extraVars:Map<String, Dynamic>):Dynamic
 	{
@@ -233,6 +225,7 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		set('Function_Continue', Globals.Function_Continue);
 		set('curBeat', 0);
 		set('curStep', 0);
+		set('curSection', 0);
 		set('curDecBeat', 0);
 		set('curDecStep', 0);
 		set('version', Main.NMV_VERSION.trim());

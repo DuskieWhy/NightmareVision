@@ -1017,7 +1017,7 @@ class PlayState extends MusicBeatState
 		}
 	}
 	
-	function initFunkinHScript(filePath:String, ?name:String)
+	function initFunkinHScript(filePath:String, ?name:String):Null<FunkinHScript>
 	{
 		for (i in hscriptArray)
 		{
@@ -1035,8 +1035,9 @@ class PlayState extends MusicBeatState
 		return script;
 	}
 	
-	public function getLuaObject(tag:String, text:Bool = true):FlxSprite
+	public function getModchartObject(tag:String):Dynamic
 	{
+		if (variables.exists(tag)) return variables.get(tag);
 		if (modchartObjects.exists(tag)) return modchartObjects.get(tag);
 		return null;
 	}
@@ -2149,7 +2150,6 @@ class PlayState extends MusicBeatState
 		for (key in eventScripts.keys())
 			eventScripts.get(key).call('update', [elapsed]);
 			
-		callOnScripts('update', [elapsed]);
 		callOnScripts('onUpdate', [elapsed]);
 		
 		super.update(elapsed);
@@ -3002,7 +3002,7 @@ class PlayState extends MusicBeatState
 				var props:Array<String> = value1.split('.');
 				if (props.length > 1)
 				{
-					Reflect.setProperty(ReflectUtils.getPropertyLoop(props, true, true), props[props.length - 1], value2);
+					Reflect.setProperty(ReflectUtils.getPropertyLoop(props, true), props[props.length - 1], value2);
 				}
 				else
 				{
@@ -3045,9 +3045,11 @@ class PlayState extends MusicBeatState
 		callOnScripts('onMoveCamera', [isDad ? 'dad' : 'boyfriend']);
 	}
 	
-	public function getCharacterCameraPos(char:Character)
+	public function getCharacterCameraPos(char:Character):FlxPoint
 	{
+		if (char == null) return FlxPoint.weak();
 		var desiredPos = char.getMidpoint();
+		
 		if (char.isPlayer)
 		{
 			desiredPos.x -= 100 + (char.cameraPosition[0] - boyfriendCameraOffset[0]);
@@ -3058,11 +3060,10 @@ class PlayState extends MusicBeatState
 			desiredPos.x += 150 + char.cameraPosition[0] + opponentCameraOffset[0];
 			desiredPos.y += -100 + char.cameraPosition[1] + opponentCameraOffset[1];
 		}
-		
 		return desiredPos;
 	}
 	
-	public function moveCamera(isDad:Bool)
+	public function moveCamera(isDad:Bool):Void
 	{
 		var desiredPos:FlxPoint = null;
 		var curCharacter:Character = null;
@@ -3096,7 +3097,7 @@ class PlayState extends MusicBeatState
 	 * 'Snaps the camera to a position.'
 	 * @param lockPosition 'if true, locks the camera position after snapping.'
 	 */
-	function snapCamToPos(x:Float = 0, y:Float = 0, lockPosition:Bool = false)
+	function snapCamToPos(x:Float = 0, y:Float = 0, lockPosition:Bool = false):Void
 	{
 		camFollow.setPosition(x, y);
 		FlxG.camera.snapToTarget();
@@ -3198,14 +3199,9 @@ class PlayState extends MusicBeatState
 		
 		if (ret != Globals.Function_Stop && !transitioning)
 		{
-			if (SONG.validScore)
-			{
-				#if !switch
-				var percent:Float = ratingPercent;
-				if (Math.isNaN(percent)) percent = 0;
-				Highscore.saveScore(SONG.song, songScore, storyDifficulty, percent);
-				#end
-			}
+			var percent:Float = ratingPercent;
+			if (Math.isNaN(percent)) percent = 0;
+			Highscore.saveScore(SONG.song, songScore, storyDifficulty, percent);
 			
 			if (chartingMode)
 			{
@@ -3232,10 +3228,7 @@ class PlayState extends MusicBeatState
 					{
 						StoryMenuState.weekCompleted.set(WeekData.weeksList[storyWeek], true);
 						
-						if (SONG.validScore)
-						{
-							Highscore.saveWeekScore(WeekData.getWeekFileName(), campaignScore, storyDifficulty);
-						}
+						Highscore.saveWeekScore(WeekData.getWeekFileName(), campaignScore, storyDifficulty);
 						
 						FlxG.save.data.weekCompleted = StoryMenuState.weekCompleted;
 						FlxG.save.flush();
@@ -3277,7 +3270,7 @@ class PlayState extends MusicBeatState
 	#if ACHIEVEMENTS_ALLOWED
 	var achievementObj:AchievementObject = null;
 	
-	function startAchievement(achieve:String)
+	function startAchievement(achieve:String):Void
 	{
 		achievementObj = new AchievementObject(achieve, camOther);
 		achievementObj.onFinish = achievementEnd;
@@ -3295,7 +3288,7 @@ class PlayState extends MusicBeatState
 	}
 	#end
 	
-	public function KillNotes()
+	public function KillNotes():Void
 	{
 		while (notes.length > 0)
 		{
@@ -3924,14 +3917,10 @@ class PlayState extends MusicBeatState
 			note.wasGoodHit = true;
 			vocals.playerVolume = 1;
 			
-			final hscriptArgs = [note];
-			
-			callOnScripts("goodNoteHit", hscriptArgs);
+			callOnScripts("goodNoteHit", [note]);
 			if (note.noteScript != null)
 			{
-				var script:Dynamic = note.noteScript;
-				
-				callScript(script, "goodNoteHit", hscriptArgs);
+				callScript(note.noteScript, "goodNoteHit", [note]);
 			}
 			if (!note.isSustainNote)
 			{
@@ -4090,14 +4079,12 @@ class PlayState extends MusicBeatState
 			note.wasGoodHit = true;
 			vocals.playerVolume = 1;
 			
-			var hscriptArgs = [note];
-			
-			callOnScripts("extraNoteHit", hscriptArgs);
+			callOnScripts("extraNoteHit", [note]);
 			if (note.noteScript != null)
 			{
 				var script:Dynamic = note.noteScript;
 				
-				callScript(script, "extraNoteHit", hscriptArgs);
+				callScript(script, "extraNoteHit", [note]);
 			}
 			if (!note.isSustainNote)
 			{
@@ -4289,33 +4276,40 @@ class PlayState extends MusicBeatState
 		callHUDFunc(hud -> hud.sectionHit());
 	}
 	
-	public function callOnScripts(event:String, ?args:Array<Dynamic>, ignoreStops:Bool = false, ?exclusions:Array<String>, ?scriptArray:Array<Dynamic>, ?ignoreSpecialShit:Bool = true)
+	public function callOnScripts(event:String, ?args:Array<Dynamic>, ignoreStops:Bool = false, ?exclusions:Array<String>, ?scriptArray:Array<FunkinHScript>, ?ignoreSpecialShit:Bool = true)
 	{
 		args ??= [];
+		
 		if (scriptArray == null)
 		{
 			scriptArray = hscriptArray.copy();
 			for (s in eventScripts)
 				scriptArray.push(s);
 		}
+		
 		if (exclusions == null) exclusions = [];
 		var returnVal:Dynamic = Globals.Function_Continue;
 		for (script in scriptArray)
 		{
-			if (exclusions.contains(script.scriptName)
+			if (!script.exists(event)
+				|| exclusions.contains(script.name)
 				|| ignoreSpecialShit
-				&& (notetypeScripts.exists(script.scriptName) || eventScripts.exists(script.scriptName)))
+				&& (notetypeScripts.exists(script.name) || eventScripts.exists(script.name)))
 			{
 				continue;
 			}
-			var ret:Dynamic = script.call(event, args);
-			if (ret == Globals.Function_Halt)
-			{
-				ret = returnVal;
-				if (!ignoreStops) return returnVal;
-			};
+			var ret:Dynamic = script.call(event, args)?.returnValue;
 			
-			if (ret != Globals.Function_Continue && ret != null) returnVal = ret;
+			if (ret != null)
+			{
+				if (ret == Globals.Function_Halt)
+				{
+					ret = returnVal;
+					if (!ignoreStops) return returnVal;
+				};
+				
+				if (ret != Globals.Function_Continue) returnVal = ret;
+			}
 		}
 		if (returnVal == null) returnVal = Globals.Function_Continue;
 		
