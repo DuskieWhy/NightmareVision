@@ -29,7 +29,7 @@ class Note extends FlxSprite
 	public var row:Int = 0;
 	public var lane:Int = 0;
 	
-	public var noteScript:FunkinHScript;
+	public var noteScript:Null<FunkinHScript> = null;
 	
 	public static var quants:Array<Int> = [4, // quarter note
 		8, // eight

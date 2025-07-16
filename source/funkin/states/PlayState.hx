@@ -1732,10 +1732,7 @@ class PlayState extends MusicBeatState
 				modchartObjects.set('note${swagNote.ID}', swagNote);
 				unspawnNotes.push(swagNote);
 				
-				if (swagNote.noteScript != null)
-				{
-					callScript(swagNote.noteScript, 'setupNote', [swagNote]);
-				}
+				callNoteTypeScript(swagNote.noteType, 'setupNote', [swagNote]);
 				
 				var floorSus:Int = Math.round(susLength);
 				if (floorSus > 0)
@@ -1761,10 +1758,8 @@ class PlayState extends MusicBeatState
 						sustainNote.parent = swagNote;
 						
 						unspawnNotes.push(sustainNote);
-						if (sustainNote.noteScript != null)
-						{
-							callScript(sustainNote.noteScript, 'setupNote', [sustainNote]);
-						}
+						
+						callNoteTypeScript(sustainNote.noteType, 'setupNote', [sustainNote]);
 						
 						if (sustainNote.mustPress)
 						{
@@ -2206,12 +2201,9 @@ class PlayState extends MusicBeatState
 			while (unspawnNotes.length > 0 && unspawnNotes[0].strumTime - Conductor.songPosition < time)
 			{
 				var dunceNote:Note = unspawnNotes[0];
-				var doSpawn:Bool = true;
-				if (dunceNote.noteScript != null)
-				{
-					doSpawn = callScript(dunceNote.noteScript, "spawnNote", [dunceNote]) != Globals.Function_Stop;
-				}
-				if (doSpawn) doSpawn = scripts.call('onSpawnNote', [dunceNote]) != Globals.Function_Stop;
+				var doSpawn:Bool = callNoteTypeScript(dunceNote.noteType, 'spawnNote', [dunceNote]) != Globals.Function_Stop;
+				
+				if (doSpawn) doSpawn = scripts.call('onSpawnNote', [dunceNote], false, [dunceNote.noteType]) != Globals.Function_Stop;
 				if (doSpawn)
 				{
 					var desiredPlayfield = playFields.members[dunceNote.lane];
@@ -2256,13 +2248,9 @@ class PlayState extends MusicBeatState
 					var index:Int = unspawnNotes.indexOf(dunceNote);
 					unspawnNotes.splice(index, 1);
 					
-					scripts.call('onSpawnNotePost', [dunceNote]);
-					if (dunceNote.noteScript != null)
-					{
-						var script:Dynamic = dunceNote.noteScript;
-						
-						callScript(script, "postSpawnNote", [dunceNote]);
-					}
+					scripts.call('onSpawnNotePost', [dunceNote], false, [dunceNote.noteType]);
+					
+					callNoteTypeScript(dunceNote.noteType, 'postSpawnNote', [dunceNote]);
 				}
 				else
 				{
@@ -3558,13 +3546,9 @@ class PlayState extends MusicBeatState
 			}
 		}
 		
-		scripts.call("noteMiss", [daNote]);
-		if (daNote.noteScript != null)
-		{
-			var script:Dynamic = daNote.noteScript;
-			
-			callScript(script, "noteMiss", [daNote]);
-		}
+		scripts.call("noteMiss", [daNote], false, [daNote.noteType]);
+		
+		callNoteTypeScript(daNote.noteType, 'noteMiss', [daNote]);
 	}
 	
 	function noteMissPress(direction:Int = 1, anim:Bool = true):Void // You pressed a key when there was no notes to press for this key
@@ -3713,13 +3697,9 @@ class PlayState extends MusicBeatState
 		
 		final hscriptArgs = [note];
 		
-		scripts.call("opponentNoteHit", hscriptArgs);
-		if (note.noteScript != null)
-		{
-			final script:Dynamic = note.noteScript;
-			
-			callScript(script, "opponentNoteHit", hscriptArgs);
-		}
+		scripts.call("opponentNoteHit", hscriptArgs, false, [note.noteType]);
+		callNoteTypeScript(note.noteType, 'opponentNoteHit', hscriptArgs);
+		
 		if (!note.isSustainNote)
 		{
 			disposeNote(note);
@@ -3878,12 +3858,10 @@ class PlayState extends MusicBeatState
 			note.wasGoodHit = true;
 			vocals.playerVolume = 1;
 			
-			scripts.call('goodNoteHit', [note]);
+			scripts.call('goodNoteHit', [note], false, [note.noteType]);
 			
-			if (note.noteScript != null)
-			{
-				callScript(note.noteScript, "goodNoteHit", [note]);
-			}
+			callNoteTypeScript(note.noteType, 'goodNoteHit', [note]);
+			
 			if (!note.isSustainNote)
 			{
 				disposeNote(note);
@@ -4041,12 +4019,9 @@ class PlayState extends MusicBeatState
 			note.wasGoodHit = true;
 			vocals.playerVolume = 1;
 			
-			scripts.call('extraNoteHit', [note]);
+			scripts.call('extraNoteHit', [note], false, [note.noteType]);
 			
-			if (note.noteScript != null)
-			{
-				callScript(note.noteScript, "extraNoteHit", [note]);
-			}
+			callNoteTypeScript(note.noteType, 'extraNoteHit', [note]);
 			
 			if (!note.isSustainNote)
 			{
@@ -4253,11 +4228,11 @@ class PlayState extends MusicBeatState
 		return callScript(script, func, args);
 	}
 	
-	function callNoteTypeScript(scriptName:String, func:String, args:Array<Dynamic>):Dynamic
+	function callNoteTypeScript(noteType:String, func:String, args:Array<Dynamic>):Dynamic
 	{
-		if (!noteTypeScripts.exists(scriptName)) return Globals.Function_Continue;
+		if (!noteTypeScripts.exists(noteType)) return Globals.Function_Continue;
 		
-		final script = noteTypeScripts.getScript(scriptName);
+		final script = noteTypeScripts.getScript(noteType);
 		
 		return callScript(script, func, args);
 	}
