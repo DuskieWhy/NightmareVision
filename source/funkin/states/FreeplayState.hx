@@ -18,6 +18,8 @@ import funkin.objects.*;
 
 class FreeplayState extends MusicBeatState
 {
+	public static var vocals:Null<FlxSound> = null;
+	
 	public var debugBG:FlxSprite;
 	public var debugTxt:FlxText;
 	
@@ -224,8 +226,6 @@ class FreeplayState extends MusicBeatState
 			}
 	}*/
 	var instPlaying:Int = -1;
-	
-	private static var vocals:FlxSound = null;
 	
 	var holdTime:Float = 0;
 	

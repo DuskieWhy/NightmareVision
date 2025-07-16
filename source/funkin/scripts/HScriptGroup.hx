@@ -129,3 +129,7 @@ class HScriptGroup implements IFlxDestroyable
 		@:bypassAccessor parent = null;
 	}
 }
+
+// this might be better..?
+
+class HScriptContainer extends HScriptGroup {}

@@ -796,8 +796,7 @@ class ChartingState extends MusicBeatState
 				for (file in FileSystem.readDirectory(directory))
 				{
 					var path = haxe.io.Path.join([directory, file]);
-					if (file.endsWith('.hx') || file.endsWith('.hxs') || file.endsWith('.hscript')) trace('NOT ADDING $file, contains an ending not supported.');
-					else
+					if (file.endsWith('.json'))
 					{
 						var stageToCheck:String = file.endsWith('.json') ? file.substr(0, file.length - 5) : file;
 						if (!tempMap.exists(stageToCheck))
@@ -1407,19 +1406,13 @@ class ChartingState extends MusicBeatState
 						{
 							if (file.endsWith(ext))
 							{
-								var fileToCheck:String = file.substr(0, file.length - ext.length);
+								var fileToCheck:String = file.substr(0, file.length - ext.length - 1);
 								
 								if (!noteTypeMap.exists(fileToCheck))
 								{
 									displayNameList.push(fileToCheck);
 									noteTypeMap.set(fileToCheck, key);
 									noteTypeIntMap.set(key, fileToCheck);
-									
-									if (ext != '.lua')
-									{
-										var script = FunkinHScript.fromFile(path, fileToCheck);
-										notetypeScripts.set(fileToCheck, script);
-									}
 									
 									key++;
 								}

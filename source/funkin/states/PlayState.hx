@@ -381,14 +381,15 @@ class PlayState extends MusicBeatState
 	 */
 	public var scripts:HScriptGroup;
 	
-	// public var noteScripts:HScriptGroup;
+	/**
+	 * Group of note type scripts. these have some special functions for their use
+	 */
+	public var noteTypeScripts:HScriptGroup;
 	
 	/**
 	 * Group of event scripts. these have some special functions for their use
 	 */
 	public var eventScripts:HScriptGroup;
-	
-	public var notetypeScripts:Map<String, FunkinHScript> = []; // custom notetypes for scriptVer '1'
 	
 	public static var noteSkin:funkin.data.NoteSkinHelper;
 	
@@ -487,7 +488,7 @@ class PlayState extends MusicBeatState
 	}
 	
 	// null checking
-	function callHUDFunc(f:BaseHUD->Void) if (playHUD != null) f(playHUD);
+	function callHUDFunc(hud:BaseHUD->Void) if (playHUD != null) hud(playHUD);
 	
 	override public function create()
 	{
@@ -503,6 +504,7 @@ class PlayState extends MusicBeatState
 		
 		scripts = new HScriptGroup(this);
 		eventScripts = new HScriptGroup(this);
+		noteTypeScripts = new HScriptGroup(this);
 		
 		debugKeysChart = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_1'));
 		debugKeysCharacter = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_2'));
@@ -1028,9 +1030,13 @@ class PlayState extends MusicBeatState
 		}
 	}
 	
+	/**
+	 * Creates a new `FunkinHScript` from filepath. Returns `null` if it couldnt be found
+	 * @param name set to set a custom name to the script
+	 */
 	function initFunkinHScript(filePath:String, ?name:String):Null<FunkinHScript>
 	{
-		if (scripts.getScript(filePath) != null)
+		if (scripts.exists(name ?? filePath))
 		{
 			return null;
 		}
@@ -1468,6 +1474,7 @@ class PlayState extends MusicBeatState
 	
 	var noteTypeMap:Map<String, Bool> = new Map<String, Bool>();
 	var eventsPushed:Array<String> = [];
+	var noteTypesPushed:Array<String> = [];
 	
 	var _parsedEvents:Null<Array<EventNote>> = null;
 	
@@ -1568,10 +1575,7 @@ class PlayState extends MusicBeatState
 		notes = new FlxTypedGroup<Note>();
 		add(notes);
 		
-		var noteData:Array<SwagSection>;
-		
-		// NEW SHIT
-		noteData = songData.notes;
+		var noteData:Array<SwagSection> = songData.notes;
 		
 		var playerCounter:Int = 0;
 		
@@ -1587,36 +1591,27 @@ class PlayState extends MusicBeatState
 				
 				if (!noteTypeMap.exists(type))
 				{
-					firstNotePush(type);
 					noteTypeMap.set(type, true);
 				}
 			}
 		}
 		
-		for (notetype in noteTypeMap.keys())
+		for (type in noteTypeMap.keys())
 		{
-			var doPush:Bool = false;
-			var baseScriptFile:String = 'custom_notetypes/' + notetype;
-			
-			for (ext in FunkinHScript.H_EXTS)
+			if (!noteTypesPushed.contains(type))
 			{
-				if (doPush) break;
-				var baseFile = '$baseScriptFile.$ext';
-				var files = [#if MODS_ALLOWED Paths.modFolders(baseFile), #end Paths.getPrimaryPath(baseFile)];
-				for (file in files)
+				final baseScriptFile = 'custom_notetypes/$type';
+				
+				final scriptFile = FunkinHScript.getPath(baseScriptFile);
+				
+				if (FunkinAssets.exists(scriptFile, TEXT))
 				{
-					if (FileSystem.exists(file))
-					{
-						var script = initFunkinHScript(file, notetype);
-						if (script != null)
-						{
-							notetypeScripts.set(notetype, script);
-							doPush = true;
-						}
-						
-						if (doPush) break;
-					}
+					noteTypeScripts.addScript(initFunkinHScript(scriptFile, type));
 				}
+				
+				firstNotePush(type);
+				
+				noteTypesPushed.push(type);
 			}
 		}
 		
@@ -1626,15 +1621,13 @@ class PlayState extends MusicBeatState
 			
 			if (!eventsPushed.contains(eventName))
 			{
-				final baseScriptFile:String = 'custom_events/' + eventName;
+				final baseScriptFile:String = 'custom_events/$eventName';
 				
 				final scriptFile = FunkinHScript.getPath(baseScriptFile);
 				
 				if (FunkinAssets.exists(scriptFile, TEXT))
 				{
-					final script = initFunkinHScript(scriptFile, eventName);
-					
-					eventScripts.addScript(script);
+					eventScripts.addScript(initFunkinHScript(scriptFile, eventName));
 				}
 				
 				firstEventPush(event);
@@ -1897,11 +1890,7 @@ class PlayState extends MusicBeatState
 		switch (type)
 		{
 			default:
-				if (notetypeScripts.exists(type))
-				{
-					var script:Dynamic = notetypeScripts.get(type);
-					callScript(script, "onLoad", []);
-				}
+				callNoteTypeScript(type, 'onLoad', []);
 		}
 	}
 	
@@ -2136,10 +2125,6 @@ class PlayState extends MusicBeatState
 		
 		if (generatedMusic && !endingSong && !isCameraOnForcedPos) moveCameraSection();
 		
-		for (key in notetypeScripts.keys())
-			notetypeScripts.get(key).call('update', [elapsed]);
-			
-		eventScripts.call('onUpdate', [elapsed]);
 		scripts.call('onUpdate', [elapsed]);
 		
 		super.update(elapsed);
@@ -4060,10 +4045,9 @@ class PlayState extends MusicBeatState
 			
 			if (note.noteScript != null)
 			{
-				var script:Dynamic = note.noteScript;
-				
-				callScript(script, "extraNoteHit", [note]);
+				callScript(note.noteScript, "extraNoteHit", [note]);
 			}
+			
 			if (!note.isSustainNote)
 			{
 				disposeNote(note);
@@ -4118,10 +4102,11 @@ class PlayState extends MusicBeatState
 		scripts.call('onDestroy', [], true);
 		scripts = FlxDestroyUtil.destroy(scripts);
 		
-		notetypeScripts.clear();
-		
 		eventScripts.call('onDestroy', [], true);
 		eventScripts = FlxDestroyUtil.destroy(eventScripts);
+		
+		noteTypeScripts.call('onDestroy', [], true);
+		noteTypeScripts = FlxDestroyUtil.destroy(noteTypeScripts);
 		
 		if (!ClientPrefs.controllerMode)
 		{
@@ -4254,39 +4239,9 @@ class PlayState extends MusicBeatState
 		callHUDFunc(hud -> hud.sectionHit());
 	}
 	
-	public function callOnScripts(event:String, ?args:Array<Dynamic>, ignoreStops:Bool = false, ?exclusions:Array<String>, scriptArray:Array<FunkinHScript>)
-	{
-		args ??= [];
-		exclusions ??= [];
-		
-		var returnVal:Dynamic = Globals.Function_Continue;
-		for (script in scriptArray)
-		{
-			if (!script.exists(event) || exclusions.contains(script.name))
-			{
-				continue;
-			}
-			var ret:Dynamic = script.call(event, args)?.returnValue;
-			
-			if (ret != null)
-			{
-				if (ret == Globals.Function_Halt)
-				{
-					ret = returnVal;
-					if (!ignoreStops) return returnVal;
-				};
-				
-				if (ret != Globals.Function_Continue) returnVal = ret;
-			}
-		}
-		
-		return returnVal;
-	}
-	
 	public function setOnScripts(variable:String, arg:Dynamic)
 	{
 		scripts.set(variable, arg);
-		eventScripts.set(variable, arg);
 	}
 	
 	function callEventScript(scriptName:String, func:String, args:Array<Dynamic>):Dynamic
@@ -4298,31 +4253,22 @@ class PlayState extends MusicBeatState
 		return callScript(script, func, args);
 	}
 	
-	// data todo make a callNoteScript!
-	function callNoteTypeScript() {}
-	
-	public function callScript(script:Dynamic, event:String, args:Array<Dynamic>):Dynamic
+	function callNoteTypeScript(scriptName:String, func:String, args:Array<Dynamic>):Dynamic
 	{
-		if (script is FunkinHScript)
-		{
-			return callOnScripts(event, args, true, [], [script]);
-		}
-		else if (script is Array)
-		{
-			return callOnScripts(event, args, true, [], script);
-		}
+		if (!noteTypeScripts.exists(scriptName)) return Globals.Function_Continue;
 		
-		// else if (script is String)
-		// {
-		// 	var scripts:Array<FunkinHScript> = [];
-		// 	for (scr in hscriptArray)
-		// 	{
-		// 		if (scr.name == script) scripts.push(scr);
-		// 	}
-		// 	return callOnScripts(event, args, true, [], scripts);
-		// }
+		final script = noteTypeScripts.getScript(scriptName);
 		
-		return Globals.Function_Continue;
+		return callScript(script, func, args);
+	}
+	
+	public function callScript(script:FunkinHScript, event:String, args:Array<Dynamic>):Dynamic
+	{
+		if (!script.exists(event)) return Globals.Function_Continue;
+		
+		var ret:Dynamic = script.call(event, args)?.returnValue;
+		
+		return ret ?? Globals.Function_Continue;
 	}
 	
 	function strumPlayAnim(field:PlayField, id:Int, time:Float, ?note:Note)
