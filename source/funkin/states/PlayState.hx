@@ -2275,31 +2275,16 @@ class PlayState extends MusicBeatState
 		
 		if (startedCountdown)
 		{
-			opponentStrums.forEachAlive(function(strum:StrumNote) {
-				var pos = modManager.getPos(0, 0, 0, curDecBeat, strum.noteData, 1, strum, [], strum.vec3Cache);
-				modManager.updateObject(curDecBeat, strum, pos, 1);
-				strum.x = pos.x + script_STRUMOffsets[strum.noteData].x;
-				strum.y = pos.y + script_STRUMOffsets[strum.noteData].y;
-			});
-			
-			playerStrums.forEachAlive(function(strum:StrumNote) {
-				var pos = modManager.getPos(0, 0, 0, curDecBeat, strum.noteData, 0, strum, [], strum.vec3Cache);
-				modManager.updateObject(curDecBeat, strum, pos, 0);
-				strum.x = pos.x + script_STRUMOffsets[strum.noteData].x;
-				strum.y = pos.y + script_STRUMOffsets[strum.noteData].y;
-			});
-			
-			if (extraFields.length > 0)
+			for (i in 0...playFields.length)
 			{
-				for (extra in 2...SONG.lanes)
-				{
-					extraFields[extra - 2].forEachAlive(function(strum:StrumNote) {
-						var pos = modManager.getPos(0, 0, 0, curDecBeat, strum.noteData, extra, strum, [], strum.vec3Cache);
-						modManager.updateObject(curDecBeat, strum, pos, extra);
-						strum.x = pos.x + script_STRUMOffsets[strum.noteData].x;
-						strum.y = pos.y + script_STRUMOffsets[strum.noteData].y;
-					});
-				}
+				var strums = playFields.members[i];
+				if (strums == null) continue;
+				strums.forEachAlive(strum -> {
+					var pos = modManager.getPos(0, 0, 0, curDecBeat, strum.noteData, i, strum, [], strum.vec3Cache);
+					modManager.updateObject(curDecBeat, strum, pos, i);
+					strum.x = pos.x + script_STRUMOffsets[strum.noteData].x;
+					strum.y = pos.y + script_STRUMOffsets[strum.noteData].y;
+				});
 			}
 		}
 		
