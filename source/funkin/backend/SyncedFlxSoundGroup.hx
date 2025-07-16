@@ -4,10 +4,11 @@ import flixel.util.FlxSignal;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.sound.FlxSound;
 
+@:nullSafety(Strict)
 class SyncedFlxSoundGroup extends FlxTypedGroup<FlxSound>
 {
-	// make this work later lol
-	public var onFinish:FlxSignal;
+	// // make this work later lol
+	// public var onFinish:FlxSignal;
 	
 	/**
 	 * Set volume to a value between 0 and 1 to change how this sound is.
@@ -31,16 +32,16 @@ class SyncedFlxSoundGroup extends FlxTypedGroup<FlxSound>
 	public var playing(get, never):Bool;
 	
 	@:inheritDoc(flixel.sound.FlxSound.resume)
-	public function resume() forEachAlive(f -> f.resume());
+	public function resume() forEachAlive(snd -> snd.resume());
 	
 	@:inheritDoc(flixel.sound.FlxSound.pause)
-	public function pause() forEachAlive(f -> f.pause());
+	public function pause() forEachAlive(snd -> snd.pause());
 	
 	@:inheritDoc(flixel.sound.FlxSound.play)
-	public function play(forceRestart:Bool = false, startTime:Float = 0.0, ?endTime:Null<Float>) forEachAlive(f -> f.play(forceRestart, startTime, endTime));
+	public function play(forceRestart:Bool = false, startTime:Float = 0.0, ?endTime:Null<Float>) forEachAlive(snd -> snd.play(forceRestart, startTime, endTime));
 	
 	@:inheritDoc(flixel.sound.FlxSound.stop)
-	public function stop() forEachAlive(f -> f.stop());
+	public function stop() forEachAlive(snd -> snd.stop());
 	
 	public function new()
 	{
@@ -54,17 +55,17 @@ class SyncedFlxSoundGroup extends FlxTypedGroup<FlxSound>
 	 */
 	override function add(sound:FlxSound):FlxSound
 	{
-		var f = super.add(sound);
-		if (f == null) return f;
+		var snd = super.add(sound);
+		if (snd == null) return snd;
 		
 		// copy the group settings
-		f.time = time;
-		f.pitch = pitch;
-		f.volume = volume;
+		snd.time = time;
+		snd.pitch = pitch;
+		snd.volume = volume;
 		
-		FlxG.sound.list.add(f);
+		FlxG.sound.list.add(snd);
 		
-		return f;
+		return snd;
 	}
 	
 	/**
@@ -73,11 +74,11 @@ class SyncedFlxSoundGroup extends FlxTypedGroup<FlxSound>
 	 */
 	public function getDesyncDifference(?baseTime:Float)
 	{
-		baseTime ??= getFirstAlive().time;
+		final time = baseTime ?? getFirstAlive()?.time ?? 0.0;
 		
 		var diff:Float = 0;
-		forEachAlive(f -> {
-			final s = Math.abs(f.time - baseTime);
+		forEachAlive(snd -> {
+			final s = Math.abs(snd.time - time);
 			if (s > diff) diff = s; // get the highest difference
 		});
 		
@@ -90,12 +91,12 @@ class SyncedFlxSoundGroup extends FlxTypedGroup<FlxSound>
 	 */
 	public function resync(?baseTime:Float)
 	{
-		baseTime ??= getFirstAlive().time; // nothing given. synce to the first track
+		final time = baseTime ?? getFirstAlive()?.time ?? 0.0;
 		
-		forEachAlive(f -> {
-			f.pause();
-			f.time = baseTime;
-			f.play(false, baseTime);
+		forEachAlive(snd -> {
+			snd.pause();
+			snd.time = time;
+			snd.play(false, time);
 		});
 	}
 	
@@ -115,31 +116,34 @@ class SyncedFlxSoundGroup extends FlxTypedGroup<FlxSound>
 	
 	function set_volume(value:Float):Float
 	{
-		forEachAlive(f -> f.volume = value);
+		forEachAlive(snd -> snd.volume = value);
 		return value;
 	}
 	
-	function get_volume():Float return getFirstAlive() == null ? 1 : getFirstAlive().volume;
+	function get_volume():Float return getFirstAlive()?.volume ?? 1.0;
 	
 	function set_pitch(value:Float):Float
 	{
 		#if FLX_PITCH
-		forEachAlive(f -> f.pitch = value);
+		forEachAlive(snd -> snd.pitch = value);
+		#else
+		return 1.0;
 		#end
+		
 		return value;
 	}
 	
-	function get_pitch():Float return #if FLX_PITCH getFirstAlive() == null ? 1 : getFirstAlive().pitch #else 1 #end;
+	function get_pitch():Float return #if FLX_PITCH getFirstAlive()?.pitch ?? 1.0 #else 1.0 #end;
 	
 	function set_time(value:Float):Float
 	{
-		forEachAlive(f -> f.time = value);
+		forEachAlive(snd -> snd.time = value);
 		return value;
 	}
 	
-	function get_time():Float return getFirstAlive() == null ? 0 : getFirstAlive().time;
+	function get_time():Float return getFirstAlive()?.time ?? 0.0;
 	
-	function get_playing():Bool return getFirstAlive() == null ? false : getFirstAlive().playing;
+	function get_playing():Bool return getFirstAlive()?.playing ?? false;
 }
 
 // specialized ver

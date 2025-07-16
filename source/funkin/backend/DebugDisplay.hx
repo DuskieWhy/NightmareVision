@@ -61,7 +61,7 @@ class DebugDisplay extends Sprite
 	var deltaTimeout:Float = 0.0;
 	
 	// Event Handlers
-	private override function __enterFrame(deltaTime:Float):Void
+	override function __enterFrame(deltaTime:Float):Void
 	{
 		final now:Float = haxe.Timer.stamp() * 1000;
 		times.push(now);
@@ -102,10 +102,8 @@ class DebugDisplay extends Sprite
 	{
 		#if cpp
 		return cpp.vm.Gc.memInfo64(cpp.vm.Gc.MEM_INFO_USAGE);
-		#elseif (openfl >= "9.4.0")
-		return cast(openfl.system.System.totalMemoryNumber, UInt);
 		#else
-		return cast(openfl.system.System.totalMemory, UInt);
+		return (cast openfl.system.System.totalMemoryNumber, UInt);
 		#end
 	}
 }

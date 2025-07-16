@@ -55,19 +55,17 @@ class MusicBeatState extends FlxUIState
 		
 		if (FunkinAssets.exists(scriptFile))
 		{
-			var tScript = FunkinHScript.fromFile(scriptFile);
-			if (tScript.__garbage)
+			var newScript = FunkinHScript.fromFile(scriptFile, scriptName);
+			if (newScript.__garbage)
 			{
-				tScript = FlxDestroyUtil.destroy(tScript);
+				newScript = FlxDestroyUtil.destroy(newScript);
 				return false;
 			}
 			
-			script.addScript(tScript);
+			Logger.log('script [$scriptName] initialized');
+			
+			script.addScript(newScript);
 			scripted = true;
-		}
-		else
-		{
-			Logger.log('$scriptName script [$scriptName] not found.');
 		}
 		
 		if (callOnCreate) script.call('onCreate', []);
@@ -89,6 +87,12 @@ class MusicBeatState extends FlxUIState
 		FlxTransitionableState.skipNextTransOut = false;
 	}
 	
+	/**
+	 * Sorts a `FlxTypedGroup` based on objects `zIndex`.
+	 * 
+	 * used for stage layering primarily
+	 * @param group 
+	 */
 	public function refreshZ(?group:FlxTypedGroup<FlxBasic>)
 	{
 		group ??= FlxG.state;

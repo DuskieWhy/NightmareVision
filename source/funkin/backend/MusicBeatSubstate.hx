@@ -38,7 +38,6 @@ class MusicBeatSubstate extends FlxSubState
 		scriptName = s;
 		
 		final scriptFile = FunkinHScript.getPath('scripts/$scriptPrefix/$scriptName');
-		// trace(FunkinHScript.getPath('scripts/$scriptPrefix/$scriptName'));
 		
 		if (FunkinAssets.exists(scriptFile))
 		{

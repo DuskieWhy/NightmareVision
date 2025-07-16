@@ -67,7 +67,7 @@ class FunkinAssets
 		
 		return exists;
 	}
-	 
+	
 	/**
 	 * Reads a given directory and returns all file names inside.
 	 */
@@ -134,13 +134,13 @@ class FunkinAssets
 		}
 		else if (safety)
 		{
-			Logger.log('sound ($key) was not found. Returning beep instead', WARN);
+			Logger.log('sound ($key) was not found. Returning beep instead');
 			
 			return FlxAssets.getSoundAddExtension('flixel/sounds/beep');
 		}
 		else
 		{
-			Logger.log('sound ($key) was not found', WARN);
+			Logger.log('sound ($key) was not found');
 			
 			return null;
 		}

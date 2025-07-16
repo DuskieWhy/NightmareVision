@@ -13,6 +13,10 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.graphics.FlxGraphic;
 
 // @:nullSafety
+
+/**
+ * Primary class used to simplify retrieving and finding assets.
+ */
 class Paths
 {
 	#if ASSET_REDIRECT
@@ -115,11 +119,6 @@ class Paths
 	public static inline function modsNoteskin(key:String)
 	{
 		return modFolders('noteskins/$key.json');
-	}
-	
-	public static inline function lua(key:String, ?library:String):String
-	{
-		return getPath('$key.lua', TEXT, library);
 	}
 	
 	static public function video(key:String):String

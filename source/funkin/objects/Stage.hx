@@ -2,46 +2,60 @@ package funkin.objects;
 
 import flixel.group.FlxContainer.FlxTypedContainer;
 import flixel.FlxBasic;
-import flixel.group.FlxGroup.FlxTypedGroup;
 
-import funkin.scripts.*;
-import funkin.data.StageData.StageFile;
 import funkin.data.StageData;
+import funkin.scripts.FunkinHScript;
 
-@:nullSafety
+@:nullSafety(Strict)
 class Stage extends FlxTypedContainer<FlxBasic>
 {
-	public var curStageScript:Null<FunkinHScript> = null;
+	/**
+	 * Attached script to the stage
+	 */
+	public var script:Null<FunkinHScript> = null;
 	
+	/**
+	 * The name of the current stage
+	 */
 	public var curStage = "stage";
-	public var stageData:StageFile = funkin.data.StageData.generateDefault();
 	
-	public function new(stageName:String = "stage")
+	/**
+	 * The json info from the current stage
+	 */
+	public final stageData:StageFile;
+	
+	public function new(curStage:String = "stage")
 	{
 		super();
 		
-		curStage = stageName;
+		this.curStage = curStage;
 		
-		var newStageData = StageData.getStageFile(curStage);
-		if (newStageData != null) stageData = newStageData;
+		stageData = StageData.getStageFile(curStage) ?? funkin.data.StageData.generateDefault();
 	}
 	
-	public function buildStage()
+	/**
+	 * Initiates the script for the stage
+	 * 
+	 * returns `true` if the script was made successfully
+	 */
+	public function buildStage():Bool
 	{
 		final baseScriptFile:String = 'stages/$curStage/script';
 		
-		final luaPath = Paths.getPath('$baseScriptFile.lua', TEXT, null, true);
-		
 		var scriptFile = FunkinHScript.getPath(baseScriptFile);
-		if (FunkinAssets.exists(scriptFile)) buildHX(scriptFile);
+		if (FunkinAssets.exists(scriptFile)) make(scriptFile);
 		else
 		{
 			scriptFile = FunkinHScript.getPath('stages/$curStage');
-			buildHX(scriptFile);
+			make(scriptFile);
 		}
+		
+		if (script == null) Logger.log('$curStage does not contain a script');
+		
+		return script != null;
 	}
 	
-	function buildHX(scriptFile:String = '')
+	inline function make(scriptFile:String)
 	{
 		var script = FunkinHScript.fromFile(scriptFile);
 		if (script.__garbage)
@@ -49,9 +63,10 @@ class Stage extends FlxTypedContainer<FlxBasic>
 			script = FlxDestroyUtil.destroy(script);
 			return;
 		}
-		curStageScript = script;
 		script.set("add", add);
 		script.set("stage", this);
 		script.call("onLoad");
+		
+		this.script = script;
 	}
 }

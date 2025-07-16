@@ -72,8 +72,8 @@ class GameOverSubstate extends MusicBeatSubstate
 	{
 		instance = this;
 		
-		PlayState.instance.setOnScripts('inGameOver', true);
-		PlayState.instance.callOnScripts('onGameOverStart', []);
+		PlayState.instance?.setOnScripts('inGameOver', true);
+		PlayState.instance?.scripts.call('onGameOverStart', []);
 		
 		Conductor.songPosition = 0;
 		
@@ -110,7 +110,7 @@ class GameOverSubstate extends MusicBeatSubstate
 	
 	override function update(elapsed:Float)
 	{
-		PlayState.instance.callOnScripts('onUpdate', [elapsed]);
+		PlayState.instance?.scripts.call('onUpdate', [elapsed]);
 		super.update(elapsed);
 		
 		if (controls.ACCEPT)
@@ -127,7 +127,7 @@ class GameOverSubstate extends MusicBeatSubstate
 			FlxG.switchState(() -> PlayState.isStoryMode ? new StoryMenuState() : new FreeplayState());
 			
 			FlxG.sound.playMusic(Paths.music('freakyMenu'));
-			PlayState.instance.callOnScripts('onGameOverConfirm', [false]);
+			PlayState.instance?.scripts.call('onGameOverConfirm', [false]);
 		}
 		
 		if (boyfriend.getAnimName() == 'firstDeath' && boyfriend.isAnimFinished() && startedDeath)
@@ -154,7 +154,7 @@ class GameOverSubstate extends MusicBeatSubstate
 			Conductor.songPosition = FlxG.sound.music.time;
 		}
 		
-		PlayState.instance.callOnScripts('onUpdatePost', [elapsed]);
+		PlayState.instance?.scripts.call('onUpdatePost', [elapsed]);
 	}
 	
 	/**
@@ -165,7 +165,7 @@ class GameOverSubstate extends MusicBeatSubstate
 	{
 		if (loopSoundName != null) FlxG.sound.playMusic(Paths.music(loopSoundName), volume);
 		
-		PlayState.instance.callOnScripts('deathAnimStart', [volume]);
+		PlayState.instance?.scripts.call('deathAnimStart', [volume]);
 	}
 	
 	/**
@@ -189,7 +189,7 @@ class GameOverSubstate extends MusicBeatSubstate
 					FlxG.resetState();
 				});
 			});
-			PlayState.instance.callOnScripts('onGameOverConfirm', [true]);
+			PlayState.instance?.scripts.call('onGameOverConfirm', [true]);
 		}
 	}
 	

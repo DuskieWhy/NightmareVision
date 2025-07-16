@@ -1,7 +1,5 @@
 package funkin.states;
 
-import lime.app.Application;
-
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -157,10 +155,11 @@ class MainMenuState extends MusicBeatState
 		if (isHardcodedState())
 		{
 			if (!selectedSomethin)
-			{ 
-				if (controls.UI_UP_P || controls.UI_DOWN_P) {
-				       FlxG.sound.play(Paths.sound('scrollMenu'));
-				       changeItem(controls.UI_UP_P ? -1 : 1);		
+			{
+				if (controls.UI_UP_P || controls.UI_DOWN_P)
+				{
+					FlxG.sound.play(Paths.sound('scrollMenu'));
+					changeItem(controls.UI_UP_P ? -1 : 1);
 				}
 				
 				if (controls.BACK)
