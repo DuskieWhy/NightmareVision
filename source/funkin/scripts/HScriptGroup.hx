@@ -78,7 +78,7 @@ class HScriptGroup implements IFlxDestroyable
 		var returnVal:Dynamic = Globals.Function_Continue;
 		for (i in members)
 		{
-			if (!i.exists(event) || exclusions.contains(i.name))
+			if (i == null || !i.exists(event) || exclusions.contains(i.name))
 			{
 				continue;
 			}

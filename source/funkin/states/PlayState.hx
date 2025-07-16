@@ -2280,7 +2280,7 @@ class PlayState extends MusicBeatState
 				var strums = playFields.members[i];
 				if (strums == null) continue;
 				strums.forEachAlive(strum -> {
-					var pos = modManager.getPos(0, 0, 0, curDecBeat, strum.noteData, i, strum, [], strum.vec3Cache);
+					final pos = modManager.getPos(0, 0, 0, curDecBeat, strum.noteData, i, strum, [], strum.vec3Cache);
 					modManager.updateObject(curDecBeat, strum, pos, i);
 					strum.x = pos.x + script_STRUMOffsets[strum.noteData].x;
 					strum.y = pos.y + script_STRUMOffsets[strum.noteData].y;
