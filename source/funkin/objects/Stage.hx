@@ -63,8 +63,12 @@ class Stage extends FlxTypedContainer<FlxBasic>
 			script = FlxDestroyUtil.destroy(script);
 			return;
 		}
-		script.set("add", add);
-		script.set("stage", this);
-		script.call("onLoad");
+		
+		@:nullSafety(Off) // trust me bro
+		{
+			script.set("add", add);
+			script.set("stage", this);
+			script.call("onLoad");
+		}
 	}
 }
