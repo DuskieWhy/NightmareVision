@@ -187,13 +187,14 @@ class MusicBeatState extends FlxUIState
 		script.call('onBeatHit', [curBeat]);
 	}
 	
-	public function sectionHit():Void {}
-	
-	function getBeatsOnSection()
+	public function sectionHit():Void
 	{
-		var val:Null<Float> = 4;
-		if (PlayState.SONG != null && PlayState.SONG.notes[curSection] != null) val = PlayState.SONG.notes[curSection].sectionBeats;
-		return val == null ? 4 : val;
+		script.call('onSectionHit', []);
+	}
+	
+	function getBeatsOnSection():Float
+	{
+		return PlayState.SONG?.notes[curSection]?.sectionBeats ?? 4.0;
 	}
 	
 	@:access(funkin.states.FreeplayState)
