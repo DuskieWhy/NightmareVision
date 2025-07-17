@@ -4032,8 +4032,6 @@ class PlayState extends MusicBeatState
 	{
 		super.stepHit();
 		
-		trace(vocals.getDesyncDifference(Math.abs(Conductor.songPosition - Conductor.offset)));
-		
 		if (Math.abs(FlxG.sound.music.time - (Conductor.songPosition - Conductor.offset)) > 20
 			|| (SONG.needsVoices && vocals.getDesyncDifference(Math.abs(Conductor.songPosition - Conductor.offset)) > 20))
 		{
