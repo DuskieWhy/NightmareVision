@@ -223,12 +223,16 @@ class PlayState extends MusicBeatState
 	/**
 	 * The oppononents Strum field
 	 */
-	public var opponentStrums:PlayField; // maybe make a getter... playfields[1];
+	public var opponentStrums(get, never):PlayField;
+	
+	function get_opponentStrums() return playFields.members[1];
 	
 	/**
 	 * The players Strum field
 	 */
-	public var playerStrums:PlayField; // maybe make a getter... playfields[0];
+	public var playerStrums(get, never):PlayField;
+	
+	function get_playerStrums() return playFields.members[0];
 	
 	@:isVar public var strumLineNotes(get, null):Array<StrumNote>;
 	
@@ -1203,13 +1207,10 @@ class PlayState extends MusicBeatState
 				
 				if (lane == 0)
 				{
-					playerStrums = strums;
 					strums.noteMissCallback.add(noteMiss);
 				}
 				else if (lane == 1)
 				{
-					opponentStrums = strums;
-					
 					if (!ClientPrefs.opponentStrums) strums.baseAlpha = 0;
 					else if (ClientPrefs.middleScroll) strums.baseAlpha = 0.35;
 				}
