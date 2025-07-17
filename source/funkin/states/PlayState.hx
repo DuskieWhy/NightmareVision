@@ -62,6 +62,11 @@ class PlayState extends MusicBeatState
 	
 	public static var storyMeta:StoryMeta = {};
 	
+	/**
+	 * Static reference to the state. used for other classes to reference
+	 */
+	public static var instance:Null<PlayState> = null;
+	
 	public static var ratingStuff:Array<RatingInfo> = [
 		new RatingInfo('You Suck!', 0.2),
 		new RatingInfo('Shit', 0.4),
@@ -383,9 +388,6 @@ class PlayState extends MusicBeatState
 	var boyfriendIdleTime:Float = 0.0;
 	var boyfriendIdled:Bool = false;
 	
-	// Script shit
-	public static var instance:Null<PlayState> = null;
-	
 	/**
 	 * Group of general scripts.
 	 */
@@ -476,25 +478,17 @@ class PlayState extends MusicBeatState
 		
 		girlfriendCameraOffset = stageData.camera_girlfriend ?? [0, 0];
 		
-		if (boyfriendGroup == null) boyfriendGroup = new FlxSpriteGroup(BF_X, BF_Y);
-		else
-		{
-			boyfriendGroup.x = BF_X;
-			boyfriendGroup.y = BF_Y;
-		}
-		if (dadGroup == null) dadGroup = new FlxSpriteGroup(DAD_X, DAD_Y);
-		else
-		{
-			dadGroup.x = DAD_X;
-			dadGroup.y = DAD_Y;
-		}
+		boyfriendGroup ??= new FlxSpriteGroup();
+		boyfriendGroup.x = BF_X;
+		boyfriendGroup.y = BF_Y;
 		
-		if (gfGroup == null) gfGroup = new FlxSpriteGroup(GF_X, GF_Y);
-		else
-		{
-			gfGroup.x = GF_X;
-			gfGroup.y = GF_Y;
-		}
+		dadGroup ??= new FlxSpriteGroup();
+		dadGroup.x = DAD_X;
+		dadGroup.y = DAD_Y;
+		
+		gfGroup ??= new FlxSpriteGroup();
+		gfGroup.x = GF_X;
+		gfGroup.y = GF_Y;
 	}
 	
 	// null checking
@@ -603,8 +597,6 @@ class PlayState extends MusicBeatState
 		stageData = stage.stageData;
 		setStageData(stageData); // change to setter
 		scripts.set('stage', stage);
-		
-		// STAGE SCRIPTS
 		
 		if (stage.buildStage())
 		{
@@ -1086,8 +1078,6 @@ class PlayState extends MusicBeatState
 		endingSong ? endSong() : startCountdown();
 	}
 	
-	var dialogueCount:Int = 0;
-	
 	public var psychDialogue:Null<DialogueBoxPsych> = null;
 	
 	// you should be able to do "startDialogue(DialogueBoxPsych.parseDialogue(pathToJson));""
@@ -1118,8 +1108,6 @@ class PlayState extends MusicBeatState
 					startCountdown();
 				}
 			}
-			psychDialogue.nextDialogueThing = startNextDialogue;
-			psychDialogue.skipDialogueThing = skipDialogue;
 			psychDialogue.cameras = [camHUD];
 			add(psychDialogue);
 		}
@@ -1140,9 +1128,9 @@ class PlayState extends MusicBeatState
 	var startTimer:FlxTimer = null;
 	var finishTimer:FlxTimer = null;
 	
-	public var countdownReady:FlxSprite;
-	public var countdownSet:FlxSprite;
-	public var countdownGo:FlxSprite;
+	public var countdownReady:Null<FlxSprite> = null;
+	public var countdownSet:Null<FlxSprite> = null;
+	public var countdownGo:Null<FlxSprite> = null;
 	
 	public function startCountdown():Void
 	{
@@ -1191,7 +1179,7 @@ class PlayState extends MusicBeatState
 			scripts.set('opponentStrums', opponentStrums);
 			scripts.set('playFields', playFields);
 			
-			scripts.call('postReceptorGeneration', [isStoryMode || skipArrowStartTween]); // incase you wanna do anything JUST after
+			scripts.call('postReceptorGeneration', [isStoryMode || skipArrowStartTween]);
 			
 			modManager.receptors = [for (i in playFields) i.members];
 			
@@ -1367,17 +1355,6 @@ class PlayState extends MusicBeatState
 		vocals.play();
 		Conductor.songPosition = time;
 		songTime = time;
-	}
-	
-	function startNextDialogue()
-	{
-		dialogueCount++;
-		scripts.call('onNextDialogue', [dialogueCount]);
-	}
-	
-	function skipDialogue()
-	{
-		scripts.call('onSkipDialogue', [dialogueCount]);
 	}
 	
 	var previousFrameTime:Int = 0;

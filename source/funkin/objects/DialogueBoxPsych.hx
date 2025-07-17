@@ -175,8 +175,8 @@ class DialogueBoxPsych extends FlxSpriteGroup
 	var dialogueList:DialogueFile = null;
 	
 	public var finishThing:Void->Void;
-	public var nextDialogueThing:Void->Void = null;
-	public var skipDialogueThing:Void->Void = null;
+	public var nextDialogueThing:Null<Void->Void> = null;
+	public var skipDialogueThing:Null<Void->Void> = null;
 	
 	var bgFade:FlxSprite = null;
 	var box:FlxSprite;
