@@ -72,7 +72,7 @@ class GameOverSubstate extends MusicBeatSubstate
 	{
 		instance = this;
 		
-		PlayState.instance?.setOnScripts('inGameOver', true);
+		PlayState.instance?.scripts.set('inGameOver', true);
 		PlayState.instance?.scripts.call('onGameOverStart', []);
 		
 		Conductor.songPosition = 0;

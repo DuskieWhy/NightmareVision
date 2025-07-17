@@ -94,15 +94,15 @@ class PsychHUD extends BaseHUD
 		
 		onUpdateScore(0, 0, 0);
 		
-		parent.setOnScripts('healthBar', healthBar);
-		parent.setOnScripts('iconP1', iconP1);
-		parent.setOnScripts('iconP2', iconP2);
-		parent.setOnScripts('scoreTxt', scoreTxt);
-		parent.setOnScripts('timeBar', timeBar);
-		parent.setOnScripts('timeTxt', timeTxt);
-		parent.setOnScripts('ratingPrefix', ratingPrefix);
-		parent.setOnScripts('ratingSuffix', ratingSuffix);
-		parent.setOnScripts('comboOffsets', comboOffsets);
+		parent.scripts.set('healthBar', healthBar);
+		parent.scripts.set('iconP1', iconP1);
+		parent.scripts.set('iconP2', iconP2);
+		parent.scripts.set('scoreTxt', scoreTxt);
+		parent.scripts.set('timeBar', timeBar);
+		parent.scripts.set('timeTxt', timeTxt);
+		parent.scripts.set('ratingPrefix', ratingPrefix);
+		parent.scripts.set('ratingSuffix', ratingSuffix);
+		parent.scripts.set('comboOffsets', comboOffsets);
 		
 		if (comboOffsets == null)
 		{
@@ -127,7 +127,7 @@ class PsychHUD extends BaseHUD
 		final tempScore:String = 'Score: ${FlxStringUtil.formatMoney(score, false)}'
 			+ (!parent.instakillOnMiss ? ' $textDivider Misses: ${misses}' : "")
 			+ ' $textDivider Accuracy: ${str}';
-		
+			
 		if (!missed && !parent.cpuControlled) doScoreBop();
 		
 		scoreTxt.text = '${tempScore}\n';
@@ -265,10 +265,10 @@ class PsychHUD extends BaseHUD
 			rating.zIndex = 999;
 			if (ratingGroup.members.length > 1) for (i in ratingGroup.members)
 				ratingGroup.zIndex = ratingGroup.zIndex - 1;
-
+				
 			ratingGroup.add(rating);
 			ratingGroup.sort(funkin.utils.SortUtil.sortByZ, flixel.util.FlxSort.ASCENDING);
-
+			
 			if (!PlayState.isPixelStage)
 			{
 				rating.antialiasing = ClientPrefs.globalAntialiasing;

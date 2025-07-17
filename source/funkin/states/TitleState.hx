@@ -36,8 +36,6 @@ typedef TitleData =
 class TitleState extends MusicBeatState
 {
 	public static var initialized:Bool = false;
-
-	public static var instance:TitleState;
 	
 	public static var title = [
 		'FRIDAY', 'NIGHT', 'FUNKIN'
@@ -62,8 +60,6 @@ class TitleState extends MusicBeatState
 	
 	override public function create():Void
 	{
-		instance = this;
-
 		FunkinAssets.cache.clearStoredMemory();
 		FunkinAssets.cache.clearUnusedMemory();
 		
@@ -78,7 +74,6 @@ class TitleState extends MusicBeatState
 		swagShader = new ColorSwap();
 		
 		setUpScript();
-		script.set('instance', instance);
 		
 		super.create();
 		
@@ -213,7 +208,8 @@ class TitleState extends MusicBeatState
 			else initialized = true;
 		}
 		
-		if(isHardcodedState() && script.call('createText') != Globals.Function_Stop){
+		if (isHardcodedState() && script.call('createText') != Globals.Function_Stop)
+		{
 			credGroup = new FlxGroup();
 			add(credGroup);
 			textGroup = new FlxGroup();
@@ -475,6 +471,7 @@ class TitleState extends MusicBeatState
 	}
 	
 	public var skippedIntro:Bool = false;
+	
 	var increaseVolume:Bool = false;
 	
 	public function skipIntro():Void
