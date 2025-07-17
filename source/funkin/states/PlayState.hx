@@ -223,14 +223,12 @@ class PlayState extends MusicBeatState
 	/**
 	 * The oppononents Strum field
 	 */
-	public var opponentStrums:PlayField;
+	public var opponentStrums:PlayField; // maybe make a getter... playfields[1];
 	
 	/**
 	 * The players Strum field
 	 */
-	public var playerStrums:PlayField;
-	
-	public var extraFields:Array<PlayField> = [];
+	public var playerStrums:PlayField; // maybe make a getter... playfields[0];
 	
 	@:isVar public var strumLineNotes(get, null):Array<StrumNote>;
 	
@@ -1189,64 +1187,42 @@ class PlayState extends MusicBeatState
 			
 			for (lane in 0...SONG.lanes)
 			{
+				final character = lane == 1 ? dad : boyfriend;
+				final isPlayer = lane != 1;
+				
+				final auto = (lane != 0 || cpuControlled);
+				
+				var strums = new PlayField(0, 0, SONG.keys, character, isPlayer, auto, lane);
+				
+				scripts.call('preReceptorGeneration', [strums, lane]);
+				strums.generateReceptors();
+				
+				playFields.add(strums);
+				
+				strums.noteHitCallback.add(lane == 0 ? goodNoteHit : lane == 1 ? opponentNoteHit : extraNoteHit);
+				
 				if (lane == 0)
 				{
-					playerStrums = new PlayField(ClientPrefs.middleScroll ? (FlxG.width / 2) : FlxG.width / 2
-						+ (FlxG.width / 4), 50, SONG.keys, boyfriend, true, cpuControlled, lane);
-					playerStrums.noteHitCallback.add(goodNoteHit);
-					playerStrums.noteMissCallback.add(noteMiss);
-					playerStrums.playerControls = true;
-					// playerStrums.autoPlayed = false;
-					scripts.call('preReceptorGeneration', [playerStrums, lane]);
-					playerStrums.generateReceptors();
-					playerStrums.fadeIn(isStoryMode || skipArrowStartTween);
-					playFields.add(playerStrums);
-					
-					continue;
+					playerStrums = strums;
+					strums.noteMissCallback.add(noteMiss);
 				}
 				else if (lane == 1)
 				{
-					opponentStrums = new PlayField(ClientPrefs.middleScroll ? (FlxG.width / 2) : (FlxG.width / 2 - (FlxG.width / 4)), 50, SONG.keys, dad, false, true, 1);
-					opponentStrums.noteHitCallback.add(opponentNoteHit);
-					if (!ClientPrefs.opponentStrums) opponentStrums.baseAlpha = 0;
-					else if (ClientPrefs.middleScroll) opponentStrums.baseAlpha = 0.35;
-					opponentStrums.offsetReceptors = ClientPrefs.middleScroll;
-					opponentStrums.playerControls = false;
-					opponentStrums.autoPlayed = true;
+					opponentStrums = strums;
 					
-					scripts.call('preReceptorGeneration', [opponentStrums, lane]);
-					opponentStrums.generateReceptors();
-					opponentStrums.fadeIn(isStoryMode || skipArrowStartTween);
-					playFields.add(opponentStrums);
-					
-					continue;
+					if (!ClientPrefs.opponentStrums) strums.baseAlpha = 0;
+					else if (ClientPrefs.middleScroll) strums.baseAlpha = 0.35;
 				}
-				
-				var strum:PlayField = new PlayField((FlxG.width / 2), 50, SONG.keys, boyfriend, true, cpuControlled, lane);
-				scripts.call('preReceptorGeneration', [strum, lane]);
-				strum.noteHitCallback.add(extraNoteHit);
-				strum.playerControls = false;
-				strum.autoPlayed = true;
-				strum.ID = lane;
-				strum.generateReceptors();
-				strum.fadeIn(isStoryMode || skipArrowStartTween);
-				extraFields.push(strum);
 			}
 			
-			if (extraFields.length != 0) for (extra in extraFields)
-				playFields.add(extra);
-				
 			scripts.set('playerStrums', playerStrums);
 			scripts.set('opponentStrums', opponentStrums);
 			scripts.set('playFields', playFields);
 			
 			scripts.call('postReceptorGeneration', [isStoryMode || skipArrowStartTween]); // incase you wanna do anything JUST after
 			
-			modManager.receptors = [playerStrums.members, opponentStrums.members];
+			modManager.receptors = [for (i in playFields) i.members];
 			
-			if (extraFields.length != 0) for (e in extraFields)
-				modManager.receptors.push(e.members);
-				
 			modManager.lanes = SONG.lanes;
 			
 			scripts.call('preModifierRegister', []);
