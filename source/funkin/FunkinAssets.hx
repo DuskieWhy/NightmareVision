@@ -20,7 +20,7 @@ class FunkinAssets
 	public static final cache:FunkinCache = new FunkinCache();
 	
 	/**
-	 * Parses a txt file instance
+	 * Retrieves the content of a given file from its path
 	 */
 	public static function getContent(path:String):String
 	{

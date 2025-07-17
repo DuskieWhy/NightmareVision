@@ -345,6 +345,9 @@ class Character extends FlxSprite
 		super.update(elapsed);
 	}
 	
+	/**
+	 * Helper var for gf type dances.
+	 */
 	public var danced:Bool = false;
 	
 	override function draw()
@@ -446,11 +449,6 @@ class Character extends FlxSprite
 			default:
 				FlxPoint.weak();
 		}
-	}
-	
-	function sortAnims(Obj1:Array<Dynamic>, Obj2:Array<Dynamic>):Int
-	{
-		return FlxSort.byValues(FlxSort.ASCENDING, Obj1[0], Obj2[0]);
 	}
 	
 	public var danceEveryNumBeats:Int = 2;

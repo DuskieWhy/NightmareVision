@@ -4,7 +4,6 @@ import haxe.Json;
 
 import funkin.objects.character.Character.AnimArray;
 
-using StringTools;
 typedef CharacterFile =
 {
 	/**
@@ -103,6 +102,7 @@ class CharacterBuilder
 		
 		return cast Json.parse(FunkinAssets.getContent(charPath));
 	}
+	
 	public static function changeTypeReload(info:Array<Dynamic>, type:String, file:String)
 	{
 		trace('changing type to $type');

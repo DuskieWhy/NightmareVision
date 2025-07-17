@@ -181,8 +181,6 @@ class PlayState extends MusicBeatState
 	public var songSpeedType:String = "multiplicative";
 	public var noteKillOffset:Float = 350;
 	
-	public var doof:DialogueBox;
-	
 	public static var isPixelStage:Bool = false;
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:Int = 0;
@@ -218,28 +216,28 @@ class PlayState extends MusicBeatState
 	/**
 	 * Container of all strumlines in use
 	 */
-	public var playFields:FlxTypedGroup<PlayField>;
+	public var playFields:Null<FlxTypedGroup<PlayField>>;
 	
 	/**
 	 * The oppononents Strum field
 	 */
-	public var opponentStrums(get, never):PlayField;
+	public var opponentStrums(get, never):Null<PlayField>;
 	
-	function get_opponentStrums() return playFields.members[1];
+	function get_opponentStrums() return playFields?.members[1];
 	
 	/**
 	 * The players Strum field
 	 */
-	public var playerStrums(get, never):PlayField;
+	public var playerStrums(get, never):Null<PlayField>;
 	
-	function get_playerStrums() return playFields.members[0];
+	function get_playerStrums() return playFields?.members[0];
 	
 	@:isVar public var strumLineNotes(get, null):Array<StrumNote>;
 	
 	@:noCompletion function get_strumLineNotes()
 	{
-		var notes:Array<StrumNote> = [];
-		if (playFields != null && playFields.length > 0)
+		final notes:Array<StrumNote> = [];
+		if (playFields != null && playFields.length != 0)
 		{
 			for (field in playFields.members)
 			{
@@ -322,7 +320,6 @@ class PlayState extends MusicBeatState
 	var stageData:StageFile;
 	
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
-	var dialogueJson:DialogueFile = null;
 	
 	public var songScore:Int = 0;
 	public var songHits:Int = 0;
@@ -334,8 +331,19 @@ class PlayState extends MusicBeatState
 	public static var deathCounter:Int = 0;
 	
 	public var defaultCamZoomAdd:Float = 0;
+	
+	/**
+	 * Default camera zoom the game will attempt to return to.
+	 * 
+	 * set via the Stage json
+	 */
 	public var defaultCamZoom:Float = 1.05;
+	
+	/**
+	 * Default `camHUD` zoom the game will attempt to return to.
+	 */
 	public var defaultHudZoom:Float = 1;
+	
 	public var beatsPerZoom:Int = 4;
 	
 	var totalBeat:Int = 0;
@@ -438,7 +446,7 @@ class PlayState extends MusicBeatState
 	
 	@:noCompletion public function set_cpuControlled(val:Bool)
 	{
-		if (playFields != null && playFields.members.length > 0)
+		if (playFields != null && playFields.members.length != 0)
 		{
 			for (field in playFields.members)
 			{
@@ -554,9 +562,6 @@ class PlayState extends MusicBeatState
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camOther, false);
 		
-		scripts.set('camGame', camGame);
-		scripts.set('camHUD', camHUD);
-		
 		grpNoteSplashes = new FlxTypedContainer<NoteSplash>();
 		
 		persistentUpdate = true;
@@ -620,10 +625,6 @@ class PlayState extends MusicBeatState
 			stage.add(dadGroup);
 			stage.add(boyfriendGroup);
 		}
-		
-		scripts.set('camGame', camGame);
-		scripts.set('camHUD', camHUD);
-		scripts.set('camOther', camOther);
 		
 		// "GLOBAL" SCRIPTS
 		var filesPushed:Array<String> = [];
@@ -714,31 +715,6 @@ class PlayState extends MusicBeatState
 			if (gf != null) gf.visible = false;
 		}
 		
-		var file:String = Paths.json(songName + '/dialogue'); // Checks for json/Psych Engine dialogue
-		if (OpenFlAssets.exists(file))
-		{
-			dialogueJson = DialogueBoxPsych.parseDialogue(file);
-		}
-		
-		final vanillaText:String = songName + '/' + songName + 'Dialogue';
-		var file:String = Paths.txt(vanillaText); // Checks for vanilla/Senpai dialogue
-		if (OpenFlAssets.exists(file))
-		{
-			dialogue = CoolUtil.coolTextFile(file);
-		}
-		#if MODS_ALLOWED
-		file = Paths.modFolders('${Mods.currentModDirectory}/data/${vanillaText}.txt');
-		if (file != null)
-		{
-			dialogue = CoolUtil.coolTextFile(file);
-		}
-		#end
-		doof = new DialogueBox(false, dialogue);
-		doof.scrollFactor.set();
-		doof.finishThing = startCountdown;
-		doof.nextDialogueThing = startNextDialogue;
-		doof.skipDialogueThing = skipDialogue;
-		
 		Conductor.songPosition = -5000;
 		
 		// temp
@@ -798,15 +774,12 @@ class PlayState extends MusicBeatState
 		grpNoteSplashes.cameras = [camHUD];
 		notes.cameras = [camHUD];
 		botplayTxt.cameras = [camHUD];
-		doof.cameras = [camOther];
 		
 		scripts.set('playFields', playFields);
 		scripts.set('grpNoteSplashes', grpNoteSplashes);
 		scripts.set('notes', notes);
 		
 		scripts.set('botplayTxt', botplayTxt);
-		
-		scripts.set('doof', doof);
 		
 		startingSong = true;
 		
@@ -957,8 +930,6 @@ class PlayState extends MusicBeatState
 			script_SUSTAINENDOffsets[i].x = noteSkin.data.noteAnimations[i][2].offsets[0];
 			script_SUSTAINENDOffsets[i].y = noteSkin.data.noteAnimations[i][2].offsets[1];
 			script_SUSTAINENDOffsets[i].y *= (ClientPrefs.downScroll ? -1 : 1);
-			
-			// trace('Sus: ${script_SUSTAINOffsets[i].y} | End: ${script_SUSTAINENDOffsets[i].y}');
 			
 			script_SPLASHOffsets[i].x = noteSkin.data.noteSplashAnimations[i].offsets[0];
 			script_SPLASHOffsets[i].y = noteSkin.data.noteSplashAnimations[i].offsets[1];
@@ -1117,9 +1088,9 @@ class PlayState extends MusicBeatState
 	
 	var dialogueCount:Int = 0;
 	
-	public var psychDialogue:DialogueBoxPsych;
+	public var psychDialogue:Null<DialogueBoxPsych> = null;
 	
-	// You don't have to add a song, just saying. You can just do "startDialogue(dialogueJson);" and it should work
+	// you should be able to do "startDialogue(DialogueBoxPsych.parseDialogue(pathToJson));""
 	public function startDialogue(dialogueFile:DialogueFile, ?song:String = null):Void
 	{
 		// TO DO: Make this more flexible, maybe?

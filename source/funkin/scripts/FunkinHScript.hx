@@ -263,7 +263,7 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		set('AnimateSprite', flxanimate.AnimateSprite);
 		set("FlxBackdrop", flixel.addons.display.FlxBackdrop);
 		set("FlxTiledSprite", flixel.addons.display.FlxTiledSprite);
-		set('FlxPoint', flixel.math.FlxPoint.FlxBasePoint); // redirects to flxbasepoint because thats all flxpoints are
+		set('FlxPoint', flixel.math.FlxPoint.FlxBasePoint);
 		
 		set('FlxCameraFollowStyle', flixel.FlxCamera.FlxCameraFollowStyle);
 		set("FlxTextBorderStyle", flixel.text.FlxText.FlxTextBorderStyle);
@@ -323,6 +323,7 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		set("AttachedAlphabet", AttachedAlphabet);
 		
 		set("CutsceneHandler", funkin.objects.CutsceneHandler);
+		set('DialogueBox', funkin.objects.DialogueBox);
 		
 		// modchart related
 		set("ModManager", funkin.game.modchart.ModManager);
