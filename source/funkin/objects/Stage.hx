@@ -57,7 +57,7 @@ class Stage extends FlxTypedContainer<FlxBasic>
 	
 	inline function make(scriptFile:String)
 	{
-		var script = FunkinHScript.fromFile(scriptFile);
+		script = FunkinHScript.fromFile(scriptFile);
 		if (script.__garbage)
 		{
 			script = FlxDestroyUtil.destroy(script);
@@ -66,7 +66,5 @@ class Stage extends FlxTypedContainer<FlxBasic>
 		script.set("add", add);
 		script.set("stage", this);
 		script.call("onLoad");
-		
-		this.script = script;
 	}
 }

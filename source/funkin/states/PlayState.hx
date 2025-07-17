@@ -1159,6 +1159,7 @@ class PlayState extends MusicBeatState
 				
 				scripts.call('preReceptorGeneration', [strums, lane]);
 				strums.generateReceptors();
+				strums.fadeIn(isStoryMode || skipArrowStartTween);
 				
 				playFields.add(strums);
 				
