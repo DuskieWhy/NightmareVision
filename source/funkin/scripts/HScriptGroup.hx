@@ -51,7 +51,7 @@ class HScriptGroup implements IFlxDestroyable
 	 * Adds a new script to the group
 	 * @param script 
 	 */
-	public function addScript(script:FunkinHScript, allowDupeNames:Bool = false):Bool
+	public function addScript(script:Null<FunkinHScript>, allowDupeNames:Bool = false):Bool
 	{
 		if (script == null || (!allowDupeNames && exists(script.name))) return false;
 		

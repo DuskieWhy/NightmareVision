@@ -14,7 +14,7 @@ import openfl.Assets;
 /**
  * backend for retrieving and caching assets
  */
-@:nullSafety
+@:nullSafety(Strict)
 class FunkinAssets
 {
 	public static final cache:FunkinCache = new FunkinCache();
