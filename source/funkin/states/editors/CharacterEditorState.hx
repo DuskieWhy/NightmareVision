@@ -43,7 +43,7 @@ class CharacterEditorState extends MusicBeatState
 	var ghostCharAtlas:Character;
 	var curChar:Character;
 	var curGhost:Character;
-
+	
 	var textAnim:FlxText;
 	var bgLayer:FlxTypedGroup<FlxSprite>;
 	var charLayer:FlxTypedGroup<Character>;
@@ -953,7 +953,6 @@ class CharacterEditorState extends MusicBeatState
 			curChar = char;
 		}
 		
-		
 		curChar.setPosition(curChar.positionArray[0] + OFFSET_X + 100, curChar.positionArray[1]);
 		
 		if (blahBlahBlah)
@@ -964,7 +963,6 @@ class CharacterEditorState extends MusicBeatState
 		reloadBGs();
 		updatePointerPos();
 	}
-
 	
 	function updatePointerPos()
 	{
@@ -996,6 +994,7 @@ class CharacterEditorState extends MusicBeatState
 		}
 		return null;
 	}
+	
 	function changeType(type:String, file:String)
 	{
 		for (i in [char /*, ghostChar*/])
@@ -1146,8 +1145,8 @@ class CharacterEditorState extends MusicBeatState
 		{
 			textAnim.text = curChar.animationsArray[curAnim].anim;
 			
-			var curAnim:FlxAnimation = curChar.getAnimByName(curChar.animationsArray[curAnim].anim);
-			if (curAnim != null || curAnim != null && curAnim.frames.length < 1) textAnim.text += ' (ERROR!)';
+			var curAnim = curChar.getAnimByName(curChar.animationsArray[curAnim].anim);
+			if (curAnim == null || curAnim != null && curAnim.frames.length < 1) textAnim.text += ' (ERROR!)';
 		}
 		else
 		{

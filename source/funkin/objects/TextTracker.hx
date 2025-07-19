@@ -2,7 +2,8 @@ package funkin.objects;
 
 import flixel.util.FlxAxes;
 
-@:nullSafety class TextTracker extends flixel.text.FlxText
+@:nullSafety
+class TextTracker extends FlxText
 {
 	public var sprTracker:Null<FlxSprite> = null;
 	
