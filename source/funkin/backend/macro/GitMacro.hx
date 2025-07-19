@@ -21,10 +21,21 @@ class GitMacro
 		if (process.exitCode() != 0)
 		{
 			var message = process.stderr.readAll().toString();
-			haxe.macro.Context.error("Cannot execute `git rev-parse HEAD`. " + message, haxe.macro.Context.currentPos());
+			haxe.macro.Context.info("Could not obtain current git summary. " + message, haxe.macro.Context.currentPos());
 		}
 		
-		return macro $v{process.stdout.readLine()};
+		var ret = '';
+		try
+		{
+			ret = process.stdout.readLine();
+			process.close();
+		}
+		catch (e)
+		{
+			process.close();
+		}
+		
+		return macro $v{ret};
 		#else
 		return macro $v{"-"} #end
 	}
@@ -35,10 +46,25 @@ class GitMacro
 	public static macro function getGitCommitHash()
 	{
 		#if !display
-		var proc = new sys.io.Process('git', ['rev-parse', '--short', 'HEAD'], false);
-		proc.exitCode(true);
+		var process = new sys.io.Process('git', ['rev-parse', '--short', 'HEAD'], false);
+		if (process.exitCode() != 0)
+		{
+			var message = process.stderr.readAll().toString();
+			haxe.macro.Context.info("Could not obtain current git hash. " + message, haxe.macro.Context.currentPos());
+		}
 		
-		return macro $v{proc.stdout.readLine()};
+		var ret = '';
+		try
+		{
+			ret = process.stdout.readLine();
+			process.close();
+		}
+		catch (e)
+		{
+			process.close();
+		}
+		
+		return macro $v{ret};
 		#else
 		return macro $v{""} #end
 	}
