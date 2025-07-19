@@ -270,7 +270,7 @@ class ModManager
 	
 	public inline function getVisPos(songPos:Float = 0, strumTime:Float = 0, songSpeed:Float = 1)
 	{
-		return -getBaseVisPosD(songPos - strumTime, 1);
+		return -getBaseVisPosD(songPos - strumTime, songSpeed);
 	}
 	
 	public function getPos(time:Float, diff:Float, tDiff:Float, beat:Float, data:Int, player:Int, obj:FlxSprite, ?exclusions:Array<String>, ?pos:Vector3):Vector3
