@@ -19,7 +19,7 @@ class ReflectUtils
 	
 	public static function getObjectDirectly(objectName:String):Dynamic
 	{
-		var object:Dynamic = PlayState.instance.getModchartObject(objectName);
+		var object:Dynamic = PlayState.instance?.getModchartObject(objectName);
 		
 		if (object == null) object = getVarInArray(Globals.getInstance(), objectName);
 		
