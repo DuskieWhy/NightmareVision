@@ -22,7 +22,7 @@ class FunkinCache
 		@:privateAccess
 		for (key in FlxG.bitmap._cache.keys())
 		{
-			if (!currentTrackedGraphics.exists(key) && !key.startsWith('NMV_DEBUG'))
+			if (!currentTrackedGraphics.exists(key))
 			{
 				disposeGraphic(FlxG.bitmap.get(key));
 			}

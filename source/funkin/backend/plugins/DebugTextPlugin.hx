@@ -15,7 +15,11 @@ class DebugTextPlugin extends FlxTypedGroup<DebugText>
 	
 	public static function init()
 	{
-		if (instance == null) FlxG.plugins.addPlugin(instance = new DebugTextPlugin());
+		if (instance == null)
+		{
+			FlxG.plugins.addPlugin(instance = new DebugTextPlugin());
+			FlxG.signals.postStateSwitch.add(clearTxt);
+		}
 	}
 	
 	public static function addText(message:String, colour:FlxColor = FlxColor.WHITE)
@@ -37,6 +41,13 @@ class DebugTextPlugin extends FlxTypedGroup<DebugText>
 		
 		instance.camera = CameraUtil.lastCamera;
 	}
+	
+	static function clearTxt()
+	{
+		if (instance == null) return;
+		
+		instance.forEachAlive(spr -> spr.kill());
+	}
 }
 
 class DebugText extends FlxText
@@ -50,93 +61,6 @@ class DebugText extends FlxText
 		scrollFactor.set();
 		borderSize = 1;
 		this.color = color;
-	}
-	
-	// overriden to modify its key
-	override function regenGraphic():Void
-	{
-		if (textField == null || !_regen) return;
-		
-		final oldWidth:Int = graphic != null ? graphic.width : 0;
-		final oldHeight:Int = graphic != null ? graphic.height : FlxText.VERTICAL_GUTTER;
-		
-		final newWidthFloat:Float = textField.width;
-		final newHeightFloat:Float = _autoHeight ? textField.textHeight + FlxText.VERTICAL_GUTTER : textField.height;
-		
-		var borderWidth:Float = 0;
-		var borderHeight:Float = 0;
-		switch (borderStyle)
-		{
-			case SHADOW if (_shadowOffset.x != 1 || _shadowOffset.y != 1):
-				borderWidth += Math.abs(_shadowOffset.x);
-				borderHeight += Math.abs(_shadowOffset.y);
-				
-			case SHADOW: // With the default shadowOffset value
-				borderWidth += Math.abs(borderSize);
-				borderHeight += Math.abs(borderSize);
-				
-			case SHADOW_XY(offsetX, offsetY):
-				borderWidth += Math.abs(offsetX);
-				borderHeight += Math.abs(offsetY);
-				
-			case OUTLINE_FAST | OUTLINE:
-				borderWidth += Math.abs(borderSize) * 2;
-				borderHeight += Math.abs(borderSize) * 2;
-				
-			case NONE:
-		}
-		
-		final newWidth:Int = Math.ceil(newWidthFloat + borderWidth);
-		final newHeight:Int = Math.ceil(newHeightFloat + borderHeight);
-		
-		// prevent text height from shrinking on flash if text == ""
-		if (textField.textHeight != 0 && (oldWidth != newWidth || oldHeight != newHeight))
-		{
-			// Need to generate a new buffer to store the text graphic
-			final key:String = FlxG.bitmap.getUniqueKey("NMV_DEBUGtext");
-			makeGraphic(newWidth, newHeight, FlxColor.TRANSPARENT, false, key);
-			width = Math.ceil(newWidthFloat);
-			height = Math.ceil(newHeightFloat);
-			
-			#if FLX_TRACK_GRAPHICS
-			graphic.trackingInfo = 'text($ID, $text)';
-			#end
-			
-			if (_hasBorderAlpha) _borderPixels = graphic.bitmap.clone();
-			
-			if (_autoHeight) textField.height = newHeight;
-			
-			_flashRect.x = 0;
-			_flashRect.y = 0;
-			_flashRect.width = newWidth;
-			_flashRect.height = newHeight;
-		}
-		else // Else just clear the old buffer before redrawing the text
-		{
-			graphic.bitmap.fillRect(_flashRect, FlxColor.TRANSPARENT);
-			if (_hasBorderAlpha)
-			{
-				if (_borderPixels == null) _borderPixels = new BitmapData(frameWidth, frameHeight, true);
-				else _borderPixels.fillRect(_flashRect, FlxColor.TRANSPARENT);
-			}
-		}
-		
-		if (textField != null && textField.text != null)
-		{
-			// Now that we've cleared a buffer, we need to actually render the text to it
-			copyTextFormat(_defaultFormat, _formatAdjusted);
-			
-			_matrix.identity();
-			
-			applyBorderStyle();
-			applyBorderTransparency();
-			applyFormats(_formatAdjusted, false);
-			
-			drawTextFieldTo(graphic.bitmap);
-		}
-		
-		_regen = false;
-		resetFrame();
 	}
 	
 	override function update(elapsed:Float)
