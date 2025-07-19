@@ -18,7 +18,12 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 	 */
 	public static final H_EXTS:Array<String> = ['hx', 'hxs', 'hscript'];
 	
-	public static function getPath(path:String)
+	/**
+	 * wrapper for `Paths.getPath` but attempts to append a supported hx extension to its path
+	 * @param path 
+	 * @return String
+	 */
+	public static function getPath(path:String):String
 	{
 		for (extension in H_EXTS)
 		{
@@ -30,6 +35,17 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 			if (FunkinAssets.exists(targetPath)) return targetPath;
 		}
 		return path;
+	}
+	
+	/**
+	 * Helper to check if a path ends with a support hx extension
+	 */
+	public static function isHxFile(path:String):Bool
+	{
+		for (extension in H_EXTS)
+			if (path.endsWith(extension)) return true;
+			
+		return false;
 	}
 	
 	/**

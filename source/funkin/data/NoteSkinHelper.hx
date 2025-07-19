@@ -251,7 +251,7 @@ class NoteSkinHelper
 			offsets: [0, 0]
 		}
 	];
-
+	
 	public static final fallbackNoteAnims:Array<Animation> = [
 		{
 			anim: "scroll",
@@ -269,7 +269,7 @@ class NoteSkinHelper
 			offsets: [0, 0]
 		}
 	];
-
+	
 	public static function fallbackNote(id:Int)
 	{
 		var anim:Array<Animation> = [
@@ -289,10 +289,10 @@ class NoteSkinHelper
 				offsets: [0, 0]
 			}
 		];
-
+		
 		for (i in anim)
 			i.anim = '${i.anim}${Std.string(id)}';
-
+			
 		return anim;
 	}
 	
@@ -302,7 +302,7 @@ class NoteSkinHelper
 		anim.anim = '${anim.anim}${Std.string(id)}';
 		return anim;
 	}
-
+	
 	static final defaultSingAnimations:Array<String> = ['singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
 	
 	public var data:NoteSkinData;
@@ -313,7 +313,7 @@ class NoteSkinHelper
 		
 		try
 		{
-			rawJson = File.getContent(path).trim();
+			rawJson = FunkinAssets.getContent(path).trim();
 			data = parseJSON(rawJson);
 		}
 		catch (e:Dynamic)
@@ -346,7 +346,7 @@ class NoteSkinHelper
 			for (i in j)
 				for (k in i)
 					if (k.looping == null) k.looping = false;
-
+					
 		data.singAnimations ??= defaultSingAnimations;
 		data.scale ??= 0.7;
 		data.splashesEnabled ??= true;
@@ -372,6 +372,7 @@ class NoteSkinHelper
 		StrumNote.keys = keys;
 		NoteSplash.keys = keys;
 	}
+	
 	// public static function getTempNoteAnim(handler:NoteSkinHelper)
 	// {
 	// 	var anim = fallbackNoteAnims.copy();

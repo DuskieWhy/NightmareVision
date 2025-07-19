@@ -1,12 +1,7 @@
 package funkin.states;
 
-import funkin.game.StoryMeta;
-
-import flixel.group.FlxContainer.FlxTypedContainer;
-
 import haxe.ds.Vector;
 
-import openfl.utils.Assets as OpenFlAssets;
 import openfl.events.KeyboardEvent;
 
 import flixel.util.FlxDestroyUtil;
@@ -27,6 +22,7 @@ import flixel.input.keyboard.FlxKey;
 import flixel.util.helpers.FlxBounds;
 import flixel.util.FlxSignal;
 import flixel.util.FlxSave;
+import flixel.group.FlxContainer.FlxTypedContainer;
 
 import funkin.objects.character.CharacterBuilder;
 import funkin.objects.character.Character;
@@ -47,6 +43,7 @@ import funkin.states.substates.*;
 import funkin.states.editors.*;
 import funkin.game.modchart.*;
 import funkin.backend.SyncedFlxSoundGroup;
+import funkin.game.StoryMeta;
 #if VIDEOS_ALLOWED
 import funkin.video.FunkinVideoSprite;
 #end
@@ -632,23 +629,20 @@ class PlayState extends MusicBeatState
 		
 		for (folder in foldersToCheck)
 		{
-			if (FileSystem.exists(folder))
+			if (FunkinAssets.exists(folder))
 			{
 				for (file in FileSystem.readDirectory(folder))
 				{
 					if (!filesPushed.contains(file))
 					{
-						for (ext in FunkinHScript.H_EXTS)
+						final scriptPath = FunkinHScript.getPath('$folder$file');
+						
+						if (!FunkinHScript.isHxFile(scriptPath)) continue;
+						
+						final script = initFunkinHScript('$folder$file');
+						if (script != null)
 						{
-							if (file.endsWith('.$ext'))
-							{
-								var script = initFunkinHScript(folder + file);
-								if (script != null)
-								{
-									filesPushed.push(file);
-								}
-								break;
-							}
+							filesPushed.push(file);
 						}
 					}
 				}
@@ -751,7 +745,6 @@ class PlayState extends MusicBeatState
 		
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 		
-		FlxG.fixedTimestep = false;
 		moveCameraSection();
 		
 		botplayTxt = new FlxText(400, 55, FlxG.width - 800, "BOTPLAY", 32);
@@ -790,23 +783,20 @@ class PlayState extends MusicBeatState
 		
 		for (folder in foldersToCheck)
 		{
-			if (FileSystem.exists(folder))
+			if (FunkinAssets.exists(folder))
 			{
 				for (file in FileSystem.readDirectory(folder))
 				{
 					if (!filesPushed.contains(file))
 					{
-						for (ext in FunkinHScript.H_EXTS)
+						final scriptPath = FunkinHScript.getPath('$folder$file');
+						
+						if (!FunkinHScript.isHxFile(scriptPath)) continue;
+						
+						final script = initFunkinHScript('$folder$file');
+						if (script != null)
 						{
-							if (file.endsWith('.$ext'))
-							{
-								var script = initFunkinHScript(folder + file);
-								if (script != null)
-								{
-									filesPushed.push(file);
-								}
-								break;
-							}
+							filesPushed.push(file);
 						}
 					}
 				}
@@ -853,6 +843,8 @@ class PlayState extends MusicBeatState
 		
 		scripts.call('onCreatePost', []);
 		
+		playHUD.cachePopUpScore();
+		
 		super.create();
 		
 		FunkinAssets.cache.clearUnusedMemory();
@@ -860,17 +852,17 @@ class PlayState extends MusicBeatState
 		refreshZ(stage);
 	}
 	
-	function noteskinLoading(skin:String = 'default')
+	function noteskinLoading(skin:String = 'default') // cleanup later
 	{
-		if (FileSystem.exists(Paths.modsNoteskin(skin))) noteSkin = new NoteSkinHelper(Paths.modsNoteskin(skin));
-		else if (FileSystem.exists(Paths.noteskin(skin))) noteSkin = new NoteSkinHelper(Paths.noteskin(skin));
+		final path = Paths.noteskin(skin);
+		if (FunkinAssets.exists(path, TEXT)) noteSkin = new NoteSkinHelper(path);
 		
 		arrowSkin = skin;
 		
 		noteSkin ??= new NoteSkinHelper(Paths.noteskin('default'));
 	}
 	
-	function initNoteSkinning()
+	function initNoteSkinning() // todo rewrite this
 	{
 		script_NOTEOffsets = new Vector<FlxPoint>(SONG.keys);
 		script_SUSTAINOffsets = new Vector<FlxPoint>(SONG.keys);
@@ -898,8 +890,6 @@ class PlayState extends MusicBeatState
 		if (ClientPrefs.noteSkin.contains('Quant') && noteSkin.data.hasQuants) noteskinLoading('QUANT$skin');
 		
 		NoteSkinHelper.setNoteHelpers(noteSkin, SONG.keys);
-		
-		// trace(noteSkin.data);
 		
 		arrowSkin = noteSkin.data.globalSkin;
 		NoteSkinHelper.arrowSkins = [noteSkin.data.playerSkin, noteSkin.data.opponentSkin];
@@ -996,8 +986,8 @@ class PlayState extends MusicBeatState
 	}
 	
 	/**
-	 * Creates a new `FunkinHScript` from filepath. Returns `null` if it couldnt be found
-	 * @param name set to set a custom name to the script
+	 * Creates a new `FunkinHScript` from filepath and calls `onCreate`. Returns `null` if it couldnt be found
+	 * @param name sets a custom name to the script
 	 */
 	function initFunkinHScript(filePath:String, ?name:String):Null<FunkinHScript>
 	{
@@ -2640,7 +2630,6 @@ class PlayState extends MusicBeatState
 					camHUD.alpha = leAlpha;
 				}
 			case 'Play Animation':
-				// trace('Anim to play: ' + value1);
 				var char:Character = dad;
 				switch (value2.toLowerCase().trim())
 				{
@@ -3212,7 +3201,6 @@ class PlayState extends MusicBeatState
 				RecalculateRating(false);
 			}
 		}
-		// If you're looking for the ratings graphics its done in the PlayHUDs now
 		scripts.call('popupScore', [note, daRating]);
 		callHUDFunc(hud -> hud.popUpScore(daRating.image, combo)); // only pushing the image bc is anyone ever gonna need anything else???
 		scripts.call('popupScorePost', [note, daRating]);

@@ -70,11 +70,13 @@ class FunkinAssets
 	
 	/**
 	 * Reads a given directory and returns all file names inside.
+	 * 
+	 * if it could not be found, an empty array will be returned.
 	 */
 	public static function readDirectory(directory:String):Array<String>
 	{
 		#if (MODS_ALLOWED || ASSET_REDIRECT)
-		return FileSystem.readDirectory(directory);
+		return FileSystem.exists(directory) ? FileSystem.readDirectory(directory) : []; // doing a check because i want this to maintain parity with ther assets variation
 		#else
 		var dir = Assets.list().filter(string -> string.contains(directory));
 		return dir.map(string -> string.replace(directory, '').replace('/', ''));

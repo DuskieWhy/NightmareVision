@@ -105,7 +105,7 @@ class MainMenuState extends MusicBeatState
 			FlxG.camera.follow(camFollow, null, 0.15);
 			
 			var gitHash = GitMacro.getGitCommitHash();
-			if (gitHash.length != 0) gitHash = ' - ($gitHash)';
+			if (gitHash.length != 0) gitHash = ' - dev($gitHash)';
 			
 			var ver = "Nightmare Vision Engine v" + Main.NMV_VERSION + gitHash + '\nPsych Engine v' + Main.PSYCH_VERSION + "\nFriday Night Funkin' v" + Main.FUNKIN_VERSION;
 			var verionDesc:FlxText = new FlxText(12, 0, 0, ver, 16);

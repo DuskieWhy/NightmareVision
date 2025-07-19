@@ -56,4 +56,6 @@ class BaseHUD extends FlxTypedContainer<FlxBasic>
 	{
 		return Reflect.getProperty(this, obj);
 	}
+	
+	public function cachePopUpScore() {}
 }

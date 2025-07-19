@@ -90,8 +90,6 @@ class PsychHUD extends BaseHUD
 		ratingNumGroup = new FlxTypedGroup();
 		add(ratingNumGroup);
 		
-		cachePopUpScore();
-		
 		onUpdateScore(0, 0, 0);
 		
 		parent.scripts.set('healthBar', healthBar);
@@ -349,20 +347,19 @@ class PsychHUD extends BaseHUD
 		}
 	}
 	
-	function cachePopUpScore()
+	override function cachePopUpScore()
 	{
-		final folder:String = PlayState.isPixelStage ? 'pixelUI' : "";
-		
 		var ratings = ["sick", "good", "bad", "shit"];
 		if (ClientPrefs.useEpicRankings) ratings.push('epic');
+		
 		for (rating in ratings)
 		{
-			Paths.image('$folder$rating$ratingSuffix');
+			Paths.image('$ratingPrefix$rating$ratingSuffix');
 		}
 		
 		for (i in 0...10)
 		{
-			Paths.image('${folder}num$i$ratingSuffix');
+			Paths.image('${ratingPrefix}num$i$ratingSuffix');
 		}
 	}
 }
