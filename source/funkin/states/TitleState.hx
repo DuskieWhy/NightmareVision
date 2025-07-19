@@ -37,9 +37,7 @@ class TitleState extends MusicBeatState
 {
 	public static var initialized:Bool = false;
 	
-	public static var title = [
-		'FRIDAY', 'NIGHT', 'FUNKIN'
-	];
+	public var title:Array<String> = ['FRIDAY', 'NIGHT', 'FUNKIN'];
 	
 	public var blackScreen:FlxSprite;
 	public var credGroup:FlxGroup;
@@ -54,9 +52,9 @@ class TitleState extends MusicBeatState
 	
 	public var wackyImage:FlxSprite;
 	
-	public var titleJSON:TitleData;
+	public var titleJSON:Null<TitleData> = null;
 	
-	public static var updateVersion:String = '';
+	public var skippedIntro:Bool = false;
 	
 	override public function create():Void
 	{
@@ -78,16 +76,15 @@ class TitleState extends MusicBeatState
 		super.create();
 		
 		// IGNORE THIS!!!
-		titleJSON = Json.parse(Paths.getTextFromFile('images/gfDanceTitle.json'));
-		script.set('titleJSON', titleJSON);
+		
+		final path = Paths.getPath('images/gfDanceTitle.json', TEXT, null, true);
+		if (FunkinAssets.exists(path, TEXT))
+		{
+			titleJSON = Json.parse(FunkinAssets.getContent(path));
+		}
 		
 		if (!initialized)
 		{
-			if (FlxG.save.data != null && FlxG.save.data.fullscreen)
-			{
-				FlxG.fullscreen = FlxG.save.data.fullscreen;
-				// trace('LOADED FULLSCREEN SETTING!!');
-			}
 			persistentUpdate = true;
 			persistentDraw = true;
 		}
@@ -133,14 +130,17 @@ class TitleState extends MusicBeatState
 			}
 		}
 		
-		Conductor.bpm = titleJSON.bpm;
+		Conductor.bpm = titleJSON?.bpm ?? 100;
 		persistentUpdate = true;
 		
 		if (isHardcodedState() && script.call('onStartIntro') != Globals.Function_Stop)
 		{
 			var bg:FlxSprite = new FlxSprite();
 			
-			if (titleJSON.backgroundSprite != null && titleJSON.backgroundSprite.length > 0 && titleJSON.backgroundSprite != "none")
+			if (titleJSON != null
+				&& titleJSON.backgroundSprite != null
+				&& titleJSON.backgroundSprite.length > 0
+				&& titleJSON.backgroundSprite != "none")
 			{
 				bg.loadGraphic(Paths.image(titleJSON.backgroundSprite));
 			}
@@ -151,7 +151,7 @@ class TitleState extends MusicBeatState
 			
 			add(bg);
 			
-			logoBl = new FlxSprite(titleJSON.titlex, titleJSON.titley);
+			logoBl = new FlxSprite(titleJSON?.titlex ?? 0.0, titleJSON?.titley ?? 0.0);
 			logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
 			
 			logoBl.antialiasing = ClientPrefs.globalAntialiasing;
@@ -160,10 +160,7 @@ class TitleState extends MusicBeatState
 			logoBl.updateHitbox();
 			
 			swagShader = new ColorSwap();
-			gfDance = new FlxSprite(titleJSON.gfx, titleJSON.gfy);
-			
-			var easterEgg:String = FlxG.save.data.psychDevsEasterEgg;
-			if (easterEgg == null) easterEgg = ''; // html5 fix
+			gfDance = new FlxSprite(titleJSON?.gfx ?? 0.0, titleJSON?.gfy ?? 0.0);
 			
 			gfDance.frames = Paths.getSparrowAtlas('gfDanceTitle');
 			gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
@@ -176,7 +173,7 @@ class TitleState extends MusicBeatState
 			add(logoBl);
 			logoBl.shader = swagShader.shader;
 			
-			titleText = new FlxSprite(titleJSON.startx, titleJSON.starty).loadSparrowFrames('titleEnter');
+			titleText = new FlxSprite(titleJSON?.startx ?? 0.0, titleJSON?.starty ?? 0.0).loadSparrowFrames('titleEnter');
 			
 			var animFrames:Array<FlxFrame> = [];
 			@:privateAccess {
@@ -203,9 +200,6 @@ class TitleState extends MusicBeatState
 			titleText.animation.play('idle');
 			titleText.updateHitbox();
 			add(titleText);
-			
-			if (initialized) skipIntro();
-			else initialized = true;
 		}
 		
 		if (isHardcodedState() && script.call('createText') != Globals.Function_Stop)
@@ -233,6 +227,8 @@ class TitleState extends MusicBeatState
 			FlxTween.tween(credTextShit, {y: credTextShit.y + 20}, 2.9, {ease: FlxEase.quadInOut, type: PINGPONG});
 		}
 		
+		if (initialized) skipIntro();
+		else initialized = true;
 		script.call('onCreatePost', []);
 	}
 	
@@ -469,10 +465,6 @@ class TitleState extends MusicBeatState
 			}
 		}
 	}
-	
-	public var skippedIntro:Bool = false;
-	
-	var increaseVolume:Bool = false;
 	
 	public function skipIntro():Void
 	{

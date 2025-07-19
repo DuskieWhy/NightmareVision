@@ -39,17 +39,17 @@ class MusicBeatState extends FlxUIState
 	
 	inline function isHardcodedState() return (script != null && !script.call('customMenu') == true) || (script == null);
 	
-	public function setUpScript(?s:String, callOnCreate:Bool = true):Bool
+	public function setUpScript(?scriptName:String, callOnCreate:Bool = true):Bool
 	{
 		script.parent = this;
 		
-		if (s == null)
+		if (scriptName == null)
 		{
-			final stateName = Type.getClassName(Type.getClass(this)).split('.');
-			s = stateName[stateName.length - 1];
+			final stateName = Type.getClassName(Type.getClass(this)).split('.').pop();
+			scriptName = stateName ?? '???';
 		}
 		
-		scriptName = s;
+		this.scriptName = scriptName;
 		
 		var scriptFile = FunkinHScript.getPath('scripts/menus/$scriptName');
 		
