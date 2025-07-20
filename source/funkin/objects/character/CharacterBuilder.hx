@@ -60,6 +60,11 @@ typedef CharacterFile =
 	 * The characters health colour.
 	 */
 	var healthbar_colour:Int;
+	
+	/**
+	 * todo explain why
+	 */
+	@:optional var is_nmv:Bool;
 }
 
 /**

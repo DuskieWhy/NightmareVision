@@ -293,7 +293,8 @@ class CharacterEditorState extends MusicBeatState
 				0
 			],
 			"sing_duration": 6.1,
-			"scale": 1
+			"scale": 1,
+			"is_nmv": true
 		}';
 	
 	var charDropDown:FlxUIDropDownMenuEx;
@@ -355,6 +356,7 @@ class CharacterEditorState extends MusicBeatState
 				character.healthIcon = parsedJson.healthicon;
 				character.healthColorArray = parsedJson.healthbar_colors;
 				character.setPosition(character.positionArray[0] + OFFSET_X + 100, character.positionArray[1]);
+				character.isNMV = parsedJson.is_nmv;
 			}
 			
 			reloadCharacterImage();
@@ -852,6 +854,7 @@ class CharacterEditorState extends MusicBeatState
 		{
 			curChar.dance();
 		}
+		
 		ghostDropDown.selectedLabel = '';
 		reloadGhost();
 	}
@@ -953,6 +956,7 @@ class CharacterEditorState extends MusicBeatState
 			curChar = char;
 		}
 		
+		curChar.isNMV = true; // in the char editor rewrite, make a warn about this so people dont think its just broken
 		curChar.setPosition(curChar.positionArray[0] + OFFSET_X + 100, curChar.positionArray[1]);
 		
 		if (blahBlahBlah)
@@ -1348,7 +1352,8 @@ class CharacterEditorState extends MusicBeatState
 				
 				"flip_x": curChar.originalFlipX,
 				"no_antialiasing": curChar.noAntialiasing,
-				"healthbar_colors": curChar.healthColorArray
+				"healthbar_colors": curChar.healthColorArray,
+				"is_nmv": curChar.isNMV
 			};
 			
 		var data:String = Json.stringify(json, "\t");

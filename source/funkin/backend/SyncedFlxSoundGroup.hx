@@ -163,14 +163,14 @@ class VocalGroup extends SyncedFlxSoundGroup
 		opponentVocals = new SyncedFlxSoundGroup();
 	}
 	
-	public function addOpponentVocals(sound:flixel.sound.FlxSound)
+	public function addOpponentVocals(?sound:flixel.sound.FlxSound)
 	{
 		if (sound == null) return null;
 		opponentVocals.add(sound);
 		return add(sound);
 	}
 	
-	public function addPlayerVocals(sound:flixel.sound.FlxSound)
+	public function addPlayerVocals(?sound:flixel.sound.FlxSound)
 	{
 		if (sound == null) return null;
 		playerVocals.add(sound);
@@ -183,7 +183,7 @@ class VocalGroup extends SyncedFlxSoundGroup
 		return value;
 	}
 	
-	function get_playerVolume():Float return playerVocals != null ? playerVocals.volume : 1;
+	function get_playerVolume():Float return playerVocals?.volume ?? 1.0;
 	
 	function set_opponentVolume(value:Float):Float
 	{
@@ -191,7 +191,7 @@ class VocalGroup extends SyncedFlxSoundGroup
 		return value;
 	}
 	
-	function get_opponentVolume():Float return opponentVocals != null ? opponentVocals.volume : 1;
+	function get_opponentVolume():Float return opponentVocals?.volume ?? 1.0;
 	
 	override function clear()
 	{
@@ -202,17 +202,8 @@ class VocalGroup extends SyncedFlxSoundGroup
 	
 	override function destroy()
 	{
-		if (opponentVocals != null)
-		{
-			opponentVocals.destroy();
-			opponentVocals = null;
-		}
-		
-		if (playerVocals != null)
-		{
-			playerVocals.destroy();
-			playerVocals = null;
-		}
+		opponentVocals = FlxDestroyUtil.destroy(opponentVocals);
+		playerVocals = FlxDestroyUtil.destroy(playerVocals);
 		
 		super.destroy();
 	}

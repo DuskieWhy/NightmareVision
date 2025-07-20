@@ -20,6 +20,9 @@ typedef AnimArray =
 
 class Character extends FlxSprite
 {
+	@:allow(funkin.states.editors.CharacterEditorState)
+	var isNMV(default, null):Bool = false;
+	
 	/**
 	 * Disables all animations 
 	 */
@@ -416,10 +419,17 @@ class Character extends FlxSprite
 		
 		animation.play(animName, forced, reversed, frame);
 		
-		if (animOffsets.exists(animName))
+		final daOffset = animOffsets.get(animName);
+		
+		if (daOffset != null)
 		{
-			final daOffset = animOffsets.get(animName);
 			offset.set(daOffset[0], daOffset[1]);
+			
+			if (isNMV || (scale.x != jsonScale || scale.y != jsonScale))
+			{
+				offset.x *= scale.x;
+				offset.y *= scale.y;
+			}
 		}
 		
 		if (curCharacter.startsWith('gf'))
@@ -532,7 +542,7 @@ class Character extends FlxSprite
 		if (animOffsets.exists(animName))
 		{
 			final daOffset = animOffsets.get(animName);
-			ghost.offset.set(daOffset[0], daOffset[1]);
+			ghost.offset.set(daOffset[0] * scale.x, daOffset[1] * scale.y);
 		}
 	}
 	
