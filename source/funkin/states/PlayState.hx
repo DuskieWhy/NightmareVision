@@ -986,7 +986,7 @@ class PlayState extends MusicBeatState
 	}
 	
 	/**
-	 * Creates a new `FunkinHScript` from filepath and calls `onCreate`. Returns `null` if it couldnt be found
+	 * Creates a new `FunkinHScript` from filepath and calls `onLoad`. Returns `null` if it couldnt be found
 	 * @param name sets a custom name to the script
 	 */
 	function initFunkinHScript(filePath:String, ?name:String):Null<FunkinHScript>
@@ -1003,7 +1003,7 @@ class PlayState extends MusicBeatState
 			return null;
 		}
 		Logger.log('script: ' + filePath + ' intialized');
-		if (script.exists('onCreate')) script.call('onCreate');
+		if (script.exists('onLoad')) script.call('onLoad');
 		scripts.addScript(script);
 		return script;
 	}
@@ -1525,8 +1525,6 @@ class PlayState extends MusicBeatState
 					noteTypeScripts.addScript(initFunkinHScript(scriptFile, type));
 				}
 				
-				firstNotePush(type);
-				
 				noteTypesPushed.push(type);
 			}
 		}
@@ -1794,15 +1792,6 @@ class PlayState extends MusicBeatState
 				callEventScript(event.event, 'onPush', [event]);
 		}
 		scripts.call('onEventPush', [event]);
-	}
-	
-	function firstNotePush(type:String)
-	{
-		switch (type)
-		{
-			default:
-				callNoteTypeScript(type, 'onLoad', []);
-		}
 	}
 	
 	function firstEventPush(event:EventNote)
