@@ -64,8 +64,11 @@ class Paths
 		}
 		
 		#if ASSET_REDIRECT
-		final embedCheck = getPrimaryPath().replace(CORE_DIRECTORY, 'assets') + file;
-		if (Assets.exists(embedCheck)) return embedCheck;
+		final embedCheck = getPrimaryPath().replace(CORE_DIRECTORY, trail + 'assets/embeds') + file;
+		if (FunkinAssets.exists(embedCheck))
+		{
+			return embedCheck;
+		}
 		#end
 		
 		return getPrimaryPath(file);
