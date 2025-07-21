@@ -99,7 +99,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		
 		super.create();
 		
-		PlayState.instance.callOnScripts('onGameOverPost', []);
+		PlayState.instance.scripts.call('onGameOverPost', []);
 	}
 	
 	public function new()

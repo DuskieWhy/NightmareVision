@@ -29,6 +29,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	
 	public var title:String;
 	public var rpcTitle:String;
+	public var titleText:Alphabet;
 	
 	public function new()
 	{
