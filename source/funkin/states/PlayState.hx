@@ -225,9 +225,10 @@ class PlayState extends MusicBeatState
 	 */
 	public var opponentStrums(get, never):Null<PlayField>;
 	
-	function get_opponentStrums() {
-		for(i in playFields.members)
-			if(i.ID == 1) return i;
+	function get_opponentStrums()
+	{
+		for (i in playFields?.members)
+			if (i.ID == 1) return i;
 		return playFields?.members[1];
 	}
 	
@@ -236,9 +237,10 @@ class PlayState extends MusicBeatState
 	 */
 	public var playerStrums(get, never):Null<PlayField>;
 	
-	function get_playerStrums() {
-		for(i in playFields.members)
-			if(i.ID == 0) return i;
+	function get_playerStrums()
+	{
+		for (i in playFields?.members)
+			if (i.ID == 0) return i;
 		return playFields?.members[0];
 	}
 	
@@ -1159,7 +1161,7 @@ class PlayState extends MusicBeatState
 				strums.generateReceptors();
 				strums.fadeIn(isStoryMode || skipArrowStartTween);
 				strums.ID = lane;
-
+				
 				playFields.add(strums);
 				
 				strums.noteHitCallback.add(lane == 0 ? goodNoteHit : lane == 1 ? opponentNoteHit : extraNoteHit);

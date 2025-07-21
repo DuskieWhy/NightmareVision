@@ -20,14 +20,16 @@
 				"branch": "778d59b20ad7f358a1a32fac76fded4012258471"
 			},
 			{
-				"name": "hscript"
+				"name": "hscript",
+				"version": "2.6.0"
 			},
 			{
 				"name": "hscript-iris",
 				"version": "1.1.3"
 			},
 			{
-				"name": "hxcpp-debug-server"
+				"name": "hxcpp-debug-server",
+				"version": "1.2.4"
 			},
 			{
 				"name": "hxcpp",
@@ -53,7 +55,8 @@
 			},
 			{
 				"name": "discord_rpc",
-				"link": "https://github.com/Aidan63/linc_discord-rpc"
+				"link": "https://github.com/Aidan63/linc_discord-rpc",
+				"branch": "2d83fa863ef0c1eace5f1cf67c3ac315d1a3a8a5"
 			},
 			{
 				"name": "haxeui-flixel",
@@ -64,6 +67,10 @@
 				"name": "haxeui-core",
 				"link": "https://github.com/haxeui/haxeui-core.git",
 				"branch": "99d5d035e7120ce027256b117a25625c53b488dc"
+			},
+			{
+				"name": "moonchart",
+				"version": "0.5.0"
 			}
 		]
 	}

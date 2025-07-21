@@ -47,7 +47,7 @@ class Stage extends FlxTypedContainer<FlxBasic>
 		else
 		{
 			scriptFile = FunkinHScript.getPath('stages/$curStage');
-			make(scriptFile);
+			if (FunkinAssets.exists(scriptFile)) make(scriptFile);
 		}
 		
 		if (script == null) Logger.log('$curStage does not contain a script');

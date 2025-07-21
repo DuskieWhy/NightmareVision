@@ -4,7 +4,7 @@ import funkin.scripts.Globals;
 
 class ReflectUtils
 {
-	public static function getPropertyLoop(split:Array<String>, ?getProperty:Bool = true):Dynamic
+	public static function getPropertyLoop(split:Array<String>, getProperty:Bool = true):Dynamic
 	{
 		var object:Dynamic = getObjectDirectly(split[0]);
 		var end = split.length;
