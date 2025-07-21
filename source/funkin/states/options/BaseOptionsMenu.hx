@@ -17,9 +17,9 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	public var curSelected:Int = 0;
 	public var optionsArray:Array<Option>;
 	
-	public var grpOptions:FlxTypedGroup<Alphabet>;
+	public var grpOptions:FlxTypedGroup<Dynamic>;
 	public var checkboxGroup:FlxTypedGroup<CheckboxThingie>;
-	public var grpTexts:FlxTypedGroup<AttachedAlphabet>;
+	public var grpTexts:FlxTypedGroup<Dynamic>;
 	
 	public var bg:FlxSprite;
 	
@@ -53,10 +53,10 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		add(bg);
 		
 		// avoids lagspikes while scrolling through menus!
-		grpOptions = new FlxTypedGroup<Alphabet>();
+		grpOptions = new FlxTypedGroup<Dynamic>();
 		add(grpOptions);
 		
-		grpTexts = new FlxTypedGroup<AttachedAlphabet>();
+		grpTexts = new FlxTypedGroup<Dynamic>();
 		add(grpTexts);
 		
 		checkboxGroup = new FlxTypedGroup<CheckboxThingie>();
@@ -66,7 +66,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		descBox.alpha = 0.6;
 		add(descBox);
 		
-		var titleText:Alphabet = new Alphabet(0, 0, title, true, false, 0, 0.6);
+		titleText = new Alphabet(0, 0, title, true, false, 0, 0.6);
 		titleText.x += 60;
 		titleText.y += 40;
 		titleText.alpha = 0.4;

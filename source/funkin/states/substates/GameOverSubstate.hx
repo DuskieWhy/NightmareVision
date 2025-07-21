@@ -98,6 +98,8 @@ class GameOverSubstate extends MusicBeatSubstate
 		FlxG.camera.follow(camFollow, LOCKON, 0);
 		
 		super.create();
+		
+		PlayState.instance.callOnScripts('onGameOverPost', []);
 	}
 	
 	public function new()

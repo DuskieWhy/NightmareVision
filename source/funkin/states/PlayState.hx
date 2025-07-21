@@ -225,14 +225,22 @@ class PlayState extends MusicBeatState
 	 */
 	public var opponentStrums(get, never):Null<PlayField>;
 	
-	function get_opponentStrums() return playFields?.members[1];
+	function get_opponentStrums() {
+		for(i in playFields.members)
+			if(i.ID == 1) return i;
+		return playFields?.members[1];
+	}
 	
 	/**
 	 * The players Strum field
 	 */
 	public var playerStrums(get, never):Null<PlayField>;
 	
-	function get_playerStrums() return playFields?.members[0];
+	function get_playerStrums() {
+		for(i in playFields.members)
+			if(i.ID == 0) return i;
+		return playFields?.members[0];
+	}
 	
 	@:isVar public var strumLineNotes(get, null):Array<StrumNote>;
 	
@@ -1150,7 +1158,8 @@ class PlayState extends MusicBeatState
 				scripts.call('preReceptorGeneration', [strums, lane]);
 				strums.generateReceptors();
 				strums.fadeIn(isStoryMode || skipArrowStartTween);
-				
+				strums.ID = lane;
+
 				playFields.add(strums);
 				
 				strums.noteHitCallback.add(lane == 0 ? goodNoteHit : lane == 1 ? opponentNoteHit : extraNoteHit);
@@ -3564,7 +3573,7 @@ class PlayState extends MusicBeatState
 		if (playfield.autoPlayed)
 		{
 			var time:Float = 0.15;
-			if (note.isSustainNote && !note.animation.curAnim.name.endsWith('end'))
+			if (note.isSustainNote && !note.animation.curAnim.name.endsWith('end${note.noteData}'))
 			{
 				time += 0.15;
 			}
@@ -3609,7 +3618,7 @@ class PlayState extends MusicBeatState
 			if (field.autoPlayed)
 			{
 				var time:Float = 0.15;
-				if (note.isSustainNote && !note.animation.curAnim.name.endsWith('end'))
+				if (note.isSustainNote && !note.animation.curAnim.name.endsWith('end${note.noteData}'))
 				{
 					time += 0.15;
 				}

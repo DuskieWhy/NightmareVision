@@ -1290,7 +1290,7 @@ class CharacterEditorState extends MusicBeatState
 						curGhost.addOffset(curChar.animationsArray[curAnim].anim, curChar.animationsArray[curAnim].offsets[0], curChar.animationsArray[curAnim].offsets[1]);
 						
 						curChar.playAnim(curChar.animationsArray[curAnim].anim, false);
-						if (!curGhost.isAnimNull() && !curChar.isAnimNull() && curChar.getAnimName() == curGhost.animation.curAnim.name)
+						if (!curGhost.isAnimNull() && !curChar.isAnimNull() && curChar.getAnimName() == curGhost.getAnimName())
 						{
 							curGhost.playAnim(curChar.getAnimName(), false);
 						}

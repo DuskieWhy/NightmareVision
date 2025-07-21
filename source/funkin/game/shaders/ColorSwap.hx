@@ -102,7 +102,7 @@ class ColorSwapShader extends FlxShader
 			vec4 swagColor = vec4(rgb2hsv(vec3(color.rgb)), color.a);
 
 			swagColor.r = swagColor.r + u_hue;
-			swagColor.g = swagColor.g + clamp(u_saturation,0.0,1.0);
+			swagColor.g = swagColor.g + clamp(u_saturation,-1.0,1.0);
 			swagColor.b = swagColor.b * (1.0 + u_brightness);
 			
 			color = vec4(hsv2rgb(vec3(swagColor.rgb)), swagColor.a);
