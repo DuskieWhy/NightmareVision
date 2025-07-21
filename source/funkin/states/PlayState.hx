@@ -3764,7 +3764,7 @@ class PlayState extends MusicBeatState
 			if (field.autoPlayed)
 			{
 				var time:Float = 0.15;
-				if (note.isSustainNote && !note.animation.curAnim.name.endsWith('end'))
+				if (note.isSustainNote && !note.animation.curAnim.name.endsWith('end${note.noteData}'))
 				{
 					time += 0.15;
 				}
