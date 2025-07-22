@@ -178,8 +178,9 @@ class FreeplayState extends MusicBeatState
 			debugBG.alpha = 0;
 			add(debugBG);
 			
-			debugTxt = new FlxText(50, 0, FlxG.width - 100, '', 36);
-			debugTxt.setFormat(Paths.font("vcr.ttf"), 36, FlxColor.WHITE, CENTER, OUTLINE_FAST, FlxColor.BLACK);
+			debugTxt = new FlxText(25, 0, FlxG.width - 50, '', 32);
+			debugTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, OUTLINE_FAST, FlxColor.BLACK);
+			debugTxt.borderSize = 2;
 			debugTxt.screenCenter(Y);
 			add(debugTxt);
 			
@@ -341,7 +342,7 @@ class FreeplayState extends MusicBeatState
 				}
 				catch (e)
 				{
-					final message = 'Failed to load song: [${e.toString()}]\ndoes the chart exist?';
+					final message = 'Failed to load song.\nException: ${e.toString()}';
 					debugBG.alpha = 0.7;
 					debugTxt.text = message;
 					debugTxt.screenCenter(Y);

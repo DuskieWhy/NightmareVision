@@ -91,6 +91,7 @@ class Song
 		}
 	}
 	
+	// will be killed
 	public static function loadFromJson(jsonInput:String, ?folder:String):SwagSong
 	{
 		final formattedFolder:String = Paths.formatToSongPath(folder);

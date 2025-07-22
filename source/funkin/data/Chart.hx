@@ -9,26 +9,31 @@ import haxe.Json;
 // this is for later
 enum abstract ChartFormat(String) to String
 {
-	var PSYCH = 'psych_1.0';
-	var CNE = 'codename';
-	var VSLICE = 'v-slice';
-	var UNKNOWN;
+	var PSYCH = 'Psych_1.0';
+	var CNE = 'Codename Engine';
+	var VSLICE = 'V-Slice';
+	var UNKNOWN; // this isnt final dw
 }
 
 class Chart
 {
+	/**
+	 * Attempts to get a songs data from a given path
+	 * @param path 
+	 * @return SwagSong
+	 */
 	public static function fromPath(path:String):SwagSong
 	{
 		path = Paths.formatToSongPath(path);
 		if (!FunkinAssets.exists(path))
 		{
-			throw 'couldnt find chart at' + path;
+			throw 'couldnt find chart at ($path)';
 		}
 		
-		var content = FunkinAssets.getContent(path);
-		
-		return fromData(Json.parse(content));
+		return fromData(Json.parse(FunkinAssets.getContent(path)));
 	}
+	
+	public static function fromSong(songName:String) {}
 	
 	public static function fromData(data:Dynamic):SwagSong
 	{
@@ -38,9 +43,9 @@ class Chart
 		}
 		
 		var format = checkFormat(data);
-		if (format == PSYCH || format == VSLICE) throw "this is using a incompatible format"; // this isnt gonna stay btw
+		if (format != UNKNOWN) throw 'this is using a incompatible format\n($format)'; // this isnt gonna stay btw
 		
-		if (!Reflect.hasField(data, 'song')) throw "invalid data struct";
+		if (!Reflect.hasField(data, 'song')) throw "data provided is invalid";
 		
 		var json = data.song;
 		StageData.loadDirectory(json); // i think actually we can kill this
@@ -49,16 +54,23 @@ class Chart
 		return cast json;
 	}
 	
-	// public static function getSong(content:String) {}
+	/**
+	 * Checks a structures fields to find out if its using a knwon format
+	 */
 	public static function checkFormat(json:Dynamic):ChartFormat
 	{
 		if (json == null) return UNKNOWN;
+		
 		if (Reflect.hasField(json, 'format'))
 		{
 			var format:String = Reflect.field(json, 'format');
 			if (format.contains('psych_v1')) return PSYCH;
 		}
+		
 		if (Reflect.hasField(json, 'version') && Reflect.hasField(json, 'scrollSpeed')) return VSLICE;
+		
+		if (Reflect.hasField(json, 'codenameChart')) return CNE;
+		
 		return UNKNOWN;
 	}
 	
