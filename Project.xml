@@ -74,6 +74,8 @@
 	<haxelib name="flixel-ui"/>
 
 	<haxelib name="flxanimate"/>
+	<haxelib name="moonchart"/>
+
 
 	<!-- <haxelib name="haxeui-core" /> -->
 	<!-- <haxelib name="haxeui-flixel" /> -->

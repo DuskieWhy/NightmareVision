@@ -330,18 +330,18 @@ class FreeplayState extends MusicBeatState
 			else if (controls.ACCEPT)
 			{
 				persistentUpdate = false;
-				var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
-				var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
+				final folder:String = Paths.formatToSongPath(songs[curSelected].songName);
+				final song:String = Highscore.formatSong(folder, curDifficulty);
 				
 				try
 				{
-					PlayState.SONG = Song.loadFromJson(poop, songLowercase);
+					PlayState.SONG = Chart.fromPath(Paths.json('$folder/$song'));
 					PlayState.isStoryMode = false;
 					PlayState.storyDifficulty = curDifficulty;
 				}
 				catch (e)
 				{
-					final message = 'Failed to load song: [$poop]\ndoes the chart exist?';
+					final message = 'Failed to load song: [${e.toString()}]\ndoes the chart exist?';
 					debugBG.alpha = 0.7;
 					debugTxt.text = message;
 					debugTxt.screenCenter(Y);
