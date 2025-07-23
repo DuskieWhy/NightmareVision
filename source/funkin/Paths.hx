@@ -36,13 +36,6 @@ class Paths
 	public static inline final SOUND_EXT = "ogg";
 	public static inline final VIDEO_EXT = "mp4";
 	
-	public static var currentLevel:Null<String> = null;
-	
-	static public function setCurrentLevel(?name:String):Void
-	{
-		currentLevel = name?.toLowerCase() ?? null;
-	}
-	
 	public static function getPath(file:String, ?type:AssetType = TEXT, ?parentFolder:String, checkMods:Bool = false):String
 	{
 		#if MODS_ALLOWED
@@ -55,13 +48,6 @@ class Paths
 		#end
 		
 		if (parentFolder != null) return getLibraryPath(file, parentFolder);
-		
-		if (currentLevel != null)
-		{
-			var levelPath:String = getLibraryPathForce(file, currentLevel);
-			
-			if (FunkinAssets.exists(levelPath, type)) return levelPath;
-		}
 		
 		#if ASSET_REDIRECT
 		final embedCheck = getPrimaryPath().replace(CORE_DIRECTORY, trail + 'assets/embeds') + file;
@@ -194,19 +180,6 @@ class Paths
 		#end
 		
 		if (FileSystem.exists(getPrimaryPath(key))) return File.getContent(getPrimaryPath(key));
-		
-		if (currentLevel != null)
-		{
-			var levelPath:String = '';
-			if (currentLevel != 'shared')
-			{
-				levelPath = getLibraryPathForce(key, currentLevel);
-				if (FileSystem.exists(levelPath)) return File.getContent(levelPath);
-			}
-			
-			levelPath = getLibraryPathForce(key, 'shared');
-			if (FileSystem.exists(levelPath)) return File.getContent(levelPath);
-		}
 		#end
 		return Assets.getText(getPath(key, TEXT));
 	}

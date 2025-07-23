@@ -48,7 +48,6 @@ class Chart
 		if (!Reflect.hasField(data, 'song')) throw "data provided is invalid";
 		
 		var json = data.song;
-		StageData.loadDirectory(json); // i think actually we can kill this
 		correctFormat(json);
 		
 		return cast json;

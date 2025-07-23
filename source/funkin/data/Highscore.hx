@@ -6,8 +6,6 @@ import funkin.backend.Difficulty;
 
 class Highscore
 {
-	public static var songRankData:Map<String, SongScoreData> = new Map();
-	
 	public static var weekScores:Map<String, Int> = new Map();
 	public static var songScores:Map<String, Int> = new Map();
 	public static var songRating:Map<String, Float> = new Map();
@@ -126,18 +124,4 @@ class Highscore
 			songRating = FlxG.save.data.songRating;
 		}
 	}
-}
-
-typedef SongScoreData =
-{
-	songScore:Int,
-	songRating:Float,
-	songFC:FCLevel
-}
-
-enum abstract FCLevel(Int) to Int from Int
-{
-	var PFC:Int = 2;
-	var FC:Int = 1;
-	var SDCB:Int = 0;
 }

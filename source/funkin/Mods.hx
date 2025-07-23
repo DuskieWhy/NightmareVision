@@ -125,12 +125,12 @@ class Mods
 		var foldersToCheck:Array<String> = [];
 		if (FileSystem.exists(path + fileToFind)) foldersToCheck.push(path + fileToFind);
 		
-		if (Paths.currentLevel != null && Paths.currentLevel != path)
-		{
-			@:privateAccess
-			var pth:String = Paths.getLibraryPathForce(fileToFind, Paths.currentLevel);
-			if (FileSystem.exists(pth)) foldersToCheck.push(pth);
-		}
+		// if (Paths.currentLevel != null && Paths.currentLevel != path)
+		// {
+		// 	@:privateAccess
+		// 	var pth:String = Paths.getLibraryPathForce(fileToFind, Paths.currentLevel);
+		// 	if (FileSystem.exists(pth)) foldersToCheck.push(pth);
+		// }
 		
 		#if MODS_ALLOWED
 		if (mods)

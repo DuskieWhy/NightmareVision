@@ -43,7 +43,7 @@ class OptionsState extends MusicBeatState
 			case 'Loading':
 				openSubState(new funkin.states.options.MiscSubState());
 			case 'Adjust Delay and Combo':
-				CoolUtil.loadAndSwitchState(funkin.states.options.NoteOffsetState.new);
+				CoolUtil.switchAndStopMusic(funkin.states.options.NoteOffsetState.new);
 		}
 	}
 	
@@ -119,8 +119,7 @@ class OptionsState extends MusicBeatState
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				if (onPlayState)
 				{
-					StageData.loadDirectory(PlayState.SONG);
-					CoolUtil.loadAndSwitchState(PlayState.new);
+					CoolUtil.switchAndStopMusic(PlayState.new);
 					FlxG.sound.music.volume = 0;
 				}
 				else FlxG.switchState(MainMenuState.new);

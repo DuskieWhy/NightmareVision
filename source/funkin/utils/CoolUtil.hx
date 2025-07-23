@@ -292,18 +292,10 @@ class CoolUtil
 	}
 	
 	/**
-	 * Switches the currentState and sets the working directory. 
+	 * Explanatory
 	 */
-	public static inline function loadAndSwitchState(target:NextState, stopMusic:Bool = false)
+	public static inline function switchAndStopMusic(target:NextState, stopMusic:Bool = false)
 	{
-		var directory:Null<String> = null;
-		var weekDir:Null<String> = StageData.forceNextDirectory;
-		StageData.forceNextDirectory = null;
-		
-		if (weekDir != null && weekDir.length > 0 && weekDir != '') directory = weekDir;
-		
-		Paths.setCurrentLevel(directory);
-		
 		if (stopMusic && FlxG.sound.music != null) FlxG.sound.music.stop();
 		
 		FlxG.switchState(target);

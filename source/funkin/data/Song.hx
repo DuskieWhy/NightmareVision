@@ -102,7 +102,7 @@ class Song
 		final rawJson = FunkinAssets.getContent(path).trim();
 		
 		final songJson:SwagSong = parseJSON(rawJson);
-		if (jsonInput != 'events') StageData.loadDirectory(songJson);
+		// if (jsonInput != 'events') StageData.loadDirectory(songJson);
 		convertFormat(songJson);
 		return songJson;
 	}
