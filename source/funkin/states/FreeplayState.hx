@@ -358,11 +358,11 @@ class FreeplayState extends MusicBeatState
 				
 				if (FlxG.keys.pressed.SHIFT)
 				{
-					CoolUtil.switchAndStopMusic(ChartingState.new);
+					FlxG.switchState(ChartingState.new);
 				}
 				else
 				{
-					CoolUtil.switchAndStopMusic(PlayState.new);
+					FlxG.switchState(PlayState.new);
 				}
 				
 				FlxG.sound.music.volume = 0;

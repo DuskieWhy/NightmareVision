@@ -74,7 +74,7 @@ function onEndSong()
 			
 			PlayState.SONG = Chart.fromSong(PlayState.storyPlaylist[0], PlayState.storyDifficulty);
 			CoolUtil.cancelMusicFadeTween();
-			CoolUtil.switchAndStopMusic(() -> new PlayState());
+			FlxG.switchState(() -> new PlayState());
 		});
 		
 		return Function_Stop;

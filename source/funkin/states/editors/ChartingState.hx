@@ -3941,8 +3941,7 @@ class ChartingState extends MusicBeatState
 		if (vocals != null) vocals.stop();
 		if (opponentVocals != null) opponentVocals.stop();
 		
-		// if(_song.stage == null) _song.stage = stageDropDown.selectedLabel;
-		CoolUtil.switchAndStopMusic(PlayState.new);
+		FlxG.switchState(PlayState.new);
 	}
 	
 	public static function playSongFromTimestamp(time:Float)
@@ -3951,14 +3950,13 @@ class ChartingState extends MusicBeatState
 		FlxG.mouse.visible = false;
 		PlayState.SONG = _song;
 		
-		// if(_song.stage == null) _song.stage = stageDropDown.selectedLabel;
 		PlayState.startOnTime = time;
 		
 		FlxG.sound.music?.stop();
 		vocals?.stop();
 		opponentVocals?.stop();
 		
-		CoolUtil.switchAndStopMusic(PlayState.new);
+		FlxG.switchState(PlayState.new);
 	}
 	
 	// why is this static

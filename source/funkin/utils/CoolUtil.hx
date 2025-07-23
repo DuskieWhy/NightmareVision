@@ -290,18 +290,4 @@ class CoolUtil
 			FlxG.sound.music.fadeTween = null;
 		}
 	}
-	
-	/**
-	 * Explanatory
-	 */
-	public static inline function switchAndStopMusic(target:NextState, stopMusic:Bool = false)
-	{
-		if (stopMusic && FlxG.sound.music != null)
-		{
-			FlxG.sound.music.onComplete = null;
-			FlxG.sound.music.stop();
-		}
-		
-		FlxG.switchState(target);
-	}
 }

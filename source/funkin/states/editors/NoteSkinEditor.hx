@@ -376,7 +376,7 @@ class NoteSkinEditor extends MusicBeatState
 						
 						if (FlxG.keys.justPressed.ESCAPE)
 						{
-							CoolUtil.switchAndStopMusic(MasterEditorMenu.new);
+							FlxG.switchState(MasterEditorMenu.new);
 						}
 						
 						for (i in 0...controlArray.length)
@@ -458,7 +458,7 @@ class NoteSkinEditor extends MusicBeatState
 					{
 						if (FlxG.keys.justPressed.ESCAPE)
 						{
-							CoolUtil.switchAndStopMusic(MasterEditorMenu.new);
+							FlxG.switchState(MasterEditorMenu.new);
 						}
 						
 						for (i in 0...controlArray.length)

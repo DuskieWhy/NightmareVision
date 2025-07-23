@@ -3121,7 +3121,7 @@ class PlayState extends MusicBeatState
 					FlxG.sound.music.stop();
 					
 					CoolUtil.cancelMusicFadeTween();
-					CoolUtil.switchAndStopMusic(PlayState.new);
+					FlxG.switchState(PlayState.new);
 				}
 			}
 			else

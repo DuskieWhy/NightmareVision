@@ -30,11 +30,12 @@ class MasterEditorMenu extends MusicBeatState
 	
 	override function create()
 	{
-		FlxG.camera.bgColor = FlxColor.BLACK;
 		#if DISCORD_ALLOWED
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("Editors Main Menu", null);
 		#end
+		
+		persistentUpdate = true;
 		
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.scrollFactor.set();
@@ -108,19 +109,19 @@ class MasterEditorMenu extends MusicBeatState
 			switch (options[curSelected])
 			{
 				case 'Character Editor':
-					CoolUtil.switchAndStopMusic(() -> new CharacterEditorState(CharacterBuilder.DEFAULT_CHARACTER, false));
+					FlxG.switchState(() -> new CharacterEditorState(CharacterBuilder.DEFAULT_CHARACTER));
 				case 'Week Editor':
 					FlxG.switchState(() -> new WeekEditorState());
 				case 'Menu Character Editor':
 					FlxG.switchState(() -> new MenuCharacterEditorState());
 				case 'Dialogue Portrait Editor':
-					CoolUtil.switchAndStopMusic(DialogueCharacterEditorState.new, false);
+					FlxG.switchState(DialogueCharacterEditorState.new);
 				case 'Dialogue Editor':
-					CoolUtil.switchAndStopMusic(DialogueEditorState.new, false);
+					FlxG.switchState(DialogueEditorState.new);
 				case 'Chart Editor': // felt it would be cool maybe
-					CoolUtil.switchAndStopMusic(ChartingState.new, false);
+					FlxG.switchState(ChartingState.new);
 				case 'Note Skin Editor (unfinished)':
-					CoolUtil.switchAndStopMusic(() -> new NoteSkinEditor('default'), false);
+					FlxG.switchState(() -> new NoteSkinEditor('default'));
 			}
 			FlxG.sound.music.volume = 0;
 			#if PRELOAD_ALL
