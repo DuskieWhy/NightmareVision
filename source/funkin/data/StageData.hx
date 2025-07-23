@@ -20,6 +20,7 @@ typedef StageFile =
 	var camera_speed:Null<Float>;
 }
 
+@:nullSafety
 class StageData
 {
 	public static function getStageFile(stage:String):Null<StageFile>

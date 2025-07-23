@@ -1,13 +1,15 @@
 package funkin.game;
 
-// lowkey idk if i like the funckin game folder maybe ill change it
 import funkin.objects.Note;
 
 class Rating
 {
-	public static function judgeNote(note:Note, diff:Float = 0):Rating // die
+	public static function judgeNote(note:Note, diff:Float = 0):Null<Rating>
 	{
-		final data = PlayState.instance.ratingsData;
+		final data:Null<Array<Rating>> = PlayState.instance?.ratingsData;
+		
+		if (data == null) return null;
+		
 		switch (note.noteType)
 		{ // custom notetypes get custom ways of being judged
 			// case "mine": // example case, replace if needed
@@ -26,9 +28,11 @@ class Rating
 	 *
 	 * e.g: try 22.5 to get an Epic
 	**/
-	public static function judgeTime(time:Float = 0):Rating
+	public static function judgeTime(time:Float = 0):Null<Rating>
 	{
-		final data = PlayState.instance.ratingsData;
+		final data = PlayState.instance?.ratingsData;
+		if (data == null) return null;
+		
 		for (i in 0...data.length - 1)
 			if (time <= data[i].hitWindow) return data[i];
 		return data[data.length - 1];

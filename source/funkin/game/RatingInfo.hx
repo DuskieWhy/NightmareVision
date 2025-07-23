@@ -1,5 +1,6 @@
 package funkin.game;
 
+@:nullSafety
 class RatingInfo
 {
 	public var name:String;
