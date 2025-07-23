@@ -105,15 +105,10 @@ class Paths
 		return getPath('shaders/$key.vert', TEXT, null, true);
 	}
 	
-	public static inline function modsNoteskin(key:String)
-	{
-		return modFolders('noteskins/$key.json');
-	}
-	
 	static public function video(key:String):String
 	{
 		#if MODS_ALLOWED
-		var file:String = modsVideo(key);
+		final file:String = modsVideo(key);
 		if (FileSystem.exists(file))
 		{
 			return file;
@@ -129,7 +124,7 @@ class Paths
 	
 	static public function sound(key:String, ?library:String):Null<openfl.media.Sound>
 	{
-		final key = Paths.getPath('sounds/$key.$SOUND_EXT', SOUND, library, true);
+		final key = getPath('sounds/$key.$SOUND_EXT', SOUND, library, true);
 		
 		return FunkinAssets.getSound(key);
 	}
@@ -141,7 +136,7 @@ class Paths
 	
 	public static inline function music(key:String, ?library:String):Null<openfl.media.Sound>
 	{
-		final path = Paths.getPath('music/$key.$SOUND_EXT', SOUND, library, true);
+		final path = getPath('music/$key.$SOUND_EXT', SOUND, library, true);
 		
 		return FunkinAssets.getSound(path);
 	}
@@ -151,7 +146,7 @@ class Paths
 		var songKey:String = '${formatToSongPath(song)}/Voices';
 		if (postFix != null) songKey += '-$postFix';
 		
-		songKey = Paths.getPath('songs/$songKey.$SOUND_EXT', SOUND, null, true);
+		songKey = getPath('songs/$songKey.$SOUND_EXT', SOUND, null, true);
 		
 		return FunkinAssets.getSound(songKey, true, safety);
 	}
@@ -160,14 +155,14 @@ class Paths
 	{
 		var songKey:String = '${formatToSongPath(song)}/Inst';
 		
-		songKey = Paths.getPath('songs/$songKey.$SOUND_EXT', SOUND, null, true);
+		songKey = getPath('songs/$songKey.$SOUND_EXT', SOUND, null, true);
 		
 		return FunkinAssets.getSound(songKey);
 	}
 	
 	public static inline function image(key:String, ?library:String, allowGPU:Bool = true):Null<FlxGraphic>
 	{
-		final key = Paths.getPath('images/$key.png', IMAGE, library, true);
+		final key = getPath('images/$key.png', IMAGE, library, true);
 		
 		return FunkinAssets.getGraphic(key, true, allowGPU);
 	}
@@ -215,7 +210,7 @@ class Paths
 	public static inline function getMultiAtlas(keys:Array<String>, ?library:String, ?allowGPU:Bool = true):FlxAtlasFrames
 	{
 		// todo add wat for this to work with fucking uhhhhh packeratlas
-		var frames = Paths.getSparrowAtlas(keys.shift().trim(), library, allowGPU);
+		var frames = getSparrowAtlas(keys.shift().trim(), library, allowGPU);
 		
 		if (keys.length != 0)
 		{
@@ -241,19 +236,7 @@ class Paths
 	
 	public static inline function getPackerAtlas(key:String, ?library:String, ?allowGPU:Bool = true)
 	{
-		#if MODS_ALLOWED
-		var imageLoaded:FlxGraphic = image(key, library, allowGPU);
-		var txtExists:Bool = false;
-		if (FileSystem.exists(modsTxt(key)))
-		{
-			txtExists = true;
-		}
-		
-		return FlxAtlasFrames.fromSpriteSheetPacker((imageLoaded != null ? imageLoaded : image(key, library, allowGPU)),
-			(txtExists ? File.getContent(modsTxt(key)) : getPath('images/$key.txt', TEXT, library)));
-		#else
-		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library, allowGPU), getPath('images/$key.txt', TEXT, library));
-		#end
+		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library, allowGPU), FunkinAssets.getContent(getPath('images/$key.txt', TEXT, library, true)));
 	}
 	
 	public static inline function formatToSongPath(path:String):String
@@ -302,11 +285,16 @@ class Paths
 		return modFolders('images/' + key + '.txt');
 	}
 	
+	public static inline function modsNoteskin(key:String)
+	{
+		return modFolders('noteskins/$key.json');
+	}
+	
 	static public function modFolders(key:String):String
 	{
 		if (Mods.currentModDirectory != null && Mods.currentModDirectory.length > 0)
 		{
-			var fileToCheck:String = mods(Mods.currentModDirectory + '/' + key);
+			final fileToCheck:String = mods(Mods.currentModDirectory + '/' + key);
 			if (FileSystem.exists(fileToCheck))
 			{
 				return fileToCheck;
@@ -315,10 +303,10 @@ class Paths
 		
 		for (mod in Mods.globalMods)
 		{
-			var fileToCheck:String = mods(mod + '/' + key);
+			final fileToCheck:String = mods(mod + '/' + key);
 			if (FileSystem.exists(fileToCheck)) return fileToCheck;
 		}
-		return '$MODS_DIRECTORY/' + key;
+		return '$MODS_DIRECTORY/$key';
 	}
 	#end
 }

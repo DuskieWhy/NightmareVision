@@ -26,10 +26,10 @@ class DebugTextPlugin extends FlxTypedGroup<DebugText>
 	{
 		if (instance == null) return;
 		
-		var text = instance.recycle(DebugText, () -> new DebugText(message, colour));
+		final text = instance.recycle(DebugText, () -> new DebugText(message, colour));
 		text.text = message;
 		text.color = colour;
-		text.disableTime = 6;
+		text.disableTime = 4;
 		text.alpha = 1;
 		
 		instance.insert(0, text);
@@ -37,7 +37,7 @@ class DebugTextPlugin extends FlxTypedGroup<DebugText>
 		instance.forEachAlive((spr:DebugText) -> {
 			spr.y += text.height;
 		});
-		text.y = 10;
+		text.y = 25;
 		
 		instance.camera = CameraUtil.lastCamera;
 	}
@@ -46,13 +46,15 @@ class DebugTextPlugin extends FlxTypedGroup<DebugText>
 	{
 		if (instance == null) return;
 		
-		instance.forEachAlive(spr -> spr.kill());
+		instance.forEach(spr -> spr?.destroy());
+		
+		instance.clear();
 	}
 }
 
 class DebugText extends FlxText
 {
-	public var disableTime:Float = 6;
+	public var disableTime:Float = 4;
 	
 	public function new(text:String, color:FlxColor = FlxColor.WHITE)
 	{

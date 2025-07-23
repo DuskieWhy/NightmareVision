@@ -1,5 +1,7 @@
 package funkin.states.editors;
 
+import funkin.data.Chart;
+
 import haxe.ds.IntMap;
 import haxe.Json;
 import haxe.io.Bytes;
@@ -655,7 +657,16 @@ class ChartingState extends MusicBeatState
 		});
 		
 		var loadAutosaveBtn:FlxButton = new FlxButton(reloadSongJson.x, reloadSongJson.y + 30, 'Load Autosave', function() {
-			PlayState.SONG = Song.parseJSON(FlxG.save.data.autosave);
+			try
+			{
+				PlayState.SONG = Json.parse(FlxG.save.data.autosave).song;
+			}
+			catch (e)
+			{
+				Logger.log('failed to load autosave!', ERROR, true);
+				return;
+			}
+			
 			FlxTransitionableState.skipNextTransIn = true;
 			FlxTransitionableState.skipNextTransOut = true;
 			FlxG.resetState();
@@ -664,16 +675,18 @@ class ChartingState extends MusicBeatState
 		var loadEventJson:FlxButton = new FlxButton(loadAutosaveBtn.x, loadAutosaveBtn.y + 30, 'Load Events', function() {
 			var songName:String = Paths.formatToSongPath(_song.song);
 			var file:String = Paths.json(songName + '/events');
-			#if sys
-			if (#if MODS_ALLOWED FileSystem.exists(Paths.modsJson(songName + '/events')) || #end FileSystem.exists(file))
-			#else
-			if (OpenFlAssets.exists(file))
-			#end
+			
+			if (FunkinAssets.exists(file, TEXT))
 			{
 				clearEvents();
-				var events:SwagSong = Song.loadFromJson('events', songName);
-				_song.events = events.events;
+				
+				final _events = Chart.fromPath(file);
+				_song.events = _events.events;
 				changeSection(curSec);
+			}
+			else
+			{
+				Logger.log('events at ($file) could not be found', WARN, true);
 			}
 		});
 		
@@ -3797,24 +3810,18 @@ class ChartingState extends MusicBeatState
 	
 	function loadJson(song:String):Void
 	{
-		// shitty null fix, i fucking hate it when this happens
-		// make it look sexier if possible
 		reloadGridLayer();
-		if (Difficulty.difficulties[PlayState.storyDifficulty] != Difficulty.defaultDifficulty)
+		
+		try
 		{
-			if (Difficulty.difficulties[PlayState.storyDifficulty] == null)
-			{
-				PlayState.SONG = Song.loadFromJson(song.toLowerCase(), song.toLowerCase());
-			}
-			else
-			{
-				PlayState.SONG = Song.loadFromJson(song.toLowerCase() + "-" + Difficulty.difficulties[PlayState.storyDifficulty], song.toLowerCase());
-			}
+			PlayState.SONG = Chart.fromPath(Paths.json('$song/$song${Difficulty.getDifficultyFilePath()}'));
 		}
-		else
+		catch (e)
 		{
-			PlayState.SONG = Song.loadFromJson(song.toLowerCase(), song.toLowerCase());
+			Logger.log('error loading chart\nException: ${e.toString()}', ERROR, true);
+			return;
 		}
+		
 		FlxTransitionableState.skipNextTransIn = true;
 		FlxTransitionableState.skipNextTransOut = true;
 		FlxG.resetState();
