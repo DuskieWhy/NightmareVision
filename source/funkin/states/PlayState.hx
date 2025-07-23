@@ -568,7 +568,7 @@ class PlayState extends MusicBeatState
 		persistentUpdate = true;
 		persistentDraw = true;
 		
-		if (SONG == null) SONG = Song.loadFromJson('tutorial');
+		SONG ??= Chart.fromSong('tutorial');
 		
 		Conductor.mapBPMChanges(SONG);
 		Conductor.bpm = SONG.bpm;
@@ -1433,7 +1433,7 @@ class PlayState extends MusicBeatState
 		
 		if (FunkinAssets.exists(file))
 		{
-			var eventsData:Array<Dynamic> = Song.loadFromJson('events', songName).events;
+			final eventsData:Array<Dynamic> = Chart.fromPath(Paths.json('$songName/events')).events;
 			for (event in eventsData) // Event Notes
 			{
 				for (i in 0...event[1].length)
@@ -2056,13 +2056,7 @@ class PlayState extends MusicBeatState
 			
 			if (FlxG.keys.justPressed.NINE) openNoteskinEditor();
 			
-			if (FlxG.keys.anyJustPressed(debugKeysCharacter))
-			{
-				persistentUpdate = false;
-				paused = true;
-				CoolUtil.cancelMusicFadeTween();
-				FlxG.switchState(() -> new CharacterEditorState(SONG.player2));
-			}
+			if (FlxG.keys.anyJustPressed(debugKeysCharacter)) openCharacterEditor();
 		}
 		
 		if (health > healthBounds.max) health = healthBounds.max;
@@ -2352,7 +2346,6 @@ class PlayState extends MusicBeatState
 	
 	function openChartEditor()
 	{
-		FlxG.camera.followLerp = 0;
 		persistentUpdate = false;
 		paused = true;
 		CoolUtil.cancelMusicFadeTween();
@@ -2362,6 +2355,21 @@ class PlayState extends MusicBeatState
 		
 		#if DISCORD_ALLOWED
 		DiscordClient.changePresence("Chart Editor", null, null, true);
+		#end
+	}
+	
+	function openCharacterEditor()
+	{
+		FlxG.camera.followLerp = 0;
+		
+		persistentUpdate = false;
+		paused = true;
+		CoolUtil.cancelMusicFadeTween();
+		
+		FlxG.switchState(() -> new CharacterEditorState(SONG.player2));
+		
+		#if DISCORD_ALLOWED
+		DiscordClient.changePresence("Character Editor", null, null, true);
 		#end
 	}
 	

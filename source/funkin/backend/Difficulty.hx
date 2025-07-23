@@ -29,11 +29,18 @@ class Difficulty
 	 * Returns the difficulty suffix from `num`
 	 * @param num 
 	 */
-	public static function getDifficultyFilePath(?number:Int)
+	public static function getDifficultyFilePath(number:Int = -1):String
 	{
-		number ??= PlayState.storyDifficulty;
+		if (number == -1) number = PlayState.storyDifficulty;
 		
-		var fileSuffix:String = difficulties[number];
+		var fileSuffix:Null<String> = difficulties[number];
+		
+		if (fileSuffix == null)
+		{
+			Logger.log('difficulty in index $number does not exist');
+			return Paths.formatToSongPath(defaultDifficulty);
+		}
+		
 		if (fileSuffix != defaultDifficulty)
 		{
 			fileSuffix = '-' + fileSuffix;

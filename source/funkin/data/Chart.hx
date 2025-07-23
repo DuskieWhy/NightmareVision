@@ -1,5 +1,6 @@
 package funkin.data;
 
+import funkin.backend.Difficulty;
 import funkin.data.Song.SwagSection;
 import funkin.data.Song.SwagSong;
 import funkin.data.StageData;
@@ -15,6 +16,9 @@ enum abstract ChartFormat(String) to String
 	var UNKNOWN; // this isnt final dw
 }
 
+/**
+ * General utility class to load Chart data
+ */
 class Chart
 {
 	/**
@@ -33,7 +37,24 @@ class Chart
 		return fromData(Json.parse(FunkinAssets.getContent(path)));
 	}
 	
-	public static function fromSong(songName:String) {}
+	/**
+	 * Attempts to get a songs data from song name
+	 * @param songName 
+	 * @param difficulty 
+	 * @return SwagSong
+	 */
+	public static function fromSong(songName:String, difficulty:Int = -1):SwagSong
+	{
+		var diff = Difficulty.getDifficultyFilePath(difficulty);
+		
+		var path = Paths.formatToSongPath(Paths.json('$songName/$songName$diff'));
+		if (!FunkinAssets.exists(path))
+		{
+			throw 'couldnt find chart at ($path)';
+		}
+		
+		return fromData(Json.parse(FunkinAssets.getContent(path)));
+	}
 	
 	public static function fromData(data:Dynamic):SwagSong
 	{
@@ -42,7 +63,7 @@ class Chart
 			throw "data provided was null";
 		}
 		
-		var format = checkFormat(data);
+		final format = checkFormat(data);
 		if (format != UNKNOWN) throw 'this is using a incompatible format\n($format)'; // this isnt gonna stay btw
 		
 		if (!Reflect.hasField(data, 'song')) throw "data provided is invalid";

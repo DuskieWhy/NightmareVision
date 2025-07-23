@@ -331,12 +331,10 @@ class FreeplayState extends MusicBeatState
 			else if (controls.ACCEPT)
 			{
 				persistentUpdate = false;
-				final folder:String = Paths.formatToSongPath(songs[curSelected].songName);
-				final song:String = Highscore.formatSong(folder, curDifficulty);
 				
 				try
 				{
-					PlayState.SONG = Chart.fromPath(Paths.json('$folder/$song'));
+					PlayState.SONG = Chart.fromSong(songs[curSelected].songName, curDifficulty);
 					PlayState.isStoryMode = false;
 					PlayState.storyDifficulty = curDifficulty;
 				}
