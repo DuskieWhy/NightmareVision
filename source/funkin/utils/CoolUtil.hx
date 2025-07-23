@@ -296,7 +296,11 @@ class CoolUtil
 	 */
 	public static inline function switchAndStopMusic(target:NextState, stopMusic:Bool = false)
 	{
-		if (stopMusic && FlxG.sound.music != null) FlxG.sound.music.stop();
+		if (stopMusic && FlxG.sound.music != null)
+		{
+			FlxG.sound.music.onComplete = null;
+			FlxG.sound.music.stop();
+		}
 		
 		FlxG.switchState(target);
 	}
