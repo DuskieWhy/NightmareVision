@@ -3116,7 +3116,8 @@ class PlayState extends MusicBeatState
 					
 					trace('LOADING: ' + Paths.formatToSongPath(PlayState.storyPlaylist[0]) + difficulty);
 					
-					PlayState.SONG = Song.loadFromJson(songLowercase + difficulty, songLowercase);
+					PlayState.SONG = Chart.fromSong(songLowercase, PlayState.storyDifficulty);
+					
 					FlxG.sound.music.stop();
 					
 					CoolUtil.cancelMusicFadeTween();

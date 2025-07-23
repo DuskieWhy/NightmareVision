@@ -1,3 +1,5 @@
+import funkin.data.Chart;
+
 var heyTimer:Float;
 var upperBoppers:BGSprite;
 var bottomBoppers:BGSprite;
@@ -50,6 +52,7 @@ function onCountdownTick()
 	santa.dance(true);
 }
 
+// rewrite this
 function onEndSong()
 {
 	// Check to see if horrorland is next up in the song list, and that we are in story mode.
@@ -69,9 +72,9 @@ function onEndSong()
 			
 			PlayState.storyPlaylist.remove(PlayState.storyPlaylist[0]);
 			
-			PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0] + CoolUtil.getDifficultyFilePath(), PlayState.storyPlaylist[0]);
+			PlayState.SONG = Chart.fromSong(PlayState.storyPlaylist[0], PlayState.storyDifficulty);
 			CoolUtil.cancelMusicFadeTween();
-			CoolUtil.switchAndStopMusic(new PlayState());
+			CoolUtil.switchAndStopMusic(() -> new PlayState());
 		});
 		
 		return Function_Stop;

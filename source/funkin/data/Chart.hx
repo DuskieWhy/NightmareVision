@@ -47,6 +47,8 @@ class Chart
 	{
 		var diff = Difficulty.getDifficultyFilePath(difficulty);
 		
+		songName = Paths.formatToSongPath(songName);
+		
 		var path = Paths.formatToSongPath(Paths.json('$songName/$songName$diff'));
 		if (!FunkinAssets.exists(path))
 		{
