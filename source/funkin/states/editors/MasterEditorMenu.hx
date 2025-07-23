@@ -19,7 +19,7 @@ class MasterEditorMenu extends MusicBeatState
 		'Dialogue Portrait Editor',
 		'Character Editor',
 		'Chart Editor',
-		'Note Skin Editor (unfinished)'
+		'Note Skin Editor'
 	];
 	private var grpTexts:FlxTypedGroup<Alphabet>;
 	private var directories:Array<String> = [null];
@@ -108,19 +108,19 @@ class MasterEditorMenu extends MusicBeatState
 			switch (options[curSelected])
 			{
 				case 'Character Editor':
-					CoolUtil.loadAndSwitchState(() -> new CharacterEditorState(CharacterBuilder.DEFAULT_CHARACTER, false));
+					CoolUtil.switchAndStopMusic(() -> new CharacterEditorState(CharacterBuilder.DEFAULT_CHARACTER, false));
 				case 'Week Editor':
 					FlxG.switchState(() -> new WeekEditorState());
 				case 'Menu Character Editor':
 					FlxG.switchState(() -> new MenuCharacterEditorState());
 				case 'Dialogue Portrait Editor':
-					CoolUtil.loadAndSwitchState(DialogueCharacterEditorState.new, false);
+					CoolUtil.switchAndStopMusic(DialogueCharacterEditorState.new, false);
 				case 'Dialogue Editor':
-					CoolUtil.loadAndSwitchState(DialogueEditorState.new, false);
+					CoolUtil.switchAndStopMusic(DialogueEditorState.new, false);
 				case 'Chart Editor': // felt it would be cool maybe
-					CoolUtil.loadAndSwitchState(ChartingState.new, false);
+					CoolUtil.switchAndStopMusic(ChartingState.new, false);
 				case 'Note Skin Editor (unfinished)':
-					CoolUtil.loadAndSwitchState(() -> new NoteSkinEditor('default'), false);
+					CoolUtil.switchAndStopMusic(() -> new NoteSkinEditor('default'), false);
 			}
 			FlxG.sound.music.volume = 0;
 			#if PRELOAD_ALL

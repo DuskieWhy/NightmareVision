@@ -568,7 +568,7 @@ class PlayState extends MusicBeatState
 		persistentUpdate = true;
 		persistentDraw = true;
 		
-		SONG ??= Chart.fromSong('tutorial');
+		SONG ??= Chart.fromPath(Paths.json('test/test'));
 		
 		Conductor.mapBPMChanges(SONG);
 		Conductor.bpm = SONG.bpm;

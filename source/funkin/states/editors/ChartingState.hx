@@ -334,7 +334,7 @@ class ChartingState extends MusicBeatState
 			
 			_song =
 				{
-					song: 'Tutorial',
+					song: 'test',
 					notes: [],
 					events: [],
 					bpm: 100.0,
