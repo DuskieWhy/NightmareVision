@@ -1821,6 +1821,8 @@ class ChartingState extends MusicBeatState
 		tab_group_chart.add(new FlxText(metronomeOffsetStepper.x, metronomeOffsetStepper.y - 15, 0, 'Offset (ms):'));
 		tab_group_chart.add(new FlxText(instVolume.x, instVolume.y - 15, 0, 'Inst Volume'));
 		tab_group_chart.add(new FlxText(voicesVolume.x, voicesVolume.y - 15, 0, 'Voices Volume'));
+		tab_group_chart.add(new FlxText(opponentvoicesVolume.x, opponentvoicesVolume.y - 15, 0, 'Opp Voices Volume'));
+		
 		tab_group_chart.add(metronome);
 		tab_group_chart.add(disableAutoScrolling);
 		tab_group_chart.add(metronomeStepper);
@@ -3594,14 +3596,12 @@ class ChartingState extends MusicBeatState
 	{
 		var sec:SwagSection =
 			{
-				lengthInSteps: Std.int(sectionBeats * 4),
 				sectionBeats: sectionBeats,
 				bpm: _song.bpm,
 				changeBPM: false,
 				mustHitSection: true,
 				gfSection: false,
 				sectionNotes: [],
-				typeOfSection: 0,
 				altAnim: false
 			};
 			
@@ -3953,9 +3953,11 @@ class ChartingState extends MusicBeatState
 		
 		// if(_song.stage == null) _song.stage = stageDropDown.selectedLabel;
 		PlayState.startOnTime = time;
-		FlxG.sound.music.stop();
-		if (vocals != null) vocals.stop();
-		if (opponentVocals != null) opponentVocals.stop();
+		
+		FlxG.sound.music?.stop();
+		vocals?.stop();
+		opponentVocals?.stop();
+		
 		CoolUtil.switchAndStopMusic(PlayState.new);
 	}
 	

@@ -5,10 +5,9 @@ import haxe.Json;
 typedef SwagSection =
 {
 	var sectionNotes:Array<Dynamic>;
-	var ?sectionBeats:Float;
-	var lengthInSteps:Int;
-	var typeOfSection:Int;
 	var mustHitSection:Bool;
+	
+	var ?sectionBeats:Float;
 	var gfSection:Bool;
 	var bpm:Float;
 	var changeBPM:Bool;

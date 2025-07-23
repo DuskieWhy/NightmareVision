@@ -96,38 +96,58 @@ class Chart
 		return UNKNOWN;
 	}
 	
-	static function correctFormat(songJson:Dynamic) // Convert old charts to newest format
+	static function correctFormat(songJson:Dynamic) // cleanup chart format
 	{
 		if (songJson.gfVersion == null)
 		{
 			songJson.gfVersion = songJson.player3;
-			songJson.player3 = null;
+			
+			if (Reflect.hasField(songJson, 'player3')) Reflect.deleteField(songJson, 'player3');
 		}
 		
 		if (songJson.keys == null) songJson.keys = 4;
 		if (songJson.lanes == null) songJson.lanes = 2;
 		
+		final sectionsData:Array<SwagSection> = songJson.notes;
+		
 		if (songJson.events == null)
 		{
 			songJson.events = [];
-			for (secNum in 0...songJson.notes.length)
+			
+			if (sectionsData != null)
 			{
-				var sec:SwagSection = songJson.notes[secNum];
-				
-				var i:Int = 0;
-				var notes:Array<Dynamic> = sec.sectionNotes;
-				var len:Int = notes.length;
-				while (i < len)
+				for (secNum in 0...songJson.notes.length)
 				{
-					var note:Array<Dynamic> = notes[i];
-					if (note[1] < 0)
+					var sec:SwagSection = songJson.notes[secNum];
+					
+					var i:Int = 0;
+					var notes:Array<Dynamic> = sec.sectionNotes;
+					var len:Int = notes.length;
+					while (i < len)
 					{
-						songJson.events.push([note[0], [[note[2], note[3], note[4]]]]);
-						notes.remove(note);
-						len = notes.length;
+						var note:Array<Dynamic> = notes[i];
+						if (note[1] < 0)
+						{
+							trace(note);
+							songJson.events.push([note[0], [[note[2], note[3], note[4]]]]);
+							notes.remove(note);
+							len = notes.length;
+						}
+						else i++;
 					}
-					else i++;
 				}
+			}
+		}
+		
+		if (sectionsData == null) return;
+		
+		for (section in sectionsData)
+		{
+			final beats:Null<Float> = section.sectionBeats;
+			if (beats == null || Math.isNaN(beats))
+			{
+				section.sectionBeats = 4;
+				if (Reflect.hasField(section, 'lengthInSteps')) Reflect.deleteField(section, 'lengthInSteps');
 			}
 		}
 	}
