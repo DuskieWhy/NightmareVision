@@ -41,7 +41,7 @@ import funkin.data.NoteSkinHelper;
 import funkin.backend.Difficulty;
 import funkin.data.Song;
 import funkin.states.substates.Prompt;
-import funkin.data.Conductor.BPMChangeEvent;
+import funkin.backend.Conductor.BPMChangeEvent;
 import funkin.data.Song.SwagSong;
 import funkin.scripts.*;
 import funkin.states.*;

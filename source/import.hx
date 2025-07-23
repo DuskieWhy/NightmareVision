@@ -31,7 +31,7 @@ import Init;
 
 import funkin.Paths;
 import funkin.data.ClientPrefs;
-import funkin.data.Conductor;
+import funkin.backend.Conductor;
 import funkin.utils.CoolUtil;
 import funkin.data.Highscore;
 import funkin.states.*;

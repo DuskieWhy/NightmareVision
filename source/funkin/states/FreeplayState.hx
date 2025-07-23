@@ -335,6 +335,7 @@ class FreeplayState extends MusicBeatState
 				
 				try
 				{
+					// todo write a func to ahndel this
 					PlayState.SONG = Chart.fromSong(songs[curSelected].songName, curDifficulty);
 					PlayState.isStoryMode = false;
 					PlayState.storyDifficulty = curDifficulty;

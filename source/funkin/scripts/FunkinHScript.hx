@@ -191,31 +191,20 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 	{
 		super.preset();
 		
-		var currentState = flixel.FlxG.state;
-		if ((currentState is PlayState))
-		{
-			set("inPlaystate", true);
-			set('bpm', PlayState.SONG.bpm);
-			set('scrollSpeed', PlayState.SONG.speed);
-			set('songName', PlayState.SONG.song);
-			set('isStoryMode', PlayState.isStoryMode);
-			set('difficulty', PlayState.storyDifficulty);
-			set('weekRaw', PlayState.storyWeek);
-			set('seenCutscene', PlayState.seenCutscene);
-			set('week', funkin.data.WeekData.weeksList[PlayState.storyWeek]);
-			set('difficultyName', funkin.backend.Difficulty.difficulties[PlayState.storyDifficulty]);
-			set('songLength', flixel.FlxG.sound.music.length);
-			set('healthGainMult', PlayState.instance.healthGain);
-			set('healthLossMult', PlayState.instance.healthLoss);
-			set('instakillOnMiss', PlayState.instance.instakillOnMiss);
-			set('botPlay', PlayState.instance.cpuControlled);
-			set('practice', PlayState.instance.practiceMode);
-			set('startedCountdown', false);
-		}
-		else
-		{
-			set("inPlaystate", false);
-		}
+		set("StringTools", StringTools);
+		
+		set("Type", Type);
+		set("script", this);
+		set("Dynamic", Dynamic);
+		
+		set('StringMap', haxe.ds.StringMap);
+		set('IntMap', haxe.ds.IntMap);
+		set('ObjectMap', haxe.ds.ObjectMap);
+		
+		set("Main", Main);
+		set("Lib", openfl.Lib);
+		set("Assets", lime.utils.Assets);
+		set("OpenFlAssets", openfl.utils.Assets);
 		
 		set('inGameOver', false);
 		set('downscroll', ClientPrefs.downScroll);
@@ -245,21 +234,6 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		set('curDecBeat', 0);
 		set('curDecStep', 0);
 		set('version', Main.NMV_VERSION.trim());
-		
-		set("StringTools", StringTools);
-		
-		set("Type", Type);
-		set("script", this);
-		set("Dynamic", Dynamic);
-		
-		set('StringMap', haxe.ds.StringMap);
-		set('IntMap', haxe.ds.IntMap);
-		set('ObjectMap', haxe.ds.ObjectMap);
-		
-		set("Main", Main);
-		set("Lib", openfl.Lib);
-		set("Assets", lime.utils.Assets);
-		set("OpenFlAssets", openfl.utils.Assets);
 		
 		// set flixel related stuff
 		set("FlxG", flixel.FlxG);
@@ -308,7 +282,7 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		// FNF-specific things
 		set("MusicBeatState", funkin.backend.MusicBeatState);
 		set("Paths", Paths);
-		set("Conductor", funkin.data.Conductor);
+		set("Conductor", funkin.backend.Conductor);
 		set("Song", funkin.data.Song);
 		set("ClientPrefs", funkin.data.ClientPrefs);
 		set("CoolUtil", funkin.utils.CoolUtil);
@@ -330,7 +304,6 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		set("BackgroundDancer", funkin.objects.stageobjects.BackgroundDancer);
 		set("BackgroundGirls", funkin.objects.stageobjects.BackgroundGirls);
 		set("TankmenBG", funkin.objects.stageobjects.TankmenBG);
-		set("FNFSprite", funkin.objects.FNFSprite);
 		set("HealthIcon", HealthIcon);
 		set("Character", funkin.objects.character.Character);
 		set("NoteSplash", NoteSplash);
@@ -357,16 +330,37 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		
 		set("GameOverSubstate", funkin.states.substates.GameOverSubstate);
 		
-		if ((FlxG.state is PlayState) && PlayState.instance != null)
+		var currentState = FlxG.state;
+		if ((currentState is PlayState))
 		{
-			final state:PlayState = PlayState.instance;
+			set("inPlaystate", true);
+			set('bpm', PlayState.SONG.bpm);
+			set('scrollSpeed', PlayState.SONG.speed);
+			set('songName', PlayState.SONG.song);
+			set('isStoryMode', PlayState.isStoryMode);
+			set('difficulty', PlayState.storyDifficulty);
+			set('weekRaw', PlayState.storyWeek);
+			set('seenCutscene', PlayState.seenCutscene);
+			set('week', funkin.data.WeekData.weeksList[PlayState.storyWeek]);
+			set('difficultyName', funkin.backend.Difficulty.difficulties[PlayState.storyDifficulty]);
+			set('songLength', FlxG.sound.music.length);
+			set('healthGainMult', PlayState.instance.healthGain);
+			set('healthLossMult', PlayState.instance.healthLoss);
+			set('instakillOnMiss', PlayState.instance.instakillOnMiss);
+			set('botPlay', PlayState.instance.cpuControlled);
+			set('practice', PlayState.instance.practiceMode);
+			set('startedCountdown', false);
 			
-			set("game", state);
-			set("global", state.variables);
+			set("game", currentState);
+			set("global", PlayState.instance.variables);
 			set("getInstance", funkin.scripts.Globals.getInstance);
 			
-			set('setVar', (varName:String, val:Dynamic) -> state.variables.set(varName, val));
-			set('getVar', (varName:String) -> state.variables.get(varName));
+			set('setVar', (varName:String, val:Dynamic) -> PlayState.instance.variables.set(varName, val));
+			set('getVar', (varName:String) -> PlayState.instance.variables.get(varName));
+		}
+		else
+		{
+			set("inPlaystate", false);
 		}
 		
 		set("newShader", (?fragFile:String, ?vertFile:String) -> {

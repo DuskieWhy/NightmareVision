@@ -19,6 +19,7 @@ enum abstract ChartFormat(String) to String
 /**
  * General utility class to load Chart data
  */
+@:nullSafety
 class Chart
 {
 	/**

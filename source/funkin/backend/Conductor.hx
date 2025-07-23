@@ -1,4 +1,4 @@
-package funkin.data;
+package funkin.backend;
 
 import funkin.data.Song.SwagSong;
 

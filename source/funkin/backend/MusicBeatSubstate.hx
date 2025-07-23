@@ -32,10 +32,10 @@ class MusicBeatSubstate extends FlxSubState
 	public var scriptPrefix:String = 'menus/substates';
 	public var scriptGroup:HScriptGroup = new HScriptGroup();
 	
-	public function setUpScript(s:String = '', callOnCreate:Bool = true):Bool
+	public function setUpScript(scriptName:String = '', callOnCreate:Bool = true):Bool
 	{
 		scriptGroup.parent = this;
-		scriptName = s;
+		this.scriptName = scriptName;
 		
 		final scriptFile = FunkinHScript.getPath('scripts/$scriptPrefix/$scriptName');
 		
