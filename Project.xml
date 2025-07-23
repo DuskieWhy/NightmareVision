@@ -73,6 +73,8 @@
 	<haxelib name="flixel-addons"/>
 	<haxelib name="flixel-ui"/>
 
+	<haxelib name="hscript-iris"/>
+
 	<haxelib name="flxanimate"/>
 	<haxelib name="moonchart"/>
 
@@ -80,7 +82,6 @@
 	<!-- <haxelib name="haxeui-core" /> -->
 	<!-- <haxelib name="haxeui-flixel" /> -->
 	
-	<haxelib name="hscript-iris"/>
 
 	<haxelib name="discord_rpc" if="DISCORD_ALLOWED"/>
 	<haxelib name="hxvlc" if="VIDEOS_ALLOWED"/>
@@ -92,6 +93,7 @@
 	
 	<haxeflag name="--macro" value="include('funkin')" />
 	<haxeflag name="--macro" value="include('flixel.addons',true,['flixel.addons.nape.*','flixel.addons.editors.*'])" />
+	
 	<haxeflag name="-dce no" />
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
