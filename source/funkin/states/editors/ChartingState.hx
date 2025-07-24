@@ -3814,7 +3814,8 @@ class ChartingState extends MusicBeatState
 		
 		try
 		{
-			PlayState.SONG = Chart.fromPath(Paths.json('$song/$song${Difficulty.getDifficultyFilePath()}'));
+			final songName = Paths.formatToSongPath(song);
+			PlayState.SONG = Chart.fromPath(Paths.json('$songName/$songName${Difficulty.getDifficultyFilePath()}'));
 		}
 		catch (e)
 		{
