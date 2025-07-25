@@ -121,7 +121,6 @@ class Note extends FlxSprite
 	
 	public static var swagWidth:Float = 160 * 0.7;
 	
-	// Lua shit
 	public var noteSplashDisabled:Bool = false;
 	public var noteSplashTexture:Null<String> = null;
 	public var noteSplashHue:Float = 0;

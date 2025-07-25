@@ -508,7 +508,6 @@ class PlayState extends MusicBeatState
 		skipCountdown = false;
 		countdownSounds = true;
 		
-		// for lua
 		instance = this;
 		
 		GameOverSubstate.resetVariables();
@@ -1837,7 +1836,7 @@ class PlayState extends MusicBeatState
 		return 0;
 	}
 	
-	public var skipArrowStartTween:Bool = false; // for lua
+	public var skipArrowStartTween:Bool = false;
 	
 	function removeStatics(player:Int)
 	{

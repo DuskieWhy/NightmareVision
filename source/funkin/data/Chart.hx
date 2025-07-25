@@ -129,7 +129,6 @@ class Chart
 						var note:Array<Dynamic> = notes[i];
 						if (note[1] < 0)
 						{
-							trace(note);
 							songJson.events.push([note[0], [[note[2], note[3], note[4]]]]);
 							notes.remove(note);
 							len = notes.length;
