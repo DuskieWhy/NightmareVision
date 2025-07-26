@@ -244,6 +244,13 @@ class PlayState extends MusicBeatState
 		return playFields?.members[0];
 	}
 	
+	function getStrumID(id:Int)
+	{
+		for (i in playFields.members)
+			if (i.ID == id) return i;
+		return playFields?.members[id];
+	}
+	
 	@:isVar public var strumLineNotes(get, null):Array<StrumNote>;
 	
 	@:noCompletion function get_strumLineNotes()
@@ -2115,8 +2122,8 @@ class PlayState extends MusicBeatState
 				if (doSpawn) doSpawn = scripts.call('onSpawnNote', [dunceNote], false, [dunceNote.noteType]) != Globals.Function_Stop;
 				if (doSpawn)
 				{
-					var desiredPlayfield = playFields.members[dunceNote.lane];
-					if (desiredPlayfield != null) playFields.members[dunceNote.lane].addNote(dunceNote);
+					var desiredPlayfield = getStrumID(dunceNote.lane);
+					if (desiredPlayfield != null) getStrumID(dunceNote.lane).addNote(dunceNote);
 					else
 					{
 						if (dunceNote.desiredPlayfield != null) dunceNote.desiredPlayfield.addNote(dunceNote);

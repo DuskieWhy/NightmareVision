@@ -4,6 +4,8 @@ import flixel.util.typeLimit.NextState;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.math.FlxPoint;
 import flixel.FlxG;
+import flixel.util.FlxAxes;
+import flixel.FlxObject;
 
 import openfl.utils.Assets;
 
@@ -289,5 +291,11 @@ class CoolUtil
 			@:nullSafety(Off)
 			FlxG.sound.music.fadeTween = null;
 		}
+	}
+	
+	public static function centerOnObject(obj1:FlxObject, obj2:FlxObject, axes:FlxAxes = XY)
+	{
+		if (axes.x) obj1.x = obj2.x + (obj2.width - obj1.width) / 2;
+		if (axes.y) obj1.y = obj2.y + (obj2.height - obj1.height) / 2;
 	}
 }

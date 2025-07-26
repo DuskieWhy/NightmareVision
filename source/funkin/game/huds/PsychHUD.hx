@@ -11,7 +11,7 @@ import funkin.objects.HealthIcon;
 @:access(funkin.states.PlayState)
 class PsychHUD extends BaseHUD
 {
-	var ratingGroup:FlxTypedGroup<FlxSprite>;
+	var ratingGraphic:FlxSprite;
 	var ratingNumGroup:FlxTypedGroup<FlxSprite>;
 	
 	var healthBar:Bar;
@@ -84,8 +84,9 @@ class PsychHUD extends BaseHUD
 		add(timeBar);
 		add(timeTxt);
 		
-		ratingGroup = new FlxTypedGroup();
-		add(ratingGroup);
+		ratingGraphic = new FlxSprite();
+		ratingGraphic.alpha = 0;
+		add(ratingGraphic);
 		
 		ratingNumGroup = new FlxTypedGroup();
 		add(ratingNumGroup);
@@ -249,48 +250,33 @@ class PsychHUD extends BaseHUD
 		
 		if (showRating)
 		{
-			var rating:FlxSprite = ratingGroup.recycle(FlxSprite);
-			rating.alpha = 1;
-			rating.loadGraphic(Paths.image(ratingPrefix + ratingImage + ratingSuffix));
-			rating.screenCenter();
-			rating.x = posX - 40;
-			rating.y -= 60;
-			rating.acceleration.y = 550;
-			rating.velocity.y = -FlxG.random.int(140, 175);
-			rating.velocity.x = -FlxG.random.int(0, 10);
-			rating.x += comboOffsets[0];
-			rating.y -= comboOffsets[1];
-			rating.zIndex = 999;
-			if (ratingGroup.members.length > 1) for (i in ratingGroup.members)
-				ratingGroup.zIndex = ratingGroup.zIndex - 1;
-				
-			ratingGroup.add(rating);
-			ratingGroup.sort(funkin.utils.SortUtil.sortByZ, flixel.util.FlxSort.ASCENDING);
+			FlxTween.cancelTweensOf(ratingGraphic, ['scale.x', 'scale.y', 'alpha']);
+			ratingGraphic.alpha = 1;
+			ratingGraphic.loadGraphic(Paths.image(ratingPrefix + ratingImage + ratingSuffix));
+			ratingGraphic.screenCenter();
+			ratingGraphic.x = posX - 40;
+			ratingGraphic.y -= 60;
+			ratingGraphic.x += comboOffsets[0];
+			ratingGraphic.y -= comboOffsets[1];
 			
 			if (!PlayState.isPixelStage)
 			{
-				rating.antialiasing = ClientPrefs.globalAntialiasing;
-				rating.scale.set(0.785, 0.785);
-				FlxTween.cancelTweensOf(rating, ['scale.x', 'scale.y']);
-				FlxTween.tween(rating.scale, {x: 0.7, y: 0.7}, 0.5, {ease: FlxEase.expoOut});
+				ratingGraphic.antialiasing = ClientPrefs.globalAntialiasing;
+				ratingGraphic.scale.set(0.785, 0.785);
+				FlxTween.tween(ratingGraphic.scale, {x: 0.7, y: 0.7}, 0.5, {ease: FlxEase.expoOut});
 			}
 			else
 			{
-				rating.setGraphicSize(Std.int(rating.width * pixelZoom * 0.85));
+				ratingGraphic.setGraphicSize(Std.int(ratingGraphic.width * pixelZoom * 0.85));
 			}
-			rating.updateHitbox();
-			
-			FlxTween.tween(rating, {alpha: 0}, 0.2,
-				{
-					onComplete: function(tween:FlxTween) {
-						rating.kill();
-					},
-					startDelay: Conductor.crotchet * 0.001
-				});
+			ratingGraphic.updateHitbox();
+			FlxTween.tween(ratingGraphic, {alpha: 0}, 0.5, {startDelay: Conductor.stepCrotchet * 0.01, ease: FlxEase.expoOut});
 		}
 		
 		if (showRatingNum)
 		{
+			ratingNumGroup.clear();
+			
 			var seperatedScore:Array<Int> = [];
 			
 			if (combo >= 1000)
@@ -307,11 +293,9 @@ class PsychHUD extends BaseHUD
 				var numScore:FlxSprite = ratingNumGroup.recycle(FlxSprite);
 				numScore.loadGraphic(Paths.image(ratingPrefix + 'num' + Std.int(i) + ratingSuffix));
 				numScore.alpha = 1;
-				
 				numScore.screenCenter();
 				numScore.x = posX + (43 * daLoop) - 90;
 				numScore.y += 80;
-				
 				numScore.x += comboOffsets[2];
 				numScore.y -= comboOffsets[3];
 				
@@ -327,21 +311,9 @@ class PsychHUD extends BaseHUD
 					numScore.setGraphicSize(Std.int(numScore.width * pixelZoom));
 				}
 				numScore.updateHitbox();
-				
-				numScore.acceleration.y = FlxG.random.int(200, 300);
-				numScore.velocity.y = -FlxG.random.int(140, 160);
-				numScore.velocity.x = FlxG.random.float(-5, 5);
-				
 				ratingNumGroup.add(numScore);
+				FlxTween.tween(numScore, {alpha: 0}, 0.5, {startDelay: Conductor.stepCrotchet * 0.01, ease: FlxEase.expoOut});
 				
-				FlxTween.tween(numScore, {alpha: 0}, 0.2,
-					{
-						onComplete: function(tween:FlxTween) {
-							numScore.kill();
-						},
-						startDelay: Conductor.crotchet * 0.002
-					});
-					
 				daLoop++;
 			}
 		}
@@ -354,7 +326,7 @@ class PsychHUD extends BaseHUD
 		
 		for (rating in ratings)
 		{
-			Paths.image('$ratingPrefix$rating$ratingSuffix');
+			ratingGraphic.loadGraphic(Paths.image('$ratingPrefix$rating$ratingSuffix'));
 		}
 		
 		for (i in 0...10)

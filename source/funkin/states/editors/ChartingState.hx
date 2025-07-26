@@ -809,7 +809,8 @@ class ChartingState extends MusicBeatState
 				for (file in FileSystem.readDirectory(directory))
 				{
 					var path = haxe.io.Path.join([directory, file]);
-					if (file.endsWith('.json'))
+					if (file.endsWith('.hx') || file.endsWith('.hxs') || file.endsWith('.hscript')) trace('NOT ADDING $file, contains an ending not supported.');
+					else
 					{
 						var stageToCheck:String = file.endsWith('.json') ? file.substr(0, file.length - 5) : file;
 						if (!tempMap.exists(stageToCheck))
