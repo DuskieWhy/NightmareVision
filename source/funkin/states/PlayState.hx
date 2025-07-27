@@ -244,9 +244,10 @@ class PlayState extends MusicBeatState
 		return playFields?.members[0];
 	}
 	
-	function getStrumID(id:Int)
+	// i dont understand the need to change the ids tbh
+	function getStrumFromID(id:Int):Null<PlayField>
 	{
-		for (i in playFields.members)
+		for (i in playFields?.members)
 			if (i.ID == id) return i;
 		return playFields?.members[id];
 	}
@@ -2122,8 +2123,9 @@ class PlayState extends MusicBeatState
 				if (doSpawn) doSpawn = scripts.call('onSpawnNote', [dunceNote], false, [dunceNote.noteType]) != Globals.Function_Stop;
 				if (doSpawn)
 				{
-					var desiredPlayfield = getStrumID(dunceNote.lane);
-					if (desiredPlayfield != null) getStrumID(dunceNote.lane).addNote(dunceNote);
+					// rewrite this later this is messy
+					var desiredPlayfield = getStrumFromID(dunceNote.lane);
+					if (desiredPlayfield != null) getStrumFromID(dunceNote.lane).addNote(dunceNote);
 					else
 					{
 						if (dunceNote.desiredPlayfield != null) dunceNote.desiredPlayfield.addNote(dunceNote);
