@@ -142,8 +142,6 @@ class FunkinAssets
 		}
 		else
 		{
-			Logger.log('sound ($key) was not found');
-			
 			return null;
 		}
 	}

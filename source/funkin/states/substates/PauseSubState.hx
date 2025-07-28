@@ -297,7 +297,6 @@ class PauseSubState extends MusicBeatSubstate
 						PlayState.changedDifficulty = true;
 						PlayState.instance.botplayTxt.visible = PlayState.instance.cpuControlled;
 						PlayState.instance.botplayTxt.alpha = 1;
-						PlayState.instance.botplaySine = 0;
 					case 'Hawk Tuah Respect Button -->':
 						FlxG.sound.play(Paths.sound('untitled1'));
 					case "Exit to menu":

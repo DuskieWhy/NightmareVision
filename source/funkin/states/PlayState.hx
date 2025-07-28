@@ -78,6 +78,9 @@ class PlayState extends MusicBeatState
 		new RatingInfo('Perfect!!', 1),
 	];
 	
+	public static var arrowSkin:String = '';
+	public static var noteSplashSkin:String = '';
+	
 	public var modManager:ModManager;
 	
 	var speedChanges:Array<SpeedEvent> = [{}];
@@ -85,9 +88,6 @@ class PlayState extends MusicBeatState
 	public var currentSV:SpeedEvent = {};
 	
 	var noteRows:Array<Array<Array<Note>>> = [[], []];
-	
-	public static var arrowSkin:String = '';
-	public static var noteSplashSkin:String = '';
 	
 	public var modchartObjects:Map<String, FlxSprite> = new Map<String, FlxSprite>();
 	
@@ -327,7 +327,6 @@ class PlayState extends MusicBeatState
 	public var cpuControlled(default, set):Bool = false;
 	public var practiceMode:Bool = false;
 	
-	public var botplaySine:Float = 0;
 	public var botplayTxt:FlxText;
 	
 	public var camHUD:FlxCamera;
@@ -1509,11 +1508,7 @@ class PlayState extends MusicBeatState
 		notes = new FlxTypedGroup<Note>();
 		add(notes);
 		
-		var noteData:Array<SwagSection> = songData.notes;
-		
-		var playerCounter:Int = 0;
-		
-		var daBeats:Int = 0; // Not exactly representative of 'daBeats' lol, just how much it has looped
+		final noteData:Array<SwagSection> = songData.notes;
 		
 		// loads note types
 		for (section in noteData)
@@ -1579,8 +1574,8 @@ class PlayState extends MusicBeatState
 		
 		speedChanges.sort(SortUtil.svSort);
 		
-		var lastBFNotes:Array<Note> = [null, null, null, null];
-		var lastDadNotes:Array<Note> = [null, null, null, null];
+		var lastBFNotes:Array<Note> = [for (i in 0...songData.keys) null];
+		var lastDadNotes:Array<Note> = [for (i in 0...songData.keys) null];
 		// Should populate these w/ nulls depending on keycount -neb
 		
 		#if debug
@@ -1615,9 +1610,6 @@ class PlayState extends MusicBeatState
 				
 				var oldNote:Note = null;
 				
-				var pixelStage = isPixelStage;
-				// var skin = arrowSkin;
-				
 				var type:Dynamic = songNotes[3];
 				if (!Std.isOfType(type, String)) type = ChartingState.noteTypeList[type];
 				
@@ -1631,6 +1623,7 @@ class PlayState extends MusicBeatState
 				rowArray[swagNote.row].push(swagNote);
 				swagNote.mustPress = gottaHitNote;
 				swagNote.sustainLength = songNotes[2];
+				
 				if (gottaHitNote)
 				{
 					lastBFNotes[daNoteData] = swagNote;
@@ -1655,7 +1648,6 @@ class PlayState extends MusicBeatState
 				swagNote.noteType = type;
 				
 				swagNote.scrollFactor.set();
-				// swagNote.player = gottaHitNote ? 0 : 1;
 				
 				var susLength:Float = swagNote.sustainLength;
 				
@@ -1666,64 +1658,36 @@ class PlayState extends MusicBeatState
 				
 				callNoteTypeScript(swagNote.noteType, 'setupNote', [swagNote]);
 				
-				var floorSus:Int = Math.round(susLength);
-				if (floorSus > 0)
-				{
-					for (susNote in 0...floorSus + 1)
-					{
-						oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
-						
-						var sustainNote:Note = new Note(daStrumTime
-							+ (Conductor.stepCrotchet * susNote)
-							+ (Conductor.stepCrotchet / FlxMath.roundDecimal(songSpeed, 2)), daNoteData, oldNote, true,
-							false, gottaHitNote ? 0 : 1);
-						sustainNote.mustPress = gottaHitNote;
-						sustainNote.gfNote = swagNote.gfNote;
-						sustainNote.noteType = type;
-						if (!sustainNote.alive) break;
-						
-						sustainNote.ID = unspawnNotes.length;
-						modchartObjects.set('note${sustainNote.ID}', sustainNote);
-						sustainNote.scrollFactor.set();
-						sustainNote.lane = swagNote.lane;
-						swagNote.tail.push(sustainNote);
-						sustainNote.parent = swagNote;
-						
-						unspawnNotes.push(sustainNote);
-						
-						callNoteTypeScript(sustainNote.noteType, 'setupNote', [sustainNote]);
-						
-						if (sustainNote.mustPress)
-						{
-							sustainNote.x += FlxG.width / 2; // general offset
-						}
-						else if (ClientPrefs.middleScroll)
-						{
-							sustainNote.x += 310;
-							if (daNoteData > 1) // Up and Right
-							{
-								sustainNote.x += FlxG.width / 2 + 25;
-							}
-						}
-					}
-				}
+				// floored but rounded????
+				final flooredSusLength = Math.round(susLength);
 				
-				// arrowSkin = skin;
+				if (flooredSusLength <= 0) continue;
 				
-				if (swagNote.mustPress)
+				for (susNote in 0...flooredSusLength + 1)
 				{
-					swagNote.x += FlxG.width / 2; // general offset
-				}
-				else if (ClientPrefs.middleScroll)
-				{
-					swagNote.x += 310;
-					if (daNoteData > 1) // Up and Right
-					{
-						swagNote.x += FlxG.width / 2 + 25;
-					}
+					oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
+					
+					var sustainNote:Note = new Note(daStrumTime
+						+ (Conductor.stepCrotchet * susNote)
+						+ (Conductor.stepCrotchet / FlxMath.roundDecimal(songSpeed, 2)), daNoteData, oldNote, true,
+						false, gottaHitNote ? 0 : 1);
+					sustainNote.mustPress = gottaHitNote;
+					sustainNote.gfNote = swagNote.gfNote;
+					sustainNote.noteType = type;
+					if (!sustainNote.alive) break;
+					
+					sustainNote.ID = unspawnNotes.length;
+					modchartObjects.set('note${sustainNote.ID}', sustainNote);
+					sustainNote.scrollFactor.set();
+					sustainNote.lane = swagNote.lane;
+					swagNote.tail.push(sustainNote);
+					sustainNote.parent = swagNote;
+					
+					unspawnNotes.push(sustainNote);
+					
+					callNoteTypeScript(sustainNote.noteType, 'setupNote', [sustainNote]);
 				}
 			}
-			daBeats += 1;
 		}
 		
 		#if debug
@@ -1739,10 +1703,9 @@ class PlayState extends MusicBeatState
 		generatedMusic = true;
 	}
 	
-	public function getNoteInitialTime(time:Float)
+	public function getNoteInitialTime(time:Float):Float
 	{
-		var event:SpeedEvent = getSV(time);
-		return getTimeFromSV(time, event);
+		return getTimeFromSV(time, getSV(time));
 	}
 	
 	public inline function getTimeFromSV(time:Float, event:SpeedEvent) return event.position
@@ -1911,16 +1874,16 @@ class PlayState extends MusicBeatState
 			forEachOfType(FunkinVideoSprite, video -> if (video != null && video.isStateAffected) video.pause(), true);
 			#end
 			
-			for (i in playFields.members)
+			for (field in playFields?.members)
 			{
-				if (i.inControl && i.playerControls)
+				if (field.inControl && field.playerControls)
 				{
-					for (s in i.members)
+					for (strum in field.members)
 					{
-						if (s.animation.curAnim?.name != 'static')
+						if (strum.animation.curAnim?.name != 'static')
 						{
-							s.playAnim('static');
-							s.resetAnim = 0;
+							strum.playAnim('static');
+							strum.resetAnim = 0;
 						}
 					}
 				}
@@ -2944,8 +2907,8 @@ class PlayState extends MusicBeatState
 	
 	public function moveCamera(isDad:Bool):Void
 	{
-		var desiredPos:FlxPoint = null;
-		var curCharacter:Character = null;
+		var desiredPos:Null<FlxPoint> = null;
+		var curCharacter:Null<Character> = null;
 		
 		if (opponentStrums != null && playerStrums != null) curCharacter = isDad ? opponentStrums.owner : playerStrums.owner;
 		else curCharacter = isDad ? dad : boyfriend;
@@ -3942,6 +3905,7 @@ class PlayState extends MusicBeatState
 		var hue:Float = ClientPrefs.arrowHSV[data % 4][0] / 360;
 		var sat:Float = ClientPrefs.arrowHSV[data % 4][1] / 100;
 		var brt:Float = ClientPrefs.arrowHSV[data % 4][2] / 100;
+		
 		if (note != null)
 		{
 			hue = note.noteSplashHue;
