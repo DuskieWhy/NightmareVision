@@ -879,7 +879,7 @@ class PlayState extends MusicBeatState
 		noteSkin ??= new NoteSkinHelper(Paths.noteskin('default'));
 	}
 	
-	function initNoteSkinning() // todo rewrite this
+	function initNoteSkinning() // TODO: rewrite this
 	{
 		script_NOTEOffsets = new Vector<FlxPoint>(SONG.keys);
 		script_SUSTAINOffsets = new Vector<FlxPoint>(SONG.keys);
@@ -2117,31 +2117,31 @@ class PlayState extends MusicBeatState
 			
 			while (unspawnNotes.length > 0 && unspawnNotes[0].strumTime - Conductor.songPosition < time)
 			{
-				var dunceNote:Note = unspawnNotes[0];
+				final dunceNote:Note = unspawnNotes[0];
+				
 				var doSpawn:Bool = callNoteTypeScript(dunceNote.noteType, 'spawnNote', [dunceNote]) != Globals.Function_Stop;
 				
 				if (doSpawn) doSpawn = scripts.call('onSpawnNote', [dunceNote], false, [dunceNote.noteType]) != Globals.Function_Stop;
+				
 				if (doSpawn)
 				{
 					// rewrite this later this is messy
-					var desiredPlayfield = getStrumFromID(dunceNote.lane);
-					if (desiredPlayfield != null) getStrumFromID(dunceNote.lane).addNote(dunceNote);
+					
+					final expectedPlayfield:Null<PlayField> = getStrumFromID(dunceNote.lane) ?? dunceNote.desiredPlayfield ?? dunceNote.parent?.playField;
+					
+					if (expectedPlayfield != null) expectedPlayfield.addNote(dunceNote);
 					else
 					{
-						if (dunceNote.desiredPlayfield != null) dunceNote.desiredPlayfield.addNote(dunceNote);
-						else if (dunceNote.parent != null && dunceNote.parent.playField != null) dunceNote.parent.playField.addNote(dunceNote);
-						else
+						for (field in playFields?.members)
 						{
-							for (field in playFields.members)
+							if (field.isPlayer == dunceNote.mustPress)
 							{
-								if (field.isPlayer == dunceNote.mustPress)
-								{
-									field.addNote(dunceNote);
-									break;
-								}
+								field.addNote(dunceNote);
+								break;
 							}
 						}
 					}
+					
 					if (dunceNote.playField == null)
 					{
 						var deadNotes:Array<Note> = [dunceNote];
@@ -2166,9 +2166,11 @@ class PlayState extends MusicBeatState
 					var index:Int = unspawnNotes.indexOf(dunceNote);
 					unspawnNotes.splice(index, 1);
 					
-					scripts.call('onSpawnNotePost', [dunceNote], false, [dunceNote.noteType]);
-					
-					callNoteTypeScript(dunceNote.noteType, 'postSpawnNote', [dunceNote]);
+					var ret:Dynamic = callNoteTypeScript(dunceNote.noteType, 'postSpawnNote', [dunceNote]);
+					if (ret != Globals.Function_Stop)
+					{
+						scripts.call('onSpawnNotePost', [dunceNote], false, [dunceNote.noteType]);
+					}
 				}
 				else
 				{
@@ -2193,9 +2195,9 @@ class PlayState extends MusicBeatState
 		
 		if (startedCountdown)
 		{
-			for (i in 0...playFields.length)
+			for (i in 0...playFields?.length)
 			{
-				var strums = playFields.members[i];
+				final strums:Null<PlayField> = playFields.members[i];
 				if (strums == null) continue;
 				strums.forEachAlive(strum -> {
 					final pos = modManager.getPos(0, 0, 0, curDecBeat, strum.noteData, i, strum, [], strum.vec3Cache);
