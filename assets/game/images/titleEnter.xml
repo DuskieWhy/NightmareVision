@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-Created with Funkin Packer v0.1.3 https://neeeoo.github.io/funkin-packer/
--->
+
 <TextureAtlas imagePath="titleEnter.png" width="2017" height="1950">
 	<SubTexture name="ENTER PRESSED0000" x="1" y="1870" width="1002" height="79" frameX="-0" frameY="-0" frameWidth="1477" frameHeight="79"/>
 	<SubTexture name="ENTER PRESSED0001" x="1006" y="1870" width="1002" height="79" frameX="-0" frameY="-0" frameWidth="1477" frameHeight="79"/>

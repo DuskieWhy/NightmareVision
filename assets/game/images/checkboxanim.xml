@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-Created with Funkin Packer v0.1.3 https://neeeoo.github.io/funkin-packer/
--->
+
 <TextureAtlas imagePath="checkboxanim.png" width="451" height="555">
 	<SubTexture name="checkbox0000" x="1" y="446" width="111" height="108" frameX="-0" frameY="-0" frameWidth="111" frameHeight="108"/>
 	<SubTexture name="checkbox anim0000" x="325" y="282" width="109" height="149" rotated="true" frameX="-0" frameY="-24" frameWidth="183" frameHeight="142"/>

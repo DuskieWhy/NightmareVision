@@ -55,16 +55,16 @@ function onLoad()
 	
 	if (!ClientPrefs.lowQuality)
 	{
-		var smokeLeft:BGSprite = new BGSprite('smokeLeft', -200, -100, 0.4, 0.4, ['SmokeBlurLeft'], true);
+		var smokeLeft:BGSprite = new BGSprite('smokeLeft', -200, -100, 0.4, 0.4, ['SmokeBlurLeft instance 1'], true);
 		add(smokeLeft);
-		var smokeRight:BGSprite = new BGSprite('smokeRight', 1100, -100, 0.4, 0.4, ['SmokeRight'], true);
+		var smokeRight:BGSprite = new BGSprite('smokeRight', 1100, -100, 0.4, 0.4, ['SmokeRight instance 1'], true);
 		add(smokeRight);
 		
-		tankWatchtower = new BGSprite('tankWatchtower', 100, 50, 0.5, 0.5, ['watchtower gradient color']);
+		tankWatchtower = new BGSprite('tankWatchtower', 100, 50, 0.5, 0.5, ['watchtower gradient color instance 1']);
 		add(tankWatchtower);
 	}
 	
-	tankGround = new BGSprite('tankRolling', 300, 300, 0.5, 0.5, ['BG tank w lighting'], true);
+	tankGround = new BGSprite('tankRolling', 300, 300, 0.5, 0.5, ['BG tank w lighting instance 1'], true);
 	add(tankGround);
 	
 	tankmanRun = new FlxTypedGroup();
@@ -76,15 +76,15 @@ function onLoad()
 	add(ground);
 	moveTank();
 	
-	var tank0 = new BGSprite('tank0', -500, 650, 1.7, 1.5, ['fg']);
+	var tank0 = new BGSprite('tank0', -500, 650, 1.7, 1.5, ['fg tankhead far right instance 1']);
 	tank0.zIndex = 999;
 	add(tank0);
 	
-	var tank2 = new BGSprite('tank2', 450, 940, 1.5, 1.5, ['foreground']);
+	var tank2 = new BGSprite('tank2', 450, 940, 1.5, 1.5, ['foreground man 3 instance 1']);
 	tank2.zIndex = 999;
 	add(tank2);
 	
-	var tank4 = new BGSprite('tank5', 1620, 700, 1.5, 1.5, ['fg']);
+	var tank4 = new BGSprite('tank5', 1620, 700, 1.5, 1.5, ['fg tankhead far right instance 1']);
 	tank4.zIndex = 999;
 	add(tank4);
 	
@@ -92,17 +92,17 @@ function onLoad()
 	
 	if (!ClientPrefs.lowQuality)
 	{
-		var tank1 = new BGSprite('tank1', -300, 750, 2, 0.2, ['fg']);
+		var tank1 = new BGSprite('tank1', -300, 750, 2, 0.2, ['fg tankhead 5 instance 1']);
 		tank1.zIndex = 999;
 		add(tank1);
 		boppers.push(tank1);
 		
-		var tank3 = new BGSprite('tank4', 1300, 900, 1.5, 1.5, ['fg']);
+		var tank3 = new BGSprite('tank4', 1300, 900, 1.5, 1.5, ['fg tankman bobbin 3 instance 1']);
 		tank3.zIndex = 999;
 		add(tank3);
 		boppers.push(tank3);
 		
-		var tank5 = new BGSprite('tank3', 1300, 1200, 3.5, 2.5, ['fg']);
+		var tank5 = new BGSprite('tank3', 1300, 1200, 3.5, 2.5, ['fg tankhead 4 instance 1']);
 		tank5.zIndex = 999;
 		add(tank5);
 		boppers.push(tank5);
