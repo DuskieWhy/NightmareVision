@@ -3,14 +3,20 @@ import funkin.states.substates.GameOverSubstate;
 import funkin.objects.stageobjects.TankmenBG;
 import funkin.data.Chart;
 
+import flixel.util.FlxSort;
+
+import haxe.ds.ArraySort;
+
 var tankWatchtower:BGSprite;
 var tankGround:BGSprite;
 var tankmanRun:FlxTypedGroup;
 var foregroundSprites:FlxTypedGroup;
-var chart:SONG.SwagSong = null;
-var picoAnims:Array<CrowdAnim> = [];
 var anims:Array<String> = ['shoot1', 'shoot2', 'shoot3', 'shoot4'];
 var boppers:Array<FlxSprite> = [];
+
+// pico stuff
+var picoAnims:Array<CrowdAnim> = [];
+var chart:SONG.SwagSong = null;
 
 typedef CrowdAnim =
 {
@@ -134,6 +140,13 @@ function onCreatePost()
 				}
 			}
 		}
+		
+		ArraySort.sort(picoAnims, (a, b) -> {
+			if (a.time < b.time) return -1;
+			else if (a.time > b.time) return 1;
+			return 0;
+		});
+		
 		TankmenBG.animationNotes = chart.notes;
 		
 		gf.playAnim("shoot1");
@@ -167,16 +180,15 @@ function onUpdate(elapsed)
 
 function updatePicoChart()
 {
-	for (anim in picoAnims)
+	if (picoAnims.length != 0 && picoAnims[0].time <= Conductor.songPosition)
 	{
-		if (anim.time <= Conductor.songPosition)
-		{
-			var animToPlay:String = anims[anim.data];
-			gf.holdTimer = 0;
-			gf.playAnim(animToPlay, true);
-			var holdingTime = Conductor.songPosition - anim.time;
-			if (anim.length == 0 || anim.length < holdingTime) picoAnims.remove(anim);
-		}
+		var data = picoAnims[0];
+		
+		var animToPlay:String = anims[data.data];
+		gf.holdTimer = 0;
+		gf.playAnim(animToPlay, true);
+		var holdingTime = Conductor.songPosition - data.time;
+		if (data.length == 0 || data.length < holdingTime) picoAnims.shift();
 	}
 }
 
