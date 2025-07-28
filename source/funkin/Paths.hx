@@ -36,6 +36,7 @@ class Paths
 	public static inline final SOUND_EXT = "ogg";
 	public static inline final VIDEO_EXT = "mp4";
 	
+	// thinking of removing parentfolder its pointless ?
 	public static function getPath(file:String, ?type:AssetType = TEXT, ?parentFolder:String, checkMods:Bool = false):String
 	{
 		#if MODS_ALLOWED
@@ -169,14 +170,9 @@ class Paths
 	
 	static public function getTextFromFile(key:String, ignoreMods:Bool = false):String
 	{
-		#if sys
-		#if MODS_ALLOWED
-		if (!ignoreMods && FileSystem.exists(modFolders(key))) return File.getContent(modFolders(key));
-		#end
+		final path = Paths.getPath(key, TEXT, null, !ignoreMods);
 		
-		if (FileSystem.exists(getPrimaryPath(key))) return File.getContent(getPrimaryPath(key));
-		#end
-		return Assets.getText(getPath(key, TEXT));
+		return FunkinAssets.getContent(path);
 	}
 	
 	public static inline function font(key:String):String

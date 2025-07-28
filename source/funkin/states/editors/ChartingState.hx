@@ -3324,23 +3324,23 @@ class ChartingState extends MusicBeatState
 		prevRenderedSustains.clear();
 		
 		var skin:NoteSkinHelper = PlayState.noteSkin;
-		if (_song.arrowSkin != 'default' && _song.arrowSkin != '' && _song.arrowSkin != null)
+		
+		var arrowSkin:Null<String> = _song?.arrowSkin;
+		
+		if (arrowSkin != null && arrowSkin.length > 0)
 		{
-			if (FileSystem.exists(Paths.modsNoteskin('${_song.arrowSkin}')))
+			final path = Paths.noteskin(arrowSkin);
+			if (FunkinAssets.exists(path, TEXT))
 			{
-				skin = new NoteSkinHelper(Paths.modsNoteskin('${_song.arrowSkin}'));
-			}
-			else if (FileSystem.exists(Paths.noteskin('${_song.arrowSkin}')))
-			{
-				// Noteskin doesn't exist in assets, trying mods folder
-				skin = new NoteSkinHelper(Paths.noteskin('${_song.arrowSkin}'));
+				skin = new NoteSkinHelper(path);
 			}
 		}
 		else
 		{
-			if (FileSystem.exists(Paths.modsNoteskin('default')))
+			final path = Paths.noteskin('default');
+			if (FunkinAssets.exists(path, TEXT))
 			{
-				skin = new NoteSkinHelper(Paths.modsNoteskin('default'));
+				skin = new NoteSkinHelper(path);
 			}
 		}
 		

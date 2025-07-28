@@ -32,20 +32,10 @@ typedef MetaVariables =
 		var json:MetaVariables = null;
 		final formattedSong = Paths.formatToSongPath(PlayState.SONG.song);
 		
-		var jsonExists:Bool = false;
-		var path:String = Paths.modsJson('$formattedSong/meta');
-		if (FileSystem.exists(path))
+		var path = Paths.json('$formattedSong/meta');
+		if (FunkinAssets.exists(path))
 		{
-			jsonExists = true;
-			json = haxe.Json.parse(File.getContent(path));
-		}
-		
-		// try asset dir
-		if (!jsonExists)
-		{
-			path = Paths.json('$formattedSong/meta');
-			if (FileSystem.exists(path)) json = haxe.Json.parse(File.getContent(path));
-			else if (Assets.exists(path, TEXT)) json = haxe.Json.parse(Assets.getText(path));
+			json = haxe.Json.parse(FunkinAssets.getContent(path));
 		}
 		
 		if (json != null)
@@ -65,20 +55,10 @@ typedef MetaVariables =
 	{
 		var json:MetaVariables = null;
 		
-		var jsonExists:Bool = false;
-		var path:String = Paths.modFolders('$filePath.json');
-		if (FileSystem.exists(path))
+		final path = Paths.getPath('$filePath.json', TEXT, null, true);
+		if (FunkinAssets.exists(path))
 		{
-			jsonExists = true;
-			json = haxe.Json.parse(File.getContent(path));
-		}
-		
-		// try asset dir
-		if (!jsonExists)
-		{
-			path = Paths.getPath('$filePath.json', TEXT);
-			if (FileSystem.exists(path)) json = haxe.Json.parse(File.getContent(path));
-			else if (Assets.exists(path, TEXT)) json = haxe.Json.parse(Assets.getText(path));
+			json = haxe.Json.parse(FunkinAssets.getContent(path));
 		}
 		
 		if (json != null)
