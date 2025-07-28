@@ -336,8 +336,6 @@ class PlayState extends MusicBeatState
 	
 	public var defaultScoreAddition:Bool = true;
 	
-	var stageData:StageFile;
-	
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
 	
 	public var songScore:Int = 0;
@@ -472,25 +470,30 @@ class PlayState extends MusicBeatState
 		return (cpuControlled = val);
 	}
 	
-	function setStageData(stageData:StageFile)
+	function applyStageData(file:Null<StageFile>)
 	{
-		defaultCamZoom = stageData.defaultZoom;
-		FlxG.camera.zoom = stageData.defaultZoom;
-		isPixelStage = stageData.isPixelStage;
-		BF_X = stageData.boyfriend[0];
-		BF_Y = stageData.boyfriend[1];
-		GF_X = stageData.girlfriend[0];
-		GF_Y = stageData.girlfriend[1];
-		DAD_X = stageData.opponent[0];
-		DAD_Y = stageData.opponent[1];
+		if (file == null) return;
 		
-		if (stageData.camera_speed != null) cameraSpeed = stageData.camera_speed;
+		defaultCamZoom = file.defaultZoom;
+		FlxG.camera.zoom = file.defaultZoom;
+		isPixelStage = file.isPixelStage;
 		
-		boyfriendCameraOffset = stageData.camera_boyfriend ?? [0, 0];
+		BF_X = file.boyfriend[0];
+		BF_Y = file.boyfriend[1];
 		
-		opponentCameraOffset = stageData.camera_opponent ?? [0, 0];
+		GF_X = file.girlfriend[0];
+		GF_Y = file.girlfriend[1];
 		
-		girlfriendCameraOffset = stageData.camera_girlfriend ?? [0, 0];
+		DAD_X = file.opponent[0];
+		DAD_Y = file.opponent[1];
+		
+		if (file.camera_speed != null) cameraSpeed = file.camera_speed;
+		
+		boyfriendCameraOffset = file.camera_boyfriend ?? [0, 0];
+		
+		opponentCameraOffset = file.camera_opponent ?? [0, 0];
+		
+		girlfriendCameraOffset = file.camera_girlfriend ?? [0, 0];
 		
 		boyfriendGroup ??= new FlxSpriteGroup();
 		boyfriendGroup.x = BF_X;
@@ -607,9 +610,8 @@ class PlayState extends MusicBeatState
 		if (SONG.stage == null || SONG.stage.length == 0) SONG.stage = 'stage';
 		
 		stage = new Stage(SONG.stage);
-		stageData = stage.stageData;
-		setStageData(stageData); // change to setter
 		scripts.set('stage', stage);
+		applyStageData(stage.stageData);
 		
 		if (stage.buildStage())
 		{
@@ -668,7 +670,7 @@ class PlayState extends MusicBeatState
 		var gfVersion:String = SONG.gfVersion;
 		if (gfVersion == null || gfVersion.length < 1) SONG.gfVersion = gfVersion = 'gf';
 		
-		if (!stageData.hide_girlfriend)
+		if (!stage.stageData.hide_girlfriend)
 		{
 			gf = CharacterBuilder.fromName(0, 0, gfVersion);
 			startCharacterPos(gf);
@@ -4174,7 +4176,7 @@ class PlayState extends MusicBeatState
 	
 	override public function startOutro(onOutroComplete:() -> Void)
 	{
-		if (isPixelStage != stageData.isPixelStage) isPixelStage = stageData.isPixelStage;
+		if (stage != null && isPixelStage != stage.stageData.isPixelStage) isPixelStage = stage.stageData.isPixelStage;
 		super.startOutro(onOutroComplete);
 	}
 }
