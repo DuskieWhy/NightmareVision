@@ -23,9 +23,6 @@ typedef EventNote =
 
 class Note extends FlxSprite
 {
-	public static var handler:NoteSkinHelper;
-	public static var keys:Int = 4;
-	
 	public var row:Int = 0;
 	public var lane:Int = 0;
 	
@@ -316,7 +313,7 @@ class Note extends FlxSprite
 			colorSwap = new ColorSwap();
 			shader = colorSwap.shader;
 			
-			x += swagWidth * (noteData % keys);
+			x += swagWidth * (noteData % NoteSkinHelper.keys);
 			if (!isSustainNote) animation.play('scroll$noteData');
 		}
 		
@@ -336,7 +333,7 @@ class Note extends FlxSprite
 			
 			offsetX -= width / 2;
 			
-			if (handler.data.isPixel) offsetX += 30;
+			if (NoteSkinHelper.instance.data.isPixel) offsetX += 30;
 			
 			if (prevNote.isSustainNote)
 			{
@@ -347,7 +344,7 @@ class Note extends FlxSprite
 					prevNote.scale.y *= PlayState.instance.songSpeed;
 				}
 				
-				if (handler.data.isPixel)
+				if (NoteSkinHelper.instance.data.isPixel)
 				{
 					prevNote.scale.y *= 1.19;
 					prevNote.scale.y *= (6 / height); // Auto adjust note size
@@ -358,7 +355,7 @@ class Note extends FlxSprite
 				// prevNote.setGraphicSize();
 			}
 			
-			if (handler.data.isPixel)
+			if (NoteSkinHelper.instance.data.isPixel)
 			{
 				scale.y *= PlayState.daPixelZoom;
 				updateHitbox();
@@ -408,35 +405,33 @@ class Note extends FlxSprite
 		var arraySkin:Array<String> = skin.split('/');
 		arraySkin[arraySkin.length - 1] = prefix + arraySkin[arraySkin.length - 1] + suffix;
 		
-		handler ??= new NoteSkinHelper(Paths.noteskin('default'));
-		
 		var lastScaleY:Float = scale.y;
 		var blahblah:String = arraySkin.join('/');
-		isQuant = (ClientPrefs.noteSkin == 'Quants' || ClientPrefs.noteSkin == "QuantStep") && handler.data.isQuants;
-		if (handler.data.isPixel)
+		isQuant = (ClientPrefs.noteSkin == 'Quants' || ClientPrefs.noteSkin == "QuantStep") && NoteSkinHelper.instance.data.isQuants;
+		if (NoteSkinHelper.instance.data.isPixel)
 		{
 			if (isSustainNote)
 			{
-				loadGraphic(Paths.image(blahblah + handler.data.sustainSuffix));
+				loadGraphic(Paths.image(blahblah + NoteSkinHelper.instance.data.sustainSuffix));
 				width = width / 4;
 				height = height / 2;
 				originalHeightForCalcs = height;
-				loadGraphic(Paths.image(blahblah + handler.data.sustainSuffix), true, Math.floor(width), Math.floor(height));
+				loadGraphic(Paths.image(blahblah + NoteSkinHelper.instance.data.sustainSuffix), true, Math.floor(width), Math.floor(height));
 			}
 			else
 			{
 				loadGraphic(Paths.image(blahblah));
-				width = width / handler.data.pixelSize[0];
-				height = height / handler.data.pixelSize[1];
+				width = width / NoteSkinHelper.instance.data.pixelSize[0];
+				height = height / NoteSkinHelper.instance.data.pixelSize[1];
 				loadGraphic(Paths.image(blahblah), true, Math.floor(width), Math.floor(height));
 			}
-			setGraphicSize(Std.int(width * handler.data.scale));
+			setGraphicSize(Std.int(width * NoteSkinHelper.instance.data.scale));
 			loadPixelNoteAnims();
 			
 			if (isSustainNote)
 			{
 				offsetX += lastNoteOffsetXForPixelAutoAdjusting;
-				lastNoteOffsetXForPixelAutoAdjusting = (width - 7) * (handler.data.scale / 2);
+				lastNoteOffsetXForPixelAutoAdjusting = (width - 7) * (NoteSkinHelper.instance.data.scale / 2);
 				offsetX -= lastNoteOffsetXForPixelAutoAdjusting;
 				
 				/*if(animName != null && !animName.endsWith('end'))
@@ -470,7 +465,7 @@ class Note extends FlxSprite
 			baseScaleY = scale.y;
 		}
 		
-		antialiasing = ClientPrefs.globalAntialiasing && handler.data.antialiasing;
+		antialiasing = ClientPrefs.globalAntialiasing && NoteSkinHelper.instance.data.antialiasing;
 		
 		if (noteScript != null)
 		{
@@ -506,13 +501,13 @@ class Note extends FlxSprite
 	
 	function _loadNoteAnims()
 	{
-		for (i in 0...handler.data.noteAnimations[noteData].length)
+		for (i in 0...NoteSkinHelper.instance.data.noteAnimations[noteData].length)
 		{
-			var anim = handler.data.noteAnimations[noteData][i];
+			var anim = NoteSkinHelper.instance.data.noteAnimations[noteData][i];
 			animation.addByPrefix(anim.anim, '${anim.xmlName}0', 24, true);
 		}
 		
-		setGraphicSize(Std.int(width * handler.data.scale));
+		setGraphicSize(Std.int(width * NoteSkinHelper.instance.data.scale));
 		updateHitbox();
 		baseScaleX = scale.x;
 		baseScaleY = scale.y;

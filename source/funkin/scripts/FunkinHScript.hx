@@ -338,11 +338,11 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 			set('scrollSpeed', PlayState.SONG.speed);
 			set('songName', PlayState.SONG.song);
 			set('isStoryMode', PlayState.isStoryMode);
-			set('difficulty', PlayState.storyDifficulty);
-			set('weekRaw', PlayState.storyWeek);
+			set('difficulty', PlayState.storyMeta.difficulty);
+			set('weekRaw', PlayState.storyMeta.curWeek);
 			set('seenCutscene', PlayState.seenCutscene);
-			set('week', funkin.data.WeekData.weeksList[PlayState.storyWeek]);
-			set('difficultyName', funkin.backend.Difficulty.difficulties[PlayState.storyDifficulty]);
+			set('week', funkin.data.WeekData.weeksList[PlayState.storyMeta.curWeek]);
+			set('difficultyName', funkin.backend.Difficulty.difficulties[PlayState.storyMeta.difficulty]);
 			set('songLength', FlxG.sound.music.length);
 			set('healthGainMult', PlayState.instance.healthGain);
 			set('healthLossMult', PlayState.instance.healthLoss);

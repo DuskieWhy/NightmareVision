@@ -50,6 +50,8 @@ class Init extends FlxState
 		funkin.video.FunkinVideoSprite.init();
 		#end
 		
+		funkin.data.NoteSkinHelper.init();
+		
 		addPlugins();
 		
 		#if MODS_ALLOWED

@@ -310,19 +310,19 @@ class StoryMenuState extends MusicBeatState
 			}
 			
 			// Nevermind that's stupid lmao
-			PlayState.storyPlaylist = songArray;
+			PlayState.storyMeta.playlist = songArray;
 			PlayState.isStoryMode = true;
 			selectedWeek = true;
 			
 			var diffic = Difficulty.getDifficultyFilePath(curDifficulty);
 			if (diffic == null) diffic = '';
 			
-			PlayState.storyDifficulty = curDifficulty;
+			PlayState.storyMeta.difficulty = curDifficulty;
 			
-			PlayState.SONG = Chart.fromSong(PlayState.storyPlaylist[0], PlayState.storyDifficulty);
+			PlayState.SONG = Chart.fromSong(PlayState.storyMeta.playlist[0], PlayState.storyMeta.difficulty);
 			
-			PlayState.campaignScore = 0;
-			PlayState.campaignMisses = 0;
+			PlayState.storyMeta.score = 0;
+			PlayState.storyMeta.misses = 0;
 			new FlxTimer().start(1, function(tmr:FlxTimer) {
 				if (FlxG.sound.music != null)
 				{
@@ -420,7 +420,7 @@ class StoryMenuState extends MusicBeatState
 		{
 			bgSprite.loadGraphic(Paths.image('menubackgrounds/menu_' + assetName));
 		}
-		PlayState.storyWeek = curWeek;
+		PlayState.storyMeta.curWeek = curWeek;
 		
 		Difficulty.reset();
 		var diffStr:String = WeekData.getCurrentWeek().difficulties;

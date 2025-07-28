@@ -20,8 +20,6 @@ import flixel.text.FlxText;
 import flixel.group.FlxSpriteGroup;
 import flixel.input.keyboard.FlxKey;
 import flixel.util.helpers.FlxBounds;
-import flixel.util.FlxSignal;
-import flixel.util.FlxSave;
 import flixel.group.FlxContainer.FlxTypedContainer;
 
 import funkin.objects.character.CharacterBuilder;
@@ -57,7 +55,14 @@ class PlayState extends MusicBeatState
 	
 	public static var SONG:Null<SwagSong> = null;
 	
-	public static var storyMeta:StoryMeta = {};
+	public static var storyMeta:StoryMeta = new StoryMeta();
+	
+	public static var isStoryMode:Bool = false;
+	
+	// how big to stretch the pixel art assets
+	public static var daPixelZoom:Float = 6;
+	
+	public static var isPixelStage:Bool = false;
 	
 	/**
 	 * Static reference to the state. used for other classes to reference
@@ -183,12 +188,6 @@ class PlayState extends MusicBeatState
 	public var songSpeedType:String = "multiplicative";
 	public var noteKillOffset:Float = 350;
 	
-	public static var isPixelStage:Bool = false;
-	public static var isStoryMode:Bool = false;
-	public static var storyWeek:Int = 0;
-	public static var storyPlaylist:Array<String> = [];
-	public static var storyDifficulty:Int = 1;
-	
 	public var spawnTime:Float = 3000;
 	
 	/**
@@ -208,7 +207,7 @@ class PlayState extends MusicBeatState
 	/**
 	 * Previous cameras target. used in story mode for a more seamless transition
 	 */
-	static var prevCamFollow:FlxObject;
+	static var prevCamFollow:Null<FlxObject> = null;
 	
 	/**
 	 * List of FlxCameras that follow camFollow
@@ -218,7 +217,7 @@ class PlayState extends MusicBeatState
 	/**
 	 * Container of all strumlines in use
 	 */
-	public var playFields:Null<FlxTypedGroup<PlayField>>;
+	public var playFields:Null<FlxTypedGroup<PlayField>> = null;
 	
 	/**
 	 * The oppononents Strum field
@@ -336,14 +335,10 @@ class PlayState extends MusicBeatState
 	
 	public var defaultScoreAddition:Bool = true;
 	
-	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
-	
 	public var songScore:Int = 0;
 	public var songHits:Int = 0;
 	public var songMisses:Int = 0;
 	
-	public static var campaignScore:Int = 0;
-	public static var campaignMisses:Int = 0;
 	public static var seenCutscene:Bool = false;
 	public static var deathCounter:Int = 0;
 	
@@ -371,9 +366,6 @@ class PlayState extends MusicBeatState
 	var gameShake:Float = 0.003;
 	var hudShake:Float = 0.003;
 	var shakeTime:Bool = false;
-	
-	// how big to stretch the pixel art assets
-	public static var daPixelZoom:Float = 6;
 	
 	public var inCutscene:Bool = false;
 	public var ingameCutscene:Bool = false;
@@ -587,7 +579,7 @@ class PlayState extends MusicBeatState
 		initNoteSkinning();
 		
 		#if DISCORD_ALLOWED
-		storyDifficultyText = Difficulty.difficulties[storyDifficulty];
+		storyDifficultyText = Difficulty.difficulties[storyMeta.difficulty];
 		
 		// String that contains the mode defined here so it isn't necessary to call changePresence for each mode
 		if (isStoryMode) // fix this again
@@ -720,9 +712,6 @@ class PlayState extends MusicBeatState
 		}
 		
 		Conductor.songPosition = -5000;
-		
-		// temp
-		updateTime = true;
 		
 		playFields = new FlxTypedGroup<PlayField>();
 		add(playFields);
@@ -861,7 +850,7 @@ class PlayState extends MusicBeatState
 		
 		scripts.call('onCreatePost', []);
 		
-		playHUD.cachePopUpScore();
+		callHUDFunc(hud -> hud.cachePopUpScore());
 		
 		super.create();
 		
@@ -874,10 +863,6 @@ class PlayState extends MusicBeatState
 	{
 		final path = Paths.noteskin(skin);
 		if (FunkinAssets.exists(path, TEXT)) noteSkin = new NoteSkinHelper(path);
-		
-		arrowSkin = skin;
-		
-		noteSkin ??= new NoteSkinHelper(Paths.noteskin('default'));
 	}
 	
 	function initNoteSkinning():Void // TODO: rewrite this
@@ -902,12 +887,9 @@ class PlayState extends MusicBeatState
 		
 		noteskinLoading(skin);
 		
-		trace('Quants turned on: ${ClientPrefs.noteSkin.contains('Quant')}');
-		trace('HAS quants: ${noteSkin.data.hasQuants}');
-		
 		if (ClientPrefs.noteSkin.contains('Quant') && noteSkin.data.hasQuants) noteskinLoading('QUANT$skin');
 		
-		NoteSkinHelper.setNoteHelpers(noteSkin, SONG.keys);
+		NoteSkinHelper.keys = SONG.keys;
 		
 		arrowSkin = noteSkin.data.globalSkin;
 		NoteSkinHelper.arrowSkins = [noteSkin.data.playerSkin, noteSkin.data.opponentSkin];
@@ -1033,8 +1015,10 @@ class PlayState extends MusicBeatState
 		return null;
 	}
 	
-	function startCharacterPos(char:Character, ?gfCheck:Bool = false)
+	function startCharacterPos(?char:Character, gfCheck:Bool = false):Void
 	{
+		if (char == null) return;
+		
 		if (gfCheck && char.curCharacter.startsWith('gf'))
 		{ // IF DAD IS GIRLFRIEND, HE GOES TO HER POSITION
 			char.setPosition(GF_X, GF_Y);
@@ -3045,7 +3029,7 @@ class PlayState extends MusicBeatState
 		{
 			var percent:Float = ratingPercent;
 			if (Math.isNaN(percent)) percent = 0;
-			Highscore.saveScore(SONG.song, songScore, storyDifficulty, percent);
+			Highscore.saveScore(SONG.song, songScore, storyMeta.difficulty, percent);
 			
 			if (chartingMode)
 			{
@@ -3055,12 +3039,12 @@ class PlayState extends MusicBeatState
 			
 			if (isStoryMode)
 			{
-				campaignScore += songScore;
-				campaignMisses += songMisses;
+				storyMeta.score += songScore;
+				storyMeta.misses += songMisses;
 				
-				storyPlaylist.remove(storyPlaylist[0]);
+				storyMeta.playlist.remove(storyMeta.playlist[0]);
 				
-				if (storyPlaylist.length <= 0)
+				if (storyMeta.playlist.length <= 0)
 				{
 					FlxG.sound.playMusic(Paths.music('freakyMenu'));
 					FlxG.sound.music.volume = 1;
@@ -3070,9 +3054,9 @@ class PlayState extends MusicBeatState
 					
 					if (!ClientPrefs.getGameplaySetting('practice', false) && !ClientPrefs.getGameplaySetting('botplay', false))
 					{
-						StoryMenuState.weekCompleted.set(WeekData.weeksList[storyWeek], true);
+						StoryMenuState.weekCompleted.set(WeekData.weeksList[storyMeta.curWeek], true);
 						
-						Highscore.saveWeekScore(WeekData.getWeekFileName(), campaignScore, storyDifficulty);
+						Highscore.saveWeekScore(WeekData.getWeekFileName(), storyMeta.score, storyMeta.difficulty);
 						
 						FlxG.save.data.weekCompleted = StoryMenuState.weekCompleted;
 						FlxG.save.flush();
@@ -3087,11 +3071,11 @@ class PlayState extends MusicBeatState
 					prevCamFollow = camFollow;
 					
 					final difficulty:String = Difficulty.getDifficultyFilePath();
-					final songLowercase = Paths.formatToSongPath(storyPlaylist[0].toLowerCase());
+					final songLowercase = Paths.formatToSongPath(storyMeta.playlist[0].toLowerCase());
 					
-					trace('LOADING: ' + Paths.formatToSongPath(PlayState.storyPlaylist[0]) + difficulty);
+					trace('LOADING: ' + Paths.formatToSongPath(storyMeta.playlist[0]) + difficulty);
 					
-					PlayState.SONG = Chart.fromSong(songLowercase, PlayState.storyDifficulty);
+					PlayState.SONG = Chart.fromSong(songLowercase, PlayState.storyMeta.difficulty);
 					
 					FlxG.sound.music.stop();
 					

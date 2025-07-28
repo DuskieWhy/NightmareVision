@@ -12,9 +12,6 @@ import funkin.data.*;
 
 class StrumNote extends FlxSprite
 {
-	public static var handler:NoteSkinHelper;
-	public static var keys:Int = 4;
-	
 	public var intThing:Int = 0;
 	
 	public var vec3Cache:Vector3 = new Vector3(); // for vector3 operations in modchart code
@@ -87,33 +84,33 @@ class StrumNote extends FlxSprite
 		var lastAnim:String = null;
 		if (animation.curAnim != null) lastAnim = animation.curAnim.name;
 		var br:String = texture;
-		if (handler.data.isPixel)
+		if (NoteSkinHelper.instance.data.isPixel)
 		{
-			if ((ClientPrefs.noteSkin == 'Quants' || ClientPrefs.noteSkin == "QuantStep")) isQuant = handler.data.isQuants;
+			if ((ClientPrefs.noteSkin == 'Quants' || ClientPrefs.noteSkin == "QuantStep")) isQuant = NoteSkinHelper.instance.data.isQuants;
 			loadGraphic(Paths.image(br));
-			width = width / handler.data.pixelSize[0];
-			height = height / handler.data.pixelSize[1];
+			width = width / NoteSkinHelper.instance.data.pixelSize[0];
+			height = height / NoteSkinHelper.instance.data.pixelSize[1];
 			loadGraphic(Paths.image(br), true, Math.floor(width), Math.floor(height));
 			
 			antialiasing = false;
-			setGraphicSize(Std.int(width * handler.data.scale));
+			setGraphicSize(Std.int(width * NoteSkinHelper.instance.data.scale));
 			loadPixelAnimations();
 		}
 		else
 		{
-			if ((ClientPrefs.noteSkin == 'Quants' || ClientPrefs.noteSkin == "QuantStep")) isQuant = handler.data.isQuants;
+			if ((ClientPrefs.noteSkin == 'Quants' || ClientPrefs.noteSkin == "QuantStep")) isQuant = NoteSkinHelper.instance.data.isQuants;
 			frames = Paths.getSparrowAtlas(br);
 			
 			antialiasing = ClientPrefs.globalAntialiasing;
-			setGraphicSize(Std.int(width * handler.data.scale));
+			setGraphicSize(Std.int(width * NoteSkinHelper.instance.data.scale));
 			
 			loadAnimations();
 		}
 		defScale.copyFrom(scale);
 		updateHitbox();
 		
-		antialiasing = handler.data.antialiasing;
-		if (handler.data.antialiasing) antialiasing = ClientPrefs.globalAntialiasing;
+		antialiasing = NoteSkinHelper.instance.data.antialiasing;
+		if (NoteSkinHelper.instance.data.antialiasing) antialiasing = ClientPrefs.globalAntialiasing;
 		
 		if (lastAnim != null)
 		{
@@ -123,25 +120,20 @@ class StrumNote extends FlxSprite
 	
 	function loadAnimations()
 	{
-		// what?
-		// for(note in 0...keys){ animation.addByPrefix(handler.data.noteAnimations[note][0].anim, handler.data.receptorAnimations[noteData][0].anim ); }
-		for (i in 0...handler.data.receptorAnimations[noteData].length)
+		for (i in 0...NoteSkinHelper.instance.data.receptorAnimations[noteData].length)
 		{
-			if (handler != null)
-			{
-				var anim = handler.data.receptorAnimations[noteData][i];
-				
-				animation.addByPrefix(anim.anim, anim.xmlName, 24, anim.looping);
-				addOffset(anim.anim, anim.offsets[0], anim.offsets[1]);
-			}
+			var anim = NoteSkinHelper.instance.data.receptorAnimations[noteData][i];
+			
+			animation.addByPrefix(anim.anim, anim.xmlName, 24, anim.looping);
+			addOffset(anim.anim, anim.offsets[0], anim.offsets[1]);
 		}
 	}
 	
 	function loadPixelAnimations()
 	{
-		for (note in 0...keys)
+		for (note in 0...NoteSkinHelper.keys)
 		{
-			animation.add(handler.data.noteAnimations[note][0].anim, [note + 4]);
+			animation.add(NoteSkinHelper.instance.data.noteAnimations[note][0].anim, [note + 4]);
 		}
 		
 		animation.add('static', [noteData]);
@@ -173,7 +165,7 @@ class StrumNote extends FlxSprite
 		super.set_alpha(targetAlpha * alphaMult);
 		if (animation.curAnim != null)
 		{ // my bad i was upset
-			if (animation.curAnim.name == 'confirm' && !handler.data.isPixel) centerOrigin();
+			if (animation.curAnim.name == 'confirm' && !NoteSkinHelper.instance.data.isPixel) centerOrigin();
 		}
 		
 		super.update(elapsed);
@@ -211,7 +203,7 @@ class StrumNote extends FlxSprite
 				colorSwap.brightness = note.colorSwap.brightness;
 			}
 			
-			if (animation.curAnim.name == 'confirm' && !handler.data.isPixel)
+			if (animation.curAnim.name == 'confirm' && !NoteSkinHelper.instance.data.isPixel)
 			{
 				centerOrigin();
 			}

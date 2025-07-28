@@ -359,7 +359,7 @@ class ChartingState extends MusicBeatState
 		
 		if (PlayState.noteSkin != null)
 		{
-			NoteSkinHelper.setNoteHelpers(PlayState.noteSkin, _song.keys);
+			NoteSkinHelper.keys = _song.keys;
 		}
 		
 		#if DISCORD_ALLOWED
@@ -3344,12 +3344,15 @@ class ChartingState extends MusicBeatState
 			}
 		}
 		
-		if (skin != null) NoteSkinHelper.setNoteHelpers(skin, _song.keys);
+		if (skin != null)
+		{
+			NoteSkinHelper.keys = _song.keys;
+			NoteSkinHelper.instance = skin;
+		}
 		
 		if (_song.notes[curSec].changeBPM && _song.notes[curSec].bpm > 0)
 		{
 			Conductor.bpm = _song.notes[curSec].bpm;
-			// trace('BPM of this section:');
 		}
 		else
 		{

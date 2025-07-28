@@ -1,5 +1,6 @@
 package funkin.data;
 
+import haxe.io.Path;
 import haxe.Json;
 
 import flixel.math.FlxPoint;
@@ -58,8 +59,57 @@ typedef NoteSkinData =
 	?splashesEnabled:Bool
 }
 
-class NoteSkinHelper
+// should be rewritten ngl
+class NoteSkinHelper implements IFlxDestroyable
 {
+	public static var keys:Int = DEFAULT_KEYS;
+	
+	// to do do this instead
+	public static var instance:Null<NoteSkinHelper> = null;
+	
+	public static function init():Void
+	{
+		if (instance == null) instance = new NoteSkinHelper(Paths.getPath('noteskins/default.json', TEXT));
+	}
+	
+	public var data(default, null):NoteSkinData;
+	
+	public function new(path:String)
+	{
+		try
+		{
+			data = parseRaw(FunkinAssets.getContent(path).trim());
+		}
+		catch (e)
+		{
+			data = {};
+			trace(e.message);
+		}
+		resolveData(data);
+	}
+	
+	public function destroy()
+	{
+		data = null;
+	}
+	
+	public function loadFromPath(path:String, keyCount:Int = -1)
+	{
+		try
+		{
+			data = parseRaw(FunkinAssets.getContent(path).trim());
+		}
+		catch (e)
+		{
+			data = {};
+			trace(e.message);
+		}
+		if (keyCount != -1) keys = keyCount;
+		resolveData(data);
+	}
+	
+	public static final DEFAULT_KEYS:Int = 4;
+	
 	static final defaultTexture:String = 'NOTE_assets';
 	static final defaultSplashTexture:String = 'noteSplashes';
 	
@@ -305,25 +355,6 @@ class NoteSkinHelper
 	
 	static final defaultSingAnimations:Array<String> = ['singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
 	
-	public var data:NoteSkinData;
-	
-	public function new(path:String)
-	{
-		var rawJson = null;
-		
-		try
-		{
-			rawJson = FunkinAssets.getContent(path).trim();
-			data = parseJSON(rawJson);
-		}
-		catch (e:Dynamic)
-		{
-			data = {};
-			trace(e);
-		}
-		resolveData(data);
-	}
-	
 	public static function resolveData(data:NoteSkinData)
 	{
 		data.globalSkin ??= defaultTexture;
@@ -352,37 +383,20 @@ class NoteSkinHelper
 		data.splashesEnabled ??= true;
 	}
 	
-	public static function parseJSON(rawJson:String):NoteSkinData
+	inline function parseRaw(rawJson:String):NoteSkinData
 	{
-		var data:NoteSkinData = cast Json.parse(rawJson);
-		return data;
+		return cast Json.parse(rawJson);
 	}
 	
 	public static var arrowSkins:Array<String> = [];
-	
-	public static function setNoteHelpers(helper:NoteSkinHelper, keys:Int = 4)
-	{
-		// trace('set helpers!');
-		
-		Note.handler = helper;
-		StrumNote.handler = helper;
-		NoteSplash.handler = helper;
-		
-		Note.keys = keys;
-		StrumNote.keys = keys;
-		NoteSplash.keys = keys;
-	}
-	
-	// public static function getTempNoteAnim(handler:NoteSkinHelper)
+	// public static function setNoteHelpers(helper:NoteSkinHelper, keys:Int = 4)
 	// {
-	// 	var anim = fallbackNoteAnims.copy();
-	// 	var temp = 0;
-	// 	for (i in handler.data.noteAnimations)
-	// 		if (i[0].color.contains('temp')) temp += 1;
-	// 	trace(temp);
-	// 	for (i in 0...anim.length)
-	// 		anim[i].color = 'temp ' + temp;
-	// 	trace(anim);
-	// 	return anim;
+	// 	// trace('set helpers!');
+	// 	// Note.handler = helper;
+	// 	// StrumNote.handler = helper;
+	// 	// NoteSplash.handler = helper;
+	// 	// Note.keys = keys;
+	// 	// StrumNote.keys = keys;
+	// 	// NoteSplash.keys = keys;
 	// }
 }

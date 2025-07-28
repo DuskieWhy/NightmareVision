@@ -223,7 +223,7 @@ class PauseSubState extends MusicBeatSubstate
 					if (menuItems.length - 1 != curSelected && difficultyChoices.contains(daSelected))
 					{
 						PlayState.SONG = Chart.fromSong(PlayState.SONG.song, curSelected);
-						PlayState.storyDifficulty = curSelected;
+						PlayState.storyMeta.difficulty = curSelected;
 						FlxG.resetState();
 						FlxG.sound.music.volume = 0;
 						PlayState.changedDifficulty = true;

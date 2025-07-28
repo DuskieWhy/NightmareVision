@@ -8,9 +8,6 @@ import funkin.states.*;
 
 class NoteSplash extends FlxSprite
 {
-	public static var handler:NoteSkinHelper;
-	public static var keys:Int = 4;
-	
 	public var colorSwap:HSLColorSwap = null;
 	
 	private var idleAnim:String;
@@ -80,9 +77,9 @@ class NoteSplash extends FlxSprite
 		switch (skin)
 		{
 			default:
-				for (i in 0...keys)
+				for (i in 0...NoteSkinHelper.keys)
 				{
-					animation.addByPrefix(handler.data.noteSplashAnimations[i].anim, handler.data.noteSplashAnimations[i].xmlName, 24, false);
+					animation.addByPrefix(NoteSkinHelper.instance.data.noteSplashAnimations[i].anim, NoteSkinHelper.instance.data.noteSplashAnimations[i].xmlName, 24, false);
 				}
 		}
 		

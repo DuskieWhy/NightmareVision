@@ -338,7 +338,7 @@ class FreeplayState extends MusicBeatState
 					// todo write a func to ahndel this
 					PlayState.SONG = Chart.fromSong(songs[curSelected].songName, curDifficulty);
 					PlayState.isStoryMode = false;
-					PlayState.storyDifficulty = curDifficulty;
+					PlayState.storyMeta.difficulty = curDifficulty;
 				}
 				catch (e)
 				{
@@ -405,7 +405,7 @@ class FreeplayState extends MusicBeatState
 		intendedRating = Highscore.getRating(songs[curSelected].songName, curDifficulty);
 		#end
 		
-		PlayState.storyDifficulty = curDifficulty;
+		PlayState.storyMeta.difficulty = curDifficulty;
 		diffText.text = '< ' + Difficulty.getCurDifficulty() + ' >';
 		positionHighscore();
 	}
@@ -457,7 +457,7 @@ class FreeplayState extends MusicBeatState
 			}
 			
 			Mods.currentModDirectory = songs[curSelected].folder;
-			PlayState.storyWeek = songs[curSelected].week;
+			PlayState.storyMeta.curWeek = songs[curSelected].week;
 			
 			Difficulty.reset();
 			

@@ -113,7 +113,8 @@ class NoteSkinEditor extends MusicBeatState
 		if (oh != null) handler = oh;
 		else handler = helperLoading(n);
 		
-		NoteSkinHelper.setNoteHelpers(handler, handler.data.noteAnimations.length);
+		NoteSkinHelper.keys = handler.data.noteAnimations.length;
+		NoteSkinHelper.instance = handler;
 		
 		name = n;
 		keys = handler.data.noteAnimations.length;
