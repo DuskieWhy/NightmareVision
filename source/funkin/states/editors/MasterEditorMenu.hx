@@ -109,7 +109,7 @@ class MasterEditorMenu extends MusicBeatState
 			switch (options[curSelected])
 			{
 				case 'Character Editor':
-					FlxG.switchState(() -> new CharacterEditorState(CharacterBuilder.DEFAULT_CHARACTER));
+					FlxG.switchState(() -> new CharacterEditorState(CharacterBuilder.DEFAULT_CHARACTER, false));
 				case 'Week Editor':
 					FlxG.switchState(() -> new WeekEditorState());
 				case 'Menu Character Editor':

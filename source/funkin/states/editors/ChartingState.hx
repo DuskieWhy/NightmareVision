@@ -809,8 +809,7 @@ class ChartingState extends MusicBeatState
 				for (file in FileSystem.readDirectory(directory))
 				{
 					var path = haxe.io.Path.join([directory, file]);
-					if (file.endsWith('.hx') || file.endsWith('.hxs') || file.endsWith('.hscript')) trace('NOT ADDING $file, contains an ending not supported.');
-					else
+					if (file.endsWith('.json'))
 					{
 						var stageToCheck:String = file.endsWith('.json') ? file.substr(0, file.length - 5) : file;
 						if (!tempMap.exists(stageToCheck))
@@ -1860,28 +1859,28 @@ class ChartingState extends MusicBeatState
 		vocals.autoDestroy = false;
 		opponentVocals.autoDestroy = false;
 		
-		try
+		final playerVocalsSnd:Null<Sound> = Paths.voices(currentSongName, 'player', false) ?? Paths.voices(currentSongName, null, false);
+		
+		if (playerVocalsSnd != null)
 		{
-			var playerVocals = Paths.voices(currentSongName, 'player', false);
-			trace('plauerVoc' + playerVocals);
-			vocals.loadEmbedded(playerVocals == null ? Paths.voices(currentSongName) : playerVocals);
+			vocals.loadEmbedded(playerVocalsSnd);
 		}
-		catch (e)
+		else
 		{
-			trace('fuck. ' + e);
+			trace('failed to load vocals for current song');
 		}
+		
 		FlxG.sound.list.add(vocals);
 		
 		try
 		{
-			var oppVocals = Paths.voices(currentSongName, 'opp', false);
+			final oppVocals:Null<Sound> = Paths.voices(currentSongName, 'opp', false);
 			if (oppVocals != null)
 			{
 				opponentVocals.loadEmbedded(oppVocals);
 				FlxG.sound.list.add(opponentVocals);
 			}
 		}
-		catch (e) {}
 		
 		generateSong();
 		FlxG.sound.music.pause();
