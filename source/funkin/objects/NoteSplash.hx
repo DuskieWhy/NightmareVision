@@ -6,55 +6,59 @@ import funkin.game.shaders.*;
 import funkin.data.*;
 import funkin.states.*;
 
+@:nullSafety
 class NoteSplash extends FlxSprite
 {
-	public var colorSwap:HSLColorSwap = null;
+	/**
+	 * Shader applied to the notesplash to support custom colours
+	 */
+	public final colorSwap:HSLColorSwap;
 	
-	private var idleAnim:String;
-	private var textureLoaded:String = null;
-	
+	/**
+	 * The notedata of the splash
+	 */
 	public var data:Int = 0;
 	
-	public function new(x:Float = 0, y:Float = 0, ?note:Int = 0)
+	// internal thing to optimize loading frames
+	@:noCompletion var _textureLoaded:Null<String> = null;
+	
+	public function new(x:Float = 0, y:Float = 0, noteData:Int = 0)
 	{
 		super(x, y);
-		
-		var skin:String = getPlayStateSplash('noteSplashes');
-		
-		loadAnims(skin);
 		
 		colorSwap = new HSLColorSwap();
 		shader = colorSwap.shader;
 		
-		setupNoteSplash(x, y, note);
+		loadAnims(getPlayStateSplash('noteSplashes'));
+		
+		setupNoteSplash(x, y, noteData);
+		
 		antialiasing = ClientPrefs.globalAntialiasing;
 	}
 	
-	public function setupNoteSplash(x:Float, y:Float, note:Int = 0, texture:String = null, hueColor:Float = 0, satColor:Float = 0, brtColor:Float = 0, ?field:PlayField)
+	public function setupNoteSplash(x:Float = 0, y:Float = 0, note:Int = 0, ?texture:String, hueColor:Float = 0, satColor:Float = 0, brtColor:Float = 0, ?field:PlayField)
 	{
-		// scale.set(1, 1);
-		if (field != null) setPosition(x - field.members[note].swagWidth * 0.95, y - field.members[note].swagWidth * 0.95);
-		else setPosition(x - Note.swagWidth * 0.95, y - Note.swagWidth);
+		final swagWidth = field?.members[note].swagWidth ?? Note.swagWidth;
+		setPosition(x - swagWidth * 0.95, y - swagWidth);
 		
-		if (texture == null)
-		{
-			texture = getPlayStateSplash('noteSplashes');
-		}
+		texture ??= getPlayStateSplash('noteSplashes');
 		
-		if (textureLoaded != texture)
+		if (_textureLoaded != texture)
 		{
 			loadAnims(texture);
 		}
+		
 		if (field != null)
 		{
 			scale.x *= field.scale;
 			scale.y *= field.scale;
 		}
+		
 		data = note;
+		
 		switch (texture)
 		{
 			default:
-				// alpha = 0.6;
 				alpha = 1;
 				antialiasing = true;
 				colorSwap.hue = hueColor;
@@ -62,7 +66,6 @@ class NoteSplash extends FlxSprite
 				colorSwap.lightness = brtColor;
 				animation.play('note' + note, true);
 				offset.set(-20, -20);
-				// animation.curAnim.frameRate = 24 + FlxG.random.int(-2, 2);
 		}
 	}
 	
@@ -77,16 +80,21 @@ class NoteSplash extends FlxSprite
 		switch (skin)
 		{
 			default:
-				for (i in 0...NoteSkinHelper.keys)
+				final data = NoteSkinHelper.instance?.data.noteSplashAnimations ?? NoteSkinHelper.DEFAULT_NOTESPLASH_ANIMATIONS;
+				
+				for (noteData in 0...NoteSkinHelper.keys)
 				{
-					animation.addByPrefix(NoteSkinHelper.instance.data.noteSplashAnimations[i].anim, NoteSkinHelper.instance.data.noteSplashAnimations[i].xmlName, 24, false);
+					if (data[noteData] == null || data[noteData].anim == null || data[noteData].xmlName == null) continue;
+					
+					@:nullSafety(Off)
+					animation.addByPrefix(data[noteData].anim, data[noteData].xmlName, 24, false);
 				}
 		}
 		
-		textureLoaded = skin;
+		_textureLoaded = skin;
 	}
 	
-	function getPlayStateSplash(?fallback:String = ''):String
+	function getPlayStateSplash(fallback:String):String
 	{
 		if (PlayState.SONG != null)
 		{

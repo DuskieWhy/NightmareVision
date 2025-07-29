@@ -890,6 +890,8 @@ class PlayState extends MusicBeatState
 		
 		if (ClientPrefs.noteSkin.contains('Quant') && noteSkin.data.hasQuants) noteskinLoading('QUANT$skin');
 		
+		NoteSkinHelper.instance?.destroy();
+		NoteSkinHelper.instance = noteSkin;
 		NoteSkinHelper.keys = SONG.keys;
 		
 		arrowSkin = noteSkin.data.globalSkin;
@@ -1825,7 +1827,6 @@ class PlayState extends MusicBeatState
 				field.forEachAlive(function(strum:StrumNote) {
 					strum.x = x;
 					strum.postAddedToGroup();
-					if (field.offsetReceptors) field.doReceptorOffset(strum);
 				});
 			}
 		}

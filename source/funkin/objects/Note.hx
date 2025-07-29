@@ -163,7 +163,7 @@ class Note extends FlxSprite
 	{
 		if (playField != field)
 		{
-			if (playField != null && playField.notes.contains(this)) playField.remNote(this);
+			if (playField != null && playField.notes.contains(this)) playField.removeNote(this);
 			
 			if (field != null && !field.notes.contains(this)) field.addNote(this);
 		}
@@ -433,13 +433,6 @@ class Note extends FlxSprite
 				offsetX += lastNoteOffsetXForPixelAutoAdjusting;
 				lastNoteOffsetXForPixelAutoAdjusting = (width - 7) * (NoteSkinHelper.instance.data.scale / 2);
 				offsetX -= lastNoteOffsetXForPixelAutoAdjusting;
-				
-				/*if(animName != null && !animName.endsWith('end'))
-					{
-						lastScaleY /= lastNoteScaleToo;
-						lastNoteScaleToo = (6 / height);
-						lastScaleY *= lastNoteScaleToo;
-				}*/
 			}
 		}
 		else
@@ -555,7 +548,7 @@ class Note extends FlxSprite
 	
 	override public function destroy()
 	{
-		if (playField != null) playField.remNote(this);
+		if (playField != null) playField.removeNote(this);
 		prevNote = null;
 		vec3Cache = null;
 		defScale.put();

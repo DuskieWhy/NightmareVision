@@ -32,7 +32,7 @@ class Alphabet extends FlxSpriteGroup
 	
 	// custom shit
 	// amp, backslash, question mark, apostrophy, comma, angry faic, period
-	var lastSprite:AlphaCharacter;
+	var lastSprite:Null<AlphaCharacter> = null;
 	var xPosResetted:Bool = false;
 	
 	var splitWords:Array<String> = [];

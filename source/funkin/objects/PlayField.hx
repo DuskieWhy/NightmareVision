@@ -1,5 +1,6 @@
 package funkin.objects;
 
+import flixel.group.FlxContainer.FlxTypedContainer;
 import flixel.util.FlxSignal.FlxTypedSignal;
 import flixel.math.FlxMath;
 import flixel.tweens.FlxEase;
@@ -13,7 +14,7 @@ typedef NoteSignal = FlxTypedSignal<(Note, PlayField) -> Void>;
 // playfields should get a rework
 // i feel more actual note handling should happen in here
 
-class PlayField extends FlxTypedGroup<StrumNote>
+class PlayField extends FlxTypedContainer<StrumNote>
 {
 	public var owner:Character;
 	public var noteHitCallback:NoteSignal = new NoteSignal();
@@ -26,8 +27,8 @@ class PlayField extends FlxTypedGroup<StrumNote>
 	
 	public var notes:Array<Note> = [];
 	public var keyCount(default, set):Int = 0;
-	@:isVar
-	public var swagWidth(get, null):Float;
+	
+	public var swagWidth(get, never):Float;
 	
 	public function get_swagWidth()
 	{
@@ -56,10 +57,9 @@ class PlayField extends FlxTypedGroup<StrumNote>
 	{
 		for (strum in members)
 		{
-			var anim:String = '';
-			if (strum.animation.curAnim != null) anim = strum.animation.curAnim.name;
+			var anim:String = strum.animation.curAnim?.name ?? '';
 			strum.playAnim("static", true);
-			strum.setGraphicSize(Std.int(strum.frameWidth * 0.7 * value));
+			strum.setGraphicSize(strum.frameWidth * 0.7 * value);
 			strum.updateHitbox();
 			strum.playAnim(anim, true);
 		}
@@ -98,14 +98,16 @@ class PlayField extends FlxTypedGroup<StrumNote>
 	{
 		super();
 		if (playerControls == null) playerControls = isPlayer;
-		autoPlayed = cpu;
-		owner = who;
+		
+		this.autoPlayed = cpu;
+		
+		this.owner = who;
 		this.isPlayer = isPlayer;
 		this.playerControls = playerControls;
 		this.player = player;
 		
-		baseX = x;
-		baseY = y;
+		this.baseX = x;
+		this.baseY = y;
 		this.keyCount = keyCount;
 	}
 	
@@ -119,7 +121,7 @@ class PlayField extends FlxTypedGroup<StrumNote>
 		}
 	}
 	
-	public function generateReceptors(?x:Float)
+	public function generateReceptors()
 	{
 		clearReceptors();
 		for (data in 0...keyCount)
@@ -131,22 +133,6 @@ class PlayField extends FlxTypedGroup<StrumNote>
 			babyArrow.alphaMult = alpha;
 			add(babyArrow);
 			babyArrow.postAddedToGroup();
-			if (offsetReceptors) doReceptorOffset(babyArrow);
-		}
-	}
-	
-	public function doReceptorOffset(babyArrow:StrumNote)
-	{
-		if (offsetReceptors)
-		{
-			if (babyArrow.noteData > 1)
-			{
-				babyArrow.x += swagWidth * 3;
-			}
-			else
-			{
-				babyArrow.x -= swagWidth * 3;
-			}
 		}
 	}
 	
@@ -181,7 +167,7 @@ class PlayField extends FlxTypedGroup<StrumNote>
 	
 	public function getHoldNotes(dir:Int):Array<Note> return getNotes(dir, (note:Note) -> note.isSustainNote);
 	
-	inline public function remNote(note:Note)
+	public inline function removeNote(note:Note)
 	{
 		notes.remove(note);
 		note.scale.set(note.baseScaleX, note.baseScaleY);
@@ -190,7 +176,7 @@ class PlayField extends FlxTypedGroup<StrumNote>
 		if (note.playField == this) note.playField = null;
 	}
 	
-	inline public function addNote(note:Note)
+	public inline function addNote(note:Note)
 	{
 		notes.push(note);
 		if (note.isSustainNote) note.scale.set(note.baseScaleX * scale, note.baseScaleY);
@@ -201,17 +187,10 @@ class PlayField extends FlxTypedGroup<StrumNote>
 		if (note.playField != this) note.playField = this;
 	}
 	
-	public function forEachNote(callback:Note->Void)
+	public function forEachAliveNote(func:Note->Void)
 	{
-		var i:Int = 0;
-		var note:Note = null;
-		
-		while (i < notes.length)
-		{
-			note = notes[i++];
-			
-			if (note != null && note.exists && note.alive) callback(note);
-		}
+		for (note in notes)
+			if (note != null && note.exists && note.alive) func(note);
 	}
 	
 	override function destroy()

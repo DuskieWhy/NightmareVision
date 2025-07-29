@@ -1,11 +1,6 @@
 package funkin.data;
 
-import haxe.io.Path;
 import haxe.Json;
-
-import flixel.math.FlxPoint;
-
-import funkin.objects.*;
 
 // havent implemented this
 typedef Animation =
@@ -108,12 +103,16 @@ class NoteSkinHelper implements IFlxDestroyable
 		resolveData(data);
 	}
 	
+	public static var arrowSkins:Array<String> = [];
+	
+	// constants
 	public static final DEFAULT_KEYS:Int = 4;
 	
-	static final defaultTexture:String = 'NOTE_assets';
-	static final defaultSplashTexture:String = 'noteSplashes';
+	static final DEFAULT_TEXTURE:String = 'NOTE_assets';
 	
-	static final defaultNoteAnimations:Array<Array<Animation>> = [
+	static final DEFAULT_SPLASH_TEXTURE:String = 'noteSplashes';
+	
+	static final DEFAULT_NOTE_ANIMATIONS:Array<Array<Animation>> = [
 		[
 			{
 				anim: "scroll",
@@ -195,7 +194,7 @@ class NoteSkinHelper implements IFlxDestroyable
 			}
 		]
 	];
-	static final defaultReceptorAnimations:Array<Array<Animation>> = [
+	static final DEFAULT_RECEPTOR_ANIMATIONS:Array<Array<Animation>> = [
 		[
 			{
 				anim: 'static',
@@ -277,7 +276,7 @@ class NoteSkinHelper implements IFlxDestroyable
 			}
 		]
 	];
-	static final defaultNoteSplashAnimations:Array<Animation> = [
+	public static final DEFAULT_NOTESPLASH_ANIMATIONS:Array<Animation> = [
 		{anim: "note0", xmlName: "note splash purple", offsets: [0, 0]},
 		{anim: "note1", xmlName: "note splash blue", offsets: [0, 0]},
 		{anim: "note2", xmlName: "note splash green", offsets: [0, 0]},
@@ -357,11 +356,11 @@ class NoteSkinHelper implements IFlxDestroyable
 	
 	public static function resolveData(data:NoteSkinData)
 	{
-		data.globalSkin ??= defaultTexture;
+		data.globalSkin ??= DEFAULT_TEXTURE;
 		data.playerSkin ??= data.globalSkin;
 		data.opponentSkin ??= data.globalSkin;
 		data.extraSkin ??= data.globalSkin;
-		data.noteSplashSkin ??= defaultSplashTexture;
+		data.noteSplashSkin ??= DEFAULT_SPLASH_TEXTURE;
 		data.hasQuants ??= false;
 		data.isQuants ??= false;
 		
@@ -370,13 +369,13 @@ class NoteSkinHelper implements IFlxDestroyable
 		data.antialiasing ??= true;
 		data.sustainSuffix ??= 'ENDS';
 		
-		data.noteAnimations ??= defaultNoteAnimations;
-		data.receptorAnimations ??= defaultReceptorAnimations;
-		data.noteSplashAnimations ??= defaultNoteSplashAnimations;
+		data.noteAnimations ??= DEFAULT_NOTE_ANIMATIONS;
+		data.receptorAnimations ??= DEFAULT_RECEPTOR_ANIMATIONS;
+		data.noteSplashAnimations ??= DEFAULT_NOTESPLASH_ANIMATIONS;
 		for (j in [data.noteAnimations, data.receptorAnimations])
 			for (i in j)
 				for (k in i)
-					if (k.looping == null) k.looping = false;
+					k.looping ??= false;
 					
 		data.singAnimations ??= defaultSingAnimations;
 		data.scale ??= 0.7;
@@ -387,16 +386,4 @@ class NoteSkinHelper implements IFlxDestroyable
 	{
 		return cast Json.parse(rawJson);
 	}
-	
-	public static var arrowSkins:Array<String> = [];
-	// public static function setNoteHelpers(helper:NoteSkinHelper, keys:Int = 4)
-	// {
-	// 	// trace('set helpers!');
-	// 	// Note.handler = helper;
-	// 	// StrumNote.handler = helper;
-	// 	// NoteSplash.handler = helper;
-	// 	// Note.keys = keys;
-	// 	// StrumNote.keys = keys;
-	// 	// NoteSplash.keys = keys;
-	// }
 }
