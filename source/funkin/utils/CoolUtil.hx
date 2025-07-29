@@ -14,6 +14,7 @@ import funkin.data.StageData;
 /**
 	General Utility class for more one off functions
 **/
+@:nullSafety(Strict)
 class CoolUtil
 {
 	/**
@@ -62,12 +63,12 @@ class CoolUtil
 		return p;
 	}
 	
-	inline public static function quantizeAlpha(f:Float, interval:Float)
+	public static inline function quantizeAlpha(f:Float, interval:Float)
 	{
 		return Std.int((f + interval / 2) / interval) * interval;
 	}
 	
-	inline public static function quantize(f:Float, interval:Float)
+	public static inline function quantize(f:Float, interval:Float)
 	{
 		return Std.int((f + interval / 2) / interval) * interval;
 	}
@@ -77,7 +78,7 @@ class CoolUtil
 	/**
 		capitalizes the first letter of a given `String`
 	**/
-	inline public static function capitalize(text:String):String return text.charAt(0).toUpperCase() + text.substr(1).toLowerCase();
+	public static inline function capitalize(text:String):String return text.charAt(0).toUpperCase() + text.substr(1).toLowerCase();
 	
 	/**
 		Helper Function to Fix Save Files for Flixel 5
@@ -131,38 +132,37 @@ class CoolUtil
 
 		should be used lightly as its very performance heavy
 	**/
-	public static function dominantColor(sprite:flixel.FlxSprite):Int
+	public static inline function dominantColor(sprite:Null<flixel.FlxSprite>):Int
 	{
+		if (sprite == null || sprite.pixels.image == null) return FlxColor.BLACK;
+		
 		var countByColor:Map<Int, Int> = [];
 		for (col in 0...sprite.frameWidth)
 		{
 			for (row in 0...sprite.frameHeight)
 			{
-				var colorOfThisPixel:Int = sprite.pixels.getPixel32(col, row);
-				if (colorOfThisPixel != 0)
+				var colorOfThisPixel:FlxColor = sprite.pixels.getPixel32(col, row);
+				if (colorOfThisPixel.alphaFloat > 0.05)
 				{
-					if (countByColor.exists(colorOfThisPixel))
-					{
-						countByColor[colorOfThisPixel] = countByColor[colorOfThisPixel] + 1;
-					}
-					else if (countByColor[colorOfThisPixel] != 13520687 - (2 * 13520687))
-					{
-						countByColor[colorOfThisPixel] = 1;
-					}
+					colorOfThisPixel = FlxColor.fromRGB(colorOfThisPixel.red, colorOfThisPixel.green, colorOfThisPixel.blue, 255);
+					var count:Int = countByColor.get(colorOfThisPixel) ?? 0;
+					countByColor.set(colorOfThisPixel, count + 1);
 				}
 			}
 		}
+		
 		var maxCount = 0;
-		var maxKey:Int = 0; // after the loop this will store the max color
-		countByColor[flixel.util.FlxColor.BLACK] = 0;
-		for (key in countByColor.keys())
+		var maxKey:Int = 0;
+		countByColor.set(FlxColor.BLACK, 0);
+		for (key => count in countByColor)
 		{
-			if (countByColor[key] >= maxCount)
+			if (count >= maxCount)
 			{
-				maxCount = countByColor[key];
+				maxCount = count;
 				maxKey = key;
 			}
 		}
+		
 		return maxKey;
 	}
 	

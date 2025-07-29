@@ -694,22 +694,22 @@ class ChartingState extends MusicBeatState
 			saveEvents();
 		});
 		
-		var stepperBPM:FlxUINumericStepper = new FlxUINumericStepper(10, 70, 1, 1, 1, 400, 3);
+		var stepperBPM:FlxUINumericStepper = new FlxUINumericStepper(10, 70, 1, 1, 1, 400, 3, 1, new extensions.FlxUIInputTextEx(0, 0, 25));
 		stepperBPM.value = Conductor.bpm;
 		stepperBPM.name = 'song_bpm';
 		blockPressWhileTypingOnStepper.push(stepperBPM);
 		
-		var stepperStrums:FlxUINumericStepper = new FlxUINumericStepper(stepperBPM.x + (stepperBPM.width * 2), 70, 1, 2, 1, 8);
+		var stepperStrums:FlxUINumericStepper = new FlxUINumericStepper(stepperBPM.x + (stepperBPM.width * 2), 70, 1, 2, 1, 8, 0, 1, new extensions.FlxUIInputTextEx(0, 0, 25));
 		stepperStrums.value = _song.lanes;
 		stepperStrums.name = 'song_strums';
 		blockPressWhileTypingOnStepper.push(stepperStrums);
 		
-		var stepperKeys:FlxUINumericStepper = new FlxUINumericStepper(stepperBPM.x + (stepperBPM.width * 2), 100, 1, 2, 4, 9);
+		var stepperKeys:FlxUINumericStepper = new FlxUINumericStepper(stepperBPM.x + (stepperBPM.width * 2), 100, 1, 2, 4, 9, 0, 1, new extensions.FlxUIInputTextEx(0, 0, 25));
 		stepperKeys.value = _song.keys;
 		stepperKeys.name = 'song_keys';
 		blockPressWhileTypingOnStepper.push(stepperKeys);
 		
-		var stepperSpeed:FlxUINumericStepper = new FlxUINumericStepper(10, stepperBPM.y + 35, 0.1, 1, 0.1, 10, 1);
+		var stepperSpeed:FlxUINumericStepper = new FlxUINumericStepper(10, stepperBPM.y + 35, 0.1, 1, 0.1, 10, 1, 1, new extensions.FlxUIInputTextEx(0, 0, 25));
 		stepperSpeed.value = _song.speed;
 		stepperSpeed.name = 'song_speed';
 		blockPressWhileTypingOnStepper.push(stepperSpeed);
@@ -1114,7 +1114,7 @@ class ChartingState extends MusicBeatState
 		check_altAnim = new FlxUICheckBox(check_gfSection.x + 120, check_gfSection.y, null, null, "Alt Animation", 100);
 		check_altAnim.checked = _song.notes[curSec].altAnim;
 		
-		stepperBeats = new FlxUINumericStepper(10, 100, 1, 4, 1, 6, 2);
+		stepperBeats = new FlxUINumericStepper(10, 100, 1, 4, 1, 6, 2, 1, new extensions.FlxUIInputTextEx(0, 0, 25));
 		stepperBeats.value = getSectionBeats();
 		stepperBeats.name = 'section_beats';
 		blockPressWhileTypingOnStepper.push(stepperBeats);
@@ -1124,7 +1124,7 @@ class ChartingState extends MusicBeatState
 		check_changeBPM.checked = _song.notes[curSec].changeBPM;
 		check_changeBPM.name = 'check_changeBPM';
 		
-		stepperSectionBPM = new FlxUINumericStepper(10, check_changeBPM.y + 20, 1, Conductor.bpm, 0, 999, 1);
+		stepperSectionBPM = new FlxUINumericStepper(10, check_changeBPM.y + 20, 1, Conductor.bpm, 0, 999, 1, 1, new extensions.FlxUIInputTextEx(0, 0, 25));
 		if (check_changeBPM.checked)
 		{
 			stepperSectionBPM.value = _song.notes[curSec].bpm;
@@ -1289,7 +1289,7 @@ class ChartingState extends MusicBeatState
 		copyLastButton.setGraphicSize(80, 30);
 		copyLastButton.updateHitbox();
 		
-		stepperCopy = new FlxUINumericStepper(copyLastButton.x + 100, copyLastButton.y, 1, 1, -999, 999, 0);
+		stepperCopy = new FlxUINumericStepper(copyLastButton.x + 100, copyLastButton.y, 1, 1, -999, 999, 0, 1, new extensions.FlxUIInputTextEx(0, 0, 25));
 		blockPressWhileTypingOnStepper.push(stepperCopy);
 		
 		var duetButton:FlxButton = new FlxButton(10, copyLastButton.y + 45, "Duet Notes", function() {
@@ -1377,7 +1377,7 @@ class ChartingState extends MusicBeatState
 		var tab_group_note = new FlxUI(null, UI_box);
 		tab_group_note.name = 'Note';
 		
-		stepperSusLength = new FlxUINumericStepper(10, 25, Conductor.stepCrotchet / 2, 0, 0, Conductor.stepCrotchet * 64);
+		stepperSusLength = new FlxUINumericStepper(10, 25, Conductor.stepCrotchet / 2, 0, 0, Conductor.stepCrotchet * 64, 0, 1, new extensions.FlxUIInputTextEx(0, 0, 25));
 		stepperSusLength.value = 0;
 		stepperSusLength.name = 'note_susLength';
 		blockPressWhileTypingOnStepper.push(stepperSusLength);
@@ -1785,8 +1785,8 @@ class ChartingState extends MusicBeatState
 		if (FlxG.save.data.chart_metronome == null) FlxG.save.data.chart_metronome = false;
 		metronome.checked = FlxG.save.data.chart_metronome;
 		
-		metronomeStepper = new FlxUINumericStepper(15, 55, 5, _song.bpm, 1, 1500, 1);
-		metronomeOffsetStepper = new FlxUINumericStepper(metronomeStepper.x + 100, metronomeStepper.y, 25, 0, 0, 1000, 1);
+		metronomeStepper = new FlxUINumericStepper(15, 55, 5, _song.bpm, 1, 1500, 1, 1, new extensions.FlxUIInputTextEx(0, 0, 25));
+		metronomeOffsetStepper = new FlxUINumericStepper(metronomeStepper.x + 100, metronomeStepper.y, 25, 0, 0, 1000, 1, 1, new extensions.FlxUIInputTextEx(0, 0, 25));
 		blockPressWhileTypingOnStepper.push(metronomeStepper);
 		blockPressWhileTypingOnStepper.push(metronomeOffsetStepper);
 		
@@ -1796,17 +1796,17 @@ class ChartingState extends MusicBeatState
 		if (FlxG.save.data.chart_noAutoScroll == null) FlxG.save.data.chart_noAutoScroll = false;
 		disableAutoScrolling.checked = FlxG.save.data.chart_noAutoScroll;
 		
-		instVolume = new FlxUINumericStepper(metronomeStepper.x, 270, 0.1, 1, 0, 1, 1);
+		instVolume = new FlxUINumericStepper(metronomeStepper.x, 270, 0.1, 1, 0, 1, 1, 1, new extensions.FlxUIInputTextEx(0, 0, 25));
 		instVolume.value = FlxG.sound.music.volume;
 		instVolume.name = 'inst_volume';
 		blockPressWhileTypingOnStepper.push(instVolume);
 		
-		voicesVolume = new FlxUINumericStepper(instVolume.x + 100, instVolume.y, 0.1, 1, 0, 1, 1);
+		voicesVolume = new FlxUINumericStepper(instVolume.x + 100, instVolume.y, 0.1, 1, 0, 1, 1, 1, new extensions.FlxUIInputTextEx(0, 0, 25));
 		voicesVolume.value = vocals.volume;
 		voicesVolume.name = 'voices_volume';
 		blockPressWhileTypingOnStepper.push(voicesVolume);
 		
-		opponentvoicesVolume = new FlxUINumericStepper(voicesVolume.x + 100, instVolume.y, 0.1, 1, 0, 1, 1);
+		opponentvoicesVolume = new FlxUINumericStepper(voicesVolume.x + 100, instVolume.y, 0.1, 1, 0, 1, 1, 1, new extensions.FlxUIInputTextEx(0, 0, 25));
 		opponentvoicesVolume.value = vocals.volume;
 		opponentvoicesVolume.name = 'opponent_voices_volume';
 		blockPressWhileTypingOnStepper.push(opponentvoicesVolume);

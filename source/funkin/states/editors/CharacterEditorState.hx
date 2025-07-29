@@ -411,13 +411,13 @@ class CharacterEditorState extends MusicBeatState
 		});
 		
 		var decideIconColor:FlxButton = new FlxButton(reloadImage.x, reloadImage.y + 30, "Get Icon Color", function() {
-			var coolColor = FlxColor.fromInt(CoolUtil.dominantColor(leHealthIcon));
-			healthColorStepperR.value = coolColor.red;
-			healthColorStepperG.value = coolColor.green;
-			healthColorStepperB.value = coolColor.blue;
-			getEvent(FlxUINumericStepper.CHANGE_EVENT, healthColorStepperR, null);
-			getEvent(FlxUINumericStepper.CHANGE_EVENT, healthColorStepperG, null);
-			getEvent(FlxUINumericStepper.CHANGE_EVENT, healthColorStepperB, null);
+			final coolColor = FlxColor.fromInt(CoolUtil.dominantColor(leHealthIcon));
+			
+			curChar.healthColorArray[0] = coolColor.red;
+			curChar.healthColorArray[1] = coolColor.green;
+			curChar.healthColorArray[2] = coolColor.blue;
+			
+			resetHealthBarColor();
 		});
 		
 		healthIconInputText = new extensions.FlxUIInputTextEx(15, imageInputText.y + 35, 75, leHealthIcon.getCharacter(), 8);

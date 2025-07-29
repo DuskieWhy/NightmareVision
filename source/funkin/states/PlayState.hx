@@ -1,5 +1,6 @@
 package funkin.states;
 
+import haxe.Timer;
 import haxe.ds.Vector;
 
 import openfl.events.KeyboardEvent;
@@ -3576,152 +3577,149 @@ class PlayState extends MusicBeatState
 	{
 		scripts.call("goodNoteHitPre", [note]);
 		
-		if (!note.wasGoodHit)
+		if (note.wasGoodHit || field.autoPlayed && (note.ignoreNote || note.hitCausesMiss)) return;
+		
+		if (ClientPrefs.hitsoundVolume > 0 && !note.hitsoundDisabled)
 		{
-			if (field.autoPlayed && (note.ignoreNote || note.hitCausesMiss)) return;
-			
-			if (ClientPrefs.hitsoundVolume > 0 && !note.hitsoundDisabled)
+			FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.hitsoundVolume);
+		}
+		
+		if (field.autoPlayed)
+		{
+			var time:Float = 0.15;
+			if (note.isSustainNote && !note.animation.curAnim.name.endsWith('end${note.noteData}'))
 			{
-				FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.hitsoundVolume);
+				time += 0.15;
+			}
+			if (field.playAnims) strumPlayAnim(field, Std.int(Math.abs(note.noteData)) % SONG.keys, time, note);
+		}
+		else
+		{
+			field.forEach(function(spr:StrumNote) {
+				if (Math.abs(note.noteData) == spr.ID)
+				{
+					spr.playAnim('confirm', true, note);
+				}
+			});
+		}
+		
+		if (note.hitCausesMiss)
+		{
+			field.noteMissCallback.dispatch(note, field);
+			if (!note.noteSplashDisabled && !note.isSustainNote && field.playerControls)
+			{
+				spawnNoteSplashOnNote(note);
 			}
 			
-			if (field.autoPlayed)
+			if (!note.noMissAnimation)
 			{
-				var time:Float = 0.15;
-				if (note.isSustainNote && !note.animation.curAnim.name.endsWith('end${note.noteData}'))
+				switch (note.noteType)
 				{
-					time += 0.15;
-				}
-				if (field.playAnims) strumPlayAnim(field, Std.int(Math.abs(note.noteData)) % SONG.keys, time, note);
-			}
-			else
-			{
-				field.forEach(function(spr:StrumNote) {
-					if (Math.abs(note.noteData) == spr.ID)
-					{
-						spr.playAnim('confirm', true, note);
-					}
-				});
-			}
-			
-			if (note.hitCausesMiss)
-			{
-				field.noteMissCallback.dispatch(note, field);
-				if (!note.noteSplashDisabled && !note.isSustainNote && field.playerControls)
-				{
-					spawnNoteSplashOnNote(note);
-				}
-				
-				if (!note.noMissAnimation)
-				{
-					switch (note.noteType)
-					{
-						case 'Hurt Note': // Hurt note
-							if (field.owner.animation.exists('hurt'))
-							{
-								field.owner.playAnim('hurt', true);
-								field.owner.specialAnim = true;
-							}
-					}
-				}
-				
-				note.wasGoodHit = true;
-				if (!note.isSustainNote)
-				{
-					disposeNote(note);
-				}
-				return;
-			}
-			
-			if (!note.isSustainNote)
-			{
-				combo += 1;
-				if (combo > 9999) combo = 9999;
-				popUpScore(note);
-			}
-			health += note.hitHealth * healthGain;
-			
-			if (!note.noAnimation)
-			{
-				var daAlt = '';
-				if (note.noteType == 'Alt Animation') daAlt = '-alt';
-				
-				var animToPlay:String = noteSkin.data.singAnimations[Std.int(Math.abs(note.noteData))];
-				
-				if (note.gfNote)
-				{
-					if (gf != null)
-					{
-						gf.playAnim(animToPlay + daAlt, true);
-						gf.holdTimer = 0;
-					}
-				}
-				else if (field.owner.animTimer <= 0 && !field.owner.voicelining)
-				{
-					field.owner.holdTimer = 0;
-					
-					final charToSing = note.owner ?? field.owner;
-					
-					final curRow = noteRows[note.gfNote ? 2 : note.mustPress ? 0 : 1][note.row];
-					
-					if (ClientPrefs.jumpGhosts && field.owner.ghostsEnabled && !note.isSustainNote && curRow != null && curRow.length > 1 && note.noteType != "Ghost Note")
-					{
-						// potentially have jump anims?
-						final chord = curRow;
-						final animNote = chord[0];
-						final realAnim = noteSkin.data.singAnimations[Std.int(Math.abs(animNote.noteData))] + daAlt;
-						
-						if (field.owner.mostRecentRow != note.row)
+					case 'Hurt Note': // Hurt note
+						if (field.owner.animation.exists('hurt'))
 						{
-							charToSing.playAnim(realAnim, true);
-						}
-						
-						if (note != animNote && chord.indexOf(note) != animNote.noteData)
-						{
-							charToSing.playGhostAnim(chord.indexOf(note), animToPlay, true);
-						}
-						
-						field.owner.mostRecentRow = note.row;
-					}
-					else
-					{
-						if (note.noteType != "Ghost Note") charToSing.playAnim(animToPlay + daAlt, true);
-						else charToSing.playGhostAnim(note.noteData, animToPlay, true);
-					}
-				}
-				
-				if (note.noteType == 'Hey!')
-				{
-					if (field.owner.animTimer <= 0 && !field.owner.voicelining)
-					{
-						if (field.owner.animOffsets.exists('hey'))
-						{
-							field.owner.playAnim('hey', true);
+							field.owner.playAnim('hurt', true);
 							field.owner.specialAnim = true;
-							field.owner.heyTimer = 0.6;
 						}
-					}
-					
-					if (gf != null && gf.animOffsets.exists('cheer'))
-					{
-						gf.playAnim('cheer', true);
-						gf.specialAnim = true;
-						gf.heyTimer = 0.6;
-					}
 				}
 			}
 			
 			note.wasGoodHit = true;
-			vocals.playerVolume = 1;
-			
-			scripts.call('goodNoteHit', [note], false, [note.noteType]);
-			
-			callNoteTypeScript(note.noteType, 'goodNoteHit', [note]);
-			
 			if (!note.isSustainNote)
 			{
 				disposeNote(note);
 			}
+			return;
+		}
+		
+		if (!note.isSustainNote)
+		{
+			combo += 1;
+			if (combo > 9999) combo = 9999;
+			popUpScore(note);
+		}
+		health += note.hitHealth * healthGain;
+		
+		if (!note.noAnimation)
+		{
+			var daAlt = '';
+			if (note.noteType == 'Alt Animation') daAlt = '-alt';
+			
+			var animToPlay:String = noteSkin.data.singAnimations[Std.int(Math.abs(note.noteData))];
+			
+			if (note.gfNote)
+			{
+				if (gf != null)
+				{
+					gf.playAnim(animToPlay + daAlt, true);
+					gf.holdTimer = 0;
+				}
+			}
+			else if (field.owner.animTimer <= 0 && !field.owner.voicelining)
+			{
+				field.owner.holdTimer = 0;
+				
+				final charToSing = note.owner ?? field.owner;
+				
+				final curRow = noteRows[note.gfNote ? 2 : note.mustPress ? 0 : 1][note.row];
+				
+				if (ClientPrefs.jumpGhosts && field.owner.ghostsEnabled && !note.isSustainNote && curRow != null && curRow.length > 1 && note.noteType != "Ghost Note")
+				{
+					// potentially have jump anims?
+					final chord = curRow;
+					final animNote = chord[0];
+					final realAnim = noteSkin.data.singAnimations[Std.int(Math.abs(animNote.noteData))] + daAlt;
+					
+					if (field.owner.mostRecentRow != note.row)
+					{
+						charToSing.playAnim(realAnim, true);
+					}
+					
+					if (note != animNote && chord.indexOf(note) != animNote.noteData)
+					{
+						charToSing.playGhostAnim(chord.indexOf(note), animToPlay, true);
+					}
+					
+					field.owner.mostRecentRow = note.row;
+				}
+				else
+				{
+					if (note.noteType != "Ghost Note") charToSing.playAnim(animToPlay + daAlt, true);
+					else charToSing.playGhostAnim(note.noteData, animToPlay, true);
+				}
+			}
+			
+			if (note.noteType == 'Hey!')
+			{
+				if (field.owner.animTimer <= 0 && !field.owner.voicelining)
+				{
+					if (field.owner.animOffsets.exists('hey'))
+					{
+						field.owner.playAnim('hey', true);
+						field.owner.specialAnim = true;
+						field.owner.heyTimer = 0.6;
+					}
+				}
+				
+				if (gf != null && gf.animOffsets.exists('cheer'))
+				{
+					gf.playAnim('cheer', true);
+					gf.specialAnim = true;
+					gf.heyTimer = 0.6;
+				}
+			}
+		}
+		
+		note.wasGoodHit = true;
+		vocals.playerVolume = 1;
+		
+		scripts.call('goodNoteHit', [note], false, [note.noteType]);
+		
+		callNoteTypeScript(note.noteType, 'goodNoteHit', [note]);
+		
+		if (!note.isSustainNote)
+		{
+			disposeNote(note);
 		}
 	}
 	
