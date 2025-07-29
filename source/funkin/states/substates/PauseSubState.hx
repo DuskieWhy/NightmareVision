@@ -162,6 +162,8 @@ class PauseSubState extends MusicBeatSubstate
 		}
 		
 		super.create();
+
+		scriptGroup.call('onCreatePost', []);
 	}
 	
 	var holdTime:Float = 0;
