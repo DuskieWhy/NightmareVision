@@ -16,8 +16,6 @@ class Main extends Sprite
 	public static final NMV_VERSION:String = '1.0';
 	public static final FUNKIN_VERSION:String = '0.2.7';
 	
-	public static var instance:Null<Main> = null;
-	
 	public static final startMeta =
 		{
 			width: 1280,
@@ -35,7 +33,7 @@ class Main extends Sprite
 	
 	public static function main():Void
 	{
-		Lib.current.addChild(instance = new Main());
+		Lib.current.addChild(new Main());
 	}
 	
 	public function new()

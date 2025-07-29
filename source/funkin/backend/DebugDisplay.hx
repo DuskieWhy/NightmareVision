@@ -19,13 +19,12 @@ class DebugDisplay extends Sprite
 	
 	public static function init()
 	{
-		if (Main.instance == null || instance == null) return;
+		if (FlxG.game?.parent == null || instance != null) return;
 		
-		instance = new DebugDisplay();
 		instance = new DebugDisplay(10, 3, 0xFFFFFF);
 		instance.visible = ClientPrefs.showFPS;
 		
-		Main.instance.addChild(instance);
+		FlxG.game.parent.addChild(instance);
 	}
 	
 	/**
