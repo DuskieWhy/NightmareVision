@@ -2,8 +2,6 @@ package funkin.data;
 
 import haxe.Json;
 
-import funkin.data.Song;
-
 typedef StageFile =
 {
 	var defaultZoom:Float;

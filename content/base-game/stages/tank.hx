@@ -147,8 +147,6 @@ function onCreatePost()
 			return 0;
 		});
 		
-		TankmenBG.animationNotes = chart.notes;
-		
 		gf.playAnim("shoot1");
 		
 		if (!ClientPrefs.lowQuality)

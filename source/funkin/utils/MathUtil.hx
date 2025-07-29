@@ -1,5 +1,6 @@
 package funkin.utils;
 
+@:nullSafety(Strict)
 class MathUtil
 {
 	/**

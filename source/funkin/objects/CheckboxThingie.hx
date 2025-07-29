@@ -2,10 +2,12 @@ package funkin.objects;
 
 import flixel.FlxSprite;
 
+@:nullSafety
 class CheckboxThingie extends FlxSprite
 {
 	public var sprTracker:Null<FlxSprite> = null;
-	public var daValue(default, set):Bool;
+	public var daValue(default, set):Bool = false;
+	
 	public var copyAlpha:Bool = true;
 	public var offsetX:Float = 0;
 	public var offsetY:Float = 0;

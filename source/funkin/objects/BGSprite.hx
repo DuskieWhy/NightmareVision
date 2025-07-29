@@ -2,6 +2,7 @@ package funkin.objects;
 
 import flixel.FlxSprite;
 
+@:nullSafety
 class BGSprite extends FlxSprite
 {
 	var idleAnim:Null<String> = null;

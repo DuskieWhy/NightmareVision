@@ -13,6 +13,7 @@ import funkin.Mods;
  * 
  * There is no need to open this beyond the first time
  */
+@:nullSafety(Strict)
 class Init extends FlxState
 {
 	/**

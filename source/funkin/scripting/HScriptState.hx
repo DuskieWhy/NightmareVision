@@ -2,15 +2,15 @@ package funkin.scripting;
 
 import funkin.backend.FallbackState;
 
+@:nullSafety
 class HScriptState extends MusicBeatState
 {
-	public function new(name:String)
+	public function new(scriptName:String)
 	{
 		super();
 		
-		setUpScript(name, false);
-		script.parent = this;
-		trace('in scripted state $name');
+		setUpScript(scriptName, false);
+		scriptGroup.parent = this;
 	}
 	
 	override function create()
@@ -20,8 +20,9 @@ class HScriptState extends MusicBeatState
 		if (!scripted)
 		{
 			FlxG.switchState(() -> new FallbackState('failed to load ($scriptName)!\nDoes it exist?', () -> FlxG.switchState(MainMenuState.new)));
+			return;
 		}
 		
-		script.call('onCreate', []);
+		scriptGroup.call('onCreate', []);
 	}
 }

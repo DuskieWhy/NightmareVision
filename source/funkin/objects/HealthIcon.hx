@@ -2,6 +2,7 @@ package funkin.objects;
 
 import flixel.FlxSprite;
 
+@:nullSafety
 class HealthIcon extends FlxSprite
 {
 	public var sprTracker:Null<FlxSprite> = null;

@@ -153,7 +153,7 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 			var daFunc = get(func);
 			if (Reflect.isFunction(daFunc))
 			{
-				var returnVal:Any = null;
+				var returnVal:Dynamic = null;
 				var defaultShit:Map<String, Dynamic> = [];
 				
 				if (theObject != null) extraVars.set("this", theObject);
@@ -166,7 +166,7 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 				
 				try
 				{
-					returnVal = Reflect.callMethod(theObject, daFunc, parameters);
+					returnVal = Reflect.callMethod(theObject, daFunc, parameters ?? []);
 				}
 				catch (e:haxe.Exception)
 				{
@@ -303,7 +303,6 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		#end
 		set("BackgroundDancer", funkin.objects.stageobjects.BackgroundDancer);
 		set("BackgroundGirls", funkin.objects.stageobjects.BackgroundGirls);
-		set("TankmenBG", funkin.objects.stageobjects.TankmenBG);
 		set("HealthIcon", HealthIcon);
 		set("Character", funkin.objects.character.Character);
 		set("NoteSplash", NoteSplash);

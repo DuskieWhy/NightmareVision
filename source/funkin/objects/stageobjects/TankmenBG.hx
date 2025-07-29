@@ -5,8 +5,6 @@ import flixel.FlxSprite;
 
 class TankmenBG extends FlxSprite
 {
-	public static var animationNotes:Array<Dynamic> = [];
-	
 	private var tankSpeed:Float;
 	private var endingOffset:Float;
 	private var goingRight:Bool;

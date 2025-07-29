@@ -1,5 +1,7 @@
 package funkin.data;
 
+import funkin.backend.DebugDisplay;
+
 import flixel.input.keyboard.FlxKey;
 import flixel.util.FlxSave;
 
@@ -209,7 +211,7 @@ class ClientPrefs
 		
 		if (FlxG.save.data.mute != null) FlxG.sound.muted = FlxG.save.data.mute;
 		
-		if (Main.fpsVar != null) Main.fpsVar.visible = showFPS;
+		if (DebugDisplay.instance != null) DebugDisplay.instance.visible = showFPS;
 		
 		if (FlxG.save.data.framerate == null) framerate = Std.int(FlxMath.bound(FlxG.stage.application.window.displayMode.refreshRate, 60, 240));
 		

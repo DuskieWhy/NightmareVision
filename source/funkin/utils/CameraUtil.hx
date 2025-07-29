@@ -4,9 +4,9 @@ import flixel.system.FlxAssets.FlxShader;
 
 import openfl.filters.ShaderFilter;
 
-// by me data thx
 @:access(flixel.FlxCamera)
 @:access(flixel.system.frontEnds.CameraFrontEnd)
+@:nullSafety
 class CameraUtil
 {
 	/**

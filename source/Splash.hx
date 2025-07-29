@@ -9,7 +9,6 @@ import funkin.video.FunkinVideoSprite;
 using StringTools;
 
 @:access(flixel.FlxGame)
-@:access(Main)
 class Splash extends FlxState
 {
 	var _cachedAutoPause:Bool;
@@ -21,7 +20,7 @@ class Splash extends FlxState
 	{
 		_cachedAutoPause = FlxG.autoPause;
 		FlxG.autoPause = false;
-
+		
 		FlxTimer.wait(1, () -> {
 			#if VIDEOS_ALLOWED
 			var video = new FunkinVideoSprite();
@@ -96,7 +95,7 @@ class Splash extends FlxState
 			});
 		});
 	}
-
+	
 	function finish()
 	{
 		if (spriteEvents != null)

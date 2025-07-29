@@ -2,10 +2,6 @@ package funkin.backend;
 
 import funkin.data.Song.SwagSong;
 
-/**
- * ...
- * @author
- */
 typedef BPMChangeEvent =
 {
 	var stepTime:Int;

@@ -35,13 +35,13 @@ class MusicBeatState extends FlxUIState
 	// script related vars
 	public var scripted:Bool = false;
 	public var scriptName:String = 'Placeholder';
-	public var script:HScriptGroup = new HScriptGroup();
+	public var scriptGroup:HScriptGroup = new HScriptGroup();
 	
-	inline function isHardcodedState() return (script != null && !script.call('customMenu') == true) || (script == null);
+	inline function isHardcodedState() return (scriptGroup != null && !scriptGroup.call('customMenu') == true) || (scriptGroup == null);
 	
 	public function setUpScript(?scriptName:String, callOnCreate:Bool = true):Bool
 	{
-		script.parent = this;
+		scriptGroup.parent = this;
 		
 		if (scriptName == null)
 		{
@@ -64,11 +64,11 @@ class MusicBeatState extends FlxUIState
 			
 			Logger.log('script [$scriptName] initialized');
 			
-			script.addScript(newScript);
+			scriptGroup.addScript(newScript);
 			scripted = true;
 		}
 		
-		if (callOnCreate) script.call('onCreate', []);
+		if (callOnCreate) scriptGroup.call('onCreate', []);
 		
 		return scripted;
 	}
@@ -118,7 +118,7 @@ class MusicBeatState extends FlxUIState
 			}
 		}
 		
-		script.call('onUpdate', [elapsed]);
+		scriptGroup.call('onUpdate', [elapsed]);
 		
 		super.update(elapsed);
 	}
@@ -179,17 +179,17 @@ class MusicBeatState extends FlxUIState
 	public function stepHit():Void
 	{
 		if (curStep % 4 == 0) beatHit();
-		script.call('onStepHit', []);
+		scriptGroup.call('onStepHit', []);
 	}
 	
 	public function beatHit():Void
 	{
-		script.call('onBeatHit', []);
+		scriptGroup.call('onBeatHit', []);
 	}
 	
 	public function sectionHit():Void
 	{
-		script.call('onSectionHit', []);
+		scriptGroup.call('onSectionHit', []);
 	}
 	
 	function getBeatsOnSection():Float
@@ -202,7 +202,7 @@ class MusicBeatState extends FlxUIState
 	{
 		FlxG.sound?.music?.fadeTween?.cancel();
 		FreeplayState.vocals?.fadeTween?.cancel();
-		
+		@:nullSafety(Off)
 		if (FlxG.sound != null && FlxG.sound.music != null) FlxG.sound.music.onComplete = null;
 		
 		if (!FlxTransitionableState.skipNextTransIn)
@@ -218,9 +218,9 @@ class MusicBeatState extends FlxUIState
 	
 	override function destroy()
 	{
-		script.call('onDestroy');
+		scriptGroup.call('onDestroy');
 		
-		script = FlxDestroyUtil.destroy(script);
+		scriptGroup = FlxDestroyUtil.destroy(scriptGroup);
 		
 		super.destroy();
 	}

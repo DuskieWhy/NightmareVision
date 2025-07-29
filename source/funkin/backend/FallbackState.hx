@@ -16,7 +16,6 @@ class FallbackState extends MusicBeatState
 	
 	override function create()
 	{
-		@:nullSafety(Off)
 		var bg = new FlxSprite().loadGraphic(Paths.image('uhoh'));
 		bg.setGraphicSize(FlxG.width, FlxG.height);
 		bg.updateHitbox();

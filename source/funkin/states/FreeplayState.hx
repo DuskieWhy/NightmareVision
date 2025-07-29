@@ -92,8 +92,8 @@ class FreeplayState extends MusicBeatState
 		
 		setUpScript();
 		
-		script.set('SongMetadata', SongMetadata);
-		script.set('WeekData', WeekData);
+		scriptGroup.set('SongMetadata', SongMetadata);
+		scriptGroup.set('WeekData', WeekData);
 		
 		if (isHardcodedState())
 		{
@@ -188,7 +188,7 @@ class FreeplayState extends MusicBeatState
 			changeDiff();
 		}
 		super.create();
-		script.call('onCreatePost', []);
+		scriptGroup.call('onCreatePost', []);
 	}
 	
 	override function closeSubState()

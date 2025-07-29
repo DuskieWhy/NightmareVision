@@ -2,20 +2,21 @@ package;
 
 import openfl.Lib;
 import openfl.display.Sprite;
-import openfl.events.Event;
 import openfl.display.StageScaleMode;
 
 import flixel.FlxG;
 import flixel.FlxGame;
-import flixel.FlxState;
 
 import funkin.backend.DebugDisplay;
 
+@:nullSafety(Strict)
 class Main extends Sprite
 {
 	public static final PSYCH_VERSION:String = '0.5.2h';
 	public static final NMV_VERSION:String = '1.0';
 	public static final FUNKIN_VERSION:String = '0.2.7';
+	
+	public static var instance:Null<Main> = null;
 	
 	public static final startMeta =
 		{
@@ -27,9 +28,6 @@ class Main extends Sprite
 			initialState: funkin.states.TitleState
 		};
 		
-	// You can pretty much ignore everything from here on - your code should go in your states.
-	public static var fpsVar:DebugDisplay;
-	
 	static function __init__()
 	{
 		funkin.utils.MacroUtil.haxeVersionEnforcement();
@@ -37,7 +35,7 @@ class Main extends Sprite
 	
 	public static function main():Void
 	{
-		Lib.current.addChild(new Main());
+		Lib.current.addChild(instance = new Main());
 	}
 	
 	public function new()
@@ -73,14 +71,10 @@ class Main extends Sprite
 		addChild(game);
 		
 		#if !mobile
-		fpsVar = new DebugDisplay(10, 3, 0xFFFFFF);
-		addChild(fpsVar);
+		DebugDisplay.init();
+		
 		Lib.current.stage.align = "tl";
 		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
-		if (fpsVar != null)
-		{
-			fpsVar.visible = ClientPrefs.showFPS;
-		}
 		#end
 		
 		#if html5
@@ -99,11 +93,6 @@ class Main extends Sprite
 	static function onResize(w:Int, h:Int)
 	{
 		final scale:Float = Math.max(1, Math.min(w / FlxG.width, h / FlxG.height));
-		if (fpsVar != null)
-		{
-			// remove for now idfk some people have the textfield scaling fucky ???
-			// fpsVar.scaleX = fpsVar.scaleY = scale;
-		}
 		
 		if (FlxG.cameras != null)
 		{
@@ -119,8 +108,10 @@ class Main extends Sprite
 		}
 	}
 	
+	@:nullSafety(Off)
 	public static function resetSpriteCache(sprite:Sprite):Void
 	{
+		if (sprite == null) return;
 		@:privateAccess
 		{
 			sprite.__cacheBitmap = null;

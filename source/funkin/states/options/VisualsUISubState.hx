@@ -1,5 +1,7 @@
 package funkin.states.options;
 
+import funkin.backend.DebugDisplay;
+
 import flixel.FlxG;
 
 class VisualsUISubState extends BaseOptionsMenu
@@ -77,7 +79,7 @@ class VisualsUISubState extends BaseOptionsMenu
 	#if !mobile
 	function onChangeFPSCounter()
 	{
-		if (Main.fpsVar != null) Main.fpsVar.visible = ClientPrefs.showFPS;
+		if (DebugDisplay.instance != null) DebugDisplay.instance.visible = ClientPrefs.showFPS;
 	}
 	#end
 }

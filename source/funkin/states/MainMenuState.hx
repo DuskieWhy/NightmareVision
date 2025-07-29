@@ -134,7 +134,7 @@ class MainMenuState extends MusicBeatState
 		}
 		super.create();
 		
-		script.call('onCreatePost', []);
+		scriptGroup.call('onCreatePost', []);
 	}
 	
 	#if ACHIEVEMENTS_ALLOWED
@@ -174,11 +174,11 @@ class MainMenuState extends MusicBeatState
 					FlxG.switchState(TitleState.new);
 				}
 				
-				script.set('curSelected', curSelected);
+				scriptGroup.set('curSelected', curSelected);
 				
 				if (controls.ACCEPT)
 				{
-					script.call('onSelect', [optionShit[curSelected]]);
+					scriptGroup.call('onSelect', [optionShit[curSelected]]);
 					
 					selectedSomethin = true;
 					FlxG.sound.play(Paths.sound('confirmMenu'));
@@ -202,7 +202,8 @@ class MainMenuState extends MusicBeatState
 						}
 					});
 					
-					script.set('onSelectPost', [optionShit[curSelected]]);
+					// ?
+					scriptGroup.set('onSelectPost', [optionShit[curSelected]]);
 					
 					menuItems.forEachAlive(s -> if (s != selectedObj) FlxTween.tween(s, {alpha: 0}, 0.4, {ease: FlxEase.quadOut}));
 				}
@@ -219,7 +220,7 @@ class MainMenuState extends MusicBeatState
 		
 		super.update(elapsed);
 		
-		script.call('onUpdatePost', [elapsed]);
+		scriptGroup.call('onUpdatePost', [elapsed]);
 	}
 	
 	function changeItem(huh:Int = 0)
@@ -237,6 +238,6 @@ class MainMenuState extends MusicBeatState
 		final add:Float = menuItems.length > 4 ? menuItems.length * 8 : 0;
 		camFollow.y = newObj.getGraphicMidpoint().y - add;
 		
-		script.call('onItemChange', [curSelected]);
+		scriptGroup.call('onItemChange', [curSelected]);
 	}
 }

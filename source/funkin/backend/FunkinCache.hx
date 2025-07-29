@@ -3,7 +3,6 @@ package funkin.backend;
 import openfl.Assets;
 
 import flixel.graphics.FlxGraphic;
-import flixel.system.FlxAssets;
 
 import openfl.display.BitmapData;
 import openfl.media.Sound;

@@ -57,7 +57,7 @@ class OptionsState extends MusicBeatState
 		#end
 		
 		setUpScript('OptionsState');
-		script.set('this', this);
+		scriptGroup.set('this', this);
 		
 		if (isHardcodedState())
 		{
@@ -94,7 +94,7 @@ class OptionsState extends MusicBeatState
 	
 	override function closeSubState()
 	{
-		script.call('onCloseSubState', []);
+		scriptGroup.call('onCloseSubState', []);
 		super.closeSubState();
 		ClientPrefs.flush();
 	}

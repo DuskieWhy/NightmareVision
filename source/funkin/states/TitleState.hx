@@ -133,7 +133,7 @@ class TitleState extends MusicBeatState
 		Conductor.bpm = titleJSON?.bpm ?? 100;
 		persistentUpdate = true;
 		
-		if (isHardcodedState() && script.call('onStartIntro') != Globals.Function_Stop)
+		if (isHardcodedState() && scriptGroup.call('onStartIntro') != Globals.Function_Stop)
 		{
 			var bg:FlxSprite = new FlxSprite();
 			
@@ -202,7 +202,7 @@ class TitleState extends MusicBeatState
 			add(titleText);
 		}
 		
-		if (isHardcodedState() && script.call('createText') != Globals.Function_Stop)
+		if (isHardcodedState() && scriptGroup.call('createText') != Globals.Function_Stop)
 		{
 			credGroup = new FlxGroup();
 			add(credGroup);
@@ -229,7 +229,7 @@ class TitleState extends MusicBeatState
 		
 		if (initialized) skipIntro();
 		else initialized = true;
-		script.call('onCreatePost', []);
+		scriptGroup.call('onCreatePost', []);
 	}
 	
 	public function getIntroTextShit():Array<Array<String>>
@@ -304,7 +304,7 @@ class TitleState extends MusicBeatState
 					titleText.alpha = FlxMath.lerp(titleTextAlphas[0], titleTextAlphas[1], timer);
 				}
 				
-				if (pressedEnter && script.call('onEnter', []) != Globals.Function_Stop)
+				if (pressedEnter && scriptGroup.call('onEnter', []) != Globals.Function_Stop)
 				{
 					titleText.color = FlxColor.WHITE;
 					titleText.alpha = 1;
@@ -390,10 +390,10 @@ class TitleState extends MusicBeatState
 		if (!closedState)
 		{
 			sickBeats++;
-			script.set('curBeat', sickBeats);
+			scriptGroup.set('curBeat', sickBeats);
 		}
 		
-		if (!isHardcodedState() || script.call('onBeatHit', []) == Globals.Function_Stop) return;
+		if (!isHardcodedState() || scriptGroup.call('onBeatHit', []) == Globals.Function_Stop) return;
 		
 		// just in case
 		if (isHardcodedState())
@@ -468,7 +468,7 @@ class TitleState extends MusicBeatState
 	
 	public function skipIntro():Void
 	{
-		if (script.call('onSkipIntro', []) != Globals.Function_Stop && !skippedIntro)
+		if (scriptGroup.call('onSkipIntro', []) != Globals.Function_Stop && !skippedIntro)
 		{
 			remove(ngSpr);
 			remove(credGroup);

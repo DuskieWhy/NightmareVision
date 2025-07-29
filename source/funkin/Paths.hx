@@ -161,11 +161,20 @@ class Paths
 		return FunkinAssets.getSound(songKey);
 	}
 	
-	public static inline function image(key:String, ?library:String, allowGPU:Bool = true):Null<FlxGraphic>
+	public static inline function image(key:String, ?library:String, allowGPU:Bool = true):FlxGraphic
 	{
 		final key = getPath('images/$key.png', IMAGE, library, true);
 		
-		return FunkinAssets.getGraphic(key, true, allowGPU);
+		final cacheGraphic = FunkinAssets.getGraphic(key, true, allowGPU);
+		
+		if (cacheGraphic == null)
+		{
+			return FlxG.bitmap.add('flixel/images/logo/default.png'); // to be compliant with nullsafety
+		}
+		else
+		{
+			return cacheGraphic;
+		}
 	}
 	
 	static public function getTextFromFile(key:String, ignoreMods:Bool = false):String
@@ -196,11 +205,7 @@ class Paths
 		}
 		#end
 		
-		if (FunkinAssets.exists(getPath(key, type)))
-		{
-			return true;
-		}
-		return false;
+		return FunkinAssets.exists(getPath(key, type));
 	}
 	
 	public static inline function getMultiAtlas(keys:Array<String>, ?library:String, ?allowGPU:Bool = true):FlxAtlasFrames
