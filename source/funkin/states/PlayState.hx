@@ -3415,9 +3415,8 @@ class PlayState extends MusicBeatState
 			}
 		}
 		
-		scripts.call("noteMiss", [daNote], false, [daNote.noteType]);
-		
-		callNoteTypeScript(daNote.noteType, 'noteMiss', [daNote]);
+		final noteScriptRet = callNoteTypeScript(daNote.noteType, 'noteMiss', [daNote]);
+		if (noteScriptRet != Globals.Function_Stop) scripts.call('noteMiss', [daNote], false, [daNote.noteType]);
 	}
 	
 	function noteMissPress(direction:Int = 1, anim:Bool = true):Void // You pressed a key when there was no notes to press for this key
@@ -3565,8 +3564,8 @@ class PlayState extends MusicBeatState
 		
 		final hscriptArgs = [note];
 		
-		scripts.call("opponentNoteHit", hscriptArgs, false, [note.noteType]);
-		callNoteTypeScript(note.noteType, 'opponentNoteHit', hscriptArgs);
+		final noteScriptRet = callNoteTypeScript(note.noteType, 'opponentNoteHit', hscriptArgs);
+		if (noteScriptRet != Globals.Function_Stop) scripts.call('opponentNoteHit', hscriptArgs, false, [note.noteType]);
 		
 		if (!note.isSustainNote)
 		{
@@ -3714,9 +3713,8 @@ class PlayState extends MusicBeatState
 		note.wasGoodHit = true;
 		vocals.playerVolume = 1;
 		
-		scripts.call('goodNoteHit', [note], false, [note.noteType]);
-		
-		callNoteTypeScript(note.noteType, 'goodNoteHit', [note]);
+		final noteScriptRet = callNoteTypeScript(note.noteType, 'goodNoteHit', [note]);
+		if (noteScriptRet != Globals.Function_Stop) scripts.call('goodNoteHit', [note], false, [note.noteType]);
 		
 		if (!note.isSustainNote)
 		{
@@ -3849,8 +3847,10 @@ class PlayState extends MusicBeatState
 			}
 			note.wasGoodHit = true;
 			vocals.playerVolume = 1;
-			scripts.call('extraNoteHit', [note], false, [note.noteType]);
-			callNoteTypeScript(note.noteType, 'extraNoteHit', [note]);
+			
+			final noteScriptRet = callNoteTypeScript(note.noteType, 'extraNoteHit', [note]);
+			if (noteScriptRet != Globals.Function_Stop) scripts.call('extraNoteHit', [note], false, [note.noteType]);
+			
 			if (!note.isSustainNote)
 			{
 				disposeNote(note);

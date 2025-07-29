@@ -6,6 +6,11 @@ import flixel.FlxBasic;
 import funkin.data.StageData;
 import funkin.scripts.FunkinHScript;
 
+/**
+ * Primary class holding all `FlxBasic`'s for the background of stage within `PlayState`
+ * 
+ * Besides whatever else is added, it contains the characters as well.
+ */
 @:nullSafety(Strict)
 class Stage extends FlxTypedContainer<FlxBasic>
 {
