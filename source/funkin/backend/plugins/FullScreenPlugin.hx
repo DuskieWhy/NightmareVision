@@ -5,6 +5,7 @@ import flixel.FlxBasic;
 /**
  * Adds the bind of f11 to fullscreen.
  */
+@:nullSafety
 class FullScreenPlugin extends FlxBasic
 {
 	static var instance:Null<FullScreenPlugin> = null;
