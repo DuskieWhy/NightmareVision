@@ -241,17 +241,12 @@ class Note extends FlxSprite
 					owner = PlayState.instance.gf;
 				case 'Hurt Note':
 					ignoreNote = mustPress;
-					reloadNote('HURT');
-					noteSplashTexture = 'HURTnoteSplashes';
-					if (isSustainNote)
-					{
-						missHealth = 0.1;
-					}
-					else
-					{
-						missHealth = 0.3;
-					}
+					missHealth = isSustainNote ? 0.1 : 0.3;
 					hitCausesMiss = true;
+					rgbShader.r = 0xFF101010;
+					rgbShader.g = 0xFFFF0000;
+					rgbShader.b = 0xFF990022;
+					
 				case 'No Animation':
 					noAnimation = true;
 					noMissAnimation = true;
