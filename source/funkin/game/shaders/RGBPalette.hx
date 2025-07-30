@@ -4,12 +4,18 @@ import flixel.system.FlxAssets.FlxShader;
 
 import funkin.objects.note.Note;
 
+// imma adjust some thigns here later
+
 class RGBPalette
 {
 	public var shader(default, null):RGBPaletteShader = new RGBPaletteShader();
 	public var r(default, set):FlxColor;
 	public var g(default, set):FlxColor;
 	public var b(default, set):FlxColor;
+	
+	public var alphaMult(default, set):Float;
+	public var flash(default, set):Float;
+	
 	public var mult(default, set):Float;
 	
 	public function copyValues(tempShader:RGBPalette)
@@ -23,6 +29,8 @@ class RGBPalette
 				shader.b.value[i] = tempShader.shader.b.value[i];
 			}
 			shader.mult.value[0] = tempShader.shader.mult.value[0];
+			shader.u_alpha.value[0] = tempShader.shader.u_alpha.value[0];
+			shader.u_flash.value[0] = tempShader.shader.u_flash.value[0];
 		}
 		else shader.mult.value[0] = 0.0;
 	}
@@ -55,12 +63,28 @@ class RGBPalette
 		return mult;
 	}
 	
+	private function set_flash(value:Float):Float
+	{
+		flash = value;
+		shader.u_flash.value = [value];
+		return flash;
+	}
+	
+	private function set_alphaMult(value:Float):Float
+	{
+		alphaMult = value;
+		shader.u_alpha.value = [value];
+		return alphaMult;
+	}
+	
 	public function new()
 	{
 		r = 0xFFFF0000;
 		g = 0xFF00FF00;
 		b = 0xFF0000FF;
 		mult = 1.0;
+		flash = 0.0;
+		alphaMult = 1.0;
 	}
 }
 
@@ -70,11 +94,13 @@ class RGBShaderReference
 	public var r(default, set):FlxColor;
 	public var g(default, set):FlxColor;
 	public var b(default, set):FlxColor;
+	
 	public var mult(default, set):Float;
-	public var alpha(default, set):Float;
+	public var alphaMult(default, set):Float;
 	public var flash(default, set):Float;
-	public var brightness(default, set):Float;
+	
 	public var enabled(default, set):Bool = true;
+	
 	public var shader:FlxShader;
 	
 	public var parent:RGBPalette;
@@ -95,6 +121,8 @@ class RGBShaderReference
 			g = parent.g;
 			b = parent.b;
 			mult = parent.mult;
+			alphaMult = parent.alphaMult;
+			flash = parent.flash;
 		}
 	}
 	
@@ -122,6 +150,18 @@ class RGBShaderReference
 		return (mult = parent.mult = value);
 	}
 	
+	function set_alphaMult(value:Float):Float
+	{
+		if (allowNew && value != _original.alphaMult) cloneOriginal();
+		return (alphaMult = parent.alphaMult = value);
+	}
+	
+	function set_flash(value:Float):Float
+	{
+		if (allowNew && value != _original.flash) cloneOriginal();
+		return (flash = parent.flash = value);
+	}
+	
 	private function set_enabled(value:Bool)
 	{
 		_owner.shader = value ? parent.shader : null;
@@ -142,8 +182,11 @@ class RGBShaderReference
 			parent.g = _original.g;
 			parent.b = _original.b;
 			parent.mult = _original.mult;
+			
+			parent.alphaMult = _original.alphaMult;
+			parent.flash = _original.flash;
+			
 			_owner.shader = parent.shader;
-			// trace('created new shader');
 		}
 	}
 }
@@ -158,9 +201,14 @@ class RGBPaletteShader extends FlxShader
 		uniform vec3 b;
 		uniform float mult;
 
-		vec4 flixel_texture2DCustom(sampler2D bitmap, vec2 coord) {
+		uniform float u_alpha;
+		uniform float u_flash;
+
+		vec4 flixel_texture2DCustom(sampler2D bitmap, vec2 coord) 
+		{
 			vec4 color = flixel_texture2D(bitmap, coord);
-			if (!hasTransform || color.a == 0.0 || mult == 0.0) {
+			if (!hasTransform || color.a == 0.0 || mult == 0.0) 
+			{
 				return color;
 			}
 
@@ -170,7 +218,8 @@ class RGBPaletteShader extends FlxShader
 			
 			color = mix(color, newColor, mult);
 			
-			if(color.a > 0.0) {
+			if(color.a > 0.0) 
+			{
 				return vec4(color.rgb, color.a);
 			}
 			return vec4(0.0, 0.0, 0.0, 0.0);
@@ -178,9 +227,22 @@ class RGBPaletteShader extends FlxShader
 	@:glFragmentSource('
 		#pragma header
 
-		void main() {
-			gl_FragColor = flixel_texture2DCustom(bitmap, openfl_TextureCoordv);
-		}')
+		void main() 
+		{
+			vec4 texOutput = flixel_texture2DCustom(bitmap, openfl_TextureCoordv);
+
+			
+			if (u_flash != 0.0)
+			{
+				texOutput = mix(texOutput,vec4(1.0,1.0,1.0,1.0),u_flash) * texOutput.a;
+			}
+
+			texOutput *= u_alpha;
+
+			gl_FragColor = texOutput;
+		}
+			
+		')
 	public function new()
 	{
 		super();

@@ -59,9 +59,6 @@ class Note extends FlxSprite
 	public var noteDiff:Float = 1000;
 	public var quant:Int = 4;
 	
-	// i did nnot find these genuinely used?
-	// public var zIndex:Float = 0;
-	// public var desiredZIndex:Float = 0;
 	public var z:Float = 0;
 	public var garbage:Bool = false; // if this is true, the note will be removed in the next update cycle
 	public var alphaMod:Float = 1;
@@ -549,7 +546,7 @@ class Note extends FlxSprite
 			}
 		}
 		
-		rgbShader?.alpha = (alphaMod * alphaMod2) * (playField?.baseAlpha ?? 1.0);
+		if (rgbShader != null) rgbShader.alphaMult = (alphaMod * alphaMod2) * (playField?.baseAlpha ?? 1.0);
 		
 		var actualHitbox:Float = hitbox * earlyHitMult;
 		

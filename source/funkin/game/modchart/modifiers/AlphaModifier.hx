@@ -141,7 +141,7 @@ class AlphaModifier extends NoteModifier
 			alpha = alpha * (1 - getSubmodValue("dark", player)) * (1 - getSubmodValue('dark${receptor.noteData}', player));
 		}
 		// @:privateAccess
-		receptor.rgbShader.daAlpha = alpha;
+		receptor.rgbShader.alphaMult = alpha;
 	}
 	
 	override function getSubmods()
