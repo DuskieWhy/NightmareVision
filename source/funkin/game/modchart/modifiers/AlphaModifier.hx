@@ -6,7 +6,7 @@ import flixel.math.FlxMath;
 import flixel.FlxG;
 
 import funkin.states.*;
-import funkin.objects.*;
+import funkin.objects.note.*;
 import funkin.game.modchart.*;
 
 class AlphaModifier extends NoteModifier
@@ -118,7 +118,7 @@ class AlphaModifier extends NoteModifier
 		var speed = PlayState.instance.songSpeed * note.multSpeed;
 		var yPos:Float = modMgr.getVisPos(Conductor.songPosition, note.strumTime, speed) + 50;
 		
-		note.colorSwap.flash = 0;
+		note.rgbShader.flash = 0;
 		var alphaMod = (1 - getSubmodValue("alpha",
 			player)) * (1 - getSubmodValue('alpha${note.noteData}', player)) * (1 - getSubmodValue("noteAlpha", player)) * (1 - getSubmodValue('noteAlpha${note.noteData}', player));
 		var alpha = getVisibility(yPos, player, note);
@@ -126,7 +126,7 @@ class AlphaModifier extends NoteModifier
 		if (getSubmodValue("dontUseStealthGlow", player) == 0)
 		{
 			note.alphaMod = getAlpha(alpha);
-			note.colorSwap.flash = getGlow(alpha);
+			note.rgbShader.flash = getGlow(alpha);
 		}
 		else note.alphaMod = alpha;
 		
@@ -140,8 +140,8 @@ class AlphaModifier extends NoteModifier
 		{
 			alpha = alpha * (1 - getSubmodValue("dark", player)) * (1 - getSubmodValue('dark${receptor.noteData}', player));
 		}
-		@:privateAccess
-		receptor.colorSwap.daAlpha = alpha;
+		// @:privateAccess
+		receptor.rgbShader.daAlpha = alpha;
 	}
 	
 	override function getSubmods()

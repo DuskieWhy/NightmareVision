@@ -11,6 +11,7 @@ import funkin.game.modchart.modifiers.*;
 import funkin.game.modchart.events.*;
 import funkin.states.*;
 import funkin.objects.*;
+import funkin.objects.note.*;
 
 // Weird amalgamation of Schmovin' modifier system, Andromeda modifier system and my own new shit -neb
 // todo more safety this crashes too easily //still to do aha..

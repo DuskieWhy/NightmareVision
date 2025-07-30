@@ -23,6 +23,7 @@ import flixel.addons.ui.FlxUITabMenu;
 
 import funkin.data.*;
 import funkin.objects.*;
+import funkin.objects.note.*;
 import funkin.states.substates.Prompt;
 
 enum MODE
@@ -689,21 +690,16 @@ class NoteSkinEditor extends MusicBeatState
 	
 	function playSplashAnim(data:Int)
 	{
-		final isQuant:Bool = ClientPrefs.noteSkin.toLowerCase().contains('quant');
 		var strum = playFields.members[0].members[data];
 		
 		var skin:String = noteSplashSkin;
-		var quantsAllowed = handler.data.hasQuants;
-		
-		if (isQuant && quantsAllowed) skin = 'QUANT$skin';
-		// trace(skin);
 		
 		var hue:Float = ClientPrefs.arrowHSV[data % 4][0] / 360;
 		var sat:Float = ClientPrefs.arrowHSV[data % 4][1] / 100;
 		var brt:Float = ClientPrefs.arrowHSV[data % 4][2] / 100;
 		
 		var splash:NoteSplash = noteSplashes.recycle(NoteSplash);
-		splash.setupNoteSplash(strum.x + script_SPLASHOffsets[data].x, strum.y + script_SPLASHOffsets[data].y, data, handler.data.noteSplashSkin, hue, sat, brt);
+		splash.setupNoteSplash(strum.x + script_SPLASHOffsets[data].x, strum.y + script_SPLASHOffsets[data].y, data, handler.data.noteSplashSkin, 4);
 		noteSplashes.add(splash);
 	}
 	
@@ -872,12 +868,11 @@ class NoteSkinEditor extends MusicBeatState
 	var opponentInput:FlxUIInputText;
 	var extraInput:FlxUIInputText;
 	var splashesInput:FlxUIInputText;
-	var hasQuantsCheck:FlxUICheckBox;
-	var isQuantsCheck:FlxUICheckBox;
 	var keysStepper:FlxUINumericStepper;
 	var scaleStepper:FlxUINumericStepper;
 	var nameInput:FlxUIInputText;
 	var splashesCheck:FlxUICheckBox;
+	var inEngineColoringCheck:FlxUICheckBox;
 	var skinDropDown:FlxUIDropDownMenuEx;
 	
 	function addTexturesUI()
@@ -922,16 +917,10 @@ class NoteSkinEditor extends MusicBeatState
 		reloadImage.x = (150 - reloadImage.width) / 2;
 		reloadImage.y = 180;
 		
-		hasQuantsCheck = new FlxUICheckBox(180, 27.5, null, null, "HAS quants?", 50);
-		hasQuantsCheck.checked = handler.data.hasQuants;
-		hasQuantsCheck.callback = () -> {
-			handler.data.hasQuants = hasQuantsCheck.checked;
-		}
-		
-		isQuantsCheck = new FlxUICheckBox(180, 57.5, null, null, "IS quants?", 50);
-		isQuantsCheck.checked = handler.data.isQuants;
-		isQuantsCheck.callback = () -> {
-			handler.data.isQuants = isQuantsCheck.checked;
+		inEngineColoringCheck = new FlxUICheckBox(180, 27.5, null, null, "In-engine coloring?", 50);
+		inEngineColoringCheck.checked = handler.data.inGameColoring;
+		inEngineColoringCheck.callback = () -> {
+			handler.data.inGameColoring = inEngineColoringCheck.checked;
 		}
 		
 		var lanesStepper:FlxUINumericStepper = new FlxUINumericStepper(180, 127.5, 1, 1, 1, 3);
@@ -956,7 +945,7 @@ class NoteSkinEditor extends MusicBeatState
 			else killSplashes();
 		}
 		
-		skinDropDown = new FlxUIDropDownMenuEx(hasQuantsCheck.x + hasQuantsCheck.width + 10, 90, FlxUIDropDownMenu.makeStrIdLabelArray([''], true), (skin) -> {
+		skinDropDown = new FlxUIDropDownMenuEx(inEngineColoringCheck.x + inEngineColoringCheck.width + 10, 90, FlxUIDropDownMenu.makeStrIdLabelArray([''], true), (skin) -> {
 			setupHelper(skinList[Std.parseInt(skin)]);
 			
 			regenEverything();
@@ -966,7 +955,7 @@ class NoteSkinEditor extends MusicBeatState
 		reloadDropdown();
 		skinDropDown.selectedLabel = name;
 		
-		nameInput = new FlxUIInputText(hasQuantsCheck.x + hasQuantsCheck.width + 10, 30, 100, name, 8);
+		nameInput = new FlxUIInputText(inEngineColoringCheck.x + inEngineColoringCheck.width + 10, 30, 100, name, 8);
 		blockPressWhileTypingOn.push(nameInput);
 		
 		var saveSkin:FlxButton = new FlxButton(nameInput.x, nameInput.y + 30, "Save Skin", saveSkin);
@@ -986,8 +975,7 @@ class NoteSkinEditor extends MusicBeatState
 		tab_group.add(extraInput);
 		tab_group.add(splashesInput);
 		tab_group.add(reloadImage);
-		tab_group.add(hasQuantsCheck);
-		tab_group.add(isQuantsCheck);
+		tab_group.add(inEngineColoringCheck);
 		tab_group.add(lanesStepper);
 		tab_group.add(keysStepper);
 		tab_group.add(scaleStepper);
@@ -1415,8 +1403,7 @@ class NoteSkinEditor extends MusicBeatState
 			opponentInput.text = handler.data.opponentSkin;
 			extraInput.text = handler.data.extraSkin;
 			splashesInput.text = handler.data.noteSplashSkin;
-			hasQuantsCheck.checked = handler.data.hasQuants;
-			isQuantsCheck.checked = handler.data.isQuants;
+			inEngineColoringCheck.checked = handler.data.inGameColoring;
 			splashesCheck.checked = handler.data.splashesEnabled;
 			keysStepper.value = keys;
 			nameInput.text = name;
@@ -1477,8 +1464,6 @@ class NoteSkinEditor extends MusicBeatState
 				"opponentSkin": handler.data.opponentSkin,
 				"extraSkin": handler.data.extraSkin,
 				"noteSplashSkin": handler.data.noteSplashSkin,
-				"hasQuants": handler.data.hasQuants,
-				"isQuants": handler.data.isQuants,
 				
 				"isPixel": handler.data.isPixel,
 				"pixelSize": handler.data.pixelSize,
@@ -1493,7 +1478,8 @@ class NoteSkinEditor extends MusicBeatState
 				
 				"singAnimations": handler.data.singAnimations,
 				"scale": handler.data.scale,
-				"splashesEnabled": handler.data.splashesEnabled
+				"splashesEnabled": handler.data.splashesEnabled,
+				"inGameColoring": handler.data.inGameColoring
 			}
 			
 		var data:String = Json.stringify(json, "\t");

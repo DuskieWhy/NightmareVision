@@ -5,7 +5,7 @@ import math.Vector3;
 import flixel.FlxG;
 
 import funkin.states.*;
-import funkin.objects.*;
+import funkin.objects.note.*;
 import funkin.game.modchart.*;
 
 class ReceptorScrollModifier extends NoteModifier

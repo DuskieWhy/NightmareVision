@@ -46,6 +46,7 @@ import funkin.data.Song.SwagSong;
 import funkin.scripts.*;
 import funkin.states.*;
 import funkin.objects.*;
+import funkin.objects.note.*;
 import funkin.backend.MusicBeatSubstate;
 
 #if sys

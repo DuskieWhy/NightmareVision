@@ -6,7 +6,7 @@ import flixel.math.FlxPoint;
 
 import funkin.game.modchart.Modifier.ModifierOrder;
 import funkin.states.*;
-import funkin.objects.*;
+import funkin.objects.note.*;
 
 class ScaleModifier extends NoteModifier
 {

@@ -6,7 +6,7 @@ import flixel.FlxSprite;
 import flixel.math.FlxMath;
 import flixel.FlxG;
 
-import funkin.objects.*;
+import funkin.objects.note.*;
 import funkin.game.modchart.*;
 
 // NOTE: THIS SHOULDNT HAVE ITS PERCENTAGE MODIFIED

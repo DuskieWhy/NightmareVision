@@ -5,7 +5,7 @@ import math.Vector3;
 import flixel.FlxSprite;
 import flixel.FlxG;
 
-import funkin.objects.*;
+import funkin.objects.note.*;
 import funkin.game.modchart.*;
 
 class RotateModifier extends NoteModifier

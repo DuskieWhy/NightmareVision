@@ -1,4 +1,4 @@
-package funkin.objects;
+package funkin.objects.note;
 
 import math.Vector3;
 
@@ -6,7 +6,8 @@ import flixel.FlxSprite;
 import flixel.math.FlxPoint;
 
 import funkin.objects.*;
-import funkin.game.shaders.*;
+import funkin.game.shaders.RGBPalette;
+import funkin.game.shaders.RGBPalette.RGBShaderReference;
 import funkin.states.*;
 import funkin.data.*;
 
@@ -17,7 +18,6 @@ class StrumNote extends FlxSprite
 	public var vec3Cache:Vector3 = new Vector3(); // for vector3 operations in modchart code
 	public var defScale:FlxPoint = FlxPoint.get(); // for modcharts to keep the scaling
 	
-	public var colorSwap:ColorSwap;
 	public var resetAnim:Float = 0;
 	public var noteData:Int = 0;
 	public var direction:Float = 90;
@@ -59,12 +59,13 @@ class StrumNote extends FlxSprite
 		return value;
 	}
 	
+	public var rgbShader:RGBShaderReference;
+	public var useRGBShader:Bool = true;
+	
 	public function new(player:Int, x:Float, y:Float, leData:Int, ?parent:PlayField)
 	{
-		// handler = PlayState.noteSkin;
+		// rgbShader.enabled = false;
 		
-		colorSwap = new ColorSwap();
-		shader = colorSwap.shader;
 		noteData = leData;
 		this.noteData = leData;
 		this.parent = parent;
@@ -76,6 +77,33 @@ class StrumNote extends FlxSprite
 		texture = skin; // Load texture and anims
 		
 		scrollFactor.set();
+		
+		rgbShader = new RGBShaderReference(this, Note.initializeGlobalRGBShader(leData));
+		if (NoteSkinHelper.instance?.data?.inGameColoring ?? false) shader = rgbShader.shader;
+	}
+	
+	public function handleColors(anim:String, ?note:Note = null)
+	{
+		if (!NoteSkinHelper.instance?.data?.inGameColoring ?? false || rgbShader == null) return;
+		
+		var arr:Array<FlxColor> = ClientPrefs.arrowRGBdef[noteData];
+		if (ClientPrefs.noteSkin.contains('Quant'))
+		{
+			if (note != null) arr = ClientPrefs.arrowRGBquant[Note.quants.indexOf(note.quant)];
+			if (anim == 'pressed') arr = ClientPrefs.arrowRGBquant[0];
+		}
+		
+		if (noteData <= arr.length)
+		{
+			@:bypassAccessor
+			{
+				rgbShader.r = arr[0];
+				rgbShader.g = arr[1];
+				rgbShader.b = arr[2];
+			}
+		}
+		
+		rgbShader.enabled = anim == 'static' ? false : true;
 	}
 	
 	public function reloadNote()
@@ -84,9 +112,10 @@ class StrumNote extends FlxSprite
 		var lastAnim:String = null;
 		if (animation.curAnim != null) lastAnim = animation.curAnim.name;
 		var br:String = texture;
+		if (ClientPrefs.noteSkin.contains('Quant')) isQuant = NoteSkinHelper.instance.data.isQuants;
+		
 		if (NoteSkinHelper.instance.data.isPixel)
 		{
-			if ((ClientPrefs.noteSkin == 'Quants' || ClientPrefs.noteSkin == "QuantStep")) isQuant = NoteSkinHelper.instance.data.isQuants;
 			loadGraphic(Paths.image(br));
 			width = width / NoteSkinHelper.instance.data.pixelSize[0];
 			height = height / NoteSkinHelper.instance.data.pixelSize[1];
@@ -98,7 +127,6 @@ class StrumNote extends FlxSprite
 		}
 		else
 		{
-			if ((ClientPrefs.noteSkin == 'Quants' || ClientPrefs.noteSkin == "QuantStep")) isQuant = NoteSkinHelper.instance.data.isQuants;
 			frames = Paths.getSparrowAtlas(br);
 			
 			antialiasing = ClientPrefs.globalAntialiasing;
@@ -116,6 +144,8 @@ class StrumNote extends FlxSprite
 		{
 			playAnim(lastAnim, true);
 		}
+		
+		handleColors('');
 	}
 	
 	function loadAnimations()
@@ -181,33 +211,9 @@ class StrumNote extends FlxSprite
 		{
 			offset.set(offset.x + animOffsets.get(anim)[0], offset.y + animOffsets.get(anim)[1]);
 		}
+		if (animation.curAnim.name == 'confirm' && !NoteSkinHelper.instance.data.isPixel) centerOrigin();
 		
-		if (animation.curAnim == null || animation.curAnim.name == 'static')
-		{
-			colorSwap.hue = 0;
-			colorSwap.saturation = 0;
-			colorSwap.brightness = 0;
-		}
-		else
-		{
-			if (note == null)
-			{
-				colorSwap.hue = ClientPrefs.arrowHSV[noteData % 4][0] / 360;
-				colorSwap.saturation = ClientPrefs.arrowHSV[noteData % 4][1] / 100;
-				colorSwap.brightness = ClientPrefs.arrowHSV[noteData % 4][2] / 100;
-			}
-			else
-			{
-				colorSwap.hue = note.colorSwap.hue;
-				colorSwap.saturation = note.colorSwap.saturation;
-				colorSwap.brightness = note.colorSwap.brightness;
-			}
-			
-			if (animation.curAnim.name == 'confirm' && !NoteSkinHelper.instance.data.isPixel)
-			{
-				centerOrigin();
-			}
-		}
+		handleColors(anim, ClientPrefs.noteSkin.contains('Quant') ? note : null);
 	}
 	
 	public function addOffset(name:String, x:Float = 0, y:Float = 0)

@@ -1,4 +1,4 @@
-package funkin.objects;
+package funkin.objects.note;
 
 import flixel.FlxSprite;
 import flixel.math.FlxPoint;
@@ -6,6 +6,7 @@ import flixel.math.FlxRect;
 
 import funkin.data.*;
 import funkin.game.shaders.*;
+import funkin.game.shaders.RGBPalette.RGBShaderReference;
 import funkin.objects.character.Character;
 import funkin.scripts.*;
 import funkin.states.*;
@@ -90,6 +91,7 @@ class Note extends FlxSprite
 	
 	public var sustainLength:Float = 0;
 	public var isSustainNote:Bool = false;
+	public var isSustainEnd:Bool = false;
 	public var noteType(default, set):String = null;
 	
 	public var alreadyShifted:Bool = false;
@@ -99,7 +101,11 @@ class Note extends FlxSprite
 	public var eventVal1:String = '';
 	public var eventVal2:String = '';
 	
-	public var colorSwap:ColorSwap;
+	public var rgbShader:RGBShaderReference;
+	public var rgbEnabled:Bool = true;
+	
+	public static var globalRgbShaders:Array<RGBPalette> = [];
+	
 	public var inEditor:Bool = false;
 	public var skipScale:Bool = false;
 	public var gfNote:Bool = false;
@@ -180,12 +186,15 @@ class Note extends FlxSprite
 	public function resizeByRatio(ratio:Float)
 	{
 		// for some fuckin reason this shit is still crashing but i cant figure it out. data got that 👀👀👀
-		if (isSustainNote && (skipScale || !animation.curAnim.name.contains('end')))
+		try
 		{
-			scale.y *= ratio;
-			baseScaleY = scale.y;
-			defScale.y = scale.y;
-			updateHitbox();
+			if (isSustainNote && (skipScale || !isSustainEnd))
+			{
+				scale.y *= ratio;
+				baseScaleY = scale.y;
+				defScale.y = scale.y;
+				updateHitbox();
+			}
 		}
 	}
 	
@@ -198,33 +207,29 @@ class Note extends FlxSprite
 		return (texture = value);
 	}
 	
-	private function set_noteType(value:String):String
+	public function defaultRGB()
 	{
-		noteSplashTexture = PlayState.SONG.splashSkin;
-		if (isQuant && ClientPrefs.noteSkin == "Quants")
+		var arr:Array<FlxColor> = ClientPrefs.arrowRGBdef[noteData];
+		if (ClientPrefs.noteSkin.contains('Quant')) arr = ClientPrefs.arrowRGBquant[quants.indexOf(quant)];
+		
+		if (arr != null && noteData > -1 && noteData <= arr.length)
 		{
-			var idx = quants.indexOf(quant);
-			colorSwap.hue = ClientPrefs.quantHSV[idx][0] / 360;
-			colorSwap.saturation = ClientPrefs.quantHSV[idx][1] / 100;
-			colorSwap.brightness = ClientPrefs.quantHSV[idx][2] / 100;
-			if (noteSplashTexture == null || noteSplashTexture == 'noteSplashes' || noteSplashTexture.length <= 0 || PlayState.SONG.splashSkin == null)
-				noteSplashTexture = 'QUANTnoteSplashes'; // give it da quant notesplashes!!
-		}
-		else if (isQuant && ClientPrefs.noteSkin == "QuantStep")
-		{
-			var idx = quants.indexOf(quant);
-			colorSwap.hue = ClientPrefs.quantStepmania[idx][0] / 360;
-			colorSwap.saturation = ClientPrefs.quantStepmania[idx][1] / 100;
-			colorSwap.brightness = ClientPrefs.quantStepmania[idx][2] / 100;
-			if (noteSplashTexture == null || noteSplashTexture == 'noteSplashes' || noteSplashTexture.length <= 0 || PlayState.SONG.splashSkin == null)
-				noteSplashTexture = 'QUANTnoteSplashes'; // give it da quant notesplashes!!
+			rgbShader.r = arr[0];
+			rgbShader.g = arr[1];
+			rgbShader.b = arr[2];
 		}
 		else
 		{
-			colorSwap.hue = ClientPrefs.arrowHSV[noteData % 4][0] / 360;
-			colorSwap.saturation = ClientPrefs.arrowHSV[noteData % 4][1] / 100;
-			colorSwap.brightness = ClientPrefs.arrowHSV[noteData % 4][2] / 100;
+			rgbShader.r = 0xFFFF0000;
+			rgbShader.g = 0xFF00FF00;
+			rgbShader.b = 0xFF0000FF;
 		}
+	}
+	
+	private function set_noteType(value:String):String
+	{
+		noteSplashTexture = PlayState.SONG.splashSkin;
+		if (NoteSkinHelper.instance?.data?.inGameColoring ?? false) defaultRGB();
 		
 		noteScript = null;
 		
@@ -238,9 +243,6 @@ class Note extends FlxSprite
 					ignoreNote = mustPress;
 					reloadNote('HURT');
 					noteSplashTexture = 'HURTnoteSplashes';
-					colorSwap.hue = 0;
-					colorSwap.saturation = 0;
-					colorSwap.brightness = 0;
 					if (isSustainNote)
 					{
 						missHealth = 0.1;
@@ -269,9 +271,6 @@ class Note extends FlxSprite
 			}
 			noteType = value;
 		}
-		noteSplashHue = colorSwap.hue;
-		noteSplashSat = colorSwap.saturation;
-		noteSplashBrt = colorSwap.brightness;
 		if (hitCausesMiss) canMiss = true;
 		
 		return value;
@@ -309,9 +308,10 @@ class Note extends FlxSprite
 		
 		if (noteData > -1)
 		{
+			rgbShader = new RGBShaderReference(this, initializeGlobalRGBShader(noteData));
+			if (NoteSkinHelper.instance?.data?.inGameColoring ?? false) shader = rgbShader.shader;
+			
 			texture = '';
-			colorSwap = new ColorSwap();
-			shader = colorSwap.shader;
 			
 			x += swagWidth * (noteData % NoteSkinHelper.keys);
 			if (!isSustainNote) animation.play('scroll$noteData');
@@ -329,6 +329,7 @@ class Note extends FlxSprite
 			copyAngle = false;
 			
 			animation.play('holdend$noteData');
+			isSustainEnd = true;
 			updateHitbox();
 			
 			offsetX -= width / 2;
@@ -337,6 +338,7 @@ class Note extends FlxSprite
 			
 			if (prevNote.isSustainNote)
 			{
+				isSustainEnd = false;
 				prevNote.animation.play('hold$noteData');
 				prevNote.scale.y *= Conductor.stepCrotchet / 100 * 1.05;
 				if (PlayState.instance != null)
@@ -370,6 +372,31 @@ class Note extends FlxSprite
 		baseScaleY = scale.y;
 	}
 	
+	public static function initializeGlobalRGBShader(noteData:Int, ?quant:Int = 0)
+	{
+		if (globalRgbShaders[noteData] == null)
+		{
+			var newRGB:RGBPalette = new RGBPalette();
+			var arr:Array<FlxColor> = ClientPrefs.arrowRGBdef[noteData];
+			
+			if (arr != null && noteData > -1 && noteData <= arr.length)
+			{
+				newRGB.r = arr[0];
+				newRGB.g = arr[1];
+				newRGB.b = arr[2];
+			}
+			else
+			{
+				newRGB.r = 0xFFFF0000;
+				newRGB.g = 0xFF00FF00;
+				newRGB.b = 0xFF0000FF;
+			}
+			
+			globalRgbShaders[noteData] = newRGB;
+		}
+		return globalRgbShaders[noteData];
+	}
+	
 	var lastNoteOffsetXForPixelAutoAdjusting:Float = 0;
 	var lastNoteScaleToo:Float = 1;
 	
@@ -381,10 +408,7 @@ class Note extends FlxSprite
 		if (texture == null) texture = '';
 		if (suffix == null) suffix = '';
 		
-		if (noteScript != null)
-		{
-			if (noteScript.executeFunc("onReloadNote", [this, prefix, texture, suffix], this) == Globals.Function_Stop) return;
-		}
+		if (noteScript != null) if (noteScript.executeFunc("onReloadNote", [this, prefix, texture, suffix], this) == Globals.Function_Stop) return;
 		
 		var skin:String = texture;
 		if (texture.length < 1)
@@ -460,10 +484,7 @@ class Note extends FlxSprite
 		
 		antialiasing = ClientPrefs.globalAntialiasing && NoteSkinHelper.instance.data.antialiasing;
 		
-		if (noteScript != null)
-		{
-			noteScript.executeFunc("postReloadNote", [this, prefix, texture, suffix], this);
-		}
+		if (noteScript != null) noteScript.executeFunc("postReloadNote", [this, prefix, texture, suffix], this);
 	}
 	
 	public function loadNoteAnims()
@@ -528,7 +549,7 @@ class Note extends FlxSprite
 			}
 		}
 		
-		colorSwap.daAlpha = (alphaMod * alphaMod2) * (playField?.baseAlpha ?? 1.0);
+		rgbShader?.alpha = (alphaMod * alphaMod2) * (playField?.baseAlpha ?? 1.0);
 		
 		var actualHitbox:Float = hitbox * earlyHitMult;
 		

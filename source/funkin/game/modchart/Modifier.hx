@@ -6,6 +6,7 @@ import math.Vector3;
 import flixel.FlxSprite;
 
 import funkin.objects.*;
+import funkin.objects.note.*;
 
 // Based on Schmovin' and Andromeda's modifier systems
 

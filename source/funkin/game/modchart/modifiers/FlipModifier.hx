@@ -4,7 +4,7 @@ import math.Vector3;
 
 import flixel.FlxSprite;
 
-import funkin.objects.*;
+import funkin.objects.note.*;
 
 class FlipModifier extends NoteModifier
 {

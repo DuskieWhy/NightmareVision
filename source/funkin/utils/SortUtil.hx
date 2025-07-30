@@ -11,7 +11,7 @@ class SortUtil
 	/**
 		Sorts by Note time
 	**/
-	public static inline function sortByStrumTime(a:funkin.objects.Note, b:funkin.objects.Note):Int
+	public static inline function sortByStrumTime(a:funkin.objects.note.Note, b:funkin.objects.note.Note):Int
 	{
 		if (a == null || b == null) return 0;
 		
@@ -29,7 +29,7 @@ class SortUtil
 	/**
 		Sorts by Event notes time
 	**/
-	public static inline function sortByTime(a:funkin.objects.Note.EventNote, b:funkin.objects.Note.EventNote):Int
+	public static inline function sortByTime(a:funkin.objects.note.Note.EventNote, b:funkin.objects.note.Note.EventNote):Int
 	{
 		if (a == null || b == null) return 0;
 		

@@ -4,7 +4,7 @@ import math.Vector3;
 
 import funkin.game.modchart.*;
 import funkin.states.*;
-import funkin.objects.*;
+import funkin.objects.note.*;
 
 class ConfusionModifier extends NoteModifier
 {

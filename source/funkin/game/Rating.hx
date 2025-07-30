@@ -1,6 +1,6 @@
 package funkin.game;
 
-import funkin.objects.Note;
+import funkin.objects.note.*;
 
 class Rating
 {

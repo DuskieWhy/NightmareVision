@@ -1,8 +1,9 @@
-package funkin.objects;
+package funkin.objects.note;
 
 import flixel.FlxSprite;
 
 import funkin.game.shaders.*;
+import funkin.game.shaders.RGBPalette.RGBShaderReference;
 import funkin.data.*;
 import funkin.states.*;
 
@@ -12,7 +13,7 @@ class NoteSplash extends FlxSprite
 	/**
 	 * Shader applied to the notesplash to support custom colours
 	 */
-	public final colorSwap:HSLColorSwap;
+	public var rgbShader:RGBShaderReference;
 	
 	/**
 	 * The notedata of the splash
@@ -26,19 +27,19 @@ class NoteSplash extends FlxSprite
 	{
 		super(x, y);
 		
-		colorSwap = new HSLColorSwap();
-		shader = colorSwap.shader;
+		rgbShader = new RGBShaderReference(this, Note.initializeGlobalRGBShader(noteData));
+		if (NoteSkinHelper.instance?.data?.inGameColoring ?? false) shader = rgbShader.shader;
 		
 		loadAnims(getPlayStateSplash('noteSplashes'));
-		
 		setupNoteSplash(x, y, noteData);
 		
 		antialiasing = ClientPrefs.globalAntialiasing;
 	}
 	
-	public function setupNoteSplash(x:Float = 0, y:Float = 0, note:Int = 0, ?texture:String, hueColor:Float = 0, satColor:Float = 0, brtColor:Float = 0, ?field:PlayField)
+	public function setupNoteSplash(x:Float = 0, y:Float = 0, note:Int = 0, ?texture:String, ?q:Int, ?field:PlayField)
 	{
 		final swagWidth = field?.members[note].swagWidth ?? Note.swagWidth;
+		final quant = q == null ? 4 : q;
 		setPosition(x - swagWidth * 0.95, y - swagWidth);
 		
 		texture ??= getPlayStateSplash('noteSplashes');
@@ -61,11 +62,25 @@ class NoteSplash extends FlxSprite
 			default:
 				alpha = 1;
 				antialiasing = true;
-				colorSwap.hue = hueColor;
-				colorSwap.saturation = satColor;
-				colorSwap.lightness = brtColor;
 				animation.play('note' + note, true);
 				offset.set(-20, -20);
+		}
+		
+		// gonna make it togglable soon im just lazy rn shruggg
+		if (NoteSkinHelper.instance?.data?.inGameColoring ?? false && rgbShader != null)
+		{
+			var arr:Array<FlxColor> = ClientPrefs.arrowRGBdef[note];
+			if (ClientPrefs.noteSkin.contains('Quant')) arr = ClientPrefs.arrowRGBquant[Note.quants.indexOf(quant)];
+			
+			if (note <= arr.length)
+			{
+				@:bypassAccessor
+				{
+					rgbShader.r = arr[0];
+					rgbShader.g = arr[1];
+					rgbShader.b = arr[2];
+				}
+			}
 		}
 	}
 	

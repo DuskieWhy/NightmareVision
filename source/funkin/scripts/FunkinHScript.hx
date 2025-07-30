@@ -6,6 +6,7 @@ import extensions.InterpEx;
 
 import funkin.backend.plugins.DebugTextPlugin;
 import funkin.objects.*;
+import funkin.objects.note.*;
 
 // wrapper for an iris script to keep the consistency of the whole funkyscript setup this engine got
 // will be replaced later when im not lazy
@@ -296,7 +297,7 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		set('HScriptSubstate', funkin.scripting.HScriptSubstate);
 		
 		// objects
-		set("Note", funkin.objects.Note);
+		set("Note", funkin.objects.note.Note);
 		set("Bar", funkin.objects.Bar);
 		#if VIDEOS_ALLOWED
 		set("FunkinVideoSprite", funkin.video.FunkinVideoSprite);

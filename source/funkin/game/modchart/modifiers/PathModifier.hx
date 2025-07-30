@@ -5,7 +5,7 @@ import math.Vector3;
 import flixel.FlxSprite;
 
 import funkin.game.modchart.*;
-import funkin.objects.*;
+import funkin.objects.note.*;
 
 typedef PathInfo =
 {

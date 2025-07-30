@@ -27,7 +27,8 @@ import funkin.objects.character.CharacterBuilder;
 import funkin.objects.character.Character;
 import funkin.backend.Difficulty;
 import funkin.game.RatingInfo;
-import funkin.objects.Note.EventNote;
+import funkin.objects.note.*;
+import funkin.objects.note.Note.EventNote;
 import funkin.game.huds.BaseHUD;
 import funkin.scripts.*;
 import funkin.data.Song.SwagSong;
@@ -888,7 +889,7 @@ class PlayState extends MusicBeatState
 		
 		noteskinLoading(skin);
 		
-		if (ClientPrefs.noteSkin.contains('Quant') && noteSkin.data.hasQuants) noteskinLoading('QUANT$skin');
+		// if (ClientPrefs.noteSkin.contains('Quant') && noteSkin.data.hasQuants) noteskinLoading('QUANT$skin');
 		
 		NoteSkinHelper.instance?.destroy();
 		NoteSkinHelper.instance = noteSkin;
@@ -2211,7 +2212,7 @@ class PlayState extends MusicBeatState
 					
 					daNote.x += script_SUSTAINOffsets[daNote.noteData].x;
 					daNote.y += script_SUSTAINOffsets[daNote.noteData].y;
-					if (daNote.animation.curAnim.name.endsWith('end${daNote.noteData}'))
+					if (daNote.isSustainEnd)
 					{
 						daNote.x += script_SUSTAINENDOffsets[daNote.noteData].x;
 						daNote.y += script_SUSTAINENDOffsets[daNote.noteData].y;
@@ -2341,8 +2342,7 @@ class PlayState extends MusicBeatState
 		paused = true;
 		CoolUtil.cancelMusicFadeTween();
 		
-		FlxG.switchState(() -> new NoteSkinEditor(((ClientPrefs.noteSkin.contains('Quant')
-			&& noteSkin.data.hasQuants) ? 'QUANT${SONG.arrowSkin}' : SONG.arrowSkin), noteSkin));
+		FlxG.switchState(() -> new NoteSkinEditor(SONG.arrowSkin, noteSkin));
 		chartingMode = true;
 		
 		#if DISCORD_ALLOWED
@@ -3544,7 +3544,7 @@ class PlayState extends MusicBeatState
 		if (playfield.autoPlayed)
 		{
 			var time:Float = 0.15;
-			if (note.isSustainNote && !note.animation.curAnim.name.endsWith('end${note.noteData}'))
+			if (note.isSustainNote && !note.isSustainEnd)
 			{
 				time += 0.15;
 			}
@@ -3587,7 +3587,7 @@ class PlayState extends MusicBeatState
 		if (field.autoPlayed)
 		{
 			var time:Float = 0.15;
-			if (note.isSustainNote && !note.animation.curAnim.name.endsWith('end${note.noteData}'))
+			if (note.isSustainNote && !note.isSustainEnd)
 			{
 				time += 0.15;
 			}
@@ -3731,7 +3731,7 @@ class PlayState extends MusicBeatState
 			{
 				var time:Float = 0.15;
 				
-				if (note.isSustainNote && !note.animation.curAnim.name.endsWith('end${note.noteData}'))
+				if (note.isSustainNote && !note.isSustainEnd)
 				{
 					time += 0.15;
 				}
@@ -3873,20 +3873,10 @@ class PlayState extends MusicBeatState
 	public function spawnNoteSplash(x:Float, y:Float, data:Int, ?note:Note = null)
 	{
 		var skin:String = noteSplashSkin;
-		
-		var hue:Float = ClientPrefs.arrowHSV[data % 4][0] / 360;
-		var sat:Float = ClientPrefs.arrowHSV[data % 4][1] / 100;
-		var brt:Float = ClientPrefs.arrowHSV[data % 4][2] / 100;
-		
-		if (note != null)
-		{
-			hue = note.noteSplashHue;
-			sat = note.noteSplashSat;
-			brt = note.noteSplashBrt;
-		}
+		var q:Int = note == null ? 4 : note.quant;
 		
 		var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
-		splash.setupNoteSplash(x + script_SPLASHOffsets[data].x, y + script_SPLASHOffsets[data].y, data, skin, hue, sat, brt, note.playField);
+		splash.setupNoteSplash(x + script_SPLASHOffsets[data].x, y + script_SPLASHOffsets[data].y, data, skin, q, note.playField);
 		grpNoteSplashes.add(splash);
 		
 		scripts.call('onSpawnNoteSplash', [splash, note]);

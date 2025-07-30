@@ -1,4 +1,4 @@
-package funkin.objects;
+package funkin.objects.note;
 
 import flixel.group.FlxContainer.FlxTypedContainer;
 import flixel.util.FlxSignal.FlxTypedSignal;

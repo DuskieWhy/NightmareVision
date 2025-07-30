@@ -51,10 +51,12 @@ typedef NoteSkinData =
 	
 	?singAnimations:Array<String>,
 	?scale:Float,
-	?splashesEnabled:Bool
+	?splashesEnabled:Bool,
+	?inGameColoring:Bool
 }
 
 // should be rewritten ngl
+// i agree its so ugly please
 class NoteSkinHelper implements IFlxDestroyable
 {
 	public static var keys:Int = DEFAULT_KEYS;
@@ -361,8 +363,6 @@ class NoteSkinHelper implements IFlxDestroyable
 		data.opponentSkin ??= data.globalSkin;
 		data.extraSkin ??= data.globalSkin;
 		data.noteSplashSkin ??= DEFAULT_SPLASH_TEXTURE;
-		data.hasQuants ??= false;
-		data.isQuants ??= false;
 		
 		data.isPixel ??= false;
 		data.pixelSize ??= [4, 5];
@@ -380,6 +380,9 @@ class NoteSkinHelper implements IFlxDestroyable
 		data.singAnimations ??= defaultSingAnimations;
 		data.scale ??= 0.7;
 		data.splashesEnabled ??= true;
+		
+		data.inGameColoring ??= true;
+		trace(data.inGameColoring);
 	}
 	
 	inline function parseRaw(rawJson:String):NoteSkinData

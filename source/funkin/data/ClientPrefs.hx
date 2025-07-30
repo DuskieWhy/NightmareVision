@@ -111,6 +111,26 @@ class ClientPrefs
 	];
 	
 	// note colours ------------------------------------------------------------------------//
+	@saveVar public static var arrowRGBdef:Array<Array<FlxColor>> = [
+		[0xFFC24B99, 0xFFFFFFFF, 0xFF3C1F56],
+		[0xFF00FFFF, 0xFFFFFFFF, 0xFF1542B7],
+		[0xFF12FA05, 0xFFFFFFFF, 0xFF0A4447],
+		[0xFFF9393F, 0xFFFFFFFF, 0xFF651038]];
+		
+	@saveVar public static var arrowRGBquant:Array<Array<FlxColor>> = [
+		[0xFFE51919, 0xFFFFFF, 0xFF5B0A30], // 4th
+		[0xFF193BE5, 0xFFFFFF, 0xFF0A3B5B], // 8th
+		[0xFFA119E5, 0xFFFFFF, 0xFF1D0A5B], // 12th
+		[0xFF26D93E, 0xFFFFFF, 0xFF24560F], // 16th
+		[0xFF0000B2, 0xFFFFFF, 0xFF002247], // 20th
+		[0xFFA119E5, 0xFFFFFF, 0xFF1D0A5B], // 24th
+		[0xFFE5C319, 0xFFFFFF, 0xFF5B2A0A], // 32nd
+		[0xFFA119E5, 0xFFFFFF, 0xFF1D0A5B], // 48th
+		[0xFF13ECA4, 0xFFFFFF, 0xFF085D18], // 64th
+		[0xFF3A3A6C, 0xFFFFFF, 0xFF17202B], // 96th
+		[0xFF3A3A6C, 0xFFFFFF, 0xFF17202B] // 192nd
+	];
+	
 	@saveVar public static var arrowHSV:Array<Array<Int>> = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
 	@saveVar public static var quantHSV:Array<Array<Int>> = [
 		[0, -20, 0], // 4th

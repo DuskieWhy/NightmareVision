@@ -3,7 +3,7 @@ package funkin.game.modchart.modifiers;
 import math.Vector3;
 
 import funkin.states.*;
-import funkin.objects.*;
+import funkin.objects.note.*;
 
 class XModifier extends NoteModifier
 {
