@@ -333,6 +333,7 @@ class Note extends FlxSprite
 				isSustainEnd = false;
 				prevNote.animation.play('hold$noteData');
 				prevNote.scale.y *= Conductor.stepCrotchet / 100 * 1.05;
+				prevNote.isSustainEnd = false;
 				if (PlayState.instance != null)
 				{
 					prevNote.scale.y *= PlayState.instance.songSpeed;
