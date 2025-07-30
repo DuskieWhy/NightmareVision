@@ -33,7 +33,9 @@ class Splash extends FlxState
 			video.onEnd(finish);
 			if (video.load(Paths.video('intro'))) video.delayAndStart();
 			else
-			#end logoFunc();
+			#end
+			
+			logoFunc();
 		});
 	}
 	

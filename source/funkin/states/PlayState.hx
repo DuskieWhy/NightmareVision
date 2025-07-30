@@ -627,38 +627,13 @@ class PlayState extends MusicBeatState
 			stage.add(boyfriendGroup);
 		}
 		
-		// "GLOBAL" SCRIPTS
-		var filesPushed:Array<String> = [];
-		var foldersToCheck:Array<String> = [Paths.getPrimaryPath('scripts/')];
-		
-		#if MODS_ALLOWED
-		foldersToCheck.insert(0, Paths.mods('scripts/'));
-		if (Mods.currentModDirectory != null && Mods.currentModDirectory.length > 0) foldersToCheck.insert(0, Paths.mods(Mods.currentModDirectory + '/scripts/'));
-		
-		for (mod in Mods.globalMods)
-			foldersToCheck.insert(0, Paths.mods(mod + '/scripts/'));
-		#end
-		
-		for (folder in foldersToCheck)
+		for (file in Paths.listAllFilesInDirectory('scripts/'))
 		{
-			if (FunkinAssets.exists(folder))
-			{
-				for (file in FileSystem.readDirectory(folder))
-				{
-					if (!filesPushed.contains(file))
-					{
-						final scriptPath = FunkinHScript.getPath('$folder$file');
-						
-						if (!FunkinHScript.isHxFile(scriptPath)) continue;
-						
-						final script = initFunkinHScript('$folder$file');
-						if (script != null)
-						{
-							filesPushed.push(file);
-						}
-					}
-				}
-			}
+			final scriptPath = FunkinHScript.getPath(file);
+			
+			if (!FunkinHScript.isHxFile(scriptPath)) continue;
+			
+			initFunkinHScript(file);
 		}
 		
 		var gfVersion:String = SONG.gfVersion;
@@ -777,39 +752,13 @@ class PlayState extends MusicBeatState
 		
 		startingSong = true;
 		
-		// SONG SPECIFIC SCRIPTS
-		var filesPushed:Array<String> = [];
-		var foldersToCheck:Array<String> = [Paths.getPrimaryPath('songs/' + Paths.formatToSongPath(SONG.song) + '/'),];
-		
-		#if MODS_ALLOWED
-		foldersToCheck.insert(0, Paths.mods('songs/' + Paths.formatToSongPath(SONG.song) + '/'));
-		if (Mods.currentModDirectory != null && Mods.currentModDirectory.length > 0) foldersToCheck.insert(0,
-			Paths.mods(Mods.currentModDirectory + '/songs/' + Paths.formatToSongPath(SONG.song) + '/'));
-			
-		for (mod in Mods.globalMods)
-			foldersToCheck.insert(0, Paths.mods(mod + '/songs/' + Paths.formatToSongPath(SONG.song) + '/')); // using push instead of insert because these should run after everything else
-		#end
-		
-		for (folder in foldersToCheck)
+		for (file in Paths.listAllFilesInDirectory('songs/${Paths.formatToSongPath(SONG.song)}/'))
 		{
-			if (FunkinAssets.exists(folder))
-			{
-				for (file in FileSystem.readDirectory(folder))
-				{
-					if (!filesPushed.contains(file))
-					{
-						final scriptPath = FunkinHScript.getPath('$folder$file');
-						
-						if (!FunkinHScript.isHxFile(scriptPath)) continue;
-						
-						final script = initFunkinHScript('$folder$file');
-						if (script != null)
-						{
-							filesPushed.push(file);
-						}
-					}
-				}
-			}
+			final scriptPath = FunkinHScript.getPath(file);
+			
+			if (!FunkinHScript.isHxFile(scriptPath)) continue;
+			
+			initFunkinHScript(file);
 		}
 		
 		if (songStartCallback == null)

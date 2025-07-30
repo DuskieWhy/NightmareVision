@@ -1,5 +1,6 @@
 package funkin;
 
+import haxe.io.Path;
 import haxe.Json;
 
 import openfl.system.System;
@@ -243,6 +244,52 @@ class Paths
 	public static inline function formatToSongPath(path:String):String
 	{
 		return path.toLowerCase().replace(' ', '-');
+	}
+	
+	/**
+	 * Lists all files found within a given directory
+	 * 
+	 * if `checkMods`, they will be loaded in order of
+	 * 
+	 * `content/globalMods/`, `content/`, `content/currentMod/`.
+	 */
+	public static function listAllFilesInDirectory(directory:String, checkMods:Bool = true) // based of psychs Mods.directoriesWithFile
+	{
+		var folders:Array<String> = [];
+		var files:Array<String> = [];
+		
+		if (FunkinAssets.exists(getPrimaryPath(directory))) folders.push(getPrimaryPath(directory));
+		
+		#if MODS_ALLOWED
+		if (checkMods)
+		{
+			for (mod in Mods.globalMods)
+			{
+				final folder = mods('$mod/$directory');
+				if (FileSystem.exists(folder) && !folders.contains(folder)) folders.push(folder);
+			}
+			
+			final folder = mods(directory);
+			if (FileSystem.exists(folder) && !folders.contains(folder)) folders.push(folder);
+			
+			if (Mods.currentModDirectory?.length > 0)
+			{
+				final folder = mods('${Mods.currentModDirectory}/$directory');
+				if (FileSystem.exists(folder) && !folders.contains(folder)) folders.push(folder);
+			}
+		}
+		#end
+		
+		for (folder in folders)
+		{
+			for (file in FunkinAssets.readDirectory(folder))
+			{
+				final path = Path.join([folder, file]);
+				if (!files.contains(path)) files.push(path);
+			}
+		}
+		
+		return files;
 	}
 	
 	#if MODS_ALLOWED

@@ -18,7 +18,7 @@ class DebugTextPlugin extends FlxTypedGroup<DebugText>
 		if (instance == null)
 		{
 			FlxG.plugins.addPlugin(instance = new DebugTextPlugin());
-			FlxG.signals.postStateSwitch.add(clearTxt);
+			FlxG.signals.preStateSwitch.add(clearTxt);
 		}
 	}
 	
