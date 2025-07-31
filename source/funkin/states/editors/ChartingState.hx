@@ -3275,8 +3275,8 @@ class ChartingState extends MusicBeatState
 		var rawJson = OpenFlAssets.getText(path);
 		#end
 		
-		var json:funkin.objects.character.CharacterBuilder.CharacterFile = cast Json.parse(rawJson);
-		return json.healthicon;
+		var json:Null<funkin.objects.character.CharacterBuilder.CharacterFile> = cast FunkinAssets.parseJson(rawJson);
+		return json.healthicon ?? 'face';
 	}
 	
 	function updateNoteUI():Void

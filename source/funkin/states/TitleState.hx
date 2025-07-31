@@ -80,7 +80,7 @@ class TitleState extends MusicBeatState
 		final path = Paths.getPath('images/gfDanceTitle.json', TEXT, null, true);
 		if (FunkinAssets.exists(path, TEXT))
 		{
-			titleJSON = Json.parse(FunkinAssets.getContent(path));
+			titleJSON = FunkinAssets.parseJson(FunkinAssets.getContent(path));
 		}
 		
 		if (!initialized)

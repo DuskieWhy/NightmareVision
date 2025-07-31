@@ -35,7 +35,7 @@ class Chart
 			throw 'couldnt find chart at ($path)';
 		}
 		
-		return fromData(Json.parse(FunkinAssets.getContent(path)));
+		return fromData(FunkinAssets.parseJson(FunkinAssets.getContent(path)));
 	}
 	
 	/**
@@ -56,7 +56,7 @@ class Chart
 			throw 'couldnt find chart at ($path)';
 		}
 		
-		return fromData(Json.parse(FunkinAssets.getContent(path)));
+		return fromData(FunkinAssets.parseJson(FunkinAssets.getContent(path)));
 	}
 	
 	public static function fromData(data:Dynamic):SwagSong

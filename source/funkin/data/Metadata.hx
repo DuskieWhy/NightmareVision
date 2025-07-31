@@ -35,7 +35,7 @@ typedef MetaVariables =
 		var path = Paths.json('$formattedSong/meta');
 		if (FunkinAssets.exists(path))
 		{
-			json = haxe.Json.parse(FunkinAssets.getContent(path));
+			json = FunkinAssets.parseJson(FunkinAssets.getContent(path));
 		}
 		
 		if (json != null)
@@ -58,7 +58,7 @@ typedef MetaVariables =
 		final path = Paths.getPath('$filePath.json', TEXT, null, true);
 		if (FunkinAssets.exists(path))
 		{
-			json = haxe.Json.parse(FunkinAssets.getContent(path));
+			json = FunkinAssets.parseJson(FunkinAssets.getContent(path));
 		}
 		
 		if (json != null)

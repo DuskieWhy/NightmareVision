@@ -368,9 +368,4 @@ class NoteSkinHelper implements IFlxDestroyable
 		data.inGameColoring ??= true;
 		trace(data.inGameColoring);
 	}
-	
-	inline function parseRaw(rawJson:String):NoteSkinData
-	{
-		return cast Json.parse(rawJson);
-	}
 }
