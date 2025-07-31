@@ -2065,11 +2065,9 @@ class PlayState extends MusicBeatState
 				
 				if (field.inControl && field.autoPlayed)
 				{
-					if (!daNote.wasGoodHit && !daNote.ignoreNote)
-					{
-						if (daNote.isSustainNote) if (daNote.canBeHit) field.noteHitCallback.dispatch(daNote, field);
-						else if (daNote.strumTime <= Conductor.songPosition) field.noteHitCallback.dispatch(daNote, field);
-					}
+					if (!daNote.wasGoodHit && !daNote.ignoreNote) if ((daNote.isSustainNote && daNote.canBeHit)
+						|| (!daNote.isSustainNote
+							&& daNote.strumTime <= Conductor.songPosition)) field.noteHitCallback.dispatch(daNote, field);
 				}
 				
 				// Kill extremely late notes and cause misses
