@@ -199,14 +199,7 @@ class Character extends FlxSprite
 	
 	public function loadGraphicFromType(path:String, type:String)
 	{
-		switch (type)
-		{
-			case "packer":
-				frames = Paths.getPackerAtlas(path);
-				
-			case "sparrow":
-				frames = Paths.getMultiAtlas(path.split(','));
-		}
+		frames = Paths.getMultiAtlas(path.split(','));
 	}
 	
 	// clean this up

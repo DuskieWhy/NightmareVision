@@ -49,11 +49,6 @@
 				"version": "9.4.1"
 			},
 			{
-				"name": "linc_luajit",
-				"link": "https://github.com/superpowers04/linc_luajit.git",
-				"branch": "daf0664aee99aa8b8d6bdd1eda993a1c3a399067"
-			},
-			{
 				"name": "discord_rpc",
 				"link": "https://github.com/Aidan63/linc_discord-rpc",
 				"branch": "2d83fa863ef0c1eace5f1cf67c3ac315d1a3a8a5"
@@ -61,12 +56,12 @@
 			{
 				"name": "haxeui-flixel",
 				"link": "https://github.com/haxeui/haxeui-flixel.git",
-				"branch": "b899a4c7d7318c5ff2b1bb645fbc73728fad1ac9"
+				"branch": "100f2c96beab619cfe72c567a058c41c71e3e998"
 			},
 			{
 				"name": "haxeui-core",
 				"link": "https://github.com/haxeui/haxeui-core.git",
-				"branch": "99d5d035e7120ce027256b117a25625c53b488dc"
+				"branch": "58e66c926e7c9447f016e69eab9e185ceb292472"
 			},
 			{
 				"name": "moonchart",

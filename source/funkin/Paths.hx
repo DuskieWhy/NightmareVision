@@ -209,16 +209,20 @@ class Paths
 		return FunkinAssets.exists(getPath(key, type));
 	}
 	
-	public static inline function getMultiAtlas(keys:Array<String>, ?library:String, ?allowGPU:Bool = true):FlxAtlasFrames
+	public static inline function getMultiAtlas(keys:Array<String>, ?library:String, ?allowGPU:Bool = true):FlxAtlasFrames // from psych
 	{
 		// todo add wat for this to work with fucking uhhhhh packeratlas
-		var frames = getSparrowAtlas(keys.shift().trim(), library, allowGPU);
+		var frames = getAtlasFrames(keys.shift().trim(), library, allowGPU);
 		
 		if (keys.length != 0)
 		{
+			// odd
+			final originalCollection = frames;
+			frames = new FlxAtlasFrames(originalCollection.parent);
+			frames.addAtlas(originalCollection, true);
 			for (i in keys)
 			{
-				final newFrames = getSparrowAtlas(i.trim(), library, allowGPU);
+				final newFrames = getAtlasFrames(i.trim(), library, allowGPU);
 				if (newFrames != null)
 				{
 					frames.addAtlas(newFrames, true);
@@ -226,6 +230,28 @@ class Paths
 			}
 		}
 		return frames;
+	}
+	
+	/**
+	 * Retrieves atlas frames of either `sparrow` or `packer` 
+	 * @param key 
+	 * @param library 
+	 * @param allowGPU 
+	 */
+	public static inline function getAtlasFrames(key:String, ?library:String, allowGPU:Bool = true):FlxAtlasFrames
+	{
+		final xmlPath = getPath('images/$key.xml', TEXT, library, true);
+		final txtPath = getPath('images/$key.txt', TEXT, library, true);
+		
+		final graphic = image(key, library, allowGPU);
+		
+		// packer
+		if (FunkinAssets.exists(txtPath))
+		{
+			return FlxAtlasFrames.fromSpriteSheetPacker(graphic, FunkinAssets.getContent(txtPath));
+		}
+		
+		return FlxAtlasFrames.fromSparrow(graphic, FunkinAssets.getContent(xmlPath));
 	}
 	
 	public static inline function getSparrowAtlas(key:String, ?library:String, ?allowGPU:Bool = true):FlxAtlasFrames
