@@ -1149,8 +1149,7 @@ class CharacterEditorState extends MusicBeatState
 		{
 			textAnim.text = curChar.animationsArray[curAnim].anim;
 			
-			var curAnim = curChar.getAnimByName(curChar.animationsArray[curAnim].anim);
-			if (curAnim == null || curAnim != null && curAnim.frames.length < 1) textAnim.text += ' (ERROR!)';
+			if (!curChar.animation.exists(curChar.animationsArray[curAnim].anim)) textAnim.text += ' (ERROR!)';
 		}
 		else
 		{
