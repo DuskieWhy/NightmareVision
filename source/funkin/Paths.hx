@@ -225,7 +225,7 @@ class Paths
 				final newFrames = getAtlasFrames(i.trim(), library, allowGPU);
 				if (newFrames != null)
 				{
-					frames.addAtlas(newFrames, true);
+					frames.addAtlas(newFrames, false); // ? okay
 				}
 			}
 		}
