@@ -24,9 +24,6 @@ class FunkinAssets
 	
 	/**
 	 * Safer alternative to directly using `haxe.Json.parse`
-	 * @param content 
-	 * @param pos 
-	 * @return Dynamic
 	 */
 	public static function parseJson(content:String, ?pos:haxe.PosInfos):Dynamic
 	{
