@@ -2140,6 +2140,8 @@ class PlayState extends MusicBeatState
 	
 	function openChartEditor():Void
 	{
+		FlxG.camera.followLerp = 0;
+		
 		persistentUpdate = false;
 		paused = true;
 		CoolUtil.cancelMusicFadeTween();

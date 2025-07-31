@@ -366,6 +366,5 @@ class NoteSkinHelper implements IFlxDestroyable
 		data.splashesEnabled ??= true;
 		
 		data.inGameColoring ??= true;
-		trace(data.inGameColoring);
 	}
 }
