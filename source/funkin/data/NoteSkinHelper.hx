@@ -73,16 +73,7 @@ class NoteSkinHelper implements IFlxDestroyable
 	
 	public function new(path:String)
 	{
-		try
-		{
-			data = parseRaw(FunkinAssets.getContent(path).trim());
-		}
-		catch (e)
-		{
-			data = {};
-			trace(e.message);
-		}
-		resolveData(data);
+		loadFromPath(path);
 	}
 	
 	public function destroy()
@@ -92,15 +83,8 @@ class NoteSkinHelper implements IFlxDestroyable
 	
 	public function loadFromPath(path:String, keyCount:Int = -1)
 	{
-		try
-		{
-			data = parseRaw(FunkinAssets.getContent(path).trim());
-		}
-		catch (e)
-		{
-			data = {};
-			trace(e.message);
-		}
+		data = cast FunkinAssets.parseJson(FunkinAssets.getContent(path).trim()) ?? {};
+		
 		if (keyCount != -1) keys = keyCount;
 		resolveData(data);
 	}
@@ -279,10 +263,10 @@ class NoteSkinHelper implements IFlxDestroyable
 		]
 	];
 	public static final DEFAULT_NOTESPLASH_ANIMATIONS:Array<Animation> = [
-		{anim: "note0", xmlName: "note splash purple", offsets: [0, 0]},
-		{anim: "note1", xmlName: "note splash blue", offsets: [0, 0]},
-		{anim: "note2", xmlName: "note splash green", offsets: [0, 0]},
-		{anim: "note3", xmlName: "note splash red", offsets: [0, 0]}
+		{anim: "note0", xmlName: "note splash purple", offsets: [4, 15]},
+		{anim: "note1", xmlName: "note splash blue", offsets: [13, 15]},
+		{anim: "note2", xmlName: "note splash green", offsets: [16, 15]},
+		{anim: "note3", xmlName: "note splash red", offsets: [22, 15]}
 	];
 	
 	public static final fallbackReceptorAnims:Array<Animation> = [
