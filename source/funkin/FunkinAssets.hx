@@ -17,7 +17,29 @@ import openfl.Assets;
 @:nullSafety(Strict)
 class FunkinAssets
 {
+	/**
+	 * Handles the caching of assets collected through `Paths` 
+	 */
 	public static final cache:FunkinCache = new FunkinCache();
+	
+	/**
+	 * Safer alternative to directly using `haxe.Json.parse`
+	 * @param content 
+	 * @param pos 
+	 * @return Dynamic
+	 */
+	public static function parseJson(content:String, ?pos:haxe.PosInfos):Dynamic
+	{
+		try
+		{
+			return haxe.Json.parse(content);
+		}
+		catch (e)
+		{
+			Logger.log('failed to parse content\nException: ${e.message}', WARN, false, pos);
+			return null;
+		}
+	}
 	
 	/**
 	 * Retrieves the content of a given file from its path

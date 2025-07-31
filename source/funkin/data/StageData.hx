@@ -26,7 +26,7 @@ class StageData
 		var path = Paths.getPath('stages/$stage/data.json', TEXT, null, true);
 		if (!FunkinAssets.exists(path, TEXT)) path = Paths.getPath('stages/$stage.json', TEXT, null, true);
 		
-		return FunkinAssets.exists(path, TEXT) ? cast Json.parse(FunkinAssets.getContent(path)) : null;
+		return FunkinAssets.exists(path, TEXT) ? cast FunkinAssets.parseJson(FunkinAssets.getContent(path)) : null;
 	}
 	
 	public static function generateDefault():StageFile return

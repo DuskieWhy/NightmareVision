@@ -80,7 +80,7 @@ class CreditsState extends MusicBeatState
 				'https://twitter.com/DuskieWhy',
 				'0x6D32A8'
 			],
-			['Data', 'data', 'Programmer', 'https://twitter.com/FixedData', '0xFFAF64'],
+			['data5', 'data', 'Programmer', 'https://twitter.com/FixedData', '0xFFAF64'],
 			[
 				'NebulaZorua',
 				'neb',
