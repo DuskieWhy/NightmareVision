@@ -330,7 +330,6 @@ class Note extends FlxSprite
 			
 			if (prevNote.isSustainNote)
 			{
-				isSustainEnd = false;
 				prevNote.animation.play('hold$noteData');
 				prevNote.scale.y *= Conductor.stepCrotchet / 100 * 1.05;
 				prevNote.isSustainEnd = false;
