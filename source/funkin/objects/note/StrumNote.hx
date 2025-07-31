@@ -84,7 +84,7 @@ class StrumNote extends FlxSprite
 	
 	public function handleColors(anim:String, ?note:Note = null)
 	{
-		if (!NoteSkinHelper.instance?.data?.inGameColoring ?? false || rgbShader == null) return;
+		if (rgbShader == null || !NoteSkinHelper.instance?.data?.inGameColoring ?? false) return;
 		
 		var arr:Array<FlxColor> = ClientPrefs.arrowRGBdef[noteData];
 		if (ClientPrefs.noteSkin.contains('Quant'))
@@ -103,7 +103,7 @@ class StrumNote extends FlxSprite
 			}
 		}
 		
-		rgbShader.enabled = anim == 'static' ? false : true;
+		rgbShader.enabled = anim != 'static';
 	}
 	
 	public function reloadNote()
