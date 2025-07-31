@@ -16,6 +16,8 @@ class RGBPalette
 	public var alphaMult(default, set):Float;
 	public var flash(default, set):Float;
 	
+	public var enabled(default, set):Bool;
+	
 	public var mult(default, set):Float;
 	
 	public function copyValues(tempShader:RGBPalette)
@@ -31,6 +33,7 @@ class RGBPalette
 			shader.mult.value[0] = tempShader.shader.mult.value[0];
 			shader.u_alpha.value[0] = tempShader.shader.u_alpha.value[0];
 			shader.u_flash.value[0] = tempShader.shader.u_flash.value[0];
+			shader.u_enabled.value[0] = tempShader.shader.u_enabled.value[0];
 		}
 		else shader.mult.value[0] = 0.0;
 	}
@@ -77,6 +80,13 @@ class RGBPalette
 		return alphaMult;
 	}
 	
+	function set_enabled(value:Bool):Bool
+	{
+		enabled = value;
+		shader.u_enabled.value = [value];
+		return enabled;
+	}
+	
 	public function new()
 	{
 		r = 0xFFFF0000;
@@ -85,6 +95,7 @@ class RGBPalette
 		mult = 1.0;
 		flash = 0.0;
 		alphaMult = 1.0;
+		enabled = true;
 	}
 }
 
@@ -123,6 +134,7 @@ class RGBShaderReference
 			mult = parent.mult;
 			alphaMult = parent.alphaMult;
 			flash = parent.flash;
+			enabled = parent.enabled;
 		}
 	}
 	
@@ -164,8 +176,8 @@ class RGBShaderReference
 	
 	private function set_enabled(value:Bool)
 	{
-		_owner.shader = value ? parent.shader : null;
-		return (enabled = value);
+		if (allowNew && value != _original.enabled) cloneOriginal();
+		return (enabled = parent.enabled = value);
 	}
 	
 	public var allowNew = true;
@@ -185,6 +197,7 @@ class RGBShaderReference
 			
 			parent.alphaMult = _original.alphaMult;
 			parent.flash = _original.flash;
+			parent.enabled = _original.enabled;
 			
 			_owner.shader = parent.shader;
 		}
@@ -204,10 +217,12 @@ class RGBPaletteShader extends FlxShader
 		uniform float u_alpha;
 		uniform float u_flash;
 
+		uniform bool u_enabled;
+
 		vec4 flixel_texture2DCustom(sampler2D bitmap, vec2 coord) 
 		{
 			vec4 color = flixel_texture2D(bitmap, coord);
-			if (!hasTransform || color.a == 0.0 || mult == 0.0) 
+			if (!u_enabled || !hasTransform || color.a == 0.0 || mult == 0.0) 
 			{
 				return color;
 			}
