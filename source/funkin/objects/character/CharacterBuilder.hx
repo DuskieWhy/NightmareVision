@@ -96,7 +96,7 @@ class CharacterBuilder
 		}
 	}
 	
-	public static function getCharacterFile(character:String):CharacterFile
+	public static function getCharacterFile(character:String):CharacterFile // char loading should be safe todo that latr.
 	{
 		var charPath:String = Paths.getPath('characters/' + character + '.json', TEXT, null, true);
 		
@@ -105,7 +105,7 @@ class CharacterBuilder
 			charPath = Paths.getPrimaryPath('characters/' + DEFAULT_CHARACTER + '.json');
 		}
 		
-		return cast Json.parse(FunkinAssets.getContent(charPath));
+		return cast FunkinAssets.parseJson(FunkinAssets.getContent(charPath));
 	}
 	
 	public static function changeTypeReload(info:Array<Dynamic>, type:String, file:String)

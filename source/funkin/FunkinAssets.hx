@@ -97,6 +97,7 @@ class FunkinAssets
 		#if (MODS_ALLOWED || ASSET_REDIRECT)
 		return FileSystem.exists(directory) ? FileSystem.readDirectory(directory) : []; // doing a check because i want this to maintain parity with ther assets variation
 		#else
+		if (directory.trim().length == 0) return [];
 		var dir = Assets.list().filter(string -> string.contains(directory));
 		return dir.map(string -> string.replace(directory, '').replace('/', ''));
 		#end
