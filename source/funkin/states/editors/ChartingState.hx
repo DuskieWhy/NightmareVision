@@ -35,7 +35,7 @@ import flixel.addons.ui.FlxUI;
 import flixel.group.FlxGroup;
 import flixel.group.FlxGroup.FlxTypedGroup;
 
-import funkin.objects.character.CharacterBuilder;
+import funkin.objects.character.Character;
 import funkin.data.StageData;
 import funkin.data.NoteSkinHelper;
 import funkin.backend.Difficulty;
@@ -3266,7 +3266,7 @@ class ChartingState extends MusicBeatState
 		if (!OpenFlAssets.exists(path))
 		#end
 		{
-			path = Paths.getPrimaryPath('characters/' + CharacterBuilder.DEFAULT_CHARACTER + '.json'); // If a character couldn't be found, change him to BF just to prevent a crash
+			path = Paths.getPrimaryPath('characters/' + Character.DEFAULT_CHARACTER + '.json'); // If a character couldn't be found, change him to BF just to prevent a crash
 		}
 		
 		#if MODS_ALLOWED
@@ -3275,7 +3275,7 @@ class ChartingState extends MusicBeatState
 		var rawJson = OpenFlAssets.getText(path);
 		#end
 		
-		var json:Null<funkin.objects.character.CharacterBuilder.CharacterFile> = cast FunkinAssets.parseJson(rawJson);
+		var json:Null<funkin.objects.character.CharacterData.CharacterInfo> = cast FunkinAssets.parseJson(rawJson);
 		return json.healthicon ?? 'face';
 	}
 	

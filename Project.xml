@@ -78,8 +78,8 @@
 	<haxelib name="flxanimate"/>
 	<haxelib name="moonchart"/>
 
-	<!-- <haxelib name="haxeui-core" /> -->
-	<!-- <haxelib name="haxeui-flixel" /> -->
+	<haxelib name="haxeui-core" />
+	<haxelib name="haxeui-flixel" />
 
 	<haxelib name="discord_rpc" if="DISCORD_ALLOWED"/>
 	<haxelib name="hxvlc" if="VIDEOS_ALLOWED"/>
@@ -98,6 +98,7 @@
 
 	<!--Needed for haxeui-->
 	<haxedef name="haxeui_dont_impose_base_class"/>
+	<haxedef name="haxeui_focus_out_on_click"/>
 
 	<!--Needed for better error reporting with hscript-->
 	<define name="hscriptPos"/>

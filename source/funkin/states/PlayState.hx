@@ -23,7 +23,6 @@ import flixel.input.keyboard.FlxKey;
 import flixel.util.helpers.FlxBounds;
 import flixel.group.FlxContainer.FlxTypedContainer;
 
-import funkin.objects.character.CharacterBuilder;
 import funkin.objects.character.Character;
 import funkin.backend.Difficulty;
 import funkin.game.RatingInfo;
@@ -623,7 +622,7 @@ class PlayState extends MusicBeatState
 		
 		if (!stage.stageData.hide_girlfriend)
 		{
-			gf = CharacterBuilder.fromName(0, 0, gfVersion);
+			gf = new Character(gfVersion);
 			startCharacterPos(gf);
 			gf.scrollFactor.set(0.95, 0.95);
 			gfGroup.add(gf);
@@ -633,13 +632,13 @@ class PlayState extends MusicBeatState
 			scripts.set('gfGroup', gfGroup);
 		}
 		
-		dad = CharacterBuilder.fromName(0, 0, SONG.player2);
+		dad = new Character(SONG.player2);
 		startCharacterPos(dad, true);
 		dadGroup.add(dad);
 		startCharacterScript(dad.curCharacter, dad);
 		dadMap.set(dad.curCharacter, dad);
 		
-		boyfriend = CharacterBuilder.fromName(0, 0, SONG.player1, true);
+		boyfriend = new Character(SONG.player1, true);
 		startCharacterPos(boyfriend);
 		boyfriendGroup.add(boyfriend);
 		startCharacterScript(boyfriend.curCharacter, boyfriend);
@@ -866,7 +865,7 @@ class PlayState extends MusicBeatState
 			case 0:
 				if (!boyfriendMap.exists(newCharacter))
 				{
-					var newBoyfriend:Character = CharacterBuilder.fromName(0, 0, newCharacter, true);
+					var newBoyfriend:Character = new Character(0, 0, newCharacter, true);
 					boyfriendMap.set(newCharacter, newBoyfriend);
 					boyfriendGroup.add(newBoyfriend);
 					startCharacterPos(newBoyfriend);
@@ -877,7 +876,7 @@ class PlayState extends MusicBeatState
 			case 1:
 				if (!dadMap.exists(newCharacter))
 				{
-					var newDad:Character = CharacterBuilder.fromName(0, 0, newCharacter);
+					var newDad:Character = new Character(0, 0, newCharacter);
 					dadMap.set(newCharacter, newDad);
 					dadGroup.add(newDad);
 					startCharacterPos(newDad, true);
@@ -888,7 +887,7 @@ class PlayState extends MusicBeatState
 			case 2:
 				if (gf != null && !gfMap.exists(newCharacter))
 				{
-					var newGf:Character = CharacterBuilder.fromName(0, 0, newCharacter);
+					var newGf:Character = new Character(0, 0, newCharacter);
 					newGf.scrollFactor.set(0.95, 0.95);
 					gfMap.set(newCharacter, newGf);
 					gfGroup.add(newGf);
@@ -2274,7 +2273,7 @@ class PlayState extends MusicBeatState
 					var lastAlpha:Float = dad.alpha;
 					dad.alpha = 0.00001;
 					dad = dadMap.get(name);
-					// if (!dad.curCharacter.startsWith('gf')){ 
+					// if (!dad.curCharacter.startsWith('gf')){
 					// 	if (wasGf && gf != null) gf.visible = true;
 					// 	else if (gf != null) gf.visible = false;
 					// }
@@ -2328,22 +2327,19 @@ class PlayState extends MusicBeatState
 				{
 					if (dad.curCharacter.startsWith('gf'))
 					{ // Tutorial GF is actually Dad! The GF is an imposter!! ding ding ding ding ding ding ding, dindinding, end my suffering
-						dad.playAnim('cheer', true);
+						dad.playAnimForDuration('cheer', time);
 						dad.specialAnim = true;
-						dad.heyTimer = time;
 					}
 					else if (gf != null)
 					{
-						gf.playAnim('cheer', true);
+						gf.playAnimForDuration('cheer', time);
 						gf.specialAnim = true;
-						gf.heyTimer = time;
 					}
 				}
 				if (value != 1)
 				{
-					boyfriend.playAnim('hey', true);
+					boyfriend.playAnimForDuration('hey', time);
 					boyfriend.specialAnim = true;
-					boyfriend.heyTimer = time;
 				}
 				
 			case 'Set GF Speed':
@@ -3151,7 +3147,7 @@ class PlayState extends MusicBeatState
 		
 		if (char != null && !daNote.noMissAnimation)
 		{
-			if (char.animTimer <= 0 && !char.voicelining)
+			if (char.animTimer <= 0)
 			{
 				var daAlt = '';
 				if (daNote.noteType == 'Alt Animation') daAlt = '-alt';
@@ -3188,8 +3184,7 @@ class PlayState extends MusicBeatState
 			
 			FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
 			
-			if (anim) if (boyfriend.animTimer <= 0 && !boyfriend.voicelining) boyfriend.playAnim(noteSkin.data.singAnimations[Std.int(Math.abs(direction))]
-				+ 'miss', true);
+			if (anim) if (boyfriend.animTimer <= 0) boyfriend.playAnim(noteSkin.data.singAnimations[Std.int(Math.abs(direction))] + 'miss', true);
 			vocals.playerVolume = 0;
 		}
 		scripts.call('noteMissPress', [direction]);
@@ -3207,9 +3202,8 @@ class PlayState extends MusicBeatState
 		
 		if (note.noteType == 'Hey!' && char.animOffsets.exists('hey'))
 		{
-			char.playAnim('hey', true);
+			char.playAnimForDuration('hey', 0.6);
 			char.specialAnim = true;
-			char.heyTimer = 0.6;
 		}
 		
 		if (!note.noteSplashDisabled && !note.isSustainNote && playfield.playerControls) spawnNoteSplashOnNote(note);
@@ -3223,7 +3217,6 @@ class PlayState extends MusicBeatState
 			}
 			
 			var animToPlay:String = noteSkin.data.singAnimations[Std.int(Math.abs(note.noteData))] + altAnim;
-			if (char.voicelining) char.voicelining = false;
 			
 			if (char != null)
 			{
@@ -3362,7 +3355,7 @@ class PlayState extends MusicBeatState
 					gf.holdTimer = 0;
 				}
 			}
-			else if (field.owner.animTimer <= 0 && !field.owner.voicelining)
+			else if (field.owner.animTimer <= 0)
 			{
 				field.owner.holdTimer = 0;
 				
@@ -3393,21 +3386,20 @@ class PlayState extends MusicBeatState
 			
 			if (note.noteType == 'Hey!')
 			{
-				if (field.owner.animTimer <= 0 && !field.owner.voicelining)
+				if (field.owner.animTimer <= 0)
 				{
 					if (field.owner.animOffsets.exists('hey'))
 					{
-						field.owner.playAnim('hey', true);
+						field.owner.playAnimForDuration('hey', 0.6);
+						
 						field.owner.specialAnim = true;
-						field.owner.heyTimer = 0.6;
 					}
 				}
 				
 				if (gf != null && gf.animOffsets.exists('cheer'))
 				{
-					gf.playAnim('cheer', true);
+					gf.playAnimForDuration('cheer', 0.6);
 					gf.specialAnim = true;
-					gf.heyTimer = 0.6;
 				}
 			}
 		}
@@ -3485,7 +3477,7 @@ class PlayState extends MusicBeatState
 						gf.holdTimer = 0;
 					}
 				}
-				else if (field.owner.animTimer <= 0 && !field.owner.voicelining)
+				else if (field.owner.animTimer <= 0)
 				{
 					field.owner.holdTimer = 0;
 					final curRow = noteRows[note.gfNote ? 2 : note.mustPress ? 0 : 1][note.row];
@@ -3510,20 +3502,18 @@ class PlayState extends MusicBeatState
 				}
 				if (note.noteType == 'Hey!')
 				{
-					if (field.owner.animTimer <= 0 && !field.owner.voicelining)
+					if (field.owner.animTimer <= 0)
 					{
 						if (field.owner.animOffsets.exists('hey'))
 						{
-							field.owner.playAnim('hey', true);
+							field.owner.playAnimForDuration('hey', 0.6);
 							field.owner.specialAnim = true;
-							field.owner.heyTimer = 0.6;
 						}
 					}
 					if (gf != null && gf.animOffsets.exists('cheer'))
 					{
-						gf.playAnim('cheer', true);
 						gf.specialAnim = true;
-						gf.heyTimer = 0.6;
+						gf.playAnimForDuration('cheer', 0.6);
 					}
 				}
 			}
@@ -3650,16 +3640,20 @@ class PlayState extends MusicBeatState
 	// rework this
 	public function handleBoppers(beat:Int)
 	{
-		if (gf != null
-			&& beat % Math.round(gfSpeed * gf.danceEveryNumBeats) == 0
-			&& !gf.isAnimNull()
-			&& !gf.getAnimName().startsWith("sing")
-			&& !gf.stunned) gf.dance();
-		if (beat % boyfriend.danceEveryNumBeats == 0
-			&& !boyfriend.isAnimNull()
-			&& !boyfriend.getAnimName().startsWith('sing')
-			&& !boyfriend.stunned) boyfriend.dance();
-		if (beat % dad.danceEveryNumBeats == 0 && !dad.isAnimNull() && !dad.getAnimName().startsWith('sing') && !dad.stunned) dad.dance();
+		gf?.onBeatHit(beat);
+		boyfriend?.onBeatHit(beat);
+		dad?.onBeatHit(beat);
+		
+		// if (gf != null
+		// 	&& beat % Math.round(gfSpeed * gf.danceEveryNumBeats) == 0
+		// 	&& !gf.isAnimNull()
+		// 	&& !gf.getAnimName().startsWith("sing")
+		// 	&& !gf.stunned) gf.dance();
+		// if (beat % boyfriend.danceEveryNumBeats == 0
+		// 	&& !boyfriend.isAnimNull()
+		// 	&& !boyfriend.getAnimName().startsWith('sing')
+		// 	&& !boyfriend.stunned) boyfriend.dance();
+		// if (beat % dad.danceEveryNumBeats == 0 && !dad.isAnimNull() && !dad.getAnimName().startsWith('sing') && !dad.stunned) dad.dance();
 	}
 	
 	override function sectionHit():Void

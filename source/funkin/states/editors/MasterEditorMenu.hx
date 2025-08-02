@@ -1,12 +1,13 @@
 package funkin.states.editors;
 
+import funkin.objects.character.Character;
+
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 
-import funkin.objects.character.CharacterBuilder;
 import funkin.data.*;
 import funkin.objects.*;
 
@@ -109,7 +110,7 @@ class MasterEditorMenu extends MusicBeatState
 			switch (options[curSelected])
 			{
 				case 'Character Editor':
-					FlxG.switchState(() -> new CharacterEditorState(CharacterBuilder.DEFAULT_CHARACTER, false));
+					FlxG.switchState(() -> new CharacterEditorState(Character.DEFAULT_CHARACTER, false));
 				case 'Week Editor':
 					FlxG.switchState(() -> new WeekEditorState());
 				case 'Menu Character Editor':

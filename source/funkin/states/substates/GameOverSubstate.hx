@@ -10,7 +10,6 @@ import flixel.util.FlxTimer;
 import funkin.backend.MusicBeatSubstate;
 import funkin.states.PlayState;
 import funkin.objects.character.Character;
-import funkin.objects.character.CharacterBuilder;
 
 /**
  * The substate that goes over the game whenever the player dies.
@@ -79,7 +78,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		
 		if (boyfriend == null)
 		{
-			boyfriend = CharacterBuilder.fromName(PlayState.instance.boyfriend.getScreenPosition()
+			boyfriend = new Character(PlayState.instance.boyfriend.getScreenPosition()
 				.x, PlayState.instance.boyfriend.getScreenPosition().y, characterName, true);
 			boyfriend.x += boyfriend.positionArray[0] - PlayState.instance.boyfriend.positionArray[0];
 			boyfriend.y += boyfriend.positionArray[1] - PlayState.instance.boyfriend.positionArray[1];
