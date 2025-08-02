@@ -3450,17 +3450,6 @@ class PlayState extends MusicBeatState
 		gf?.onBeatHit(beat);
 		boyfriend?.onBeatHit(beat);
 		dad?.onBeatHit(beat);
-		
-		// if (gf != null
-		// 	&& beat % Math.round(gfSpeed * gf.danceEveryNumBeats) == 0
-		// 	&& !gf.isAnimNull()
-		// 	&& !gf.getAnimName().startsWith("sing")
-		// 	&& !gf.stunned) gf.dance();
-		// if (beat % boyfriend.danceEveryNumBeats == 0
-		// 	&& !boyfriend.isAnimNull()
-		// 	&& !boyfriend.getAnimName().startsWith('sing')
-		// 	&& !boyfriend.stunned) boyfriend.dance();
-		// if (beat % dad.danceEveryNumBeats == 0 && !dad.isAnimNull() && !dad.getAnimName().startsWith('sing') && !dad.stunned) dad.dance();
 	}
 	
 	override function sectionHit():Void
