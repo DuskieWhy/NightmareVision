@@ -212,7 +212,7 @@ class Bopper extends FlxSprite
 	 */
 	public function recalculateDanceIdle():Void
 	{
-		alternatingDance = animation.exists('danceLeft' + idleSuffix) && animation.exists('danceRight' + idleSuffix);
+		alternatingDance = hasAnim('danceLeft' + idleSuffix) && hasAnim('danceRight' + idleSuffix);
 	}
 	
 	public function onBeatHit(beat:Int)
