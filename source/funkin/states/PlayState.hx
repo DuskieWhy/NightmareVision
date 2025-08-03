@@ -3230,45 +3230,44 @@ class PlayState extends MusicBeatState
 				scripts.call('extraNoteHitPre', [note, field.ID]);
 		}
 		
-		var char = note.owner == null ? field.owner : note.owner;
-		if (note.gfNote) char = gf;
+		final char:Null<Character> = note.gfNote ? gf : note.owner ?? field.owner;
 		
-		switch (note.noteType)
+		if (char != null)
 		{
-			case 'Hurt Note':
-				if (char.animation.exists('hurt'))
-				{
-					char.playAnim('hurt', true);
-					char.specialAnim = true;
-				}
-				return;
-			case 'Hey!':
-				if (char.animation.exists('hey'))
-				{
-					char.playAnimForDuration('hey', 0.6);
-					char.specialAnim = true;
-				}
-				return; // to do change this it prevents hscript funcs from being caleld
-		}
-		
-		if (!note.hitCausesMiss && !note.noAnimation)
-		{
-			var altAnim:String = "";
-			
-			if (SONG.notes[curSection] != null) if (SONG.notes[curSection].altAnim || note.noteType == 'Alt Animation') altAnim = '-alt';
-			
-			var animToPlay:String = noteSkin.data.singAnimations[Std.int(Math.abs(note.noteData))] + altAnim;
-			
-			if (char != null)
+			switch (note.noteType)
 			{
+				case 'Hurt Note':
+					if (char.animation.exists('hurt'))
+					{
+						char.playAnim('hurt', true);
+						char.specialAnim = true;
+					}
+				// return;
+				case 'Hey!':
+					if (char.animation.exists('hey'))
+					{
+						char.playAnimForDuration('hey', 0.6);
+						char.specialAnim = true;
+					}
+					// fiox latr
+					// return; // to do change this it prevents hscript funcs from being caleld
+			}
+			
+			if (!note.hitCausesMiss && !note.noAnimation)
+			{
+				var altAnim:String = "";
+				
+				if (note.noteType == 'Alt Animation' || SONG.notes[curSection]?.altAnim) altAnim = '-alt';
+				
+				var animToPlay:String = noteSkin.data.singAnimations[Std.int(Math.abs(note.noteData))] + altAnim;
+				
 				char.holdTimer = 0;
 				
-				final curRow = noteRows[note.mustPress ? 0 : 1][note.row];
+				final chord = noteRows[note.mustPress ? 0 : 1][note.row];
 				
-				if (ClientPrefs.jumpGhosts && char.ghostsEnabled && !note.isSustainNote && curRow != null && curRow.length > 1 && note.noteType != "Ghost Note")
+				if (ClientPrefs.jumpGhosts && char.ghostsEnabled && !note.isSustainNote && chord != null && chord.length > 1 && note.noteType != "Ghost Note")
 				{
 					// potentially have jump anims?
-					final chord = curRow;
 					final animNote = chord[0];
 					final realAnim = noteSkin.data.singAnimations[Std.int(Math.abs(animNote.noteData))] + altAnim;
 					
@@ -3277,7 +3276,7 @@ class PlayState extends MusicBeatState
 					if (note.nextNote != null && note.prevNote != null)
 					{
 						if (note != animNote
-							&& !note.nextNote.isSustainNote /* && !note.prevNote.isSustainNote */
+							&& !note.nextNote.isSustainNote
 							&& scripts.call('onGhostAnim', [animToPlay, note]) != Globals.Function_Stop)
 						{
 							char.playGhostAnim(chord.indexOf(note), animToPlay, true);
@@ -3370,10 +3369,8 @@ class PlayState extends MusicBeatState
 		scripts.call('onDestroy', [], true);
 		scripts = FlxDestroyUtil.destroy(scripts);
 		
-		eventScripts.call('onDestroy', [], true);
 		eventScripts = FlxDestroyUtil.destroy(eventScripts);
 		
-		noteTypeScripts.call('onDestroy', [], true);
 		noteTypeScripts = FlxDestroyUtil.destroy(noteTypeScripts);
 		
 		if (!ClientPrefs.controllerMode)
