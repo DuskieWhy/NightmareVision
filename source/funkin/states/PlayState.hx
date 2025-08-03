@@ -3193,12 +3193,11 @@ class PlayState extends MusicBeatState
 	
 	function noteHit(note:Note, field:PlayField):Void
 	{
-		var intendedVocals:SyncedFlxSoundGroup;
+		var intendedVocals = vocals.playerVocals;
 		
 		switch (field.ID)
 		{
 			case 0:
-				intendedVocals = vocals.playerVocals;
 				scripts.call('goodNoteHitPre', [note]);
 				
 				if (note.wasGoodHit || field.autoPlayed && (note.ignoreNote || note.hitCausesMiss)) return;
@@ -3249,7 +3248,7 @@ class PlayState extends MusicBeatState
 					char.playAnimForDuration('hey', 0.6);
 					char.specialAnim = true;
 				}
-				return;
+				return; // to do change this it prevents hscript funcs from being caleld
 		}
 		
 		if (!note.hitCausesMiss && !note.noAnimation)
@@ -3316,21 +3315,23 @@ class PlayState extends MusicBeatState
 		
 		final hscriptArgs = [note];
 		
-		switch (field.ID)
+		final funcToCall = switch (field.ID)
 		{
 			case 0:
 				note.wasGoodHit = true;
-				final noteScriptRet = callNoteTypeScript(note.noteType, 'goodNoteHit', [note]);
-				if (noteScriptRet != Globals.Function_Stop) scripts.call('goodNoteHit', [note], false, [note.noteType]);
+				'goodNoteHit';
+				
 			case 1:
 				note.hitByOpponent = true;
-				final noteScriptRet = callNoteTypeScript(note.noteType, 'opponentNoteHit', hscriptArgs);
-				if (noteScriptRet != Globals.Function_Stop) scripts.call('opponentNoteHit', hscriptArgs, false, [note.noteType]);
-			case 2:
+				'opponentNoteHit';
+			default:
 				note.wasGoodHit = true;
-				final noteScriptRet = callNoteTypeScript(note.noteType, 'extraNoteHit', [note]);
-				if (noteScriptRet != Globals.Function_Stop) scripts.call('extraNoteHit', [note], false, [note.noteType]);
+				'extraNoteHit';
 		}
+		
+		final noteScriptRet = callNoteTypeScript(note.noteType, funcToCall, hscriptArgs);
+		if (noteScriptRet != Globals.Function_Stop) scripts.call(funcToCall, hscriptArgs, false, [note.noteType]);
+		
 		if (!note.isSustainNote) disposeNote(note);
 	}
 	
