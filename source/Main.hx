@@ -6,6 +6,7 @@ import openfl.display.StageScaleMode;
 
 import flixel.FlxG;
 import flixel.FlxGame;
+import flixel.input.keyboard.FlxKey;
 
 import funkin.backend.DebugDisplay;
 
@@ -67,10 +68,9 @@ class Main extends Sprite
 		game._customSoundTray = funkin.objects.FunkinSoundTray;
 		
 		addChild(game);
-
-		//prevent accept button when alt+enter is pressed
-		FlxG.stage.addEventListener(openfl.events.KeyboardEvent.KEY_DOWN, (e) ->
-		{
+		
+		// prevent accept button when alt+enter is pressed
+		FlxG.stage.addEventListener(openfl.events.KeyboardEvent.KEY_DOWN, (e) -> {
 			if (e.keyCode == FlxKey.ENTER && e.altKey) e.stopImmediatePropagation();
 		}, false, 100);
 		
