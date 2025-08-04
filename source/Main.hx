@@ -34,12 +34,6 @@ class Main extends Sprite
 	public static function main():Void
 	{
 		Lib.current.addChild(new Main());
-
-		//prevent accept button when alt+enter is pressed
-		FlxG.stage.addEventListener(openfl.events.KeyboardEvent.KEY_DOWN, (e) ->
-		{
-			if (e.keyCode == FlxKey.ENTER && e.altKey) e.stopImmediatePropagation();
-		}, false, 100);
 	}
 	
 	public function new()
@@ -73,6 +67,12 @@ class Main extends Sprite
 		game._customSoundTray = funkin.objects.FunkinSoundTray;
 		
 		addChild(game);
+
+		//prevent accept button when alt+enter is pressed
+		FlxG.stage.addEventListener(openfl.events.KeyboardEvent.KEY_DOWN, (e) ->
+		{
+			if (e.keyCode == FlxKey.ENTER && e.altKey) e.stopImmediatePropagation();
+		}, false, 100);
 		
 		#if !mobile
 		DebugDisplay.init();
