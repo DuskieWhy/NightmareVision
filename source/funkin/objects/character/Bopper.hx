@@ -14,16 +14,13 @@ import flixel.util.FlxSignal.FlxTypedSignal;
 // i liked it alot
 class Bopper extends FlxSprite
 {
-	/**
-	 * Called whenever an animation is finished playing
-	 */
+	@:inheritDoc(flixel.animation.FlxAnimationController.onFinish)
 	public final onAnimationFinish = new FlxTypedSignal<(animName:String) -> Void>();
 	
-	/**
-	 * Called every frame of a animation that is playing
-	 */
-	public final onAnimationFrameChange = new FlxTypedSignal<(animName:String, frame:Int, idx:Int) -> Void>();
+	@:inheritDoc(flixel.animation.FlxAnimationController.onFrameChange)
+	public final onAnimationFrameChange = new FlxTypedSignal<(animName:String, frameNumber:Int, frameIndex:Int) -> Void>();
 	
+	@:inheritDoc(flixel.animation.FlxAnimationController.onLoop)
 	public final onAnimationLoop = new FlxTypedSignal<(animName:String) -> Void>();
 	
 	/**
