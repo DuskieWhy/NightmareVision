@@ -891,7 +891,7 @@ class CharacterEditorState extends MusicBeatState
 		var y:Float = curChar.getMidpoint().y;
 		if (!curChar.isPlayer)
 		{
-			x += 150 + curChar.cameraPosition[0];
+			x += 100 + curChar.cameraPosition[0];
 		}
 		else
 		{

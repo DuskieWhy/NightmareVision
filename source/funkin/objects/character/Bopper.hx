@@ -110,14 +110,22 @@ class Bopper extends FlxSprite
 			
 			animateAtlas.frames = FlxAnimateFrames.fromAnimate((Paths.getPath('images/$path', TEXT, null, true)));
 			
-			animateAtlas.anim.onFinish.add((anim) -> onAnimationFinish.dispatch(__prevPlayedAnimation));
-			animateAtlas.anim.onFrameChange.add((anim, num, idx) -> onAnimationFrameChange.dispatch(__prevPlayedAnimation, num, idx));
-			animateAtlas.anim.onLoop.add((anim) -> onAnimationLoop.dispatch(__prevPlayedAnimation));
+			animateAtlas.animation.onFinish.add((anim) -> onAnimationFinish.dispatch(__prevPlayedAnimation));
+			animateAtlas.animation.onFrameChange.add((anim, num, idx) -> onAnimationFrameChange.dispatch(__prevPlayedAnimation, num, idx));
+			animateAtlas.animation.onLoop.add((anim) -> onAnimationLoop.dispatch(__prevPlayedAnimation));
 		}
 		else
 		{
 			animateAtlas = FlxDestroyUtil.destroy(animateAtlas);
-			frames = Paths.getMultiAtlas(path.split(','));
+			
+			try
+			{
+				frames = Paths.getMultiAtlas(path.split(','));
+			}
+			catch (e)
+			{
+				loadGraphic(Paths.image(path.split(',')[0]));
+			}
 		}
 	}
 	

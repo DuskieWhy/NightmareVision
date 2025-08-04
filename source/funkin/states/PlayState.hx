@@ -2665,18 +2665,24 @@ class PlayState extends MusicBeatState
 	public function getCharacterCameraPos(char:Character):FlxPoint
 	{
 		if (char == null) return FlxPoint.weak();
-		var desiredPos = char.getMidpoint();
+		
+		final desiredPos = char.getMidpoint();
+		
+		final offsets = char.isPlayer ? boyfriendCameraOffset : opponentCameraOffset;
+		
+		desiredPos.x += char.cameraPosition[0];
+		
+		desiredPos.y += -100 + char.cameraPosition[1] + offsets[1];
 		
 		if (char.isPlayer)
 		{
-			desiredPos.x -= 100 + (char.cameraPosition[0] - boyfriendCameraOffset[0]);
-			desiredPos.y += -100 + char.cameraPosition[1] + boyfriendCameraOffset[1];
+			desiredPos.x -= 100 + offsets[0];
 		}
 		else
 		{
-			desiredPos.x += 150 + char.cameraPosition[0] + opponentCameraOffset[0];
-			desiredPos.y += -100 + char.cameraPosition[1] + opponentCameraOffset[1];
+			desiredPos.x += 100 + offsets[0];
 		}
+		
 		return desiredPos;
 	}
 	
