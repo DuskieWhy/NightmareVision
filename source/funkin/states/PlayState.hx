@@ -3234,65 +3234,72 @@ class PlayState extends MusicBeatState
 		
 		if (char != null)
 		{
-			switch (note.noteType)
+			if (!note.hitCausesMiss)
 			{
-				case 'Hurt Note':
-					if (char.animation.exists('hurt'))
-					{
-						char.playAnim('hurt', true);
-						char.specialAnim = true;
-					}
-				// return;
-				case 'Hey!':
-					if (char.animation.exists('hey'))
-					{
-						char.playAnimForDuration('hey', 0.6);
-						char.specialAnim = true;
-					}
-					// fiox latr
-					// return; // to do change this it prevents hscript funcs from being caleld
-			}
-			
-			if (!note.hitCausesMiss && !note.noAnimation)
-			{
-				var altAnim:String = "";
-				
-				if (note.noteType == 'Alt Animation' || SONG.notes[curSection]?.altAnim) altAnim = '-alt';
-				
-				var animToPlay:String = noteSkin.data.singAnimations[Std.int(Math.abs(note.noteData))] + altAnim;
-				
-				char.holdTimer = 0;
-				
-				final chord = noteRows[note.mustPress ? 0 : 1][note.row];
-				
-				if (ClientPrefs.jumpGhosts && char.ghostsEnabled && !note.isSustainNote && chord != null && chord.length > 1 && note.noteType != "Ghost Note")
+				if (!note.noAnimation)
 				{
-					// potentially have jump anims?
-					final animNote = chord[0];
-					final realAnim = noteSkin.data.singAnimations[Std.int(Math.abs(animNote.noteData))] + altAnim;
+					final animSuffix = (note.noteType == 'Alt Animation' || SONG.notes[curSection]?.altAnim) ? '-alt' : '';
 					
-					if (char.mostRecentRow != note.row) char.playAnim(realAnim, true);
+					final animToPlay = noteSkin.data.singAnimations[Std.int(Math.abs(note.noteData))] + animSuffix;
 					
-					if (note.nextNote != null && note.prevNote != null)
+					char.holdTimer = 0;
+					
+					// ghost stuff
+					final chord = noteRows[note.mustPress ? 0 : 1][note.row];
+					
+					if (ClientPrefs.jumpGhosts && char.ghostsEnabled && !note.isSustainNote && chord != null && chord.length > 1 && note.noteType != "Ghost Note")
 					{
-						if (note != animNote
-							&& !note.nextNote.isSustainNote
-							&& scripts.call('onGhostAnim', [animToPlay, note]) != Globals.Function_Stop)
+						final animNote = chord[0];
+						final realAnim = noteSkin.data.singAnimations[Std.int(Math.abs(animNote.noteData))] + animSuffix;
+						
+						if (char.mostRecentRow != note.row) char.playAnim(realAnim, true);
+						
+						if (note.nextNote != null && note.prevNote != null)
 						{
-							char.playGhostAnim(chord.indexOf(note), animToPlay, true);
+							if (note != animNote
+								&& !note.nextNote.isSustainNote
+								&& scripts.call('onGhostAnim', [animToPlay, note]) != Globals.Function_Stop)
+							{
+								char.playGhostAnim(chord.indexOf(note), animToPlay, true);
+							}
+							else if (note.nextNote.isSustainNote)
+							{
+								char.playAnim(realAnim, true);
+								char.playGhostAnim(chord.indexOf(note), animToPlay, true);
+							}
 						}
-						else if (note.nextNote.isSustainNote)
-						{
-							char.playAnim(realAnim, true);
-							char.playGhostAnim(chord.indexOf(note), animToPlay, true);
-						}
+						char.mostRecentRow = note.row;
 					}
-					char.mostRecentRow = note.row;
+					else
+					{
+						if (note.noteType != "Ghost Note") char.playAnim(animToPlay, true);
+						else char.playGhostAnim(note.noteData, animToPlay, true);
+					}
+					
+					switch (note.noteType)
+					{
+						case 'Hey!':
+							if (char.animation.exists('hey'))
+							{
+								char.playAnimForDuration('hey', 0.6);
+								char.specialAnim = true;
+							}
+					}
 				}
-				else
+			}
+			else
+			{
+				if (!note.noAnimation)
 				{
-					if (note.noteType != "Ghost Note") char.playAnim(animToPlay, true);
-					else char.playGhostAnim(note.noteData, animToPlay, true);
+					switch (note.noteType)
+					{
+						case 'Hurt Note':
+							if (char.animation.exists('hurt'))
+							{
+								char.playAnim('hurt', true);
+								char.specialAnim = true;
+							}
+					}
 				}
 			}
 		}
