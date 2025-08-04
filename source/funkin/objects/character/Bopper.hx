@@ -1,8 +1,14 @@
 package funkin.objects.character;
 
-import flixel.util.FlxSignal.FlxTypedSignal;
+import openfl.display.Graphics;
 
-import flxanimate.AnimateSprite;
+import flixel.math.FlxRect;
+import flixel.util.FlxDirectionFlags;
+
+import animate.FlxAnimateFrames;
+import animate.FlxAnimate;
+
+import flixel.util.FlxSignal.FlxTypedSignal;
 
 // highly based of base games bopper class
 // i liked it alot
@@ -16,14 +22,14 @@ class Bopper extends FlxSprite
 	/**
 	 * Called every frame of a animation that is playing
 	 */
-	public final onAnimationFrameChange = new FlxTypedSignal<(animName:String, frame:Int) -> Void>();
+	public final onAnimationFrameChange = new FlxTypedSignal<(animName:String, frame:Int, idx:Int) -> Void>();
 	
-	// public final onAnimationLoop = new FlxTypedSignal<String->Void>();
+	public final onAnimationLoop = new FlxTypedSignal<(animName:String) -> Void>();
 	
 	/**
 	 * Texture atlas instance. Initiated through `loadAtlas`.
 	 */
-	public var animateAtlas:Null<AnimateSprite> = null;
+	public var animateAtlas:Null<FlxAnimate> = null;
 	
 	/**
 	 *	Animation offsets
@@ -74,8 +80,9 @@ class Bopper extends FlxSprite
 		this.danceEveryNumBeats = danceEveryNumBeats;
 		this.antialiasing = ClientPrefs.globalAntialiasing;
 		
-		this.animation.onFinish.add(anim -> onAnimationFinish.dispatch(anim));
-		this.animation.onFrameChange.add((anim, num, idx) -> onAnimationFrameChange.dispatch(anim, num));
+		this.animation.onFinish.add((anim) -> onAnimationFinish.dispatch(anim));
+		this.animation.onFrameChange.add((anim, num, idx) -> onAnimationFrameChange.dispatch(anim, num, idx));
+		this.animation.onLoop.add((anim) -> onAnimationLoop.dispatch(anim));
 	}
 	
 	override function update(elapsed:Float)
@@ -85,16 +92,27 @@ class Bopper extends FlxSprite
 		super.update(elapsed);
 	}
 	
+	/**
+	 * initiates the visual sprite for the class
+	 * 
+	 * If the path given is to a texture atlas, it will load a texture atlas
+	 * @param path 
+	 */
 	public function loadAtlas(path:String)
 	{
 		final isAtlasSprite = FunkinAssets.exists(Paths.getPath('images/$path/Animation.json', TEXT, null, true));
 		if (isAtlasSprite)
 		{
-			animateAtlas = FlxDestroyUtil.destroy(animateAtlas);
-			animateAtlas = new AnimateSprite(0, 0, Paths.getPath('images/$path', TEXT, null, true));
+			if (animateAtlas == null)
+			{
+				animateAtlas = new FlxAnimate();
+			}
 			
-			animateAtlas.anim.onComplete.add(() -> onAnimationFinish.dispatch(__prevPlayedAnimation));
-			animateAtlas.anim.onFrame.add((num) -> onAnimationFrameChange.dispatch(__prevPlayedAnimation, num));
+			animateAtlas.frames = FlxAnimateFrames.fromAnimate((Paths.getPath('images/$path', TEXT, null, true)));
+			
+			animateAtlas.anim.onFinish.add((anim) -> onAnimationFinish.dispatch(__prevPlayedAnimation));
+			animateAtlas.anim.onFrameChange.add((anim, num, idx) -> onAnimationFrameChange.dispatch(__prevPlayedAnimation, num, idx));
+			animateAtlas.anim.onLoop.add((anim) -> onAnimationLoop.dispatch(__prevPlayedAnimation));
 		}
 		else
 		{
@@ -268,13 +286,13 @@ class Bopper extends FlxSprite
 	
 	public inline function hasAnim(anim:String):Bool
 	{
-		if (animateAtlas != null) return animateAtlas.anim.existsByName(anim);
+		if (animateAtlas != null) return animateAtlas.anim.exists(anim);
 		else return animation.exists(anim);
 	}
 	
 	public inline function isAnimNull():Bool
 	{
-		if (animateAtlas != null) return animateAtlas.anim.curSymbol == null;
+		if (animateAtlas != null) return animateAtlas.anim.curAnim == null;
 		else return animation.curAnim == null;
 	}
 	
@@ -299,21 +317,21 @@ class Bopper extends FlxSprite
 	{
 		if (isAnimNull()) return 0;
 		
-		return animateAtlas?.anim.length ?? animation.curAnim.numFrames;
+		return animateAtlas?.anim.numFrames ?? animation.curAnim.numFrames;
 	}
 	
 	public var animCurFrame(get, set):Int;
 	
 	inline function get_animCurFrame():Int
 	{
-		return isAnimNull() ? 0 : animateAtlas?.anim.curFrame ?? animation.curAnim.curFrame;
+		return isAnimNull() ? 0 : animateAtlas?.anim.curAnim.curFrame ?? animation.curAnim.curFrame;
 	}
 	
 	inline function set_animCurFrame(value:Int):Int
 	{
 		if (isAnimNull()) return 0;
 		
-		if (animateAtlas != null) return animateAtlas.anim.curFrame = value;
+		if (animateAtlas != null) return animateAtlas.anim.curAnim.curFrame = value;
 		else return animation.curAnim.curFrame = value;
 	}
 	
@@ -329,15 +347,57 @@ class Bopper extends FlxSprite
 		else animation.addByIndices(anim, prefix, indices, '', fps, looping);
 	}
 	
-	public inline function removeAnim(anim:String) // maybe thisll be ok in flixel-animate
+	public inline function removeAnim(anim:String)
 	{
-		if (animateAtlas == null) animation.remove(anim);
+		if (animateAtlas != null) animateAtlas.anim.remove(anim);
+		else animation.remove(anim);
 	}
 	
 	public inline function finishAnim()
 	{
 		if (isAnimNull()) return;
+		
 		if (animateAtlas != null) animateAtlas.anim.finish();
 		else animation.finish();
+	}
+	
+	override function get_width()
+	{
+		if (animateAtlas != null) return animateAtlas.width;
+		else return super.get_width();
+	}
+	
+	override function get_height()
+	{
+		if (animateAtlas != null) return animateAtlas.height;
+		else return super.get_height();
+	}
+	
+	override function drawDebugOnCamera(camera:FlxCamera):Void
+	{
+		if (!camera.visible || !camera.exists) return;
+		
+		final isOnScreen = animateAtlas?.isOnScreen(camera) ?? isOnScreen(camera);
+		
+		if (!isOnScreen) return;
+		
+		if (animateAtlas != null)
+		{
+			var rect = animateAtlas.getBoundingBox(camera);
+			var gfx:Graphics = animateAtlas.beginDrawDebug(camera);
+			
+			animateAtlas.drawDebugBoundingBox(gfx, rect, allowCollisions, immovable);
+			
+			animateAtlas.endDrawDebug(camera);
+		}
+		else
+		{
+			var rect = getBoundingBox(camera);
+			var gfx:Graphics = beginDrawDebug(camera);
+			
+			drawDebugBoundingBox(gfx, rect, allowCollisions, immovable);
+			
+			endDrawDebug(camera);
+		}
 	}
 }

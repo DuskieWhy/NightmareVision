@@ -75,7 +75,7 @@
 
 	<haxelib name="hscript-iris"/>
 
-	<haxelib name="flxanimate"/>
+	<haxelib name="flixel-animate"/>
 	<haxelib name="moonchart"/>
 
 	<haxelib name="haxeui-core" />

@@ -15,9 +15,9 @@
 				"version": "2.6.4"
 			},
 			{
-				"name": "flxanimate",
-				"link": "https://github.com/FixedData/flxanimate",
-				"branch": "778d59b20ad7f358a1a32fac76fded4012258471"
+				"name": "flixel-animate",
+				"link": "https://github.com/MaybeMaru/flixel-animate",
+				"branch": "d446dfa061b1ea5959e82bc94dcaee8135c565a1"
 			},
 			{
 				"name": "hscript",

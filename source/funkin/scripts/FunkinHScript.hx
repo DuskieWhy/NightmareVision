@@ -251,7 +251,6 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		set("FlxRuntimeShader", funkin.backend.FunkinShader.FunkinRuntimeShader);
 		set("FlxFlicker", flixel.effects.FlxFlicker);
 		set('FlxSpriteUtil', flixel.util.FlxSpriteUtil);
-		set('AnimateSprite', flxanimate.AnimateSprite);
 		set("FlxBackdrop", flixel.addons.display.FlxBackdrop);
 		set("FlxTiledSprite", flixel.addons.display.FlxTiledSprite);
 		set('FlxPoint', flixel.math.FlxPoint.FlxBasePoint);
