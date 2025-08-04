@@ -1,4 +1,4 @@
-import funkin.data.Conductor;
+import funkin.backend.Conductor;
 
 function onLoad()
 {
