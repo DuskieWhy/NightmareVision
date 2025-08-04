@@ -174,10 +174,16 @@ class PlayState extends MusicBeatState
 	**/
 	public var GF_Y:Float = 130;
 	
-	/**
-		Girlfriend's dance rate. 
-	**/
-	public var gfSpeed:Int = 1;
+	public var gfSpeed(default, set):Int = 1;
+	
+	function set_gfSpeed(value:Int)
+	{
+		if (gfGroup == null || gf == null) return gfSpeed = value;
+		
+		gf.danceEveryNumBeats *= value;
+		
+		return gfSpeed = value;
+	}
 	
 	/**
 	 * A container of where all sprites placed
@@ -2302,6 +2308,8 @@ class PlayState extends MusicBeatState
 					}
 					scripts.set('gf', gf);
 					scripts.set('gfGroup', gfGroup);
+					
+					gf.danceEveryNumBeats *= gfSpeed;
 				}
 		}
 		callHUDFunc(hud -> hud.onCharacterChange());
