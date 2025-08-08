@@ -1,8 +1,0 @@
-<panel id="theVBox" height="50" width="150">
-
-    <vbox id="weener" width="100%">
-        <label text="Zoom: 1x" horizontalAlign="center" verticalAlign="center" id="zoomText"/>
-        <label text="Animation Frames: ()" horizontalAlign="center" verticalAlign="center" id="animationFramesText"/>
-    </vbox>
-
-</panel>

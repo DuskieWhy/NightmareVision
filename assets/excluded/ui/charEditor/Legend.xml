@@ -1,7 +1,0 @@
-<window title="Legend" width="300" height="200">
-
-    <window-title width="100%">
-    </window-title>
-
-    <label text="" id="desc" width="100%" height="100%"/>
-</window>

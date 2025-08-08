@@ -34,7 +34,16 @@ class ToolBar extends MenuBar {}
 @:build(haxe.ui.ComponentBuilder.build("assets/excluded/ui/charEditor/characterAnimsList.xml"))
 class CharacterAnimList extends Panel {}
 
-@:build(haxe.ui.ComponentBuilder.build("assets/excluded/ui/charEditor/MiscInfo.xml"))
+@:xml('
+<panel id="theVBox" height="50" width="150">
+
+    <vbox id="weener" width="100%">
+        <label text="Zoom: 1x" horizontalAlign="center" verticalAlign="center" id="zoomText"/>
+        <label text="Animation Frames: ()" horizontalAlign="center" verticalAlign="center" id="animationFramesText"/>
+    </vbox>
+
+</panel>
+')
 class MiscInfo extends Panel {}
 
 // kinda pointless for legend to be extended ngl but well its here
