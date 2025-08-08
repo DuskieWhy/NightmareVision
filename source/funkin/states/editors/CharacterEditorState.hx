@@ -925,7 +925,6 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		}
 		
 		final isPlayer = (reload ? character.isPlayer : !tryToPredictisOpp(characterId));
-		trace(isPlayer);
 		
 		if (character == null)
 		{
@@ -947,16 +946,15 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			character.isPlayer = !character.isPlayer;
 			character.flipX = (character.originalFlipX != character.isPlayer);
 			
-			trace('isPlayer ' + character.isPlayer);
 			uiElements.toolBar.isPlayerCheckBox.value = character.isPlayer;
 		}
-		
-		dance();
 		
 		positionCharacter();
 		
 		updateAnimList();
 		updateDialogueBox();
+		
+		dance();
 	}
 	
 	inline function positionCharacter()
@@ -975,7 +973,6 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		
 		final midPoint = character.getMidpoint();
 		
-		trace(character.isPlayer);
 		var x:Float = midPoint.x;
 		var y:Float = midPoint.y;
 		if (!character.isPlayer)
