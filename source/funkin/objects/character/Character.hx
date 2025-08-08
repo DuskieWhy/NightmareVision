@@ -117,6 +117,7 @@ class Character extends Bopper
 	public var mostRecentRow:Int = 0; // for ghost anims n shit
 	
 	// Used on Character Editor
+	public var isPlayerInEditor:Null<Bool> = null;
 	public var imageFile:String = '';
 	public var jsonScale:Float = 1;
 	public var noAntialiasing:Bool = false;
@@ -181,6 +182,10 @@ class Character extends Bopper
 		
 		this.antialiasing = !noAntialiasing && ClientPrefs.globalAntialiasing;
 		
+		this.danceEveryNumBeats = json.dance_every ?? 2;
+		
+		this.isPlayerInEditor = json._editor_isPlayer;
+		
 		loadAtlas(imageFile);
 		
 		if (jsonScale != 1)
@@ -195,6 +200,10 @@ class Character extends Bopper
 			this.healthColorArray = json.healthbar_colors;
 			
 			this.healthColour = FlxColor.fromRGB(json.healthbar_colors[0], json.healthbar_colors[1], json.healthbar_colors[2]);
+		}
+		else
+		{
+			this.healthColour = json.healthbar_colour;
 		}
 		
 		this.animations = json.animations;

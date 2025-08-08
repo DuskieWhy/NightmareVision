@@ -1,0 +1,62 @@
+<menubar id="_menuBar" width="100%" height="40" horizontalAlign='right'>
+
+
+    <spacer width="60%"/>
+
+    <button allowFocus="false" id="exitButton" text="Exit" verticalAlign="center"/>
+
+    <button allowFocus="false" id="legendButton" text="press for info" verticalAlign="center"/>
+
+    <spacer width="40%" />
+
+    <menu text="Bg View" id="bgView" style="padding:10px;">
+        <vbox width="100%" horizontalAlign="center" verticalAlign="center">
+
+            <checkbox text="Stage Bg" id="stageBGCheckbox" verticalAlign="center"/>
+
+            <hbox tooltip="if Stage Bg is disabled, change the colour of the bg.">
+                <label text="Bg Colour" verticalAlign="center" />
+                <color-picker-popup id="bgColour" verticalAlign="center"/>
+            </hbox>
+        </vbox>
+    </menu>
+
+    <menu text="Ghost Settings" id="ghostSettings" style="padding:10px;">
+        <vbox width="100%" horizontalAlign="center" verticalAlign="center">
+
+            <hbox verticalAlign="center" horizontalAlign="center">
+
+                <button allowFocus="false" id="enableGhost" text="Spawn Ghost" verticalAlign="center" tooltip="Spanws a copy of the character"/>
+
+                <vbox>
+                    <checkbox text="Highlight it?" id="ghostBlend" tooltip="Sets the copy's colours to be lighter"/>
+                    <checkbox text="In Front?" id="ghostInFront" tooltip="Makes the ghost in front of the character"/>
+                </vbox>
+
+            </hbox>
+
+            <spacer height="1"/>
+            <rule />
+            <spacer height="1"/>
+
+            <label text="Ghost Alpha" verticalAlign="center" horizontalAlign="center"/>
+            <slider pos="0.5" id="ghostAlphaSlider" min="0" max="1" verticalAlign="center" horizontalAlign="center" tooltip="Changes the character copy's transparency" />
+
+        </vbox>
+    </menu>
+
+    <spacer width="1" />
+    <rule direction="vertical" width="20" height= "30" />
+    <spacer width="1" />
+
+    <button allowFocus="false" id="refreshCharButton" text="Refresh Character" style="background-color: #575213;" verticalAlign="center"/>
+    <button allowFocus="false" id="loadTemplateButton" text="Load Template" style="background-color: #a01926;" verticalAlign="center"/>
+    <button allowFocus="false" id="saveCharacterButton" text="Save Character" style="background-color: #156015;" verticalAlign="center"/>
+    
+
+    <checkbox text="Playable?" id="isPlayerCheckBox" verticalAlign="center" tooltip="Will flip and position the character based on if they are a player or not."/>
+
+    <dropdown width="150" dropdownHeight="200" searchable="true" searchPrompt="boyfriend" id="characterDropdown" verticalAlign="center" tooltip="List of currently found characters."/>
+
+
+</menubar>

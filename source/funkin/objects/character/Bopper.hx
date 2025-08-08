@@ -66,8 +66,7 @@ class Bopper extends FlxSprite
 	 */
 	public var idleSuffix:String = '';
 	
-	@:allow(funkin.states.editors.CharacterEditorState)
-	var scalableOffsets(default, null):Bool = false;
+	public var scalableOffsets:Bool = false;
 	
 	//-----
 	
@@ -366,6 +365,14 @@ class Bopper extends FlxSprite
 		else animation.finish();
 	}
 	
+	public inline function stopAnim()
+	{
+		if (isAnimNull()) return;
+		
+		if (animateAtlas != null) animateAtlas.anim.stop();
+		else animation.stop();
+	}
+	
 	override function get_width()
 	{
 		if (animateAtlas != null) return animateAtlas.width;
@@ -378,6 +385,7 @@ class Bopper extends FlxSprite
 		else return super.get_height();
 	}
 	
+	#if FLX_DEBUG
 	override function drawDebugOnCamera(camera:FlxCamera):Void
 	{
 		if (!camera.visible || !camera.exists) return;
@@ -405,4 +413,5 @@ class Bopper extends FlxSprite
 			endDrawDebug(camera);
 		}
 	}
+	#end
 }

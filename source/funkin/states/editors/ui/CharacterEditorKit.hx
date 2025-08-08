@@ -1,0 +1,114 @@
+package funkin.states.editors.ui;
+
+import haxe.ui.containers.dialogs.Dialogs.FileDialogTypes;
+import haxe.ui.containers.dialogs.SaveFileDialog;
+import haxe.ui.backend.SaveFileDialogBase;
+import haxe.ui.components.Label;
+import haxe.ui.containers.windows.WindowManager;
+import haxe.ui.containers.windows.Window;
+import haxe.ui.components.Button;
+
+import flixel.graphics.frames.FlxFrame;
+import flixel.graphics.frames.FlxImageFrame;
+
+import haxe.ui.util.Variant;
+import haxe.ui.components.Image;
+import haxe.ui.core.ItemRenderer;
+import haxe.ui.components.CheckBox;
+
+import flixel.group.FlxSpriteContainer.FlxTypedSpriteContainer;
+
+import haxe.ui.containers.HBox;
+import haxe.ui.containers.Panel;
+import haxe.ui.containers.VBox;
+import haxe.ui.containers.dialogs.CollapsibleDialog;
+import haxe.ui.containers.menus.Menu;
+import haxe.ui.containers.menus.MenuBar;
+
+@:build(haxe.ui.ComponentBuilder.build("assets/excluded/ui/charEditor/CharacterSettings.xml"))
+class CharacterDialog extends CollapsibleDialog {}
+
+@:build(haxe.ui.ComponentBuilder.build("assets/excluded/ui/charEditor/ToolBar.xml"))
+class ToolBar extends MenuBar {}
+
+@:build(haxe.ui.ComponentBuilder.build("assets/excluded/ui/charEditor/characterAnimsList.xml"))
+class CharacterAnimList extends Panel {}
+
+@:build(haxe.ui.ComponentBuilder.build("assets/excluded/ui/charEditor/MiscInfo.xml"))
+class MiscInfo extends Panel {}
+
+// kinda pointless for legend to be extended ngl but well its here
+
+@:xml('
+<window title="Information" width="300" height="200" minimizable="false" collapsable="false" >
+
+    <label text="" id="desc" width="100%" height="100%"/>
+</window>
+')
+class LegendWindow extends Window {}
+
+class CharEditorUI extends FlxTypedSpriteContainer<FlxSprite>
+{
+	// the primary components
+	public var characterDialogBox:CharacterDialog;
+	public var toolBar:ToolBar;
+	public var animationList:CharacterAnimList; // should be fuckign called a panel
+	public var miscInfo:MiscInfo;
+	
+	public function new()
+	{
+		super();
+		
+		toolBar = new ToolBar();
+		add(toolBar);
+		
+		toolBar.findComponent('stageBGCheckbox', CheckBox).value = true;
+		
+		animationList = new CharacterAnimList();
+		add(animationList);
+		animationList.x = 20;
+		animationList.y = toolBar.height + 20;
+		
+		miscInfo = new MiscInfo();
+		add(miscInfo);
+		miscInfo.y = toolBar.height + 20;
+		miscInfo.x = (FlxG.width - miscInfo.actualComponentWidth) / 2;
+		
+		characterDialogBox = new CharacterDialog();
+		add(characterDialogBox);
+		characterDialogBox.showDialog(false);
+		
+		characterDialogBox.x = FlxG.width - characterDialogBox.actualComponentWidth - 20;
+		characterDialogBox.y = toolBar.height + 20;
+		
+		characterDialogBox.characterTabs.selectedPage = characterDialogBox.characterTabs.getPageById('charSettings');
+		
+		characterDialogBox.findComponent('iconDisplay', Button).remainPressed = false;
+	}
+	
+	override function destroy()
+	{
+		super.destroy();
+	}
+	
+	public function setHealthIcon(frame:FlxFrame)
+	{
+		characterDialogBox.findComponent('iconDisplay', Button).icon = Variant.fromImageData(frame);
+	}
+	
+	public function spawnLegend()
+	{
+		var legend = new LegendWindow();
+		legend.left = 200;
+		legend.top = 50;
+		
+		legend.findComponent('desc', Label).value = _legend;
+		legend.findComponent('desc', Label).fontSize = 12;
+		
+		FlxG.sound.play(Paths.sound('ui/openPopup'), 0.5);
+		
+		WindowManager.instance.addWindow(legend);
+	}
+	
+	final _legend = '> Pressing [W, A, S, D] plays the corresponding sing animation.\nHolding shift while doing so will attempt to play alt animations\n\n> Pressing [Z, X] will move a frame forward/backward of the currently playing animation.\n\n> Use the middle mouse wheel to drag the camera and zoom.\nAdditionally, [Q, E] can zoom in/out the camera.';
+}

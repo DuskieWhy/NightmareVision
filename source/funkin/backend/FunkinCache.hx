@@ -21,7 +21,7 @@ class FunkinCache
 		@:privateAccess
 		for (key in FlxG.bitmap._cache.keys())
 		{
-			if (!currentTrackedGraphics.exists(key))
+			if (!currentTrackedGraphics.exists(key) && !key.startsWith('pixels')) // for haxeui is a bit hacky will do for now //find out hwo to avoid haxeui nicer or just do a different caching method
 			{
 				disposeGraphic(FlxG.bitmap.get(key));
 			}

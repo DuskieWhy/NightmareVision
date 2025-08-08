@@ -1,0 +1,145 @@
+<collapsible-dialog id="_CharacterSettings" title="Character Settings" width="500" height="330" closable="false">
+
+    <tabview id="characterTabs" width="100%" height="100%" styleName="full-width-buttons">
+        <box text="Animation">
+
+            <vbox>
+                <label text="Animations:" verticalAlign="center" />
+                <dropdown width="200" searchable="true" searchPrompt="idle" id="animationsDropdown">
+                    <data>
+
+                    </data>
+                </dropdown>
+
+                <spacer height="1"/>
+                <rule />
+                <spacer height="1"/>
+
+                <hbox>
+                    <vbox>
+                        <label text="Animation Name" verticalAlign="center" />
+                        <textfield placeholder="" width="300" id="animationNameTextField"/>
+                    </vbox>
+
+                    <vbox>
+                        <label text="Framerate:" verticalAlign="center"/>
+                        <number-stepper pos="24" step="1" min="0" id="animationFramerateStepper"/>
+                    </vbox>
+                </hbox>
+
+                <hbox>
+                    <vbox>
+                        <label text="XML/TXT Animation Prefix" verticalAlign="center" />
+                        <hbox>
+
+                            <textfield placeholder="" width="300" id="animationPrefixTextField"/>
+                            <checkbox text="Should it loop?" id="animationLoopCheckbox" verticalAlign="center"/>
+
+                        </hbox>
+                    </vbox>
+                </hbox>
+
+                <hbox>
+
+                    <vbox>
+                        <label text="(Optional) Animation Indices" verticalAlign="center" />
+                        <textfield placeholder="" width="300" id="animationIndicesTextField"/>
+                    </vbox>
+                </hbox>
+
+                <spacer height="1"/>
+                <rule />
+                <spacer height="1"/>
+
+                <hbox>
+                    <button allowFocus="false" id="removeAnimationButton" text="Remove Animation" horizontalAlign="right" style="background-color: #a01926;"/>
+                    <button allowFocus="false" id="addAnimationButton" text="Add/Update Animation" horizontalAlign="right" style="background-color: #156015;"/>
+                </hbox>
+            </vbox>
+            
+        </box>
+
+        <box text="Character" id="charSettings">
+
+            <vbox>
+                <grid columns="3" style="justify-content:space-evenly">
+                    <label text="Image File Name:" verticalAlign="center" />
+                    <textfield placeholder="characters/BOYFRIEND" width="200" id="imageFileTextField"/>
+                    <button allowFocus="false" id="reloadCharacterImageButton" text="Reload Image" horizontalAlign="right"/>
+
+                    <label text="Health Icon File Name:" verticalAlign="center" />
+                    <textfield placeholder="bf" width="200" id="healthIconTextField"/>
+                    <button allowFocus="false" id="getIconColourButton" text="Get Icon Colour" horizontalAlign="right"/>
+
+                </grid>
+
+                <spacer height="1"/>
+                <rule />
+                <spacer height="1"/>
+
+                <hbox style="justify-content:space-evenly">
+
+                    <vbox>
+
+                        <checkbox text="Flip X?" id="flipXCheckbox"/>
+                        <checkbox text="Anti-aliasing?" id="antialiasingCheckbox"/>
+                        <checkbox text="Scaled Offsets?" id="scaledOffsetsCheckbox"/>
+ 
+                        <spacer height="11"/>
+
+                        <vbox>
+                            <label text="Dance every:" verticalAlign="center" horizontalAlign="center" />
+                            <number-stepper pos="2" step="1" id="danceEveryStepper" min="1" precision="0" />
+                        </vbox>
+
+                    
+                        <!-- <spacer height="1"/>
+                        <rule />
+                        <spacer height="1"/> -->
+                        
+                    </vbox>
+
+                    <vbox >
+                        <button id="iconDisplay" width="80px" height="80px" verticalAlign="center" horizontalAlign="center"/>
+
+                        <label text="Health Bar Colours" verticalAlign="center" horizontalAlign="center" />
+                        <color-picker-popup id="healthColourPicker"  verticalAlign="center" horizontalAlign="center" />
+                    </vbox>
+
+
+                    <vbox>
+                        <label text="Scale:" verticalAlign="center" horizontalAlign="center" />
+                        <number-stepper pos="1" step="0.1" min="0.1" id="scaleStepper"/>
+
+                        <label text="Sing Length:" verticalAlign="center" horizontalAlign="center" />
+                        <number-stepper pos="4" step="0.1" id="singLengthStepper" min="0"/>
+                    </vbox>
+
+                    <vbox>
+                        <label text="Character X:" verticalAlign="center" horizontalAlign="center"/>
+                        <number-stepper pos="0" step="10" id="characterXStepper"/>
+
+                        <label text="Character Y:" verticalAlign="center" horizontalAlign="center" />
+                        <number-stepper pos="0" step="10" id="characterYStepper"/>
+                    </vbox>
+
+                    <vbox>
+                        <label text="Camera X:" verticalAlign="center" horizontalAlign="center" />
+                        <number-stepper pos="0" step="10" id="characterCamXStepper"/>
+
+                        <label text="Camera Y:" verticalAlign="center" horizontalAlign="center" />
+                        <number-stepper pos="0" step="10" id="characterCamYStepper"/>
+                    </vbox>
+
+                </hbox>
+
+
+
+            </vbox>
+
+        </box>
+
+    </tabview>
+
+
+</collapsible-dialog>

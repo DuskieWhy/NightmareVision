@@ -1,0 +1,8 @@
+<panel text="Animations" tooltip="List of anims of the current character.">
+
+    <listview id="animationList" width="150" height="200" selectedIndex="0">
+        <data>
+
+        </data>
+    </listview>
+</panel>

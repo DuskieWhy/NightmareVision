@@ -60,15 +60,19 @@ typedef CharacterInfo =
 	/**
 	 * The characters health colours. Stored as [r,g,b] to 0-255.
 	 */
-	@:optional var healthbar_colors:Array<Int>;
+	var ?healthbar_colors:Array<Int>;
 	
 	/**
 	 * The characters health colour.
 	 */
 	var healthbar_colour:Int;
 	
+	var ?dance_every:Int;
+	
 	/**
 	 * todo explain why
 	 */
-	@:optional var is_nmv:Bool;
+	@:optional var scalableOffsets:Bool;
+	
+	var ?_editor_isPlayer:Bool;
 }

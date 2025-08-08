@@ -2168,7 +2168,7 @@ class PlayState extends MusicBeatState
 		paused = true;
 		CoolUtil.cancelMusicFadeTween();
 		
-		FlxG.switchState(() -> new CharacterEditorState(SONG.player2));
+		FlxG.switchState(() -> new CharacterEditorState(SONG.player2, true));
 		
 		#if DISCORD_ALLOWED
 		DiscordClient.changePresence("Character Editor", null, null, true);
@@ -2670,17 +2670,15 @@ class PlayState extends MusicBeatState
 		
 		final offsets = char.isPlayer ? boyfriendCameraOffset : opponentCameraOffset;
 		
-		desiredPos.x += char.cameraPosition[0];
-		
 		desiredPos.y += -100 + char.cameraPosition[1] + offsets[1];
 		
 		if (char.isPlayer)
 		{
-			desiredPos.x -= 100 + offsets[0];
+			desiredPos.x -= 100 + offsets[0] + char.cameraPosition[0];
 		}
 		else
 		{
-			desiredPos.x += 100 + offsets[0];
+			desiredPos.x += 100 + offsets[0] + char.cameraPosition[0];
 		}
 		
 		return desiredPos;
