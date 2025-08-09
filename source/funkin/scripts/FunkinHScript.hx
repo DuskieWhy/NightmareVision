@@ -191,6 +191,10 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 	override function preset()
 	{
 		super.preset();
+		#if hl
+		set('Math', hl.HLFixes.HLMath);
+		set('Std', hl.HLFixes.HLStd);
+		#end
 		
 		set("StringTools", StringTools);
 		
