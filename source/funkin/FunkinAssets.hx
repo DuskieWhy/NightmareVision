@@ -43,18 +43,15 @@ class FunkinAssets
 	 */
 	public static function getContent(path:String):String
 	{
-		var content:String = '';
 		#if (MODS_ALLOWED || ASSET_REDIRECT)
-		if (FileSystem.exists(path)) content = File.getContent(path);
+		if (FileSystem.exists(path)) return File.getContent(path);
 		else
 		#end
-		if (Assets.exists(path)) content = Assets.getText(path);
+		if (Assets.exists(path)) return Assets.getText(path);
 		else
 		{
 			throw 'Couldnt find file at path [$path]';
 		}
-		
-		return content;
 	}
 	
 	/**
