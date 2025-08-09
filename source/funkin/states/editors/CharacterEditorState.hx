@@ -339,6 +339,24 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			character.gameoverCharacter = val.trim().length == 0 ? null : val.trim();
 		}
 		
+		uiElements.characterDialogBox.gameoverConfirmDeathSoundTextField.onChange = (ui) -> {
+			var val:String = uiElements.characterDialogBox.gameoverConfirmDeathSoundTextField.value;
+			
+			character.gameoverConfirmDeathSound = val.trim().length == 0 ? null : val.trim();
+		}
+		
+		uiElements.characterDialogBox.gameoverInitialDeathSoundTextField.onChange = (ui) -> {
+			var val:String = uiElements.characterDialogBox.gameoverInitialDeathSoundTextField.value;
+			
+			character.gameoverInitialDeathSound = val.trim().length == 0 ? null : val.trim();
+		}
+		
+		uiElements.characterDialogBox.gameoverLoopDeathSoundTextField.onChange = (ui) -> {
+			var val:String = uiElements.characterDialogBox.gameoverLoopDeathSoundTextField.value;
+			
+			character.gameoverLoopDeathSound = val.trim().length == 0 ? null : val.trim();
+		}
+		
 		uiElements.characterDialogBox.healthIconTextField.onChange = (ui) -> {
 			character.healthIcon = uiElements.characterDialogBox.healthIconTextField.value;
 			updateHealthIcon();
@@ -501,7 +519,8 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		// textfield fuckery
 		final dialog = uiElements.characterDialogBox;
 		
-		for (i in [dialog.imageFileTextField, dialog.healthIconTextField, dialog.animationNameTextField, dialog.animationPrefixTextField, dialog.animationIndicesTextField, dialog.gameoverCharTextField])
+		// UGHHHHHHH
+		for (i in [dialog.imageFileTextField, dialog.healthIconTextField, dialog.animationNameTextField, dialog.animationPrefixTextField, dialog.animationIndicesTextField, dialog.gameoverCharTextField, dialog.gameoverConfirmDeathSoundTextField, dialog.gameoverInitialDeathSoundTextField, dialog.gameoverLoopDeathSoundTextField])
 		{
 			i.onClick = (ui) -> {
 				isTextFieldFocused = true;
@@ -809,11 +828,16 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		
 		uiElements.characterDialogBox.imageFileTextField.value = character.imageFile;
 		uiElements.characterDialogBox.healthIconTextField.value = character.healthIcon;
-		uiElements.characterDialogBox.gameoverCharTextField.value = character.gameoverCharacter ?? '';
 		
 		uiElements.characterDialogBox.danceEveryStepper.value = character.danceEveryNumBeats;
 		
 		updateHealthIcon();
+		
+		// extra tab
+		uiElements.characterDialogBox.gameoverCharTextField.value = character.gameoverCharacter ?? '';
+		uiElements.characterDialogBox.gameoverConfirmDeathSoundTextField.value = character.gameoverConfirmDeathSound ?? '';
+		uiElements.characterDialogBox.gameoverInitialDeathSoundTextField.value = character.gameoverInitialDeathSound ?? '';
+		uiElements.characterDialogBox.gameoverLoopDeathSoundTextField.value = character.gameoverLoopDeathSound ?? '';
 		
 		// animations tab
 		uiElements.characterDialogBox.animationsDropdown.selectItemBy((item) -> return item.id == character.getAnimName());
@@ -1103,7 +1127,11 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 				"scalableOffsets": character.scalableOffsets,
 				"dance_every": character.danceEveryNumBeats,
 				"_editor_isPlayer": character.isPlayer,
-				"gameover_character": character.gameoverCharacter
+				
+				"gameover_character": character.gameoverCharacter,
+				"gameover_intial_sound": character.gameoverInitialDeathSound,
+				"gameover_loop_sound": character.gameoverLoopDeathSound,
+				"gameover_confirm_sound": character.gameoverConfirmDeathSound
 			};
 			
 		final dataToSave:String = Json.stringify(json, "\t");

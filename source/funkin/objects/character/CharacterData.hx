@@ -89,4 +89,10 @@ typedef CharacterInfo =
 	 * optional character to be used for `GameOverSubstate`. Has priority over the static vars
 	 */
 	var ?gameover_character:String;
+	
+	var ?gameover_intial_sound:String;
+	
+	var ?gameover_loop_sound:String;
+	
+	var ?gameover_confirm_sound:String;
 }

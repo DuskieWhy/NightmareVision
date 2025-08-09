@@ -76,7 +76,14 @@ class Character extends Bopper
 	
 	public var animations:Array<AnimationInfo> = [];
 	
+	// gameover suttffs
 	public var gameoverCharacter:Null<String> = null;
+	
+	public var gameoverInitialDeathSound:Null<String> = null;
+	
+	public var gameoverLoopDeathSound:Null<String> = null;
+	
+	public var gameoverConfirmDeathSound:Null<String> = null;
 	
 	/**
 	 * Character offsets defined by the json
@@ -189,6 +196,9 @@ class Character extends Bopper
 		this.isPlayerInEditor = json._editor_isPlayer;
 		
 		this.gameoverCharacter = json.gameover_character;
+		this.gameoverConfirmDeathSound = json.gameover_confirm_sound;
+		this.gameoverLoopDeathSound = json.gameover_loop_sound;
+		this.gameoverInitialDeathSound = json.gameover_intial_sound;
 		
 		loadAtlas(imageFile);
 		

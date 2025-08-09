@@ -101,11 +101,22 @@ class GameOverSubstate extends MusicBeatSubstate
 		PlayState.instance?.scripts.call('onGameOverPost', []);
 	}
 	
-	public function new(?character:String)
+	public function new(?character:Character)
 	{
 		super();
 		
-		characterName = character ?? characterName;
+		if (character != null)
+		{
+			characterName = character.gameoverCharacter ?? characterName;
+			
+			endSoundName = character.gameoverConfirmDeathSound ?? endSoundName;
+			
+			deathSoundName = character.gameoverInitialDeathSound ?? deathSoundName;
+			
+			loopSoundName = character.gameoverLoopDeathSound ?? loopSoundName;
+		}
+		
+		// characterName = character ?? characterName;
 		// reuse the og bf if its the same one
 		if (PlayState.instance.boyfriend != null && PlayState.instance.boyfriend.curCharacter == characterName)
 		{

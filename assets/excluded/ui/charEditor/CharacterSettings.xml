@@ -80,16 +80,6 @@
                     <textfield placeholder="bf" width="200" id="healthIconTextField"/>
                     <button allowFocus="false" id="getIconColourButton" text="Get Icon Colour" horizontalAlign="right"/>
 
-
-
-                    <vbox>
-                        <label text="(Optional)" verticalAlign="center" horizontalAlign="center"/>
-                        <label text="Gameover Character" verticalAlign="center" />
-                    </vbox>
-
-                    <textfield placeholder="bf-dead" width="200" id="gameoverCharTextField"/>
-
-
                 </grid>
 
                 <spacer height="1"/>
@@ -156,6 +146,25 @@
             </vbox>
 
         </box>
+
+        <box text="Extra" id="optionalSetttings">
+
+            <vbox>
+                <label text="(Optional) Gameover Character" verticalAlign="center" />
+                <textfield placeholder="bf-dead" width="350" id="gameoverCharTextField"/>
+
+                <label text="(Optional) Gamover Initial Death Sound" verticalAlign="center" />
+                <textfield placeholder="fnf_loss_sfx" width="350" id="gameoverInitialDeathSoundTextField"/>
+
+                <label text="(Optional) Gameover Looping Death Sound" verticalAlign="center" />
+                <textfield placeholder="gameOver" width="350" id="gameoverLoopDeathSoundTextField"/>
+
+                <label text="(Optional) Gameover Confirm Death Sound" verticalAlign="center" />
+                <textfield placeholder="gameOverEnd" width="350" id="gameoverConfirmDeathSoundTextField"/>
+
+            </vbox>
+                       
+        </box> 
 
     </tabview>
 
