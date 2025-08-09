@@ -1,122 +1,125 @@
 {
+	"_editor_isPlayer": false,
 	"animations": [
 		{
-			"loop": false,
+			"indices": [],
 			"offsets": [
 				0,
 				0
 			],
 			"fps": 24,
 			"anim": "idle",
-			"indices": [],
+			"loop": false,
 			"name": "Pico Idle Dance"
 		},
 		{
-			"loop": false,
+			"indices": [],
 			"offsets": [
 				65,
 				9
 			],
 			"fps": 24,
 			"anim": "singLEFT",
-			"indices": [],
+			"loop": false,
 			"name": "Pico Note Right0"
 		},
 		{
-			"loop": false,
+			"indices": [],
 			"offsets": [
 				-68,
 				-7
 			],
 			"fps": 24,
 			"anim": "singRIGHT",
-			"indices": [],
+			"loop": false,
 			"name": "Pico NOTE LEFT0"
 		},
 		{
-			"loop": false,
+			"indices": [],
 			"offsets": [
 				-60,
 				41
 			],
 			"fps": 24,
 			"anim": "singRIGHTmiss",
-			"indices": [],
+			"loop": false,
 			"name": "Pico NOTE LEFT miss"
 		},
 		{
-			"loop": false,
+			"indices": [],
 			"offsets": [
 				62,
 				64
 			],
 			"fps": 24,
 			"anim": "singLEFTmiss",
-			"indices": [],
+			"loop": false,
 			"name": "Pico Note Right Miss"
 		},
 		{
-			"loop": false,
+			"indices": [],
 			"offsets": [
 				-29,
 				27
 			],
 			"fps": 24,
 			"anim": "singUP",
-			"indices": [],
+			"loop": false,
 			"name": "pico Up note0"
 		},
 		{
-			"loop": false,
+			"indices": [],
 			"offsets": [
 				200,
 				-70
 			],
 			"fps": 24,
 			"anim": "singDOWN",
-			"indices": [],
+			"loop": false,
 			"name": "Pico Down Note0"
 		},
 		{
-			"loop": false,
+			"indices": [],
 			"offsets": [
 				210,
 				-28
 			],
 			"fps": 24,
 			"anim": "singDOWNmiss",
-			"indices": [],
+			"loop": false,
 			"name": "Pico Down Note MISS"
 		},
 		{
-			"loop": false,
+			"indices": [],
 			"offsets": [
 				-19,
 				67
 			],
 			"fps": 24,
 			"anim": "singUPmiss",
-			"indices": [],
+			"loop": false,
 			"name": "pico Up note miss"
 		}
 	],
-	"no_antialiasing": false,
+	"camera_position": [
+		50,
+		0
+	],
+	"dance_every": 2,
+	"flip_x": true,
+	"gameover_character": null,
+	"gameover_confirm_sound": null,
+	"gameover_intial_sound": null,
+	"gameover_loop_sound": null,
+	"healthbar_colour": -4728747,
+	"healthicon": "pico",
 	"image": "characters/Pico_FNF_assetss",
+	"no_antialiasing": false,
 	"position": [
 		0,
 		300
 	],
-	"healthicon": "pico",
-	"flip_x": true,
-	"healthbar_colors": [
-		183,
-		216,
-		85
-	],
-	"camera_position": [
-		0,
-		0
-	],
-	"sing_duration": 4,
-	"scale": 1
+	"scalableOffsets": false,
+	"scale": 1,
+	"sing_duration": 4
 }

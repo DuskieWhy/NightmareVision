@@ -106,17 +106,20 @@
 		0,
 		350
 	],
+	"dance_every": 2,
+	"gameover_intial_sound": null,
+	"scalableOffsets": false,
+	"gameover_confirm_sound": null,
 	"healthicon": "bf-pixel",
+	"gameover_character": null,
 	"flip_x": true,
-	"healthbar_colors": [
-		123,
-		214,
-		246
-	],
+	"healthbar_colour": -8661258,
 	"camera_position": [
-		50,
+		230,
 		-60
 	],
+	"gameover_loop_sound": null,
 	"sing_duration": 4,
-	"scale": 6
+	"scale": 6,
+	"_editor_isPlayer": true
 }

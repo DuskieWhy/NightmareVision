@@ -1,109 +1,112 @@
 {
+	"_editor_isPlayer": false,
 	"animations": [
 		{
-			"loop": false,
+			"indices": [],
 			"offsets": [
 				59,
 				-20
 			],
-			"anim": "hey",
 			"fps": 24,
-			"name": "spooky kids YEAH!!",
-			"indices": []
+			"anim": "hey",
+			"loop": false,
+			"name": "spooky kids YEAH!!"
 		},
 		{
-			"loop": false,
+			"indices": [],
 			"offsets": [
 				130,
 				-10
 			],
-			"anim": "singLEFT",
 			"fps": 24,
-			"name": "note sing left",
-			"indices": []
+			"anim": "singLEFT",
+			"loop": false,
+			"name": "note sing left"
 		},
 		{
-			"loop": false,
+			"indices": [],
 			"offsets": [
 				-130,
 				-14
 			],
-			"anim": "singRIGHT",
 			"fps": 24,
-			"name": "spooky sing right",
-			"indices": []
+			"anim": "singRIGHT",
+			"loop": false,
+			"name": "spooky sing right"
 		},
 		{
-			"loop": false,
+			"indices": [],
 			"offsets": [
 				-50,
 				-130
 			],
-			"anim": "singDOWN",
 			"fps": 24,
-			"name": "spooky DOWN note",
-			"indices": []
+			"anim": "singDOWN",
+			"loop": false,
+			"name": "spooky DOWN note"
 		},
 		{
-			"loop": false,
+			"indices": [
+				0,
+				2,
+				6
+			],
 			"offsets": [
 				0,
 				0
 			],
 			"fps": 12,
 			"anim": "danceLeft",
-			"indices": [
-				0,
-				2,
-				6
-			],
+			"loop": false,
 			"name": "spooky dance idle"
 		},
 		{
-			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
-			"fps": 12,
-			"anim": "danceRight",
 			"indices": [
 				8,
 				10,
 				12,
 				14
 			],
+			"offsets": [
+				0,
+				0
+			],
+			"fps": 12,
+			"anim": "danceRight",
+			"loop": false,
 			"name": "spooky dance idle"
 		},
 		{
-			"loop": false,
+			"indices": [],
 			"offsets": [
 				-20,
 				26
 			],
 			"fps": 24,
 			"anim": "singUP",
-			"indices": [],
+			"loop": false,
 			"name": "spooky UP NOTE"
 		}
 	],
-	"no_antialiasing": false,
+	"camera_position": [
+		50,
+		0
+	],
+	"dance_every": 2,
+	"flip_x": false,
+	"gameover_character": null,
+	"gameover_confirm_sound": null,
+	"gameover_intial_sound": null,
+	"gameover_loop_sound": null,
+	"healthbar_colour": -2785792,
+	"healthicon": "spooky",
 	"image": "characters/spooky_kids_assets",
+	"no_antialiasing": false,
 	"position": [
 		0,
 		200
 	],
-	"healthicon": "spooky",
-	"flip_x": false,
-	"healthbar_colors": [
-		213,
-		126,
-		0
-	],
-	"camera_position": [
-		0,
-		0
-	],
-	"sing_duration": 4,
-	"scale": 1
+	"scalableOffsets": false,
+	"scale": 1,
+	"sing_duration": 4
 }

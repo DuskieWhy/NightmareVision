@@ -1,14 +1,13 @@
 {
 	"animations": [
 		{
-			"loop": false,
 			"offsets": [
 				0,
 				0
 			],
-			"anim": "danceLeft",
+			"loop": false,
 			"fps": 24,
-			"name": "GF IDLE",
+			"anim": "danceLeft",
 			"indices": [
 				30,
 				0,
@@ -26,17 +25,17 @@
 				12,
 				13,
 				14
-			]
+			],
+			"name": "GF IDLE"
 		},
 		{
-			"loop": false,
 			"offsets": [
 				0,
 				0
 			],
-			"anim": "danceRight",
+			"loop": false,
 			"fps": 24,
-			"name": "GF IDLE",
+			"anim": "danceRight",
 			"indices": [
 				15,
 				16,
@@ -53,18 +52,19 @@
 				27,
 				28,
 				29
-			]
+			],
+			"name": "GF IDLE"
 		},
 		{
-			"loop": false,
 			"offsets": [
 				0,
 				0
 			],
-			"anim": "singUP",
+			"loop": false,
 			"fps": 24,
-			"name": "GF IDLE",
-			"indices": []
+			"anim": "singUP",
+			"indices": [],
+			"name": "GF IDLE"
 		}
 	],
 	"no_antialiasing": true,
@@ -73,17 +73,20 @@
 		0,
 		0
 	],
+	"dance_every": 1,
+	"gameover_intial_sound": null,
+	"scalableOffsets": false,
+	"gameover_confirm_sound": null,
 	"healthicon": "gf",
+	"gameover_character": null,
 	"flip_x": false,
-	"healthbar_colors": [
-		165,
-		0,
-		77
-	],
+	"healthbar_colour": -5963699,
 	"camera_position": [
 		-20,
 		80
 	],
+	"gameover_loop_sound": null,
 	"sing_duration": 4,
-	"scale": 5.99999999999999
+	"scale": 5.99999999999999,
+	"_editor_isPlayer": false
 }
