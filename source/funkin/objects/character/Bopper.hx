@@ -281,6 +281,7 @@ class Bopper extends FlxSprite
 		onAnimationFinish.removeAll();
 		onAnimationFrameChange.removeAll();
 		onAnimationFinish.removeAll();
+		
 		super.destroy();
 		
 		animateAtlas = FlxDestroyUtil.destroy(animateAtlas);

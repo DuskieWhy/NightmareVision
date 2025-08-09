@@ -41,7 +41,7 @@
             "label": "hl (ASSET_REDIRECT)",
             "target": "hl",
             "args": [
-                "-DFORCED_ANSI"
+                "-DASSET_REDIRECT"
             ]
         },
         {

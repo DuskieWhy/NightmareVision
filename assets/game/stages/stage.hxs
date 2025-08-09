@@ -1,17 +1,14 @@
-function onCreate() {
-    // PlayState.instance.defaultCamZoom = 0.2;
+function onLoad() {
 
-    var bg:FlxSprite = new FlxSprite(-600, -200);
-    bg.loadGraphic(Paths.image("stageback"));
-	bgLayer.add(bg); 
+    var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image("stageback"));
+    add(bg); 
 
-    var stageFront:FlxSprite = new FlxSprite(-600, 600);
-    stageFront.loadGraphic(Paths.image("stagefront"));
-    bgLayer.add(stageFront);
+    var stageFront:FlxSprite = new FlxSprite(-600, 600).loadGraphic(Paths.image("stagefront"));
+    add(stageFront);
 
-    var stageCurtains:FlxSprite = new FlxSprite(-600, -300);
-    stageCurtains.loadGraphic(Paths.image("stagecurtains"));
-    fgLayer.add(stageCurtains);
+    var stageCurtains:FlxSprite = new FlxSprite(-600, -300).loadGraphic(Paths.image("stagecurtains"));
+    add(stageCurtains);
 
-    trace("DICK");
+    stageCurtains.zIndex = 20;
+
 }
