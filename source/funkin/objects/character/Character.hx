@@ -310,10 +310,10 @@ class Character extends Bopper
 	/**
 	 * Plays the characters idle animation
 	 */
-	override function dance()
+	override function dance(forced:Bool = false)
 	{
 		if (debugMode) return;
-		super.dance();
+		super.dance(forced);
 	}
 	
 	override function playAnim(animToPlay:String, isForced:Bool = false, isReversed:Bool = false, frame:Int = 0)

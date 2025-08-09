@@ -208,7 +208,7 @@ class Bopper extends FlxSprite
 	/**
 	 * Makes the sprite "dance".
 	 */
-	public function dance():Void
+	public function dance(forced:Bool = false):Void
 	{
 		if (alternatingDance == null)
 		{
@@ -220,12 +220,12 @@ class Bopper extends FlxSprite
 		if (alternatingDance)
 		{
 			danced = !danced;
-			if (danced) playAnim('danceRight$idleSuffix');
-			else playAnim('danceLeft$idleSuffix');
+			if (danced) playAnim('danceRight$idleSuffix', forced);
+			else playAnim('danceLeft$idleSuffix', forced);
 		}
 		else
 		{
-			playAnim('idle$idleSuffix');
+			playAnim('idle$idleSuffix', forced);
 		}
 	}
 	

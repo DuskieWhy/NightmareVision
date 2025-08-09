@@ -691,7 +691,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			
 			if (!character.hasAnim(anim)) return;
 			
-			character.playAnim(anim);
+			character.playAnim(anim, true);
 			uiElements.animationList.animationList.selectItemBy((item) -> return item.id == anim);
 		}
 		
@@ -860,7 +860,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		if (character == null) return;
 		
 		character.debugMode = false;
-		character.dance();
+		character.dance(true);
 		character.debugMode = true;
 		
 		uiElements.animationList.animationList.selectItemBy((item) -> return item.id == character.getAnimName());
