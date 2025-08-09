@@ -9,6 +9,7 @@ import flixel.FlxG;
 
 import haxe.ui.components.DropDown;
 import haxe.ui.containers.dialogs.Dialog;
+import haxe.ui.notifications.NotificationData;
 
 class ToolKitUtils
 {
@@ -108,12 +109,25 @@ class ToolKitUtils
 	
 	public static function makeNotification(title:String, body:String, type:NotificationType = Default)
 	{
-		NotificationManager.instance.addNotification(
-			{
-				title: title,
-				body: body,
-				type: type
-			});
+		var data:NotificationData = switch (type)
+		{
+			case Success:
+				{title: title, body: body, icon: 'assets/images/editors/notification_success.png'};
+			case Warning:
+				{title: title, body: body, icon: 'assets/images/editors/notification_warn.png'};
+				
+			default: {title: title, body: body, type: type};
+		}
+		final noti = NotificationManager.instance.addNotification(data);
+		
+		switch (type)
+		{
+			case Success:
+				noti.addClass('green-notification');
+			case Warning:
+				noti.addClass('yellow-notification');
+			default:
+		}
 	}
 }
 
