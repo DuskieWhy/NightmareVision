@@ -411,6 +411,8 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			final animName = uiElements.characterDialogBox.animationNameTextField.value;
 			final prefix = uiElements.characterDialogBox.animationPrefixTextField.value;
 			final indicesTxt = uiElements.characterDialogBox.animationIndicesTextField.getTextInput().text.trim().split(',');
+			final flipX = uiElements.characterDialogBox.flipXAnimCheckbox.value;
+			final flipY = uiElements.characterDialogBox.flipYAnimCheckbox.value;
 			
 			final indices:Array<Int> = [];
 			
@@ -458,9 +460,11 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 					loop: uiElements.characterDialogBox.animationLoopCheckbox.selected,
 					indices: indices,
 					offsets: previousOffsets,
+					flipX: flipX,
+					flipY: flipY
 				};
 				
-			addAnim(newAnim.anim, newAnim.name, newAnim.fps, newAnim.loop, newAnim.indices);
+			addAnim(newAnim.anim, newAnim.name, newAnim.fps, newAnim.loop, newAnim.indices, newAnim.flipX, newAnim.flipY);
 			character.animations.push(newAnim);
 			character.addOffset(newAnim.anim, newAnim.offsets[0], newAnim.offsets[1]);
 			
@@ -838,11 +842,17 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		final loops = anim?.loop ?? false;
 		final framerate = anim?.fps ?? 24;
 		
+		final flipX = anim?.flipX ?? false;
+		final flipY = anim?.flipY ?? false;
+		
 		uiElements.characterDialogBox.animationNameTextField.value = animName;
 		uiElements.characterDialogBox.animationPrefixTextField.value = prefix;
 		uiElements.characterDialogBox.animationIndicesTextField.value = (indices.length > 0 ? indices.join(',') : '');
 		uiElements.characterDialogBox.animationLoopCheckbox.value = loops;
 		uiElements.characterDialogBox.animationFramerateStepper.value = framerate;
+		
+		uiElements.characterDialogBox.flipXAnimCheckbox.value = flipX;
+		uiElements.characterDialogBox.flipYAnimCheckbox.value = flipY;
 	}
 	
 	inline function dance()
@@ -894,8 +904,10 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			final animFps:Int = anim.fps;
 			final animLoop:Bool = !!anim.loop;
 			final animIndices:Array<Int> = anim.indices;
+			final flipX:Bool = anim.flipX ?? false;
+			final flipY:Bool = anim.flipY ?? false;
 			
-			addAnim(animAnim, animName, animFps, animLoop, animIndices);
+			addAnim(animAnim, animName, animFps, animLoop, animIndices, flipX, flipY);
 		}
 		
 		if (lastAnim.length != 0) character.playAnim(lastAnim);
@@ -904,11 +916,12 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		updateAnimList();
 	}
 	
-	function addAnim(name:String, prefix:String, fps:Int, loops:Bool, ?indices:Array<Int>)
+	function addAnim(name:String, prefix:String, fps:Int, loops:Bool, ?indices:Array<Int>, flipX:Bool = false, flipY:Bool = false)
 	{
 		if (character == null) return;
-		if (indices != null && indices.length != 0) character.addAnimByIndices(name, prefix, indices, fps, loops);
-		else character.addAnimByPrefix(name, prefix, fps, loops);
+		
+		if (indices != null && indices.length != 0) character.addAnimByIndices(name, prefix, indices, fps, loops, flipX, flipY);
+		else character.addAnimByPrefix(name, prefix, fps, loops, flipX, flipY);
 		
 		if (!character.hasAnim(name)) character.addOffset(name, 0, 0);
 	}
@@ -948,6 +961,8 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			
 			uiElements.toolBar.isPlayerCheckBox.value = character.isPlayer;
 		}
+		
+		character.alternatingDance = null;
 		
 		positionCharacter();
 		
@@ -1007,17 +1022,19 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		
 		characterGhost.loadAtlas(character.imageFile);
 		
-		inline function addGhostAnim(name:String, prefix:String, fps:Int, loops:Bool, ?indices:Array<Int>)
+		inline function addGhostAnim(name:String, prefix:String, fps:Int, loops:Bool, ?indices:Array<Int>, ?flipX:Bool, ?flipY:Bool)
 		{
-			if (indices != null && indices.length != 0) characterGhost.addAnimByIndices(name, prefix, indices, fps, loops);
-			else characterGhost.addAnimByPrefix(name, prefix, fps, loops);
+			flipX ??= false;
+			flipY ??= false;
+			if (indices != null && indices.length != 0) characterGhost.addAnimByIndices(name, prefix, indices, fps, loops, flipX, flipY);
+			else characterGhost.addAnimByPrefix(name, prefix, fps, loops, flipX, flipY);
 			
 			if (!characterGhost.hasAnim(name)) characterGhost.addOffset(name, 0, 0);
 		}
 		
 		for (i in character.animations)
 		{
-			addGhostAnim(i.anim, i.name, i.fps, i.loop, i.indices);
+			addGhostAnim(i.anim, i.name, i.fps, i.loop, i.indices, i.flipX, i.flipY);
 		}
 		
 		characterGhost.x = character.x;

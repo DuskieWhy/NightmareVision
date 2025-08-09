@@ -217,13 +217,16 @@ class Character extends Bopper
 				final animLoop:Bool = !!anim.loop; // Bruh
 				final animIndices:Array<Int> = anim.indices;
 				
+				final flipX = anim.flipX ?? false;
+				final flipY = anim.flipY ?? false;
+				
 				if (animIndices != null && animIndices.length > 0)
 				{
-					addAnimByIndices(animAnim, animName, animIndices, animFps, animLoop);
+					addAnimByIndices(animAnim, animName, animIndices, animFps, animLoop, flipX, flipY);
 				}
 				else
 				{
-					addAnimByPrefix(animAnim, animName, animFps, animLoop);
+					addAnimByPrefix(animAnim, animName, animFps, animLoop, flipX, flipY);
 				}
 				
 				if (anim.offsets != null && anim.offsets.length > 1)

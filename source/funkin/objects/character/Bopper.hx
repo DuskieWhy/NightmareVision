@@ -339,16 +339,16 @@ class Bopper extends FlxSprite
 		else return animation.curAnim.curFrame = value;
 	}
 	
-	public function addAnimByPrefix(anim:String, prefix:String, fps:Int = 24, looping:Bool = true)
+	public function addAnimByPrefix(anim:String, prefix:String, fps:Int = 24, looping:Bool = true, flipX:Bool = false, flipY:Bool = true)
 	{
-		if (animateAtlas != null) animateAtlas.anim.addBySymbol(anim, prefix, fps, looping);
-		else animation.addByPrefix(anim, prefix, fps, looping);
+		if (animateAtlas != null) animateAtlas.anim.addBySymbol(anim, prefix, fps, looping, flipX, flipY);
+		else animation.addByPrefix(anim, prefix, fps, looping, flipX, flipY);
 	}
 	
-	public function addAnimByIndices(anim:String, prefix:String, indices:Array<Int>, fps:Int = 24, looping:Bool = true)
+	public function addAnimByIndices(anim:String, prefix:String, indices:Array<Int>, fps:Int = 24, looping:Bool = true, flipX:Bool = false, flipY:Bool = true)
 	{
-		if (animateAtlas != null) animateAtlas.anim.addBySymbolIndices(anim, prefix, indices, fps, looping);
-		else animation.addByIndices(anim, prefix, indices, '', fps, looping);
+		if (animateAtlas != null) animateAtlas.anim.addBySymbolIndices(anim, prefix, indices, fps, looping, flipX, flipY);
+		else animation.addByIndices(anim, prefix, indices, '', fps, looping, flipX, flipY);
 	}
 	
 	public inline function removeAnim(anim:String)

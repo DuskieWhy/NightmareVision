@@ -8,6 +8,9 @@ typedef AnimationInfo =
 	var loop:Bool;
 	var indices:Array<Int>;
 	var offsets:Array<Int>;
+	
+	var ?flipX:Bool;
+	var ?flipY:Bool;
 }
 
 typedef CharacterInfo =

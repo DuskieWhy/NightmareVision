@@ -21,7 +21,11 @@ class FunkinCache
 		@:privateAccess
 		for (key in FlxG.bitmap._cache.keys())
 		{
-			if (!currentTrackedGraphics.exists(key) && !key.startsWith('pixels')) // for haxeui is a bit hacky will do for now //find out hwo to avoid haxeui nicer or just do a different caching method
+			// ok this is dumb fix this later
+			if (!currentTrackedGraphics.exists(key)
+				&& !key.startsWith('pixels')
+				&& !key.contains('editors/notification_success.png')
+				&& !key.contains('editors/notification_warn.png')) // for haxeui is a bit hacky will do for now //find out hwo to avoid haxeui nicer or just do a different caching method
 			{
 				disposeGraphic(FlxG.bitmap.get(key));
 			}

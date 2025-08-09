@@ -43,8 +43,17 @@
 
                     <vbox>
                         <label text="(Optional) Animation Indices" verticalAlign="center" />
-                        <textfield placeholder="" width="300" id="animationIndicesTextField"/>
+
+                        <hbox>
+                            <textfield placeholder="" width="300" id="animationIndicesTextField"/>
+                        
+                            <checkbox text="Flip X?" id="flipXAnimCheckbox"  verticalAlign="center" />
+                            <checkbox text="Flip Y?" id="flipYAnimCheckbox"  verticalAlign="center" />
+                        </hbox>
+      
                     </vbox>
+
+    
                 </hbox>
 
                 <spacer height="1"/>
