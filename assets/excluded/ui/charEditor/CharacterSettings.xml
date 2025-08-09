@@ -97,8 +97,8 @@
                         <spacer height="11"/>
 
                         <vbox>
-                            <label text="Dance every:" verticalAlign="center" horizontalAlign="center" />
-                            <number-stepper pos="2" step="1" id="danceEveryStepper" min="1" precision="0" />
+                            <label text="Dance every:" verticalAlign="center" horizontalAlign="center"/>
+                            <number-stepper pos="2" step="1" id="danceEveryStepper" min="1" precision="0" tooltip='How many beats inbetween character "dances".\nAlternating dances are generally 1!'/>
                         </vbox>
 
                     
