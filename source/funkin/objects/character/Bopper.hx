@@ -278,6 +278,9 @@ class Bopper extends FlxSprite
 	
 	override function destroy()
 	{
+		onAnimationFinish.removeAll();
+		onAnimationFrameChange.removeAll();
+		onAnimationFinish.removeAll();
 		super.destroy();
 		
 		animateAtlas = FlxDestroyUtil.destroy(animateAtlas);
