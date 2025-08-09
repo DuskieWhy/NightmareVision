@@ -2820,7 +2820,9 @@ class ChartingState extends MusicBeatState
 		
 		remove(strumLine);
 		strumLine = new FlxSprite(0, 50).makeGraphic(Std.int(GRID_SIZE * ((_song.keys * _song.lanes) + 1)), 4);
-		insert(members.indexOf(strumLineNotes), strumLine);
+		
+		final idx = strumLineNotes != null ? members.indexOf(strumLineNotes) : 0;
+		insert(idx, strumLine);
 		
 		gridBG = FlxGridOverlay.create(GRID_SIZE, GRID_SIZE, GRID_SIZE * ((_song.keys * _song.lanes) + 1), Std.int(GRID_SIZE * getSectionBeats() * 4 * zoomList[curZoom]), true,
 			ClientPrefs.editorBoxColors[0], ClientPrefs.editorBoxColors[1]);
