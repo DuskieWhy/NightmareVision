@@ -102,7 +102,7 @@ class MainMenuState extends MusicBeatState
 				menuItem.updateHitbox();
 			}
 			
-			FlxG.camera.follow(camFollow, null, 0.15);
+			FlxG.camera.follow(camFollow, null, 0.1);
 			
 			var gitHash = GitMacro.getGitCommitHash();
 			if (gitHash.length != 0) gitHash = ' - dev($gitHash)';
