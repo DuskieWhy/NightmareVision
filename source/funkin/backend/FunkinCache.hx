@@ -102,21 +102,7 @@ class FunkinCache
 	{
 		if (allowGPU && ClientPrefs.gpuCaching)
 		{
-			if (bitmap.__texture == null)
-			{
-				bitmap.image.premultiplied = true;
-				bitmap.getTexture(FlxG.stage.context3D);
-			}
-			bitmap.getSurface();
 			bitmap.disposeImage();
-			
-			@:nullSafety(Off)
-			{
-				bitmap.image.data = null;
-				bitmap.image = null;
-			}
-			
-			bitmap.readable = true;
 		}
 		
 		var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(bitmap, false, key);
