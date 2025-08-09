@@ -6,6 +6,13 @@
     },
     "lime.targetConfigurations": [
         {
+            "label": "Windows (ASSET_REDIRECT)",
+            "target": "windows",
+            "args": [
+                "-DFORCED_ANSI"
+            ]
+        },
+        {
             "label": "Windows / Debug (Forced ANSI)",
             "target": "windows",
             "args": [
@@ -31,6 +38,13 @@
             ]
         },
         {
+            "label": "hl (ASSET_REDIRECT)",
+            "target": "hl",
+            "args": [
+                "-DFORCED_ANSI"
+            ]
+        },
+        {
             "label": "hl / Debug (Forced ANSI)",
             "target": "hl",
             "args": [
@@ -46,7 +60,7 @@
                 "-DASSET_REDIRECT"
             ]
         },
-                {
+        {
             "label": "hl / Debug (ASSET_REDIRECT & Forced ANSI)",
             "target": "hl",
             "args": [

@@ -105,6 +105,18 @@ class CharEditorUI extends FlxTypedSpriteContainer<FlxSprite>
 		characterDialogBox.findComponent('iconDisplay', Button).icon = Variant.fromImageData(frame);
 	}
 	
+	override function update(elapsed:Float)
+	{
+		super.update(elapsed);
+		for (i in WindowManager.instance.windows)
+		{
+			if (i.height < 51)
+			{
+				i.height = 51;
+			}
+		}
+	}
+	
 	public function spawnLegend()
 	{
 		var legend = new LegendWindow();
