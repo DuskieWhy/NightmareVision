@@ -80,6 +80,16 @@
                     <textfield placeholder="bf" width="200" id="healthIconTextField"/>
                     <button allowFocus="false" id="getIconColourButton" text="Get Icon Colour" horizontalAlign="right"/>
 
+
+
+                    <vbox>
+                        <label text="(Optional)" verticalAlign="center" horizontalAlign="center"/>
+                        <label text="Gameover Character" verticalAlign="center" />
+                    </vbox>
+
+                    <textfield placeholder="bf-dead" width="200" id="gameoverCharTextField"/>
+
+
                 </grid>
 
                 <spacer height="1"/>
@@ -122,6 +132,7 @@
 
                         <label text="Sing Length:" verticalAlign="center" horizontalAlign="center" />
                         <number-stepper pos="4" step="0.1" id="singLengthStepper" min="0"/>
+
                     </vbox>
 
                     <vbox>
@@ -141,8 +152,6 @@
                     </vbox>
 
                 </hbox>
-
-
 
             </vbox>
 

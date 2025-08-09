@@ -70,12 +70,23 @@ typedef CharacterInfo =
 	 */
 	var healthbar_colour:Int;
 	
+	/**
+	 * How many beats between the characters `dance`
+	 */
 	var ?dance_every:Int;
 	
 	/**
-	 * todo explain why
+	 * Enables characters offsets to be adjusted according to characters scale
 	 */
-	@:optional var scalableOffsets:Bool;
+	var ?scalableOffsets:Bool;
 	
+	/**
+	 * Used for the character editor
+	 */
 	var ?_editor_isPlayer:Bool;
+	
+	/**
+	 * optional character to be used for `GameOverSubstate`. Has priority over the static vars
+	 */
+	var ?gameover_character:String;
 }

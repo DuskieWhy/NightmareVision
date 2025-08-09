@@ -2219,7 +2219,7 @@ class PlayState extends MusicBeatState
 				FlxTimer.globalManager.clear();
 				FlxTween.globalManager.clear();
 				
-				openSubState(new GameOverSubstate());
+				openSubState(new GameOverSubstate(boyfriend.gameoverCharacter));
 				
 				#if DISCORD_ALLOWED
 				// Game Over doesn't get his own variable because it's only used here

@@ -76,6 +76,8 @@ class Character extends Bopper
 	
 	public var animations:Array<AnimationInfo> = [];
 	
+	public var gameoverCharacter:Null<String> = null;
+	
 	/**
 	 * Character offsets defined by the json
 	 */
@@ -185,6 +187,8 @@ class Character extends Bopper
 		this.danceEveryNumBeats = json.dance_every ?? 2;
 		
 		this.isPlayerInEditor = json._editor_isPlayer;
+		
+		this.gameoverCharacter = json.gameover_character;
 		
 		loadAtlas(imageFile);
 		

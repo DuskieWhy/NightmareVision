@@ -333,6 +333,12 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			uiElements.characterDialogBox.findComponent('iconDisplay', Button).backgroundColor = cast bgColour;
 		}
 		
+		uiElements.characterDialogBox.gameoverCharTextField.onChange = (ui) -> {
+			var val:String = uiElements.characterDialogBox.gameoverCharTextField.value;
+			
+			character.gameoverCharacter = val.trim().length == 0 ? null : val.trim();
+		}
+		
 		uiElements.characterDialogBox.healthIconTextField.onChange = (ui) -> {
 			character.healthIcon = uiElements.characterDialogBox.healthIconTextField.value;
 			updateHealthIcon();
@@ -495,7 +501,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		// textfield fuckery
 		final dialog = uiElements.characterDialogBox;
 		
-		for (i in [dialog.imageFileTextField, dialog.healthIconTextField, dialog.animationNameTextField, dialog.animationPrefixTextField, dialog.animationIndicesTextField])
+		for (i in [dialog.imageFileTextField, dialog.healthIconTextField, dialog.animationNameTextField, dialog.animationPrefixTextField, dialog.animationIndicesTextField, dialog.gameoverCharTextField])
 		{
 			i.onClick = (ui) -> {
 				isTextFieldFocused = true;
@@ -803,6 +809,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		
 		uiElements.characterDialogBox.imageFileTextField.value = character.imageFile;
 		uiElements.characterDialogBox.healthIconTextField.value = character.healthIcon;
+		uiElements.characterDialogBox.gameoverCharTextField.value = character.gameoverCharacter ?? '';
 		
 		uiElements.characterDialogBox.danceEveryStepper.value = character.danceEveryNumBeats;
 		
@@ -1095,7 +1102,8 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 				"healthbar_colour": character.healthColour,
 				"scalableOffsets": character.scalableOffsets,
 				"dance_every": character.danceEveryNumBeats,
-				"_editor_isPlayer": character.isPlayer
+				"_editor_isPlayer": character.isPlayer,
+				"gameover_character": character.gameoverCharacter
 			};
 			
 		final dataToSave:String = Json.stringify(json, "\t");
