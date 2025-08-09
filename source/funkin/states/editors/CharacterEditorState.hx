@@ -474,7 +474,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 				
 				character.playAnim(animName, true);
 				
-				ToolKitUtils.makeNotification('Animation Addition', 'Successfully "' + (hadAnim ? 'updated' : 'added') + '" $animName to character.', Success);
+				ToolKitUtils.makeNotification('Animation Addition', 'Successfully ' + (hadAnim ? 'updated' : 'added') + ' "$animName" to character.', Success);
 			}
 			else
 			{
