@@ -113,7 +113,7 @@ class Chart
 		
 		if (songJson.events == null)
 		{
-			songJson.events = [];
+			var events:Array<Dynamic> = [];
 			
 			if (sectionsData != null)
 			{
@@ -127,9 +127,17 @@ class Chart
 					while (i < len)
 					{
 						var note:Array<Dynamic> = notes[i];
+						
 						if (note[1] < 0)
 						{
-							songJson.events.push([note[0], [[note[2], note[3], note[4]]]]);
+							// why are events stored like this?
+							final time:Float = note[0];
+							final evName:String = note[2];
+							final value1:String = note[3];
+							final value2:String = note[4];
+							
+							events.push([time, [[evName, value1, value2]]]);
+							
 							notes.remove(note);
 							len = notes.length;
 						}
@@ -137,6 +145,8 @@ class Chart
 					}
 				}
 			}
+			
+			songJson.events = events;
 		}
 		
 		if (sectionsData == null) return;
