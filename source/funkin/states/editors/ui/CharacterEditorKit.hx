@@ -114,6 +114,10 @@ class CharEditorUI extends FlxTypedSpriteContainer<FlxSprite>
 			{
 				i.height = 51;
 			}
+			if (i.width < 76)
+			{
+				i.width = 76;
+			}
 		}
 	}
 	
