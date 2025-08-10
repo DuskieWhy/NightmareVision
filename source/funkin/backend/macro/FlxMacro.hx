@@ -136,4 +136,61 @@ class FlxMacro
 			
 		return fields;
 	}
+	
+	public static macro function buildFlxCamera():Array<haxe.macro.Expr.Field>
+	{
+		//
+		var fields:Array<haxe.macro.Expr.Field> = Context.getBuildFields();
+		
+		fields.push(
+			{
+				name: "addShader",
+				access: [haxe.macro.Expr.Access.APublic],
+				kind: FFun(
+					{
+						args: [{name: 'shader', type: (macro :flixel.graphics.tile.FlxGraphicsShader)}],
+						expr: macro
+						{
+							if (shader == null) return;
+							
+							var filter = new openfl.filters.ShaderFilter(shader);
+							filters ??= [];
+							filters.push(filter);
+						}
+					}),
+				pos: Context.currentPos()
+			});
+			
+		fields.push(
+			{
+				name: "removeShader",
+				access: [haxe.macro.Expr.Access.APublic],
+				kind: FFun(
+					{
+						args: [{name: 'shader', type: (macro :flixel.graphics.tile.FlxGraphicsShader)}],
+						expr: macro
+						{
+							if (filters == null) return false;
+							
+							for (filter in filters)
+							{
+								if (filter is openfl.filters.ShaderFilter)
+								{
+									var fl:openfl.filters.ShaderFilter = cast filter;
+									if (fl.shader == shader)
+									{
+										filters.remove(filter);
+										return true;
+									}
+								}
+							}
+							
+							return false;
+						}
+					}),
+				pos: Context.currentPos()
+			});
+			
+		return fields;
+	}
 }

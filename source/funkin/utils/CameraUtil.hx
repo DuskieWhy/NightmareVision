@@ -31,44 +31,4 @@ class CameraUtil
 		
 		return cam;
 	}
-	
-	/**
-		function to easily apply a shader to a camera
-		* @param	shader	the shader to be applied
-		* @param	camera	the camera to apply the filter to. default is the first camera
-	**/
-	public static function addShader(shader:FlxShader, ?camera:FlxCamera, forced:Bool = false)
-	{
-		camera ??= FlxG.camera;
-		camera.filters ??= [];
-		
-		final filter:ShaderFilter = new ShaderFilter(shader);
-		camera.filters.push(filter);
-	}
-	
-	/**
-		function to easily remove a shader to a camera
-		* @param	shader	the shader to be removed
-		* @param	camera	the camera to remove the filter from. default is the first camera
-		* @return	whether the shader removal was successful
-	**/
-	public static function removeShader(shader:FlxShader, ?camera:FlxCamera):Bool
-	{
-		camera ??= FlxG.camera;
-		if (camera.filters == null) return false;
-		
-		for (i in camera.filters)
-		{
-			if (i is ShaderFilter)
-			{
-				var filter:ShaderFilter = cast i;
-				if (filter.shader == shader)
-				{
-					camera.filters.remove(i);
-					return true;
-				}
-			}
-		}
-		return false;
-	}
 }
