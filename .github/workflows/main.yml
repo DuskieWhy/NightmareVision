@@ -36,28 +36,18 @@ jobs:
         with:
           haxe-version: 4.3.7
       # Runs a set of commands using the runners shell
-      - name: Install Haxelib
+      - name: Install libraries
         run: |
           haxelib setup ~/haxelib
           haxelib install hxcpp > /dev/null
-          haxelib install hxpkg --global
-          haxelib run hxpkg setup --global
-          hxpkg install
-          haxelib list
-      - name: Compile hxcpp
-        run: |
-          cd ~/haxelib/hxcpp/git/tools/run
-          haxe compile.hxml
-          cd ..
-          cd ./hxcpp
-          haxe compile.hxml
-          cd ../..
+          haxelib install hxpkg
+          haxelib run hxpkg install
       - name: Compile
         run: haxelib run lime build Project.xml linux -D ${{ inputs.buildFlags }}
       - name: Publish Artifact
         uses: actions/upload-artifact@main
         with:
-          name: linuxBuild
+          name: nmv-linux
           path: 'export/release/linux/bin' 
   buildWindows:
     runs-on: windows-latest
@@ -70,29 +60,18 @@ jobs:
         with:
           haxe-version: 4.3.7
       # Runs a set of commands using the runners shell
-      - name: Install Haxelib
+      - name: Install libraries
         run: |
           haxelib setup C:/haxelib
           haxelib install hxcpp > nul
-          haxelib install hxpkg --global
-          haxelib run hxpkg setup --global
-          hxpkg install
-          haxelib list
-        shell: cmd
-      - name: Compile hxcpp
-        run: |
-          cd C:/haxelib/hxcpp/git/tools/run
-          haxe compile.hxml
-          cd ..
-          cd ./hxcpp
-          haxe compile.hxml
-          cd ../..
+          haxelib install hxpkg
+          haxelib run hxpkg install
       - name: Compile
         run: haxelib run lime build windows -D ${{ inputs.buildFlags }}
       - name: Publish Artifact
         uses: actions/upload-artifact@main
         with:
-          name: windowsBuild
+          name: nmv-windows
           path: export/release/windows/bin
   buildMacIntel:
     runs-on: macos-15
@@ -105,28 +84,19 @@ jobs:
         with:
           haxe-version: 4.3.7
       # Runs a set of commands using the runners shell
-      - name: Install Haxelib
+      - name: Install libraries
         run: |
           haxelib setup ~/haxelib
           haxelib install hxcpp > /dev/null --quiet
-          haxelib install hxpkg --global
-          haxelib run hxpkg setup --global
-          hxpkg install
-      - name: Compile hxcpp
-        run: |
-          cd ~/haxelib/hxcpp/git/tools/run
-          haxe compile.hxml
-          cd ..
-          cd ./hxcpp
-          haxe compile.hxml
-          cd ../..
+          haxelib install hxpkg
+          haxelib run hxpkg install
       - name: Compile
         run: |
           haxelib run lime build mac -64 -D ${{ inputs.buildFlags || 'commit' }} -D HXCPP_M64
       - name: Publish Artifact
         uses: actions/upload-artifact@main
         with:
-          name: macBuild-intel
+          name: nmv-macIntel
           path: export/release/macos/bin
 
   buildMacArm:
@@ -140,26 +110,17 @@ jobs:
         with:
           haxe-version: 4.3.7
       # Runs a set of commands using the runners shell
-      - name: Install Haxelib
+      - name: Install libraries
         run: |
           haxelib setup ~/haxelib
           haxelib install hxcpp > /dev/null --quiet
-          haxelib install hxpkg --global
-          haxelib run hxpkg setup --global
-          hxpkg install
-      - name: Compile hxcpp
-        run: |
-          cd ~/haxelib/hxcpp/git/tools/run
-          haxe compile.hxml
-          cd ..
-          cd ./hxcpp
-          haxe compile.hxml
-          cd ../..
+          haxelib install hxpkg
+          haxelib run hxpkg install
       - name: Compile
         run: |
           haxelib run lime build mac -arm64 -D ${{ inputs.buildFlags }} -D HXCPP_ARM64
       - name: Publish Artifact
         uses: actions/upload-artifact@main
         with:
-          name: macBuild-arm
+          name: nmv-macArm
           path: export/release/macos/bin
