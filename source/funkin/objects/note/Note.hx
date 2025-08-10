@@ -7,7 +7,7 @@ import flixel.math.FlxRect;
 import funkin.data.*;
 import funkin.game.shaders.*;
 import funkin.game.shaders.RGBPalette.RGBShaderReference;
-import funkin.objects.character.Character;
+import funkin.objects.Character;
 import funkin.scripts.*;
 import funkin.states.*;
 import funkin.states.editors.ChartingState;

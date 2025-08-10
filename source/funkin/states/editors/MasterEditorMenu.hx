@@ -1,6 +1,6 @@
 package funkin.states.editors;
 
-import funkin.objects.character.Character;
+import funkin.objects.Character;
 
 import flixel.FlxG;
 import flixel.FlxSprite;

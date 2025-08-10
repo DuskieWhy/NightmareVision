@@ -9,7 +9,7 @@ import flixel.FlxSprite;
 
 import funkin.objects.*;
 import funkin.backend.MusicBeatSubstate;
-import funkin.objects.character.Character;
+import funkin.objects.Character;
 
 class BaseOptionsMenu extends MusicBeatSubstate
 {

@@ -1,5 +1,7 @@
 package funkin.states.editors;
 
+import funkin.data.CharacterData.CharacterParser;
+
 import haxe.Json;
 
 import openfl.events.IOErrorEvent;
@@ -12,8 +14,8 @@ import funkin.objects.HealthIcon;
 
 import haxe.ui.components.popups.ColorPickerPopup;
 
-import funkin.objects.character.CharacterData.AnimationInfo;
-import funkin.objects.character.CharacterData.CharacterInfo;
+import funkin.data.CharacterData.AnimationInfo;
+import funkin.data.CharacterData.CharacterInfo;
 
 import haxe.ui.focus.FocusManager;
 import haxe.ui.Toolkit;
@@ -33,7 +35,7 @@ import haxe.ui.containers.dialogs.CollapsibleDialog;
 
 import flixel.graphics.FlxGraphic;
 
-import funkin.objects.character.Character;
+import funkin.objects.Character;
 
 using funkin.states.editors.ui.ToolKitUtils;
 
@@ -997,7 +999,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		{
 			character.isPlayer = isPlayer;
 			
-			var file = Character.fetchInfo(characterId);
+			var file = CharacterParser.fetchInfo(characterId);
 			character.loadFile(file);
 		}
 		

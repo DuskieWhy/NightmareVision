@@ -1,7 +1,8 @@
-package funkin.objects.character;
+package funkin.objects;
 
-import funkin.objects.character.CharacterData.AnimationInfo;
-import funkin.objects.character.CharacterData.CharacterInfo;
+import funkin.data.CharacterData.CharacterParser;
+import funkin.data.CharacterData.AnimationInfo;
+import funkin.data.CharacterData.CharacterInfo;
 
 // taking some things from base game
 // add back miss anim stuff
@@ -13,18 +14,6 @@ import funkin.objects.character.CharacterData.CharacterInfo;
 class Character extends Bopper
 {
 	public static final DEFAULT_CHARACTER:String = 'bf';
-	
-	public static function fetchInfo(file:String):CharacterInfo
-	{
-		var charPath:String = Paths.getPath('characters/$file.json', TEXT, null, true);
-		
-		if (!FunkinAssets.exists(charPath))
-		{
-			charPath = Paths.getPrimaryPath('characters/$DEFAULT_CHARACTER.json');
-		}
-		
-		return cast FunkinAssets.parseJson(FunkinAssets.getContent(charPath)); // improve this
-	}
 	
 	/**
 	 * how much the camera moves with the characters sings animations
@@ -155,7 +144,7 @@ class Character extends Bopper
 		
 		genGhosts();
 		
-		loadFile(fetchInfo(curCharacter));
+		loadFile(CharacterParser.fetchInfo(curCharacter));
 	}
 	
 	function genGhosts()

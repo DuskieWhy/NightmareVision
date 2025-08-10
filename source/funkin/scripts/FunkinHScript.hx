@@ -312,7 +312,7 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		set("BackgroundDancer", funkin.objects.stageobjects.BackgroundDancer);
 		set("BackgroundGirls", funkin.objects.stageobjects.BackgroundGirls);
 		set("HealthIcon", HealthIcon);
-		set("Character", funkin.objects.character.Character);
+		set("Character", funkin.objects.Character);
 		set("NoteSplash", NoteSplash);
 		set("BGSprite", BGSprite);
 		set("StrumNote", StrumNote);

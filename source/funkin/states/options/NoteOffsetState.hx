@@ -16,7 +16,7 @@ import flixel.math.FlxPoint;
 
 import funkin.states.*;
 import funkin.objects.*;
-import funkin.objects.character.Character;
+import funkin.objects.Character;
 
 using StringTools;
 

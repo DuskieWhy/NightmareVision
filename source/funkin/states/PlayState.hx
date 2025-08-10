@@ -23,7 +23,7 @@ import flixel.input.keyboard.FlxKey;
 import flixel.util.helpers.FlxBounds;
 import flixel.group.FlxContainer.FlxTypedContainer;
 
-import funkin.objects.character.Character;
+import funkin.objects.Character;
 import funkin.backend.Difficulty;
 import funkin.game.RatingInfo;
 import funkin.objects.note.*;

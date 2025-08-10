@@ -1,6 +1,7 @@
 package funkin.objects.character;
 
-import funkin.objects.character.CharacterData.CharacterInfo;
+import funkin.data.CharacterData.CharacterParser;
+import funkin.data.CharacterData.CharacterInfo;
 
 import flixel.FlxSprite;
 import flixel.tweens.FlxTween;
@@ -178,7 +179,7 @@ class CharacterOLD extends FlxSprite
 	
 	function onCreate()
 	{
-		loadFile(Character.fetchInfo(curCharacter));
+		loadFile(CharacterParser.fetchInfo(curCharacter));
 		
 		if (animOffsets.exists('singLEFTmiss') || animOffsets.exists('singDOWNmiss') || animOffsets.exists('singUPmiss') || animOffsets.exists('singRIGHTmiss')) hasMissAnimations = true;
 		recalculateDanceIdle();

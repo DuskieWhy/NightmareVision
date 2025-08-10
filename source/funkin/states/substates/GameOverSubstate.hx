@@ -9,7 +9,7 @@ import flixel.util.FlxTimer;
 
 import funkin.backend.MusicBeatSubstate;
 import funkin.states.PlayState;
-import funkin.objects.character.Character;
+import funkin.objects.Character;
 
 /**
  * The substate that goes over the game whenever the player dies.

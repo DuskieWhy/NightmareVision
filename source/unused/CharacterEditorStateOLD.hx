@@ -1,7 +1,8 @@
 package funkin.states.editors;
 
-import funkin.objects.character.CharacterData.CharacterInfo;
-import funkin.objects.character.CharacterData.AnimationInfo;
+import funkin.data.CharacterData.CharacterParser;
+import funkin.data.CharacterData.CharacterInfo;
+import funkin.data.CharacterData.AnimationInfo;
 
 import haxe.Json;
 
@@ -28,8 +29,8 @@ import flixel.ui.FlxButton;
 import flixel.animation.FlxAnimation;
 
 import funkin.objects.*;
-import funkin.objects.character.Character;
-import funkin.objects.character.*;
+import funkin.objects.Character;
+import funkin.objects.*;
 import funkin.states.editors.CharacterEditorState.Crosshair;
 
 /**
@@ -852,7 +853,7 @@ class CharacterEditorStateOLD extends MusicBeatState
 		}
 		charLayer.clear();
 		
-		final charFile = Character.fetchInfo(daAnim);
+		final charFile = CharacterParser.fetchInfo(daAnim);
 		trace(FunkinAssets.exists(Paths.textureAtlas(charFile.image + '/Animation.json')));
 		
 		ghostChar = new Character(0, 0, daAnim, !isDad);
@@ -919,7 +920,7 @@ class CharacterEditorStateOLD extends MusicBeatState
 		for (i in [char /*, ghostChar*/])
 		{
 			charLayer.remove(i);
-			i.loadAtlas(Character.fetchInfo(i.curCharacter).image);
+			i.loadAtlas(CharacterParser.fetchInfo(i.curCharacter).image);
 			charLayer.add(i);
 		}
 	}

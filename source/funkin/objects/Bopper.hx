@@ -1,4 +1,4 @@
-package funkin.objects.character;
+package funkin.objects;
 
 import openfl.display.Graphics;
 

@@ -7,7 +7,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.group.FlxGroup.FlxTypedGroup;
 
-import funkin.objects.character.Character;
+import funkin.objects.Character;
 
 typedef NoteSignal = FlxTypedSignal<(Note, PlayField) -> Void>;
 
