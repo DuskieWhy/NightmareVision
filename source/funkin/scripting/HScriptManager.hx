@@ -25,7 +25,7 @@ class HScriptManager
 		{
 			if (FunkinHScript.isHxFile(file))
 			{
-				final scriptName = file.substring(file.lastIndexOf('/') + 1);
+				final scriptName = file.substring(file.lastIndexOf('/') + 1, file.lastIndexOf('.'));
 				var script = FunkinHScript.fromFile(file, scriptName);
 				if (script.__garbage)
 				{
