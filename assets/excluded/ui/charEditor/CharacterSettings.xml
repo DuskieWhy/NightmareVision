@@ -150,6 +150,7 @@
         <box text="Extra" id="optionalSetttings">
 
             <vbox>
+
                 <label text="(Optional) Gameover Character" verticalAlign="center" />
                 <textfield placeholder="bf-dead" width="350" id="gameoverCharTextField" tooltip="Sets a specific character to be used in the gameover when this character dies."/>
 
@@ -161,6 +162,8 @@
 
                 <label text="(Optional) Gameover Confirm Death Sound" verticalAlign="center" />
                 <textfield placeholder="gameOverEnd" width="350" id="gameoverConfirmDeathSoundTextField" tooltip='Sound played when the gameover ends.\nThis audio should be in the "music/" folder!'/>
+
+                <button allowFocus="false" id="clearGameoverOptions" text="Clear Gameover Options" style="background-color: #575213;"/>
 
             </vbox>
                        

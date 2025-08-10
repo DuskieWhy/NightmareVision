@@ -107,6 +107,8 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		
 		buildUI();
 		
+		spawnCharacter();
+		
 		refreshCharDropDown();
 		
 		uiElements.toolBar.characterDropdown.selectItemBy((item) -> return item.id == characterId);
@@ -331,6 +333,20 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			var bgColour = FlxColor.interpolate(0xFF3D3F41, colour, 0.1);
 			
 			uiElements.characterDialogBox.findComponent('iconDisplay', Button).backgroundColor = cast bgColour;
+		}
+		
+		uiElements.characterDialogBox.clearGameoverOptions.onClick = (ui) -> {
+			uiElements.characterDialogBox.gameoverCharTextField.value = '';
+			uiElements.characterDialogBox.gameoverConfirmDeathSoundTextField.value = '';
+			uiElements.characterDialogBox.gameoverLoopDeathSoundTextField.value = '';
+			uiElements.characterDialogBox.gameoverInitialDeathSoundTextField.value = '';
+			@:privateAccess
+			{
+				uiElements.characterDialogBox.gameoverInitialDeathSoundTextField.focus = false;
+				uiElements.characterDialogBox.gameoverConfirmDeathSoundTextField.focus = false;
+				uiElements.characterDialogBox.gameoverLoopDeathSoundTextField.focus = false;
+				uiElements.characterDialogBox.gameoverInitialDeathSoundTextField.focus = false;
+			}
 		}
 		
 		uiElements.characterDialogBox.gameoverCharTextField.onChange = (ui) -> {

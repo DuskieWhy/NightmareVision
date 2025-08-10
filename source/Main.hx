@@ -44,7 +44,8 @@ class Main extends Sprite
 		initHaxeUI();
 		
 		#if (windows && cpp)
-		funkin.api.NativeWindows.setDarkMode();
+		cpp.Windows.setDarkMode();
+		cpp.Windows.setDpiAware();
 		#end
 		
 		// load save data before creating FlxGame
