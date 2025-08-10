@@ -15,7 +15,9 @@ class FunkinRuntimeShader extends flixel.addons.display.FlxRuntimeShader
 		}
 		catch (error)
 		{
-			CoolUtil.doPopUp('Shader Crash!', error.toString());
+			Logger.log('Shader Crashed! check the console for more information', ERROR, true);
+			Logger.log(error.toString(), ERROR);
+			
 			@:privateAccess return super.__createGLProgram(vertexSource, FunkinShader._templateFrag);
 		}
 	}
@@ -34,7 +36,8 @@ class FunkinShader extends flixel.graphics.tile.FlxGraphicsShader
 		}
 		catch (error)
 		{
-			CoolUtil.doPopUp('Shader Crash!', error.toString());
+			Logger.log('Shader Crashed! check the console for more information', ERROR, true);
+			Logger.log('Crash Log ->: "${error.toString()}"', ERROR);
 			
 			return super.__createGLProgram(vertexSource, _templateFrag);
 		}

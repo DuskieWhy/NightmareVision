@@ -5,7 +5,7 @@
 
     <button allowFocus="false" id="exitButton" text="Exit" verticalAlign="center"/>
 
-    <button allowFocus="false" id="legendButton" text="press for info" verticalAlign="center"/>
+    <button allowFocus="false" id="legendButton" text="press for help" verticalAlign="center"/>
 
     <spacer width="40%" />
 

@@ -8,8 +8,6 @@ import funkin.backend.plugins.DebugTextPlugin;
 import funkin.objects.*;
 import funkin.objects.note.*;
 
-// wrapper for an iris script to keep the consistency of the whole funkyscript setup this engine got
-// will be replaced later when im not lazy
 @:access(crowplexus.iris.Iris)
 @:access(funkin.states.PlayState)
 class FunkinHScript extends Iris implements IFlxDestroyable

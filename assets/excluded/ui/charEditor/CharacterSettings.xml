@@ -163,7 +163,7 @@
                 <label text="(Optional) Gameover Confirm Death Sound" verticalAlign="center" />
                 <textfield placeholder="gameOverEnd" width="350" id="gameoverConfirmDeathSoundTextField" tooltip='Sound played when the gameover ends.\nThis audio should be in the "music/" folder!'/>
 
-                <button allowFocus="false" id="clearGameoverOptions" text="Clear Gameover Options" style="background-color: #575213;"/>
+                <button allowFocus="false" id="clearGameoverOptions" text="Clear Gameover Options" style="background-color: #575213;" tooltip="Clears the above gameover options fields. Thats if they have anything though"/>
 
             </vbox>
                        
