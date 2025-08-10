@@ -87,6 +87,9 @@ class Init extends FlxState
 		}
 		#end
 		
+		funkin.scripting.HScriptManager.prepareSignals();
+		funkin.scripting.HScriptManager.populate();
+		
 		super.create();
 		
 		final nextState:Class<FlxState> = Main.startMeta.skipSplash ? Main.startMeta.initialState : Splash;

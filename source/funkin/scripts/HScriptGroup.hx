@@ -43,7 +43,12 @@ class HScriptGroup implements IFlxDestroyable
 	
 	public function new(?parent:Dynamic)
 	{
-		parent ??= FlxG.state;
+		@:privateAccess
+		if (FlxG.game != null)
+		{
+			parent ??= FlxG.state;
+		}
+		
 		@:bypassAccessor this.parent = parent;
 	}
 	
@@ -127,6 +132,17 @@ class HScriptGroup implements IFlxDestroyable
 	{
 		members = FlxDestroyUtil.destroyArray(members);
 		@:bypassAccessor parent = null;
+	}
+	
+	public function clear(callOnDestroy:Bool = true)
+	{
+		if (callOnDestroy) call('onDestroy', null, true);
+		for (i in 0...members.length)
+		{
+			var script = members[0];
+			members.remove(script);
+			script.destroy();
+		}
 	}
 }
 

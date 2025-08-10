@@ -1,5 +1,7 @@
 package funkin.backend;
 
+import funkin.scripting.HScriptManager;
+
 import flixel.FlxG;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.util.FlxDestroyUtil;
@@ -85,6 +87,8 @@ class MusicBeatState extends FlxUIState
 		}
 		
 		FlxTransitionableState.skipNextTransOut = false;
+		
+		HScriptManager.callOnScripts('onStateCreate');
 	}
 	
 	/**
@@ -118,8 +122,9 @@ class MusicBeatState extends FlxUIState
 			}
 		}
 		
-		scriptGroup.call('onUpdate', [elapsed]);
-		
+		final hscriptArgs = [elapsed];
+		scriptGroup.call('onUpdate', hscriptArgs);
+		HScriptManager.callOnScripts('onUpdate', hscriptArgs);
 		super.update(elapsed);
 	}
 	
@@ -180,16 +185,19 @@ class MusicBeatState extends FlxUIState
 	{
 		if (curStep % 4 == 0) beatHit();
 		scriptGroup.call('onStepHit', []);
+		HScriptManager.callOnScripts('onStepHit');
 	}
 	
 	public function beatHit():Void
 	{
 		scriptGroup.call('onBeatHit', []);
+		HScriptManager.callOnScripts('onBeatHit');
 	}
 	
 	public function sectionHit():Void
 	{
 		scriptGroup.call('onSectionHit', []);
+		HScriptManager.callOnScripts('onSectionHit');
 	}
 	
 	function getBeatsOnSection():Float

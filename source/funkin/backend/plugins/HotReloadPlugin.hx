@@ -34,6 +34,7 @@ class HotReloadPlugin extends FlxBasic
 		{
 			FlxTransitionableState.skipNextTransIn = FlxTransitionableState.skipNextTransOut = true;
 			FlxG.resetState();
+			funkin.scripting.HScriptManager.populate();
 		}
 		
 		if (FlxG.keys.justPressed.F6)

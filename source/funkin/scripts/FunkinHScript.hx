@@ -194,6 +194,12 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		#if hl
 		set('Math', hl.HLFixes.HLMath);
 		set('Std', hl.HLFixes.HLStd);
+		set("trace", Reflect.makeVarArgs(function(x:Array<Dynamic>) {
+			var pos = this.interp != null ? this.interp.posInfos() : Iris.getDefaultPos(this.name);
+			var v = x.shift();
+			if (x.length > 0) pos.customParams = x;
+			Iris.print(Std.string(v), pos);
+		}));
 		#end
 		
 		set("StringTools", StringTools);
