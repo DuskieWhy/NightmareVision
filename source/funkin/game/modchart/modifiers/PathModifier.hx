@@ -7,12 +7,13 @@ import flixel.FlxSprite;
 import funkin.game.modchart.*;
 import funkin.objects.note.*;
 
-typedef PathInfo =
+@:structInit
+class PathInfo
 {
-	var position:Vector3;
-	var dist:Float;
-	var start:Float;
-	var end:Float;
+	public var position:Vector3;
+	public var dist:Float;
+	public var start:Float;
+	public var end:Float;
 }
 
 class PathModifier extends NoteModifier
