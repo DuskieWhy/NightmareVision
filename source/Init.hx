@@ -87,8 +87,8 @@ class Init extends FlxState
 		}
 		#end
 		
-		funkin.scripting.HScriptManager.prepareSignals();
-		funkin.scripting.HScriptManager.populate();
+		funkin.scripting.PluginsManager.prepareSignals();
+		funkin.scripting.PluginsManager.populate();
 		
 		super.create();
 		

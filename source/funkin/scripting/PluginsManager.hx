@@ -8,7 +8,7 @@ import funkin.scripts.FunkinHScript;
  * 
  * these scripts are always running in the background.
  */
-class HScriptManager
+class PluginsManager
 {
 	/**
 	 * All scripts loaded by name
