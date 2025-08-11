@@ -30,7 +30,7 @@ class CharacterParser
 			raw = FunkinAssets.getContent(charPath);
 		}
 		
-		if (raw.length != 0 && charPath.endsWith('.xml')) return fromCNE(raw); // if it was a xml its cne
+		if (raw.trim().length != 0 && charPath.endsWith('.xml')) return fromCNE(raw); // if it was a xml its cne
 		
 		final rawJson:Null<Any> = FunkinAssets.parseJson(raw);
 		
@@ -52,8 +52,13 @@ class CharacterParser
 	 */
 	public static function fromCNE(data:String):CharacterInfo
 	{
-		final xml = Xml.parse(data).firstElement();
-		
+		final xml = try
+		{
+			Xml.parse(data).firstElement();
+		}
+		catch (e)
+			throw 'Failed to parse invalid xml\nException:$e';
+			
 		final access = new Access(xml);
 		
 		final baseInfo:CharacterInfo = getTemplateCharInfo();
