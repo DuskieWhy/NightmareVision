@@ -40,6 +40,7 @@ class CharacterParser
 		return cast rawJson;
 	}
 	
+	// todo clean this it makes me sad to look at
 	// dont expect this to be that good aha wip
 	public static function fromCNE(data:Dynamic):CharacterInfo
 	{
