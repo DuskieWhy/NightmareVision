@@ -1,4 +1,4 @@
-package extensions;
+package extensions.hscript;
 
 import crowplexus.iris.Iris;
 import crowplexus.hscript.*;

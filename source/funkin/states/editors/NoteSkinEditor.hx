@@ -7,8 +7,6 @@ import openfl.events.Event;
 import openfl.net.FileReference;
 import openfl.events.IOErrorEvent;
 
-import extensions.FlxUIDropDownMenuEx;
-
 import flixel.FlxObject;
 import flixel.FlxCamera;
 import flixel.text.FlxText;

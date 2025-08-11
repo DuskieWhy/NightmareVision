@@ -1,4 +1,4 @@
-package extensions;
+package extensions.flixel;
 
 import lime.system.Clipboard;
 
@@ -88,7 +88,7 @@ class FlxUIInputTextEx extends FlxUIInputText
 						
 					case V: // paste func
 						var newText:String = filter(Clipboard.text);
-					
+						
 						if (newText.length > 0 && (maxLength == 0 || (text.length + newText.length) < maxLength))
 						{
 							text = insertSubstring(text, newText, caretIndex);
@@ -96,7 +96,7 @@ class FlxUIInputTextEx extends FlxUIInputText
 							onChange(INPUT_ACTION);
 							onChange(PASTE_ACTION);
 						}
-					
+						
 						return;
 					case X: // cut func
 						Clipboard.text = text;

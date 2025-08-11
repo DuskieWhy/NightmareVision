@@ -14,9 +14,9 @@ import flixel.math.FlxPoint;
 import flixel.sound.FlxSound;
 
 #if sys
-import sys.io.*;
-
 import sys.*;
+
+import sys.io.*;
 #end
 
 #if DISCORD_ALLOWED

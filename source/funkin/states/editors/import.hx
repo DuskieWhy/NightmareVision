@@ -1,7 +1,7 @@
 package funkin.states.editors;
 
 #if !macro
-import extensions.*;
+import extensions.flixel.*;
 
 import flixel.addons.ui.*;
 #end

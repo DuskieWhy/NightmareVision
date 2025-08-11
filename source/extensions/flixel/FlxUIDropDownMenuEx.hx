@@ -1,4 +1,4 @@
-package extensions;
+package extensions.flixel;
 
 import flixel.addons.ui.FlxUIDropDownMenu;
 import flixel.FlxG;

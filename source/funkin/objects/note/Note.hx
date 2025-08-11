@@ -10,7 +10,7 @@ import funkin.game.shaders.RGBPalette.RGBShaderReference;
 import funkin.objects.Character;
 import funkin.scripts.*;
 import funkin.states.*;
-import funkin.states.editors.ChartingState;
+import funkin.states.editors.ChartEditorState;
 
 import math.Vector3;
 
@@ -254,7 +254,7 @@ class Note extends FlxSprite
 					color = 0xffa19f9f;
 				default:
 					if (!inEditor) noteScript = PlayState.instance.noteTypeScripts.getScript(value);
-					else noteScript = ChartingState.instance.notetypeScripts.get(value);
+					else noteScript = ChartEditorState.instance.notetypeScripts.get(value);
 					
 					if (noteScript != null)
 					{
@@ -468,7 +468,7 @@ class Note extends FlxSprite
 		
 		if (inEditor && !skipScale)
 		{
-			setGraphicSize(ChartingState.GRID_SIZE, ChartingState.GRID_SIZE);
+			setGraphicSize(ChartEditorState.GRID_SIZE, ChartEditorState.GRID_SIZE);
 			updateHitbox();
 			baseScaleX = scale.x;
 			baseScaleY = scale.y;

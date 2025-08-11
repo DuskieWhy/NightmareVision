@@ -9,7 +9,7 @@ import flixel.util.FlxColor;
 import flixel.tweens.FlxTween;
 
 import funkin.backend.Difficulty;
-import funkin.states.editors.ChartingState;
+import funkin.states.editors.ChartEditorState;
 import funkin.data.WeekData;
 import funkin.states.*;
 import funkin.states.substates.*;
@@ -359,7 +359,7 @@ class FreeplayState extends MusicBeatState
 				
 				if (FlxG.keys.pressed.SHIFT)
 				{
-					FlxG.switchState(ChartingState.new);
+					FlxG.switchState(ChartEditorState.new);
 				}
 				else
 				{

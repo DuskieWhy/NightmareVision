@@ -1,6 +1,6 @@
 package funkin.scripts;
 
-import extensions.InterpEx;
+import extensions.hscript.InterpEx;
 
 import flixel.util.FlxDestroyUtil;
 import flixel.util.FlxDestroyUtil.IFlxDestroyable;

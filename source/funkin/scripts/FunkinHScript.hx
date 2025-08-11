@@ -2,7 +2,7 @@ package funkin.scripts;
 
 import crowplexus.iris.Iris;
 
-import extensions.InterpEx;
+import extensions.hscript.InterpEx;
 
 import funkin.backend.plugins.DebugTextPlugin;
 import funkin.objects.*;
