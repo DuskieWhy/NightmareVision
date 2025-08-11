@@ -1,5 +1,9 @@
 package funkin.data;
 
+import flixel.animation.FlxAnimation;
+
+import haxe.xml.Access;
+
 import funkin.objects.Character;
 
 class CharacterParser
@@ -7,31 +11,148 @@ class CharacterParser
 	// wipppppp
 	public static function fetchInfo(id:String):CharacterInfo
 	{
-		var charPath:String = Paths.getPath('characters/$id.json', TEXT, null, true);
+		var charPath = Paths.findFileAndAddExts('characters/$id', ['json', 'xml']);
 		
 		if (!FunkinAssets.exists(charPath))
 		{
 			charPath = Paths.getPrimaryPath('characters/${Character.DEFAULT_CHARACTER}.json');
 		}
 		
-		var raw = null;
+		var raw:Null<String> = null;
 		
 		try
 		{
-			raw = FunkinAssets.parseJson(FunkinAssets.getContent(charPath));
+			raw = FunkinAssets.getContent(charPath);
 		}
 		
-		if (raw == null) throw 'failed to parse json at $charPath';
+		if (charPath.endsWith('.xml')) return fromCNE(raw); // check if its cne
 		
-		if (Reflect.hasField(raw, 'version')) // idk if other formats use a version but for the time being i will assume its vslice
+		final rawJson:Null<Any> = FunkinAssets.parseJson(raw);
+		
+		if (rawJson == null) throw 'failed to parse json at $charPath';
+		
+		// then check for vslice
+		if (Reflect.hasField(rawJson, 'version')) // idk if other formats use a version but for the time being i will assume its vslice
 		{
-			return fromVSlice(raw);
+			return fromVSlice(rawJson);
 		}
 		
-		return cast raw;
+		return cast rawJson;
 	}
 	
-	// maybe make this cleaner
+	// dont expect this to be that good aha wip
+	public static function fromCNE(data:Dynamic):CharacterInfo
+	{
+		var xml = Xml.parse(data).firstElement();
+		
+		final access = new Access(xml);
+		
+		final animations:Array<AnimationInfo> = [];
+		
+		// not used for this sorry ig.
+		final isPlayer = access.x.exists('isPlayer') ? access.x.get('isPlayer') == 'true' : false;
+		
+		// from https://github.com/CodenameCrew/CodenameEngine/blob/main/source/funkin/backend/utils/CoolUtil.hx
+		inline function parseNumberRange(input:String):Array<Int>
+		{
+			var result:Array<Int> = [];
+			var parts:Array<String> = input.split(",");
+			
+			for (part in parts)
+			{
+				part = part.trim();
+				var idx = part.indexOf("..");
+				if (idx != -1)
+				{
+					var start = Std.parseInt(part.substring(0, idx).trim());
+					var end = Std.parseInt(part.substring(idx + 2).trim());
+					
+					if (start == null || end == null)
+					{
+						continue;
+					}
+					
+					if (start < end)
+					{
+						for (j in start...end + 1)
+						{
+							result.push(j);
+						}
+					}
+					else
+					{
+						for (j in end...start + 1)
+						{
+							result.push(start + end - j);
+						}
+					}
+				}
+				else
+				{
+					var num = Std.parseInt(part);
+					if (num != null)
+					{
+						result.push(num);
+					}
+				}
+			}
+			return result;
+		}
+		
+		for (node in access.elements)
+		{
+			if (node.name == 'anim')
+			{
+				final anim = node.x.get('name');
+				final prefix = node.x.get('anim');
+				final xOffset = node.x.exists('x') ? Std.parseInt(node.x.get('x')) : 0;
+				final yOffset = node.x.exists('y') ? Std.parseInt(node.x.get('y')) : 0;
+				final fps = node.x.exists('fps') ? Std.parseInt(node.x.get('fps')) : 24;
+				final loops = node.x.exists('loop') ? node.x.get('loop') == 'true' : false;
+				final indices = node.x.exists('indices') ? parseNumberRange(node.x.get('indices')) : [];
+				
+				animations.push(
+					{
+						anim: anim,
+						name: prefix,
+						offsets: [xOffset, yOffset],
+						fps: fps,
+						loop: loops,
+						indices: indices
+					});
+			}
+		}
+		
+		final texture = 'characters/' + (access.x.exists('sprite') ? access.x.get('sprite') : 'BOYFRIEND');
+		final flipX = access.x.exists('flipX') ? access.x.get('flipX') == 'true' : false;
+		final icon = access.x.exists('icon') ? access.x.get('icon') : 'face';
+		final healthColour = access.x.exists('color') ? FlxColor.fromString(access.x.get('color')) : FlxColor.GRAY;
+		final x = access.x.exists('x') ? Std.parseFloat(access.x.get('x')) : 0.0;
+		final y = access.x.exists('y') ? Std.parseFloat(access.x.get('y')) : 0.0;
+		final antialiasing = access.x.exists('antialiasing') ? true : true;
+		final scale = access.x.exists('scale') ? Std.parseFloat(access.x.get('scale')) : 1;
+		final singDuration = access.x.exists('holdTime') ? Std.parseFloat(access.x.get('holdTime')) : 6.1;
+		final danceEvery = access.x.exists('interval') ? Std.parseInt(access.x.get('interval')) : 2;
+		
+		final info:CharacterInfo =
+			{
+				image: texture,
+				position: [x, y],
+				camera_position: [0, 0],
+				animations: animations,
+				healthbar_colour: healthColour,
+				healthicon: icon,
+				flip_x: flipX,
+				sing_duration: singDuration,
+				scale: scale,
+				no_antialiasing: !antialiasing,
+				dance_every: danceEvery
+			}
+			
+		return info;
+	}
+	
+	// wip
 	public static function fromVSlice(data:Dynamic):CharacterInfo
 	{
 		final singDuration = data?.singTime ?? 6.1;

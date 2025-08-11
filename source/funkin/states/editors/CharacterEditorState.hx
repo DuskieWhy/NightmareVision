@@ -811,10 +811,12 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		#if MODS_ALLOWED
 		for (file in Paths.listAllFilesInDirectory('characters/'))
 		{
-			if (file.endsWith('.json'))
+			var isXml = false;
+			if (file.endsWith('.json') || (file.endsWith('.xml') && (isXml = true)))
 			{
 				var charToCheck:String = file.substr(file.lastIndexOf('/') + 1);
-				charToCheck = charToCheck.substr(0, charToCheck.length - 5);
+				
+				charToCheck = charToCheck.substr(0, charToCheck.length - (isXml ? 4 : 5));
 				if (!characterList.contains(charToCheck)) characterList.push(charToCheck);
 			}
 		}

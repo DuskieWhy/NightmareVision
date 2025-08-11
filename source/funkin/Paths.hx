@@ -178,6 +178,18 @@ class Paths
 		}
 	}
 	
+	// uise this more
+	public static function findFileAndAddExts(file:String, exts:Array<String>):String
+	{
+		for (ext in exts)
+		{
+			final joined = getPath('$file.$ext', TEXT, null, true);
+			if (FunkinAssets.exists(joined)) return joined;
+		}
+		
+		return getPath('$file.${exts[0]}', TEXT, null, true);
+	}
+	
 	static public function getTextFromFile(key:String, ignoreMods:Bool = false):String
 	{
 		final path = Paths.getPath(key, TEXT, null, !ignoreMods);
