@@ -759,10 +759,17 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			dance();
 		}
 		
-		if ((FlxG.keys.justPressed.Z || FlxG.keys.justPressed.X) && !character.isAnimNull())
+		if (character.isAnimNull()) return;
+		
+		if ((FlxG.keys.justPressed.Z || FlxG.keys.justPressed.X))
 		{
 			character.pauseAnim();
 			character.animCurFrame = FlxMath.wrap(character.animCurFrame + (FlxG.keys.justPressed.Z ? -1 : 1), 0, character.getAnimNumFrames() - 1);
+		}
+		
+		if (FlxG.keys.justPressed.C)
+		{
+			character.playAnim(character.getAnimName(), true);
 		}
 	}
 	

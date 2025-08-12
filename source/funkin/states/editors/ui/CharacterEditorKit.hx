@@ -123,7 +123,7 @@ class CharEditorUI extends FlxTypedSpriteContainer<FlxSprite>
 	
 	public function spawnLegend()
 	{
-		var legend = new LegendWindow();
+		var legend = new LegendWindow(); // dont drag this over the character settings dialog???
 		legend.left = 200;
 		legend.top = 50;
 		
@@ -135,5 +135,5 @@ class CharEditorUI extends FlxTypedSpriteContainer<FlxSprite>
 		WindowManager.instance.addWindow(legend);
 	}
 	
-	final _legend = '> Pressing [W, A, S, D] plays the corresponding sing animation.\nHolding shift while doing so will attempt to play alt animations\n\n> Pressing [Z, X] will move a frame forward/backward of the currently playing animation.\n\n> Use the middle mouse wheel to drag the camera and zoom.\nAdditionally, [Q, E] can zoom in/out the camera.';
+	final _legend = '> Pressing [W, A, S, D] plays the corresponding sing animation.\nHolding shift while doing so will attempt to play alt animations\n\n> Pressing [Z, X] will move a frame forward/backward of the currently playing animation.\n\nPressing C to replay the current animation\n\n> Use the middle mouse wheel to drag the camera and zoom.\nAdditionally, [Q, E] can zoom in/out the camera.';
 }
