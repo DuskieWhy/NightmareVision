@@ -7,6 +7,10 @@ import flixel.math.FlxAngle;
 import flixel.graphics.frames.FlxFrame;
 import openfl.display.BitmapData;
 
+// SHADER TAKEN FROM BASE GAME FNF
+// WRITTEN BY FABS I THINK
+// IF IM WRONG I DO APOLOGISE BUT IM 99% SURE IT WAS AND ITS REALLY COOL
+
 /*
   A shader that aims to *mostly recreate how Adobe Animate/Flash handles drop shadows, but its main use here is for rim lighting.
 
