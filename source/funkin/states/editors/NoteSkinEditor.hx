@@ -379,6 +379,8 @@ class NoteSkinEditor extends MusicBeatState
 						if (FlxG.keys.justPressed.ESCAPE)
 						{
 							FlxG.switchState(MasterEditorMenu.new);
+							FlxG.sound.playMusic(Paths.music('freakyMenu'));
+							FlxG.mouse.visible = false;
 						}
 						
 						for (i in 0...controlArray.length)
