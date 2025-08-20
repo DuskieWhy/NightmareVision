@@ -30,7 +30,9 @@ In a cmd within the project directory, in order run...
 
 > haxelib install hxpkg
 
-> haxelib run hxpkg setup install
+> haxelib run hxpkg setup
+
+> haxelib run hxpkg install
 
 ### Quick Note
 - Haxe 4.3.6 or newer is recommended
