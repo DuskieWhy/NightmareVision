@@ -1,18 +1,28 @@
 <menubar id="_menuBar" width="100%" height="40" horizontalAlign='right'>
 
 
-    <spacer width="60%"/>
+    <spacer width="90%"/>
 
     <button allowFocus="false" id="exitButton" text="Exit" verticalAlign="center"/>
 
     <button allowFocus="false" id="legendButton" text="press for help" verticalAlign="center"/>
 
-    <spacer width="40%" />
+    <spacer height="1"/>
+    <rule direction="vertical" width="20" height= "30" />
+    <spacer height="1"/>
+
+    <checkbox text="Show Bounds" id="characterBoundsCheckbox" verticalAlign="center"/>
+
+    <spacer height="1"/>
+    <rule direction="vertical" width="20" height= "30" />
+    <spacer height="1"/>
 
     <menu text="Bg View" id="bgView" style="padding:10px;">
         <vbox width="100%" horizontalAlign="center" verticalAlign="center">
 
             <checkbox text="Stage Bg" id="stageBGCheckbox" verticalAlign="center"/>
+
+            <checkbox text="Grid Bg" id="gridBGCheckbox" verticalAlign="center"/>
 
             <hbox tooltip="if Stage Bg is disabled, change the colour of the bg.">
                 <label text="Bg Colour" verticalAlign="center" />

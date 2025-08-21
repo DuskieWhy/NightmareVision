@@ -1,5 +1,7 @@
 package funkin.objects;
 
+import flixel.util.FlxAxes;
+
 import openfl.media.Sound;
 
 import flixel.FlxG;
@@ -15,6 +17,8 @@ class Alphabet extends FlxSpriteGroup
 {
 	public var delay:Float = 0.05;
 	public var paused:Bool = false;
+	
+	public var changeAxis:FlxAxes = XY;
 	
 	// for menu shit
 	public var forceX:Float = Math.NEGATIVE_INFINITY;
@@ -377,14 +381,14 @@ class Alphabet extends FlxSpriteGroup
 			
 			final lerpRate = FlxMath.getElapsedLerp(0.16, elapsed);
 			
-			y = FlxMath.lerp(y, (scaledY * yMult) + (FlxG.height * 0.48) + yAdd, lerpRate);
+			if (changeAxis.y) y = FlxMath.lerp(y, (scaledY * yMult) + (FlxG.height * 0.48) + yAdd, lerpRate);
 			if (forceX != Math.NEGATIVE_INFINITY)
 			{
-				x = forceX;
+				if (changeAxis.x) x = forceX;
 			}
 			else
 			{
-				x = FlxMath.lerp(x, (targetY * 20) + 90 + xAdd, lerpRate);
+				if (changeAxis.x) x = FlxMath.lerp(x, (targetY * 20) + 90 + xAdd, lerpRate);
 			}
 		}
 		

@@ -1,40 +1,28 @@
 package funkin.states.editors;
 
-import funkin.data.CharacterData.CharacterParser;
+import flixel.addons.display.FlxGridOverlay;
+import flixel.addons.display.FlxBackdrop;
 
 import haxe.Json;
-
-import openfl.events.IOErrorEvent;
-import openfl.events.Event;
-import openfl.net.FileReference;
-
-import haxe.ui.util.Color;
-
-import funkin.objects.HealthIcon;
-
 import haxe.ui.components.popups.ColorPickerPopup;
-
-import funkin.data.CharacterData.AnimationInfo;
-import funkin.data.CharacterData.CharacterInfo;
-
-import haxe.ui.focus.FocusManager;
-import haxe.ui.Toolkit;
 import haxe.ui.core.Screen;
 import haxe.ui.components.CheckBox;
 import haxe.ui.components.Button;
 import haxe.ui.components.Slider;
 import haxe.ui.backend.flixel.UIState;
-import haxe.ui.RuntimeComponentBuilder;
 
-import funkin.states.editors.ui.CharacterEditorKit.CharEditorUI;
+import openfl.events.Event;
+import openfl.net.FileReference;
 
 import flixel.group.FlxContainer;
-
-import haxe.ui.components.DropDown;
-import haxe.ui.containers.dialogs.CollapsibleDialog;
-
 import flixel.graphics.FlxGraphic;
 
+import funkin.states.editors.ui.CharacterEditorKit.CharEditorUI;
+import funkin.states.editors.ui.DebugBounds;
+import funkin.data.CharacterData.CharacterParser;
+import funkin.data.CharacterData.CharacterInfo;
+import funkin.data.CharacterData.AnimationInfo;
+import funkin.objects.HealthIcon;
 import funkin.objects.Character;
 
 using funkin.states.editors.ui.ToolKitUtils;
@@ -52,7 +40,12 @@ class Crosshair extends openfl.display.BitmapData {}
 // if HAXEUI BREAKS ADD THIS TO FLAG -Dhaxeui_experimental_no_cache
 class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for access to a root
 {
+	var pointerBounds:DebugBounds;
+	
+	var characterBounds:DebugBounds = null;
+	
 	var bgLayer:Null<FlxContainer> = null;
+	var grid:FlxBackdrop;
 	var charLayer:FlxContainer;
 	
 	var characterGhost:Null<Character> = null;
@@ -97,6 +90,11 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		charLayer = new FlxContainer();
 		add(charLayer);
 		
+		characterBounds = new DebugBounds(character);
+		add(characterBounds);
+		characterBounds.visible = false;
+		characterBounds.color = FlxColor.RED;
+		
 		healthIcon = new HealthIcon();
 		add(healthIcon);
 		healthIcon.visible = false;
@@ -116,6 +114,10 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		uiElements.toolBar.characterDropdown.selectItemBy((item) -> return item.id == characterId);
 		
 		dance();
+		
+		pointerBounds = new DebugBounds(cameraPointer);
+		add(pointerBounds);
+		pointerBounds.alpha = 0;
 	}
 	
 	function exitState()
@@ -143,6 +145,11 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		
 		uiElements.characterDialogBox.bindDialogToView(); // so u cant push it off screen
 		
+		uiElements.toolBar.characterBoundsCheckbox.onChange = (ui) -> {
+			characterBounds.visible = ui.value.toBool();
+			characterBounds.target = character;
+		}
+		
 		uiElements.toolBar.exitButton.onClick = (ui) -> {
 			if (uiElements.toolBar.exitButton.text == 'for sure?')
 			{
@@ -154,11 +161,33 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		
 		uiElements.toolBar.findComponent('stageBGCheckbox', CheckBox).onChange = (ui) -> {
 			bgLayer.visible = ui.value.toBool();
+			
+			if (bgLayer.visible)
+			{
+				uiElements.toolBar.gridBGCheckbox.value = false;
+				grid.visible = false;
+			}
+		}
+		
+		uiElements.toolBar.gridBGCheckbox.onChange = (ui) -> {
+			//
+			var val = ui.value.toBool();
+			if (val)
+			{
+				uiElements.toolBar.stageBGCheckbox.value = false;
+				bgLayer.visible = false;
+			}
+			
+			grid.visible = val;
 		}
 		
 		uiElements.toolBar.bgView.findComponent('bgColour', ColorPickerPopup).onChange = (ui) -> {
 			final newColour = FlxColor.fromString(ui.value.toString());
-			if (FlxG.camera.bgColor != newColour) uiElements.toolBar.findComponent('stageBGCheckbox', CheckBox).value = false;
+			if (FlxG.camera.bgColor != newColour)
+			{
+				uiElements.toolBar.findComponent('stageBGCheckbox', CheckBox).value = false;
+				uiElements.toolBar.gridBGCheckbox.value = false;
+			}
 			
 			FlxG.camera.bgColor = newColour;
 		}
@@ -558,6 +587,10 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 	{
 		if (bgLayer != null) return;
 		
+		grid = new FlxBackdrop(FlxGridOverlay.create(100, 100, 200, 200).graphic);
+		add(grid);
+		grid.visible = false;
+		
 		bgLayer = new FlxContainer();
 		add(bgLayer);
 		
@@ -572,6 +605,8 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 	
 	override function update(elapsed:Float)
 	{
+		updateBounds(elapsed);
+		
 		super.update(elapsed);
 		
 		if (!isTextFieldFocused)
@@ -622,7 +657,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		
 		if (controlOffsets(elapsed) && character != null && uiElements.animationList.animationList.selectedItem != null)
 		{
-			final offsets = [character.offset.x, character.offset.y];
+			final offsets = [Std.int(character.offset.x), Std.int(character.offset.y)];
 			
 			character.addOffset(character.getAnimName(), offsets[0], offsets[1]);
 			
@@ -630,8 +665,8 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			{
 				if (i.anim == character.getAnimName())
 				{
-					i.offsets[0] = Std.int(character.offset.x);
-					i.offsets[1] = Std.int(character.offset.y);
+					i.offsets[0] = offsets[0];
+					i.offsets[1] = offsets[1];
 					break;
 				}
 			}
@@ -663,6 +698,45 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		{
 			exitState();
 		}
+	}
+	
+	var wasDraggingCursor:Bool = false;
+	
+	function updateBounds(elapsed:Float)
+	{
+		var pointerAlpha:Float = 0;
+		
+		if (pointerBounds.target != null
+			&& (wasDraggingCursor
+				|| (!isHaxeUIHovered() && FlxG.mouse.overlaps(pointerBounds.target, pointerBounds.target.getDefaultCamera())))
+			&& character != null)
+		{
+			pointerAlpha = 1;
+			if (FlxG.mouse.justPressed)
+			{
+				FlxG.sound.play(Paths.sound('ui/mouseClick'));
+			}
+			
+			if (FlxG.mouse.pressed)
+			{
+				wasDraggingCursor = true;
+				
+				var x = FlxG.mouse.deltaViewX;
+				
+				if (character.isPlayer) x *= -1;
+				
+				character.cameraPosition[0] += x;
+				
+				character.cameraPosition[1] += FlxG.mouse.deltaViewY;
+				
+				uiElements.characterDialogBox.characterCamXStepper.value = character.cameraPosition[0];
+				uiElements.characterDialogBox.characterCamYStepper.value = character.cameraPosition[1];
+			}
+			
+			if (FlxG.mouse.justReleased) wasDraggingCursor = false;
+		}
+		
+		pointerBounds.alpha = FlxMath.lerp(pointerBounds.alpha, pointerAlpha, FlxMath.getElapsedLerp(0.4, elapsed));
 	}
 	
 	// var holdingMoveTime:Float = 0;
