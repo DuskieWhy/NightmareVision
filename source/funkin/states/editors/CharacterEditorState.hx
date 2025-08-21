@@ -1,8 +1,5 @@
 package funkin.states.editors;
 
-import flixel.addons.display.FlxGridOverlay;
-import flixel.addons.display.FlxBackdrop;
-
 import haxe.Json;
 import haxe.ui.components.popups.ColorPickerPopup;
 import haxe.ui.core.Screen;
@@ -16,6 +13,8 @@ import openfl.net.FileReference;
 
 import flixel.group.FlxContainer;
 import flixel.graphics.FlxGraphic;
+import flixel.addons.display.FlxGridOverlay;
+import flixel.addons.display.FlxBackdrop;
 
 import funkin.states.editors.ui.CharacterEditorKit.CharEditorUI;
 import funkin.states.editors.ui.DebugBounds;
@@ -134,8 +133,6 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		FlxG.mouse.visible = false;
 	}
 	
-	var exitPressTimer:Float = 0;
-	
 	public function buildUI()
 	{
 		root.cameras = [camHUD]; // this tells every single component to use this camera
@@ -145,18 +142,18 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		
 		uiElements.characterDialogBox.bindDialogToView(); // so u cant push it off screen
 		
-		uiElements.toolBar.characterBoundsCheckbox.onChange = (ui) -> {
-			characterBounds.visible = ui.value.toBool();
+		uiElements.toolBar.exitMenuButton.onClick = (ui) -> {
+			exitState();
+		}
+		
+		uiElements.toolBar.toggleCharBounds.onClick = (ui) -> {
+			characterBounds.visible = !characterBounds.visible;
 			characterBounds.target = character;
 		}
 		
-		uiElements.toolBar.exitButton.onClick = (ui) -> {
-			if (uiElements.toolBar.exitButton.text == 'for sure?')
-			{
-				exitState();
-			}
-			uiElements.toolBar.exitButton.text = 'for sure?';
-			exitPressTimer = 0.5;
+		uiElements.toolBar.openHelpWindow.onClick = (ui) -> {
+			uiElements.legendWindow?.destroy();
+			uiElements.spawnLegend();
 		}
 		
 		uiElements.toolBar.findComponent('stageBGCheckbox', CheckBox).onChange = (ui) -> {
@@ -170,8 +167,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		}
 		
 		uiElements.toolBar.gridBGCheckbox.onChange = (ui) -> {
-			//
-			var val = ui.value.toBool();
+			final val = ui.value.toBool();
 			if (val)
 			{
 				uiElements.toolBar.stageBGCheckbox.value = false;
@@ -190,10 +186,6 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			}
 			
 			FlxG.camera.bgColor = newColour;
-		}
-		
-		uiElements.toolBar.legendButton.onClick = (ui) -> {
-			uiElements.spawnLegend();
 		}
 		
 		uiElements.toolBar.refreshCharButton.onClick = (ui) -> {
@@ -622,15 +614,6 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		if ((isHaxeUIHovered() && FlxG.mouse.justPressed) || FlxG.mouse.justPressedRight)
 		{
 			FlxG.sound.play(Paths.sound('ui/mouseClick'));
-		}
-		
-		if (exitPressTimer > 0)
-		{
-			exitPressTimer -= elapsed;
-			if (exitPressTimer <= 0)
-			{
-				uiElements.toolBar.exitButton.text = 'Exit';
-			}
 		}
 		
 		uiElements.miscInfo.zoomText.text = 'Camera Zoom: ' + Std.string(FlxMath.roundDecimal(FlxG.camera.zoom, 2)) + 'x';
