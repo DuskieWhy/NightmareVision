@@ -264,6 +264,8 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 				characterId = ui.data.id;
 				
 				spawnCharacter();
+				
+				resetActions();
 			}
 		}
 		
@@ -306,6 +308,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			
 			updateAnimList();
 			updateDialogueBox();
+			resetActions();
 		}
 		
 		// GHOST SETTINGS
@@ -693,6 +696,21 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		FlxG.sound.play(Paths.sound('ui/openPopup'), 0.5);
 		
 		ToolKitUtils.makeNotification((isUndo ? 'Undo' : 'Redo') + ' Action', popupText, Info);
+	}
+	
+	function resetActions()
+	{
+		while (undoActions.length > 0)
+		{
+			var undo = undoActions.pop();
+			undo = null;
+		}
+		
+		while (redoActions.length > 0)
+		{
+			var redo = redoActions.pop();
+			redo = null;
+		}
 	}
 	
 	function addUndoAction(type:UndoType, object:UndoData, value:Dynamic)
