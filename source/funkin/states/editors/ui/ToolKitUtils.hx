@@ -115,6 +115,8 @@ class ToolKitUtils
 				{title: title, body: body, icon: 'assets/images/editors/notification_success.png'};
 			case Warning:
 				{title: title, body: body, icon: 'assets/images/editors/notification_warn.png'};
+			case Info:
+				{title: title, body: body, icon: 'assets/images/editors/notification_neutral.png'};
 				
 			default: {title: title, body: body, type: type};
 		}
@@ -126,6 +128,8 @@ class ToolKitUtils
 				noti.addClass('green-notification');
 			case Warning:
 				noti.addClass('yellow-notification');
+			case Info:
+				noti.addClass("blue-notification");
 			default:
 		}
 	}

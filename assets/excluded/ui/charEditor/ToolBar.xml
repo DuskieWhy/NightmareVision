@@ -5,6 +5,9 @@
 
     <menu text="Options" id="optionsMenu">
         
+        <menu-item id="undoButton" text="Undo Previous Action" shortcutText='Ctrl+Z'/>
+        <menu-item id="redoButton" text="Redo Previous Action" shortcutText='Ctrl+X'/>
+        <menu-separator />
         <menu-item id="toggleCharBounds" text="Toggle Character Bounds"/>
         <menu-item id="openHelpWindow" text="Open Help Window"/>
         <menu-separator />

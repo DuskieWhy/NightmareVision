@@ -1,5 +1,6 @@
 package funkin.states.editors;
 
+import haxe.ui.components.Stepper;
 import haxe.Json;
 import haxe.ui.components.popups.ColorPickerPopup;
 import haxe.ui.core.Screen;
@@ -26,6 +27,40 @@ import funkin.objects.Character;
 
 using funkin.states.editors.ui.ToolKitUtils;
 
+abstract UndoData(Dynamic)
+{
+	@:from static inline function fromCheckbox(obj:CheckBox):UndoData return cast obj;
+	
+	@:to public inline function toCheckbox():CheckBox return cast this;
+	
+	@:from static inline function fromSlider(obj:Slider):UndoData return cast obj;
+	
+	@:to public inline function toSlider():Slider return cast this;
+	
+	@:from static inline function fromStepper(obj:Stepper):UndoData return cast obj;
+	
+	@:to public inline function toStepper():Stepper return cast this;
+	
+	@:from static inline function fromFlxSprite(obj:FlxSprite):UndoData return cast obj;
+	
+	@:to public inline function toFlxSprite():FlxSprite return cast this;
+}
+
+@:structInit class UndoAction
+{
+	public var type:UndoType;
+	public var object:UndoData;
+	public var value:Dynamic;
+}
+
+enum abstract UndoType(String)
+{
+	var DRAGGED;
+	var CHANGED_CHECKBOX;
+	var MOVED_SLIDER;
+	// var CHANGED_STEPPER; //idk...
+}
+
 @:bitmap("assets/excluded/images/cursorCross.png")
 class Crosshair extends openfl.display.BitmapData {}
 
@@ -39,6 +74,12 @@ class Crosshair extends openfl.display.BitmapData {}
 // if HAXEUI BREAKS ADD THIS TO FLAG -Dhaxeui_experimental_no_cache
 class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for access to a root
 {
+	public static final MAX_REMEMBERED_ACTIONS:Int = 25;
+	
+	var undoActions:Array<UndoAction> = []; // perhaps this coud be made it into its own clipboard class but for now this is fine
+	
+	var redoActions:Array<UndoAction> = [];
+	
 	var pointerBounds:DebugBounds;
 	
 	var characterBounds:DebugBounds = null;
@@ -146,6 +187,13 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			exitState();
 		}
 		
+		uiElements.toolBar.redoButton.onClick = (ui) -> {
+			triggerClipboardAction(false);
+		}
+		uiElements.toolBar.undoButton.onClick = (ui) -> {
+			triggerClipboardAction(true);
+		}
+		
 		uiElements.toolBar.toggleCharBounds.onClick = (ui) -> {
 			characterBounds.visible = !characterBounds.visible;
 			characterBounds.target = character;
@@ -198,6 +246,10 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			character.flipX = (character.originalFlipX != character.isPlayer);
 			
 			positionCharacter();
+		}
+		
+		uiElements.toolBar.isPlayerCheckBox.onClick = (ui) -> {
+			addUndoAction(CHANGED_CHECKBOX, uiElements.toolBar.isPlayerCheckBox, !uiElements.toolBar.isPlayerCheckBox.value);
 		}
 		
 		// opened the dropdown
@@ -266,6 +318,10 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 					characterGhost.alpha = ui.value.toFloat();
 				}
 			}
+			
+			slider.onDragStart = (ui) -> {
+				addUndoAction(MOVED_SLIDER, slider, slider.value);
+			}
 		}
 		
 		var ghostEnabledButton = uiElements.toolBar.ghostSettings.findComponent('enableGhost', Button);
@@ -289,14 +345,15 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 					characterGhost.colorTransform.blueOffset = offset;
 				}
 			}
+			
+			ghostBlend.onClick = (ui) -> {
+				addUndoAction(CHANGED_CHECKBOX, ghostBlend, !ghostBlend.value);
+			}
 		}
 		
-		var ghostLayer = uiElements.toolBar.ghostSettings.findComponent('ghostInFront', CheckBox, true);
-		if (ghostLayer != null)
-		{
-			ghostLayer.onClick = (ui) -> {
-				updateGhostLayering();
-			}
+		uiElements.toolBar.ghostInFront.onClick = (ui) -> {
+			updateGhostLayering();
+			addUndoAction(CHANGED_CHECKBOX, uiElements.toolBar.ghostInFront, !uiElements.toolBar.ghostInFront.value);
 		}
 		
 		// dialogebox stuff
@@ -318,6 +375,13 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		
 		uiElements.characterDialogBox.scaledOffsetsCheckbox.onChange = (ui) -> {
 			character.scalableOffsets = ui.value.toBool();
+		}
+		
+		for (i in [uiElements.characterDialogBox.flipXCheckbox, uiElements.characterDialogBox.antialiasingCheckbox, uiElements.characterDialogBox.scaledOffsetsCheckbox, uiElements.characterDialogBox.flipXAnimCheckbox, uiElements.characterDialogBox.flipYAnimCheckbox, uiElements.characterDialogBox.animationLoopCheckbox])
+		{
+			i.onClick = (ui) -> {
+				addUndoAction(CHANGED_CHECKBOX, i, !i.value);
+			}
 		}
 		
 		uiElements.characterDialogBox.scaleStepper.onChange = (ui) -> {
@@ -355,7 +419,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			
 			var bgColour = FlxColor.interpolate(0xFF3D3F41, colour, 0.1);
 			
-			uiElements.characterDialogBox.findComponent('iconDisplay', Button).backgroundColor = cast bgColour;
+			uiElements.characterDialogBox.iconDisplay.backgroundColor = cast bgColour;
 		}
 		
 		uiElements.characterDialogBox.clearGameoverOptions.onClick = (ui) -> {
@@ -567,6 +631,92 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		}
 	}
 	
+	function triggerClipboardAction(isUndo:Bool = true)
+	{
+		if (undoActions.length == 0 && redoActions.length == 0) return;
+		
+		final arrayToUse = isUndo ? undoActions : redoActions;
+		
+		final action = arrayToUse.shift();
+		
+		if (action == null) return;
+		
+		var popupText = '';
+		switch (action.type)
+		{
+			case DRAGGED:
+				var obj = action.object.toFlxSprite();
+				
+				if (obj == pointerBounds.target)
+				{
+					if (isUndo) addRedoAction(action.type, obj, [for (i in character.cameraPosition) i]);
+					else addUndoAction(action.type, obj, [for (i in character.cameraPosition) i]);
+					
+					character.cameraPosition[0] = action.value[0];
+					character.cameraPosition[1] = action.value[1];
+					
+					uiElements.characterDialogBox.characterCamXStepper.value = character.cameraPosition[0];
+					uiElements.characterDialogBox.characterCamYStepper.value = character.cameraPosition[1];
+					
+					popupText = 'Changed Camera Position to ${character.cameraPosition}';
+				}
+				else if (obj == character)
+				{
+					if (isUndo) addRedoAction(action.type, obj, [character.offset.x, character.offset.y]);
+					else addUndoAction(action.type, obj, [character.offset.x, character.offset.y]);
+					
+					character.offset.x = action.value[0];
+					character.offset.y = action.value[1];
+					
+					updateCurrentAnimOffsets();
+					
+					popupText = 'Changed Character offset to ${character.offset}';
+				}
+				
+			case MOVED_SLIDER:
+				if (isUndo) addRedoAction(action.type, action.object, action.object.toSlider().value);
+				else addUndoAction(action.type, action.object, action.object.toSlider().value);
+				
+				action.object.toSlider().value = action.value;
+				popupText = 'Changed (${action.object.toSlider().id}) to ${Math.round(action.value * 100)}%';
+				
+			case CHANGED_CHECKBOX:
+				if (isUndo) addRedoAction(action.type, action.object, action.object.toCheckbox().value);
+				else addUndoAction(action.type, action.object, action.object.toCheckbox().value);
+				
+				action.object.toCheckbox().value = action.value;
+				popupText = 'Changed (${action.object.toCheckbox().id}) to ${action.value}';
+				
+			default:
+		}
+		
+		FlxG.sound.play(Paths.sound('ui/openPopup'), 0.5);
+		
+		ToolKitUtils.makeNotification((isUndo ? 'Undo' : 'Redo') + ' Action', popupText, Info);
+	}
+	
+	function addUndoAction(type:UndoType, object:UndoData, value:Dynamic)
+	{
+		undoActions.unshift({value: value, object: object, type: type});
+		
+		while (undoActions.length > MAX_REMEMBERED_ACTIONS)
+		{
+			var undo = undoActions.pop();
+			undo = null;
+		}
+	}
+	
+	function addRedoAction(type:UndoType, object:UndoData, value:Dynamic) // THIS MAY BE WEIRD>?
+	{
+		redoActions.unshift({value: value, object: object, type: type});
+		
+		while (redoActions.length > MAX_REMEMBERED_ACTIONS)
+		{
+			var undo = redoActions.pop();
+			undo = null;
+		}
+	}
+	
 	function updateHealthIcon()
 	{
 		if (character == null) return;
@@ -603,8 +753,22 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		
 		if (!isTextFieldFocused)
 		{
-			controlCamera(elapsed);
-			playSings();
+			if (FlxG.keys.pressed.CONTROL)
+			{
+				if (FlxG.keys.justPressed.X && redoActions.length > 0)
+				{
+					triggerClipboardAction(false);
+				}
+				else if (FlxG.keys.justPressed.Z && undoActions.length > 0)
+				{
+					triggerClipboardAction(true);
+				}
+			}
+			else
+			{
+				controlCamera(elapsed);
+				playSings();
+			}
 		}
 		else
 		{
@@ -640,26 +804,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		
 		if (controlOffsets(elapsed) && character != null && uiElements.animationList.animationList.selectedItem != null)
 		{
-			final offsets = [Std.int(character.offset.x), Std.int(character.offset.y)];
-			
-			character.addOffset(character.getAnimName(), offsets[0], offsets[1]);
-			
-			for (i in character.animations)
-			{
-				if (i.anim == character.getAnimName())
-				{
-					i.offsets[0] = offsets[0];
-					i.offsets[1] = offsets[1];
-					break;
-				}
-			}
-			
-			final text = character.getAnimName() + ': $offsets';
-			
-			uiElements.animationList.animationList.selectedItem.text = text;
-			
-			// call the freaking setter DIE
-			uiElements.animationList.animationList.dataSource = uiElements.animationList.animationList.dataSource;
+			updateCurrentAnimOffsets();
 		}
 		
 		positionPointer();
@@ -698,6 +843,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			if (FlxG.mouse.justPressed)
 			{
 				FlxG.sound.play(Paths.sound('ui/mouseClick'));
+				addUndoAction(DRAGGED, pointerBounds.target, [character.cameraPosition[0], character.cameraPosition[1]]);
 			}
 			
 			if (FlxG.mouse.pressed)
@@ -722,12 +868,40 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		pointerBounds.alpha = FlxMath.lerp(pointerBounds.alpha, pointerAlpha, FlxMath.getElapsedLerp(0.4, elapsed));
 	}
 	
+	function updateCurrentAnimOffsets()
+	{
+		final offsets = [Std.int(character.offset.x), Std.int(character.offset.y)];
+		
+		character.addOffset(character.getAnimName(), offsets[0], offsets[1]);
+		
+		for (i in character.animations)
+		{
+			if (i.anim == character.getAnimName())
+			{
+				i.offsets[0] = offsets[0];
+				i.offsets[1] = offsets[1];
+				break;
+			}
+		}
+		
+		final text = character.getAnimName() + ': $offsets';
+		
+		uiElements.animationList.animationList.selectedItem.text = text;
+		
+		// call the freaking setter DIE
+		uiElements.animationList.animationList.dataSource = uiElements.animationList.animationList.dataSource;
+	}
+	
 	// var holdingMoveTime:Float = 0;
 	
 	function controlOffsets(elapsed:Float):Bool
 	{
 		if (FlxG.mouse.pressedRight && !FlxG.mouse.pressedMiddle)
 		{
+			if (FlxG.mouse.justPressedRight)
+			{
+				addUndoAction(DRAGGED, character, [character.offset.x, character.offset.y]);
+			}
 			character.offset.x -= FlxG.mouse.deltaViewX;
 			character.offset.y -= FlxG.mouse.deltaViewY;
 			
@@ -1167,24 +1341,19 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		characterGhost.alpha = uiElements.toolBar.ghostAlphaSlider.value;
 		updateGhostLayering();
 		// copy highlight
-		final ghostBlend = uiElements.toolBar.ghostSettings.findComponent('ghostBlend', CheckBox);
-		if (ghostBlend != null)
-		{
-			final offset = ghostBlend.value ? 125 : 0;
-			
-			characterGhost.colorTransform.redOffset = offset;
-			characterGhost.colorTransform.greenOffset = offset;
-			characterGhost.colorTransform.blueOffset = offset;
-		}
+		
+		final offset = uiElements.toolBar.ghostBlend.value ? 125 : 0;
+		
+		characterGhost.colorTransform.redOffset = offset;
+		characterGhost.colorTransform.greenOffset = offset;
+		characterGhost.colorTransform.blueOffset = offset;
 	}
 	
 	function updateGhostLayering()
 	{
-		var ghostLayer = uiElements.toolBar.ghostSettings.findComponent('ghostInFront', CheckBox, true);
-		
-		if (ghostLayer != null && characterGhost != null)
+		if (characterGhost != null)
 		{
-			characterGhost.zIndex = ghostLayer.value ? 10 : -1;
+			characterGhost.zIndex = uiElements.toolBar.ghostInFront.value ? 10 : -1;
 		}
 		
 		charLayer.sort(SortUtil.sortByZ, flixel.util.FlxSort.ASCENDING);

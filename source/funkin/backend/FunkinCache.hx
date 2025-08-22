@@ -24,8 +24,9 @@ class FunkinCache
 			// ok this is dumb fix this later
 			if (!currentTrackedGraphics.exists(key)
 				&& !key.startsWith('pixels')
+				&& !key.contains('editors/notification_neutral.png')
 				&& !key.contains('editors/notification_success.png')
-				&& !key.contains('editors/notification_warn.png')) // for haxeui is a bit hacky will do for now //find out hwo to avoid haxeui nicer or just do a different caching method
+				&& !key.contains('editors/notification_warn.png')) // for haxeui is a bit hacky will do for now //find out hwo to avoid haxeui nicer or just do a different caching method //rewrite soonish ok.
 			{
 				disposeGraphic(FlxG.bitmap.get(key));
 			}
