@@ -1,5 +1,7 @@
 package funkin.states.editors;
 
+import flixel.group.FlxSpriteContainer;
+
 import haxe.ui.components.Stepper;
 import haxe.Json;
 import haxe.ui.components.popups.ColorPickerPopup;
@@ -85,6 +87,8 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 	var characterBounds:DebugBounds = null;
 	
 	var bgLayer:Null<FlxContainer> = null;
+	
+	var silhouettes:Null<FlxContainer> = null;
 	var grid:FlxBackdrop;
 	var charLayer:FlxContainer;
 	
@@ -126,6 +130,25 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		FlxG.mouse.visible = true;
 		
 		buildBG();
+		
+		silhouettes = new FlxContainer();
+		add(silhouettes);
+		
+		try
+		{
+			var dad = new Character(dadPos.x, dadPos.y, 'dad', false);
+			var bf = new Character(bfPos.x, bfPos.y, 'bf', true);
+			dad.x += dad.positionArray[0];
+			dad.y += dad.positionArray[1];
+			bf.x += bf.positionArray[0];
+			bf.y += bf.positionArray[1];
+			dad.color = 0xFF000000;
+			bf.color = 0xFF000000;
+			dad.alpha = 0.5;
+			bf.alpha = 0.5;
+			silhouettes.add(dad);
+			silhouettes.add(bf);
+		}
 		
 		charLayer = new FlxContainer();
 		add(charLayer);
@@ -212,6 +235,10 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 				uiElements.toolBar.gridBGCheckbox.value = false;
 				grid.visible = false;
 			}
+		}
+		
+		uiElements.toolBar.showSilhouettes.onChange = (ui) -> {
+			silhouettes.visible = ui.value.toBool();
 		}
 		
 		uiElements.toolBar.gridBGCheckbox.onChange = (ui) -> {

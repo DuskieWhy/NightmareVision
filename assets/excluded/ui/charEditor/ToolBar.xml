@@ -26,6 +26,8 @@
 
             <checkbox text="Grid Bg" id="gridBGCheckbox" verticalAlign="center"/>
 
+            <checkbox text="Show Silhouettes" id="showSilhouettes" verticalAlign="center" value="true"/>
+
             <hbox tooltip="if Stage Bg is disabled, change the colour of the bg.">
                 <label text="Bg Colour" verticalAlign="center" />
                 <color-picker-popup id="bgColour" verticalAlign="center"/>
