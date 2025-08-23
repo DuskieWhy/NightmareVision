@@ -20,7 +20,8 @@ class MasterEditorMenu extends MusicBeatState
 		'Dialogue Portrait Editor',
 		'Character Editor',
 		'Chart Editor',
-		'Note Skin Editor'
+		'Note Skin Editor',
+		'Chart Converter'
 	];
 	private var grpTexts:FlxTypedGroup<Alphabet>;
 	private var directories:Array<String> = [null];
@@ -123,6 +124,8 @@ class MasterEditorMenu extends MusicBeatState
 					FlxG.switchState(ChartEditorState.new);
 				case 'Note Skin Editor':
 					FlxG.switchState(() -> new NoteSkinEditor('default'));
+				case 'Chart Converter':
+					FlxG.switchState(() -> new ChartConverter());
 			}
 			FlxG.sound.music.volume = 0;
 			#if PRELOAD_ALL

@@ -65,7 +65,8 @@
 			},
 			{
 				"name": "moonchart",
-				"version": "0.5.0"
+				"link": "https://github.com/MaybeMaru/moonchart",
+				"branch": "d83eba09a70bde9f523fc4409cb140d1c4e58286"
 			}
 		]
 	}
