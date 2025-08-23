@@ -357,6 +357,7 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 			set('botPlay', PlayState.instance.cpuControlled);
 			set('practice', PlayState.instance.practiceMode);
 			set('startedCountdown', false);
+			set('mustHitSection', PlayState.SONG?.notes[0]?.mustHitSection ?? false);
 			
 			set("game", currentState);
 			set("global", PlayState.instance.variables);
