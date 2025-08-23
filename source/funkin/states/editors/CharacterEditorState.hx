@@ -138,14 +138,16 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		{
 			var dad = new Character(dadPos.x, dadPos.y, 'dad', false);
 			var bf = new Character(bfPos.x, bfPos.y, 'bf', true);
+			dad.active = false;
+			bf.active = false;
 			dad.x += dad.positionArray[0];
 			dad.y += dad.positionArray[1];
 			bf.x += bf.positionArray[0];
 			bf.y += bf.positionArray[1];
 			dad.color = 0xFF000000;
 			bf.color = 0xFF000000;
-			dad.alpha = 0.5;
-			bf.alpha = 0.5;
+			dad.alpha = 0.2;
+			bf.alpha = 0.2;
 			silhouettes.add(dad);
 			silhouettes.add(bf);
 		}
