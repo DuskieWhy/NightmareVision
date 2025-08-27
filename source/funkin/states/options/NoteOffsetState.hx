@@ -214,7 +214,6 @@ class NoteOffsetState extends MusicBeatState
 		if (FlxG.sound.music != null) Conductor.songPosition = FlxG.sound.music.time;
 		
 		var addNum:Int = !FlxG.keys.pressed.SHIFT ? 1 : 10;
-		//if (FlxG.keys.pressed.SHIFT) addNum = 10;
 		
 		if (onComboMenu)
 		{
