@@ -319,10 +319,22 @@ class Character extends Bopper
 		super.dance(forced);
 	}
 	
+	var reverts = false;
+	
 	override function playAnim(animToPlay:String, isForced:Bool = false, isReversed:Bool = false, frame:Int = 0)
 	{
 		specialAnim = false;
 		super.playAnim(animToPlay, isForced, isReversed, frame);
+		
+		if (reverts)
+		{
+			scalableOffsets = true;
+			var appliedOffset = offset.x;
+			
+			trace('is Flipped');
+			
+			offset.x = (this.frameWidth - this.width) - appliedOffset;
+		}
 	}
 	
 	override function onBeatHit(beat:Int)

@@ -13,6 +13,14 @@ function onLoad()
 	stageCurtains.zIndex = 9999;
 }
 
+function onCreatePost()
+{
+	boyfriend.flipX = !boyfriend.flipX;
+	boyfriend.reverts = true;
+	boyfriend.scale.set(0.5, 0.5);
+	boyfriend.updateHitbox();
+}
+
 function onUpdate(elapsed)
 {
 	if (dad.curCharacter == 'gf') camZooming = false;
