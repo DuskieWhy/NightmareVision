@@ -326,7 +326,6 @@ class Character extends Bopper
 		
 		if ((isPlayer && flipX == originalFlipX) || (!isPlayer && flipX != originalFlipX))
 		{
-			trace(('flipped'));
 			var appliedOffset = offset.x;
 			
 			final frameWidth = animateAtlas?.frameWidth ?? frameWidth;
