@@ -213,8 +213,7 @@ class NoteOffsetState extends MusicBeatState
 	{
 		if (FlxG.sound.music != null) Conductor.songPosition = FlxG.sound.music.time;
 		
-		var addNum:Int = 1;
-		if (FlxG.keys.pressed.SHIFT) addNum = 10;
+		var addNum:Int = !FlxG.keys.pressed.SHIFT ? 1 : 10;
 		
 		if (onComboMenu)
 		{
@@ -358,13 +357,14 @@ class NoteOffsetState extends MusicBeatState
 		
 		if (controls.BACK)
 		{
-			if (zoomTween != null) zoomTween.cancel();
-			if (beatTween != null) beatTween.cancel();
+			zoomTween?.cancel();
+			beatTween?.cancel();
 			
 			// trace('WHY ARE YOU DOING THIS TO ME');
 			try
 			{
 				timeBar.destroy();
+				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 				FlxG.switchState(MainMenuState.new);
 			}
 			catch (e)
@@ -402,21 +402,17 @@ class NoteOffsetState extends MusicBeatState
 			zoomTween = FlxTween.tween(FlxG.camera, {zoom: 1}, 1,
 				{
 					ease: FlxEase.circOut,
-					onComplete: function(twn:FlxTween) {
-						zoomTween = null;
-					}
+					onComplete: (_) -> zoomTween = null
 				});
 				
 			beatText.alpha = 1;
 			beatText.y = 320;
 			beatText.velocity.y = -150;
-			if (beatTween != null) beatTween.cancel();
+			beatTween?.cancel();
 			beatTween = FlxTween.tween(beatText, {alpha: 0}, 1,
 				{
 					ease: FlxEase.sineIn,
-					onComplete: function(twn:FlxTween) {
-						beatTween = null;
-					}
+					onComplete: (_) -> beatTween = null
 				});
 		}
 		
@@ -462,11 +458,11 @@ class NoteOffsetState extends MusicBeatState
 				case 0:
 					dumbTexts.members[i].text = 'Rating Offset:';
 				case 1:
-					dumbTexts.members[i].text = '[' + ClientPrefs.comboOffset[0] + ', ' + ClientPrefs.comboOffset[1] + ']';
+					dumbTexts.members[i].text = '[${ClientPrefs.comboOffset[0]}, ${ClientPrefs.comboOffset[1]}]';
 				case 2:
 					dumbTexts.members[i].text = 'Numbers Offset:';
 				case 3:
-					dumbTexts.members[i].text = '[' + ClientPrefs.comboOffset[2] + ', ' + ClientPrefs.comboOffset[3] + ']';
+					dumbTexts.members[i].text = '[${ClientPrefs.comboOffset[2]}, ${ClientPrefs.comboOffset[3]}]';
 			}
 		}
 	}
@@ -474,7 +470,7 @@ class NoteOffsetState extends MusicBeatState
 	function updateNoteDelay()
 	{
 		ClientPrefs.noteOffset = Math.round(barPercent);
-		timeTxt.text = 'Current offset: ' + Math.floor(barPercent) + ' ms';
+		timeTxt.text = 'Current offset: ${Math.floor(barPercent)}  ms';
 	}
 	
 	function updateMode()
@@ -488,8 +484,8 @@ class NoteOffsetState extends MusicBeatState
 		timeTxt.visible = !onComboMenu;
 		beatText.visible = !onComboMenu;
 		
-		if (onComboMenu) changeModeText.text = '< Combo Offset (Press Accept to Switch) >';
-		else changeModeText.text = '< Note/Beat Delay (Press Accept to Switch) >';
+		changeModeText.text = onComboMenu ? '< Combo Offset (Press Accept to Switch) >' : 
+						'< Note/Beat Delay (Press Accept to Switch) >';
 		
 		changeModeText.text = changeModeText.text.toUpperCase();
 		FlxG.mouse.visible = onComboMenu;
