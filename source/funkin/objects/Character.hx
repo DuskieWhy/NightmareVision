@@ -319,21 +319,21 @@ class Character extends Bopper
 		super.dance(forced);
 	}
 	
-	var reverts = false;
-	
 	override function playAnim(animToPlay:String, isForced:Bool = false, isReversed:Bool = false, frame:Int = 0)
 	{
 		specialAnim = false;
 		super.playAnim(animToPlay, isForced, isReversed, frame);
 		
-		if (reverts)
+		if ((isPlayer && flipX == originalFlipX) || (!isPlayer && flipX != originalFlipX))
 		{
-			scalableOffsets = true;
+			trace(('flipped'));
 			var appliedOffset = offset.x;
 			
-			trace('is Flipped');
+			final frameWidth = animateAtlas?.frameWidth ?? frameWidth;
 			
-			offset.x = (this.frameWidth - this.width) - appliedOffset;
+			final scaleFactor = scalableOffsets ? scale.x : 1.0;
+			
+			offset.x = ((frameWidth * scaleFactor) - this.width) - appliedOffset;
 		}
 	}
 	
