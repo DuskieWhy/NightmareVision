@@ -45,8 +45,6 @@
 	<set name="BUILD_DIR" value="${BUILD_DIR}-tracy" if="FEATURE_DEBUG_TRACY"/>
 
 	<!-- _____________________________ Engine Config Settings ____________________________ -->
-
-	<!-- <define name="ASSET_REDIRECT" if="debug" /> -->
 	
 	<!--ENGINE CUSTOMIZATION-->
 	<define name="MODS_ALLOWED" if="desktop" />

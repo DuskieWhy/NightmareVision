@@ -422,7 +422,7 @@ class CharacterEditorStateOLD extends MusicBeatState
 			resetHealthBarColor();
 		});
 		
-		healthIconInputText = new extensions.FlxUIInputTextEx(15, imageInputText.y + 35, 75, leHealthIcon.getCharacter(), 8);
+		healthIconInputText = new extensions.FlxUIInputTextEx(15, imageInputText.y + 35, 75, '', 8);
 		
 		singDurationStepper = new FlxUINumericStepper(15, healthIconInputText.y + 45, 0.1, 4, 0, 999, 1);
 		
@@ -1048,7 +1048,7 @@ class CharacterEditorStateOLD extends MusicBeatState
 	{
 		#if DISCORD_ALLOWED
 		// Updating Discord Rich Presence
-		DiscordClient.changePresence("Character Editor", "Character: " + daAnim, leHealthIcon.getCharacter());
+		// DiscordClient.changePresence("Character Editor", "Character: " + daAnim, leHealthIcon.getCharacter());
 		#end
 	}
 	

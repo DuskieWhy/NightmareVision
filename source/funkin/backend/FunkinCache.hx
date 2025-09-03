@@ -1,5 +1,7 @@
 package funkin.backend;
 
+import flixel.util.FlxStringUtil;
+
 import openfl.Assets;
 
 import flixel.graphics.FlxGraphic;
@@ -122,5 +124,13 @@ class FunkinCache
 		localTrackedAssets.push(key);
 		
 		return sound;
+	}
+	
+	public function toString():String
+	{
+		final bmpCache = [for (key in currentTrackedGraphics.keys()) key];
+		final sndCache = [for (key in currentTrackedSounds.keys()) key];
+		
+		return 'Bmp Cache: $bmpCache\nSnd Cache: $sndCache';
 	}
 }

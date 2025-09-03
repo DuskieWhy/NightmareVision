@@ -1,5 +1,8 @@
 package funkin.data;
 
+import flixel.util.FlxStringUtil.LabelValuePair;
+import flixel.util.FlxStringUtil;
+
 import haxe.Json;
 
 import funkin.states.*;
@@ -275,5 +278,21 @@ class WeekData
 			}
 		}
 		#end
+	}
+	
+	public function toString()
+	{
+		return FlxStringUtil.getDebugString([
+			LabelValuePair.weak("songs", songs),
+			// LabelValuePair.weak("weekCharacters", weekCharacters),
+			// LabelValuePair.weak("weekBefore", weekBefore),
+			// LabelValuePair.weak("storyName", storyName),
+			// LabelValuePair.weak("freeplayColor", freeplayColor),
+			// LabelValuePair.weak("startUnlocked", startUnlocked),
+			// LabelValuePair.weak("hiddenUntilUnlocked", hiddenUntilUnlocked),
+			// LabelValuePair.weak("hideStoryMode", hideStoryMode),
+			// LabelValuePair.weak("hideFreeplay", hideFreeplay),
+			LabelValuePair.weak("difficulties", difficulties)
+		]);
 	}
 }
