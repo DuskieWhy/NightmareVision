@@ -324,7 +324,7 @@ class Character extends Bopper
 		specialAnim = false;
 		super.playAnim(animToPlay, isForced, isReversed, frame);
 		
-		if ((isPlayer && flipX == originalFlipX) || (!isPlayer && flipX != originalFlipX))
+		if (!debugMode && ((isPlayer && flipX == originalFlipX) || (!isPlayer && flipX != originalFlipX)))
 		{
 			var appliedOffset = offset.x;
 			
