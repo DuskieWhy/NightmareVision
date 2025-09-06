@@ -43,6 +43,9 @@ class MusicBeatState extends FlxUIState
 	
 	public function setUpScript(?scriptName:String, callOnCreate:Bool = true):Bool
 	{
+		final scriptFile = FunkinHScript.getPath('scripts/menus/$scriptName');
+		if (scriptGroup.exists(scriptFile)) return true;
+		
 		scriptGroup.parent = this;
 		
 		if (scriptName == null)
@@ -52,8 +55,6 @@ class MusicBeatState extends FlxUIState
 		}
 		
 		this.scriptName = scriptName;
-		
-		var scriptFile = FunkinHScript.getPath('scripts/menus/$scriptName');
 		
 		if (FunkinAssets.exists(scriptFile))
 		{

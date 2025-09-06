@@ -100,6 +100,17 @@ class FunkinAssets
 		#end
 	}
 	
+	public static function isDirectory(directory:String):Bool
+	{
+		#if (MODS_ALLOWED || ASSET_REDIRECT)
+		return FileSystem.isDirectory(directory);
+		#else
+		// this method is a bit chopped...
+		if (directory.trim().length == 0) return false;
+		return Assets.list().filter(path -> return path != directory && path.startsWith(directory)).length != 0;
+		#end
+	}
+	
 	/**
 	 * retrieves a flxgraphic instance from key.
 	 * 

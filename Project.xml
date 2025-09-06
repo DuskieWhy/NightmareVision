@@ -114,11 +114,11 @@
 	</section>
 
 	<!--Enable for better crash handling/reporting-->
-	<haxedef name="CRASH_HANDLER" if="desktop release"/>
+	<haxedef name="CRASH_HANDLER"/>
 
-	<haxedef name="HXCPP_CHECK_POINTER" if="CRASH_HANDLER" />
-	<haxedef name="HXCPP_STACK_LINE" if="CRASH_HANDLER" />
-	<haxedef name="HXCPP_STACK_TRACE" if="CRASH_HANDLER" />
+	<haxedef name="HXCPP_CHECK_POINTER" if="CRASH_HANDLER"/>
+	<haxedef name="HXCPP_STACK_LINE" if="CRASH_HANDLER"/>
+	<haxedef name="HXCPP_STACK_TRACE" if="CRASH_HANDLER"/>
 
 	<!--Disables all tracing abilities. Enable this for a small performance improvement-->
 	<!-- <define name="DISABLE_TRACES" if="desktop release"/> -->
