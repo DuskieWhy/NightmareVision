@@ -334,6 +334,7 @@ class Character extends Bopper
 			
 			offset.x = ((frameWidth * scaleFactor) - this.width) - appliedOffset;
 		}
+		offset.degrees += angle;
 	}
 	
 	override function onBeatHit(beat:Int)
