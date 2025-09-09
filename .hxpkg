@@ -65,18 +65,9 @@
 			},
 			{
 				"name": "moonchart",
-				"version": "0.5.0"
-			},
-			{
-                "name": "funkin.vis",
-                "link": "https://github.com/FunkinCrew/funkVis",
-                "branch": "1966f8fbbbc509ed90d4b520f3c49c084fc92fd6"
-            },
-            {
-                "name": "grig.audio",
-                "link": "https://github.com/FunkinCrew/grig.audio",
-                "branch": "8567c4dad34cfeaf2ff23fe12c3796f5db80685e"
-            }
+				"link": "https://github.com/MaybeMaru/moonchart",
+				"branch": "8c9d7cfe3280588fa71a8f3c4444c97bc7b63714"
+			}
 		]
 	}
 ]

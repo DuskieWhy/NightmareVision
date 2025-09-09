@@ -1,5 +1,8 @@
 package funkin.states;
 
+import funkin.states.editors.ChartConverterState;
+import funkin.data.Chart.ChartFormat;
+
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -48,6 +51,8 @@ class FreeplayState extends MusicBeatState
 	
 	public var bg:FlxSprite;
 	public var intendedColor:Int;
+	
+	var mayGoToChartConverter:Bool = false;
 	
 	override function create()
 	{
@@ -121,8 +126,6 @@ class FreeplayState extends MusicBeatState
 						letter.x *= textScale;
 						letter.offset.x *= textScale;
 					}
-					// songText.updateHitbox();
-					// trace(songs[i].songName + ' new scale: ' + textScale);
 				}
 				
 				Mods.currentModDirectory = songs[i].folder;
@@ -162,13 +165,9 @@ class FreeplayState extends MusicBeatState
 			textBG.alpha = 0.6;
 			add(textBG);
 			
-			#if PRELOAD_ALL
-			var leText:String = "Press SPACE to listen to the Song / Press CTRL to open the Gameplay Changers Menu / Press RESET to Reset your Score and Accuracy.";
-			var size:Int = 16;
-			#else
-			var leText:String = "Press CTRL to open the Gameplay Changers Menu / Press RESET to Reset your Score and Accuracy.";
-			var size:Int = 18;
-			#end
+			final leText:String = "Press SPACE to listen to the Song / Press CTRL to open the Gameplay Changers Menu / Press RESET to Reset your Score and Accuracy.";
+			final size:Int = 16;
+			
 			var text:FlxText = new FlxText(textBG.x, textBG.y + 4, FlxG.width, leText, size);
 			text.setFormat(Paths.font("vcr.ttf"), size, FlxColor.WHITE, RIGHT);
 			text.scrollFactor.set();
@@ -211,21 +210,6 @@ class FreeplayState extends MusicBeatState
 			&& (!StoryMenuState.weekCompleted.exists(leWeek.weekBefore) || !StoryMenuState.weekCompleted.get(leWeek.weekBefore)));
 	}
 	
-	/*public function addWeek(songs:Array<String>, weekNum:Int, weekColor:Int, ?songCharacters:Array<String>)
-		{
-			if (songCharacters == null)
-				songCharacters = ['bf'];
-
-			var num:Int = 0;
-			for (song in songs)
-			{
-				addSong(song, weekNum, songCharacters[num]);
-				this.songs[this.songs.length-1].color = weekColor;
-
-				if (songCharacters.length != 1)
-					num++;
-			}
-	}*/
 	var instPlaying:Int = -1;
 	
 	var holdTime:Float = 0;
@@ -289,6 +273,23 @@ class FreeplayState extends MusicBeatState
 				}
 			}
 			
+			if (mayGoToChartConverter)
+			{
+				if (controls.ACCEPT)
+				{
+					FlxG.switchState(() -> new funkin.states.editors.ChartConverterState());
+					ChartConverterState.goToFreeplay = true;
+				}
+				if (controls.BACK)
+				{
+					mayGoToChartConverter = false;
+					changeSelection();
+				}
+				
+				super.update(elapsed);
+				return;
+			}
+			
 			if (controls.UI_LEFT_P) changeDiff(-1);
 			else if (controls.UI_RIGHT_P) changeDiff(1);
 			else if (controls.UI_UP_P || controls.UI_DOWN_P) changeDiff();
@@ -342,7 +343,15 @@ class FreeplayState extends MusicBeatState
 				}
 				catch (e)
 				{
-					final message = 'Failed to load song.\nException: ${e.toString()}';
+					var error = e.toString();
+					
+					if (error.contains('incompatible format') && !error.contains(ChartFormat.UNKNOWN)) // scuffed method...
+					{
+						error += "\n\nIf you'd like to enter the chart converter press Accept.\nOtherwise, press Cancel to go back";
+						mayGoToChartConverter = true;
+					}
+					
+					final message = 'Failed to load song.\nException: $error';
 					debugBG.alpha = 0.7;
 					debugTxt.text = message;
 					debugTxt.screenCenter(Y);
