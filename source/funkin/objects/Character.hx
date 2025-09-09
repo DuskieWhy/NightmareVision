@@ -427,4 +427,22 @@ class Character extends Bopper
 		
 		super.destroy();
 	}
+	
+	override function loadFromSheet(path:String, animName:String, fps:Int = 24, looped:Bool = true):Character
+	{
+		super.loadFromSheet(path, animName, fps, looped);
+		return this;
+	}
+	
+	override function loadSparrowFrames(path:String, ?library:String):Character
+	{
+		super.loadSparrowFrames(path, library);
+		return this;
+	}
+	
+	override function makeScaledGraphic(width:Float, height:Float, color:FlxColor = flixel.util.FlxColor.WHITE):Character
+	{
+		super.makeScaledGraphic(width, height, color);
+		return this;
+	}
 }
