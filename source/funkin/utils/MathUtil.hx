@@ -4,6 +4,17 @@ package funkin.utils;
 class MathUtil
 {
 	/**
+	 * Get the logarithm of a value with a given base.
+	 * @param base The base of the logarithm.
+	 * @param value The value to get the logarithm of.
+	 * @return `log_base(value)`
+	*/
+	public static function logBase(base:Float, value:Float):Float
+	{
+		return Math.log(value) / Math.log(base);
+	}
+	
+	/**
 	 * Remaps a value from a range to a new range
 	 * 
 	 * Akin to `FlxMath.remapToRange`

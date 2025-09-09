@@ -83,6 +83,7 @@
 
 	<haxelib name="funkin.vis"/>
     <haxelib name="grig.audio"/>
+    <haxelib name="json2object"/>
 
 	<haxelib name="discord_rpc" if="DISCORD_ALLOWED"/>
 	<haxelib name="hxvlc" if="VIDEOS_ALLOWED"/>
