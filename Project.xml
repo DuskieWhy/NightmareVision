@@ -79,6 +79,9 @@
 	<haxelib name="haxeui-core" />
 	<haxelib name="haxeui-flixel" />
 
+	<haxelib name="funkin.vis"/>
+    <haxelib name="grig.audio"/>
+
 	<haxelib name="discord_rpc" if="DISCORD_ALLOWED"/>
 	<haxelib name="hxvlc" if="VIDEOS_ALLOWED"/>
 

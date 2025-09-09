@@ -104,6 +104,8 @@ class PlayState extends MusicBeatState
 	 */
 	public var isCameraOnForcedPos:Bool = false;
 	
+	public var cameraLerping:Bool = true;
+	
 	public var boyfriendMap:Map<String, Character> = new Map();
 	public var dadMap:Map<String, Character> = new Map();
 	public var gfMap:Map<String, Character> = new Map();
@@ -394,11 +396,6 @@ class PlayState extends MusicBeatState
 	var detailsPausedText:String = "";
 	#end
 	
-	// Achievement shit
-	var keysPressed:Array<Bool> = [];
-	var boyfriendIdleTime:Float = 0.0;
-	var boyfriendIdled:Bool = false;
-	
 	/**
 	 * Group of general scripts.
 	 */
@@ -539,10 +536,6 @@ class PlayState extends MusicBeatState
 		songStartCallback = startCountdown;
 		songEndCallback = endSong;
 		
-		// For the "Just the Two of Us" achievement
-		for (i in 0...keysArray.length)
-			keysPressed.push(false);
-			
 		// If u have epics enabled
 		if (ClientPrefs.useEpicRankings) ratingsData.unshift(new Rating('epic'));
 		
@@ -649,6 +642,9 @@ class PlayState extends MusicBeatState
 		boyfriendGroup.add(boyfriend);
 		startCharacterScript(boyfriend.curCharacter, boyfriend);
 		boyfriendMap.set(boyfriend.curCharacter, boyfriend);
+		
+		abot = new funkin.objects.stageobjects.ABot(0, 0, FlxG.sound.music, 'poop');
+		add(abot);
 		
 		scripts.set('dad', dad);
 		scripts.set('dadGroup', dadGroup);
@@ -1835,20 +1831,10 @@ class PlayState extends MusicBeatState
 	
 	override public function update(elapsed:Float):Void
 	{
-		if (!inCutscene)
+		if (cameraLerping && !inCutscene)
 		{
 			final lerpRate = 0.04 * cameraSpeed;
 			FlxG.camera.followLerp = lerpRate;
-			
-			if (!startingSong && !endingSong && !boyfriend.isAnimNull() && boyfriend.getAnimName().startsWith('idle'))
-			{
-				boyfriendIdleTime += elapsed;
-				if (boyfriendIdleTime >= 0.15)
-				{ // Kind of a mercy thing for making the achievement easier to get as it's apparently frustrating to some playerss
-					boyfriendIdled = true;
-				}
-			}
-			else boyfriendIdleTime = 0;
 		}
 		
 		if (generatedMusic && !endingSong && !isCameraOnForcedPos) moveCameraSection();
@@ -2778,36 +2764,6 @@ class PlayState extends MusicBeatState
 		deathCounter = 0;
 		seenCutscene = false;
 		
-		#if ACHIEVEMENTS_ALLOWED
-		if (achievementObj != null)
-		{
-			return;
-		}
-		else
-		{
-			var achieve:String = checkForAchievement([
-				'week1_nomiss',
-				'week2_nomiss',
-				'week3_nomiss',
-				'week4_nomiss',
-				'week5_nomiss',
-				'week6_nomiss',
-				'ur_bad',
-				'ur_good',
-				'hype',
-				'two_keys',
-				'toastie',
-				'debugger'
-			]);
-			
-			if (achieve != null)
-			{
-				startAchievement(achieve);
-				return;
-			}
-		}
-		#end
-		
 		final ret:Dynamic = scripts.call('onEndSong', []);
 		
 		if (ret != Globals.Function_Stop && !transitioning)
@@ -2880,24 +2836,6 @@ class PlayState extends MusicBeatState
 			transitioning = true;
 		}
 	}
-	
-	#if ACHIEVEMENTS_ALLOWED
-	var achievementObj:AchievementObject = null;
-	
-	function startAchievement(achieve:String):Void
-	{
-		achievementObj = new AchievementObject(achieve, camOther);
-		achievementObj.onFinish = achievementEnd;
-		add(achievementObj);
-		trace('Giving achievement ' + achieve);
-	}
-	
-	function achievementEnd():Void
-	{
-		achievementObj = null;
-		if (endingSong && !inCutscene) endSong();
-	}
-	#end
 	
 	public function KillNotes():Void
 	{
@@ -3000,9 +2938,6 @@ class PlayState extends MusicBeatState
 					}
 				}
 				
-				// this is for the "Just the Two of Us" achievement - Shadow Mario
-				keysPressed[key] = true;
-				
 				// more accurate hit time for the ratings? part 2 (Now that the calculations are done, go back to the time it was before for not causing a note stutter)
 				Conductor.songPosition = lastTime;
 			}
@@ -3098,14 +3033,7 @@ class PlayState extends MusicBeatState
 				}
 			});
 			
-			if (keysArray.contains(true) && !endingSong)
-			{
-				#if ACHIEVEMENTS_ALLOWED
-				var achieve:String = checkForAchievement(['oversinging']);
-				if (achieve != null) startAchievement(achieve);
-				#end
-			}
-			else if (boyfriend.holdTimer > Conductor.stepCrotchet * 0.0011 * boyfriend.singDuration
+			if (boyfriend.holdTimer > Conductor.stepCrotchet * 0.0011 * boyfriend.singDuration
 				&& boyfriend.getAnimName().startsWith('sing')
 				&& !boyfriend.getAnimName().endsWith('miss')) boyfriend.dance();
 		}

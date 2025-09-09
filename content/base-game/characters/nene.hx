@@ -1,45 +1,10 @@
-import funkin.backend.Conductor;
 import funkin.objects.stageobjects.ABotVis;
 
-import animate.FlxAnimateFrames;
-import animate.FlxAnimate;
-
-function onLoad()
-{
-	var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image("stageback"));
-	add(bg);
-	var stageFront:FlxSprite = new FlxSprite(-600, 600).loadGraphic(Paths.image("stagefront"));
-	add(stageFront);
-	var stageCurtains:FlxSprite = new FlxSprite(-600, -300).loadGraphic(Paths.image("stagecurtains"));
-	add(stageCurtains);
-	stageCurtains.zIndex = 9999;
-}
-
-function onUpdate(elapsed)
-{
-	if (dad.curCharacter == 'gf') camZooming = false;
-}
-
-var t = false;
-var t2 = 'boyfriend';
-
-function onMoveCamera(turn)
-{
-	if (PlayState.SONG.song.toLowerCase() != 'tutorial') return;
-	
-	if (t2 != turn) t = true;
-	t2 = turn;
-	
-	if (t)
-	{
-		FlxTween.tween(FlxG.camera, {zoom: turn == 'dad' ? 1.3 : 1}, (Conductor.stepCrotchet / 1000) * 4, {ease: FlxEase.elasticInOut});
-		t = false;
-	}
-}
-
+var abotSpeaker:FlxAnimate;
+var pupil:FlxAnimate;
 var abotVis:ABotVis;
 
-function onCreatePost()
+function onCreate()
 {
 	dadGroup.zIndex += 1;
 	boyfriendGroup.zIndex += 1;
@@ -76,18 +41,12 @@ function onCreatePost()
 	abotVis.x += 30;
 	abotVis.y += 35;
 	aBot.add(abotVis);
-	aBot.add(abotSpeaker);
-	
-	stage.remove(dadGroup);
-	
-	// trace(abotVis);
-}
-
-function onSongStart()
-{
 	abotVis.snd = FlxG.sound.music;
 	abotVis.initAnalyzer();
+	aBot.add(abotSpeaker);
 }
+
+function onSongStart() {}
 
 function onDestroy()
 {
@@ -103,14 +62,17 @@ var left = true;
 
 function onBeatHit()
 {
-	abotSpeaker.anim.play('sys', true);
+	if (abotSpeaker != null) abotSpeaker.anim.play('sys', true);
 }
 
 var prevSec = PlayState.SONG.notes[0];
 
 function onSectionHit()
 {
-	var sec = PlayState.SONG.notes[curSection];
-	if (curSection > 0) prevSec = PlayState.SONG.notes[curSection - 1];
-	if (sec.mustHitSection != prevSec.mustHitSection) pupil.anim.play('lookin ' + (sec.mustHitSection ? 'right' : 'left'));
+	if (pupil != null)
+	{
+		var sec = PlayState.SONG.notes[curSection];
+		if (curSection > 0) prevSec = PlayState.SONG.notes[curSection - 1];
+		if (sec.mustHitSection != prevSec.mustHitSection) pupil.anim.play('lookin ' + (sec.mustHitSection ? 'right' : 'left'));
+	}
 }
