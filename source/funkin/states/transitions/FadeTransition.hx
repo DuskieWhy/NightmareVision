@@ -12,7 +12,7 @@ class FadeTransition extends BaseTransitionState
 	
 	override function create()
 	{
-		cameras = [CameraUtil.lastCamera];
+		camera = CameraUtil.lastCamera;
 		
 		sprite = new FlxBGSprite();
 		sprite.color = FlxColor.BLACK;

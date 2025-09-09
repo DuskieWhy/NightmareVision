@@ -9,14 +9,18 @@ import openfl.display.Sprite;
 import flixel.FlxG;
 
 /**
-	The FPS class provides an easy-to-use monitor to display
-	the current frame rate of an OpenFL project
-**/
+ * A FL Sprite that displays the current FPS and GC memory
+ */
 @:nullSafety
 class DebugDisplay extends Sprite
 {
 	public static var instance:Null<DebugDisplay> = null;
 	
+	/**
+	 * Creates a DebugDisplay instance
+	 * 
+	 * Use after your FlxGame is initiated.
+	 */
 	public static function init()
 	{
 		if (FlxG.game?.parent == null || instance != null) return;

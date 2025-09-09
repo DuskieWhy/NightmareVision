@@ -53,7 +53,7 @@ class Init extends FlxState
 		
 		funkin.data.NoteSkinHelper.init();
 		
-		addPlugins();
+		initFlxPlugins();
 		
 		#if MODS_ALLOWED
 		Mods.pushGlobalMods();
@@ -96,7 +96,7 @@ class Init extends FlxState
 		FlxG.switchState(() -> Type.createInstance(nextState, []));
 	}
 	
-	function addPlugins()
+	function initFlxPlugins()
 	{
 		FlxG.plugins.drawOnTop = true;
 		

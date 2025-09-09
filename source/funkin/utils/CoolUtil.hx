@@ -1,15 +1,7 @@
 package funkin.utils;
 
-import flixel.util.typeLimit.NextState;
 import flixel.addons.transition.FlxTransitionableState;
-import flixel.math.FlxPoint;
 import flixel.FlxG;
-import flixel.util.FlxAxes;
-import flixel.FlxObject;
-
-import openfl.utils.Assets;
-
-import funkin.data.StageData;
 
 /**
 	General Utility class for more one off functions

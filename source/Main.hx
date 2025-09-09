@@ -58,15 +58,9 @@ class Main extends Sprite
 		
 		final game = new FlxGame(startMeta.width, startMeta.height, Init, startMeta.fps, startMeta.fps, true, startMeta.startFullScreen);
 		
-		// FlxG.game._customSoundTray wants just the class, it calls new from
-		// create() in there, which gets called when it's added to stage
-		// which is why it needs to be added before addChild(game) here
-		
-		// Also btw game has to be a variable for this to work ig - Orbyy
-		
+		// btw game has to be a variable for this to work ig - Orbyy
 		@:privateAccess
 		game._customSoundTray = funkin.objects.FunkinSoundTray;
-		
 		addChild(game);
 		
 		// prevent accept button when alt+enter is pressed
@@ -74,17 +68,7 @@ class Main extends Sprite
 			if (e.keyCode == FlxKey.ENTER && e.altKey) e.stopImmediatePropagation();
 		}, false, 100);
 		
-		#if !mobile
 		DebugDisplay.init();
-		
-		Lib.current.stage.align = "tl";
-		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
-		#end
-		
-		#if html5
-		FlxG.autoPause = false;
-		FlxG.mouse.visible = false;
-		#end
 		
 		FlxG.signals.gameResized.add(onResize);
 		

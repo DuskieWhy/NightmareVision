@@ -44,6 +44,12 @@
 	<set name="BUILD_DIR" value="export/32bit" if="32bits" />
 	<set name="BUILD_DIR" value="${BUILD_DIR}-tracy" if="FEATURE_DEBUG_TRACY"/>
 
+
+	<assets path='assets/embeds' rename='assets' embed="true" />
+	<assets path="assets/game" rename="assets"/>
+
+	<assets path='content' embed='false' if="MODS_ALLOWED"/>
+
 	<!-- _____________________________ Engine Config Settings ____________________________ -->
 	
 	<!--ENGINE CUSTOMIZATION-->
@@ -51,10 +57,6 @@
 	<define name="VIDEOS_ALLOWED" if="cpp" />
 	<define name="DISCORD_ALLOWED" if="cpp"/>
 
-	<assets path='assets/embeds' rename='assets' embed="true" />
-	<assets path="assets/game" rename="assets"/>
-
-	<assets path='content' embed='false' if="MODS_ALLOWED"/>
 
 	<!--OpenAL config--> 	<!-- appreciate you cyn0x8 and smokey for finding this -->
 	<section if="desktop">
@@ -90,7 +92,6 @@
 	<haxeflag name="--macro" value="addMetadata('@:build(funkin.backend.macro.FlxMacro.buildFlxSprite())', 'flixel.FlxSprite')" />
 	<haxeflag name="--macro" value="addMetadata('@:build(funkin.backend.macro.FlxMacro.buildFlxBasic())', 'flixel.FlxBasic')" />
 	<haxeflag name="--macro" value="addMetadata('@:build(funkin.backend.macro.FlxMacro.buildFlxCamera())', 'flixel.FlxCamera')" />
-
 	
 	<haxeflag name="--macro" value="include('funkin')" />
 	<haxeflag name="--macro" value="include('flixel.addons',true,['flixel.addons.nape.*','flixel.addons.editors.*'])" />

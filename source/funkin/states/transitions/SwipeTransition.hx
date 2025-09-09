@@ -32,25 +32,21 @@ class SwipeTransition extends BaseTransitionState
 	
 	override function create()
 	{
-		final cam = CameraUtil.lastCamera;
-		cameras = [cam];
+		camera = CameraUtil.lastCamera;
 		
 		final duration:Float = status == OUT ? 0.6 : 0.48;
 		final angle:Int = status == OUT ? 270 : 90;
-		final zoom:Float = FlxMath.bound(cam.zoom, 0.001);
-		final width:Int = Math.ceil(cam.width / zoom);
-		final height:Int = Math.ceil(cam.height / zoom);
 		
-		final yStart:Float = -height;
-		final yEnd:Float = height;
+		final yStart:Float = -camera.viewHeight;
+		final yEnd:Float = camera.viewHeight;
 		
-		gradient = FlxGradient.createGradientFlxSprite(1, height, [FlxColor.BLACK, FlxColor.TRANSPARENT], 1, angle);
-		gradient.scale.x = width;
+		gradient = FlxGradient.createGradientFlxSprite(1, Math.round(camera.viewHeight), [FlxColor.BLACK, FlxColor.TRANSPARENT], 1, angle);
+		gradient.scale.x = camera.viewWidth + 5;
 		gradient.scrollFactor.set();
 		gradient.screenCenter(X);
 		gradient.y = yStart;
 		
-		gradientFill = new FlxSprite().makeScaledGraphic(width, height, FlxColor.BLACK);
+		gradientFill = new FlxSprite().makeScaledGraphic(camera.viewWidth + 5, camera.viewHeight, FlxColor.BLACK);
 		gradientFill.screenCenter(X);
 		gradientFill.scrollFactor.set();
 		add(gradientFill);

@@ -284,14 +284,6 @@ class WeekData
 	{
 		return FlxStringUtil.getDebugString([
 			LabelValuePair.weak("songs", songs),
-			// LabelValuePair.weak("weekCharacters", weekCharacters),
-			// LabelValuePair.weak("weekBefore", weekBefore),
-			// LabelValuePair.weak("storyName", storyName),
-			// LabelValuePair.weak("freeplayColor", freeplayColor),
-			// LabelValuePair.weak("startUnlocked", startUnlocked),
-			// LabelValuePair.weak("hiddenUntilUnlocked", hiddenUntilUnlocked),
-			// LabelValuePair.weak("hideStoryMode", hideStoryMode),
-			// LabelValuePair.weak("hideFreeplay", hideFreeplay),
 			LabelValuePair.weak("difficulties", difficulties)
 		]);
 	}
