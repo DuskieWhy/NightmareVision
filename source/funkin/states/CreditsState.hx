@@ -184,7 +184,7 @@ class CreditsState extends MusicBeatState
 			[
 				'MAJigsaw77',
 				'majigsaw',
-				'Video Playback support',
+				'Creator of Hxvlc',
 				'https://x.com/MAJigsaw77',
 				'0x6E6E6E'
 			],
@@ -196,9 +196,9 @@ class CreditsState extends MusicBeatState
 				'0xFFFFFF'
 			],
 			[
-				'Smokey',
-				'smokey',
-				'Spritemap Texture Support',
+				'maybeMaru', // maybe add a option if no icon...
+				'',
+				'Creator of Moonchart',
 				'https://twitter.com/Smokey_5_',
 				'0x4D5DBD'
 			],
@@ -266,7 +266,12 @@ class CreditsState extends MusicBeatState
 					Mods.currentModDirectory = creditsStuff[i][5];
 				}
 				
-				var icon:AttachedSprite = new AttachedSprite('credits/' + creditsStuff[i][1]);
+				var icon = creditsStuff[i][1];
+				
+				// i wonder if fileExists should be used more
+				if (!Paths.fileExists('images/credits/$icon.png', IMAGE)) icon = 'missing_icon';
+				
+				var icon:AttachedSprite = new AttachedSprite('credits/$icon');
 				icon.setGraphicSize(130);
 				icon.updateHitbox();
 				icon.xAdd = optionText.width + 10;

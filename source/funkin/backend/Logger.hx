@@ -11,6 +11,7 @@ enum abstract Severity(Int)
 	var PRINT;
 	var WARN;
 	var ERROR;
+	var NOTICE;
 }
 
 /**
@@ -30,6 +31,8 @@ class Logger
 				
 			case WARN:
 				FlxG.log.warn(data, pos);
+			case NOTICE:
+				FlxG.log.notice(data, pos);
 				
 			case PRINT:
 		}
@@ -64,6 +67,8 @@ class Logger
 			
 			case WARN: AnsiColor.YELLOW;
 			
+			case NOTICE: AnsiColor.GREEN;
+			
 			default: AnsiColor.WHITE;
 		}
 	}
@@ -75,6 +80,8 @@ class Logger
 			case ERROR: FlxColor.RED;
 			
 			case WARN: FlxColor.YELLOW;
+			
+			case NOTICE: FlxColor.LIME;
 			
 			default: FlxColor.WHITE;
 		}

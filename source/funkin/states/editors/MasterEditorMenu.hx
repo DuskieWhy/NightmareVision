@@ -125,12 +125,10 @@ class MasterEditorMenu extends MusicBeatState
 				case 'Note Skin Editor':
 					FlxG.switchState(() -> new NoteSkinEditor('default'));
 				case 'Chart Converter':
-					FlxG.switchState(() -> new ChartConverter());
+					FlxG.switchState(() -> new ChartConverterState());
 			}
-			FlxG.sound.music.volume = 0;
-			#if PRELOAD_ALL
+			if (FlxG.sound.music != null) FlxG.sound.music.volume = 0;
 			FreeplayState.destroyFreeplayVocals();
-			#end
 		}
 		
 		var bullShit:Int = 0;
