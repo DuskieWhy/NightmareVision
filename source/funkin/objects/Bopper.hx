@@ -418,22 +418,4 @@ class Bopper extends FlxSprite
 		}
 	}
 	#end
-	
-	override function loadFromSheet(path:String, animName:String, fps:Int = 24, looped:Bool = true):Bopper
-	{
-		super.loadFromSheet(path, animName, fps, looped);
-		return this;
-	}
-	
-	override function loadSparrowFrames(path:String, ?library:String):Bopper
-	{
-		super.loadSparrowFrames(path, library);
-		return this;
-	}
-	
-	override function makeScaledGraphic(width:Float, height:Float, color:FlxColor = flixel.util.FlxColor.WHITE):Bopper
-	{
-		super.makeScaledGraphic(width, height, color);
-		return this;
-	}
 }

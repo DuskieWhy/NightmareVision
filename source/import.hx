@@ -38,5 +38,7 @@ import funkin.states.*;
 import funkin.objects.BGSprite;
 import funkin.backend.MusicBeatState;
 
+using flixel.util.FlxArrayUtil;
+
 using StringTools;
 #end
