@@ -216,7 +216,7 @@ class FreeplayState extends MusicBeatState
 	
 	override function update(elapsed:Float)
 	{
-		if (FlxG.sound.music.volume < 0.7)
+		if (FlxG.sound.music != null && FlxG.sound.music.volume < 0.7)
 		{
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 		}
@@ -313,7 +313,7 @@ class FreeplayState extends MusicBeatState
 				if (instPlaying != curSelected)
 				{
 					destroyFreeplayVocals();
-					FlxG.sound.music.volume = 0;
+					if (FlxG.sound.music != null) FlxG.sound.music.volume = 0;
 					Mods.currentModDirectory = songs[curSelected].folder;
 					PlayState.SONG = Chart.fromSong(songs[curSelected].songName, curDifficulty);
 					
@@ -375,7 +375,7 @@ class FreeplayState extends MusicBeatState
 					FlxG.switchState(PlayState.new);
 				}
 				
-				FlxG.sound.music.volume = 0;
+				if (FlxG.sound.music != null) FlxG.sound.music.volume = 0;
 				
 				destroyFreeplayVocals();
 			}
