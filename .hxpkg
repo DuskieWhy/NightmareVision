@@ -82,6 +82,10 @@
 				"name": "json2object",
 				"link": "https://github.com/FunkinCrew/json2object",
 				"branch": "a8c26f18463c98da32f744c214fe02273e1823fa"
+			},
+			{
+				"name": "hsjsonast",
+				"version": "1.1.0"
 			}
 		]
 	}
