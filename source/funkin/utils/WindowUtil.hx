@@ -4,8 +4,6 @@ import openfl.Lib;
 
 import lime.app.Application;
 
-import flash.system.System;
-
 // WIP
 // functions used to mess with some window properties for ease
 class WindowUtil
@@ -13,30 +11,20 @@ class WindowUtil
 	public static var monitorResolutionWidth(get, never):Float;
 	public static var monitorResolutionHeight(get, never):Float;
 	
-	static function get_monitorResolutionWidth():Float return openfl.system.Capabilities.screenResolutionX;
+	static function get_monitorResolutionWidth():Float return FlxG.stage.window.display.bounds.width;
 	
-	static function get_monitorResolutionHeight():Float return openfl.system.Capabilities.screenResolutionY;
+	static function get_monitorResolutionHeight():Float return FlxG.stage.window.display.bounds.height;
 	
 	public static var defaultAppTitle(get, never):String;
 	
 	static function get_defaultAppTitle():String return Application.current.meta['name'];
 	
-	public static function crashTheFuckingGame()
-	{
-		System.exit(0);
-	}
-	
-	public static function getWindow()
-	{
-		return Application.current.window;
-	}
-	
 	public static function setTitle(?arg:String, append:Bool = false)
 	{
 		if (arg == null) arg = defaultAppTitle;
 		
-		if (append) getWindow().title += arg;
-		else getWindow().title = arg;
+		if (append) FlxG.stage.window.title += arg;
+		else FlxG.stage.window.title = arg;
 	}
 	
 	public static function setGameDimensions(width:Int, height:Int, cameras:Array<FlxCamera>)
@@ -76,13 +64,18 @@ class WindowUtil
 	
 	public static inline function centerWindowOnPoint(?point:FlxPoint)
 	{
-		Lib.application.window.x = Std.int(point.x - (Lib.application.window.width / 2));
-		Lib.application.window.y = Std.int(point.y - (Lib.application.window.height / 2));
+		FlxG.stage.window.x = Std.int(point.x - (FlxG.stage.window.width / 2));
+		FlxG.stage.window.y = Std.int(point.y - (FlxG.stage.window.height / 2));
 	}
 	
 	public static inline function getCenterWindowPoint():FlxPoint
 	{
-		return FlxPoint.get(Lib.application.window.x + (Lib.application.window.width / 2), Lib.application.window.y + (Lib.application.window.height / 2));
+		return FlxPoint.weak(FlxG.stage.window.x + (FlxG.stage.window.width / 2), FlxG.stage.window.y + (FlxG.stage.window.height / 2));
+	}
+	
+	public static function exit()
+	{
+		openfl.system.System.exit(0);
 	}
 	
 	#if FEATURE_DEBUG_TRACY

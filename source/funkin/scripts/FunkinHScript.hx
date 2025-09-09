@@ -249,7 +249,6 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		set("FlxSprite", flixel.FlxSprite);
 		set("FlxTypedGroup", flixel.group.FlxGroup.FlxTypedGroup);
 		set("FlxSpriteGroup", flixel.group.FlxSpriteGroup);
-		set("FlxCamera", flixel.FlxCamera);
 		set("FlxCamera", extensions.flixel.FlxCameraEx);
 		set("FlxMath", flixel.math.FlxMath);
 		set("FlxTimer", flixel.util.FlxTimer);
