@@ -34,7 +34,7 @@ class CharacterParser
 		
 		final rawJson:Null<Any> = FunkinAssets.parseJson(raw);
 		
-		if (rawJson == null) throw 'failed to parse json at $charPath';
+		if (rawJson == null) throw 'failed to parse json at $charPath'; // perhaps instead of throwing i could return a dummy thats flagged as invalid..
 		
 		// then check for vslice
 		if (Reflect.hasField(rawJson, 'version')) // idk if other formats use a version but for the time being i will assume its vslice
@@ -42,7 +42,29 @@ class CharacterParser
 			return fromVSlice(rawJson);
 		}
 		
-		return cast rawJson;
+		return validateData(rawJson);
+	}
+	
+	/**
+	 * Ensures the minimum required fields are not null.
+	 */
+	static function validateData(data:Dynamic):CharacterInfo
+	{
+		final baseInfo:CharacterInfo = getTemplateCharInfo();
+		
+		data.sing_duration ??= baseInfo.sing_duration;
+		data.no_antialiasing ??= baseInfo.no_antialiasing;
+		data.flip_x ??= baseInfo.flip_x;
+		data.healthicon ??= baseInfo.healthicon;
+		data.healthbar_colour ??= baseInfo.healthbar_colour;
+		data.image ??= baseInfo.image;
+		data.dance_every ??= baseInfo.dance_every;
+		data.position ??= baseInfo.position;
+		data.camera_position ??= baseInfo.camera_position;
+		data.animations ??= baseInfo.animations;
+		data.scale ??= baseInfo.scale;
+		
+		return cast data;
 	}
 	
 	/**

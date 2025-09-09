@@ -118,10 +118,6 @@ class Bopper extends FlxSprite
 			{
 				frames = Paths.getMultiAtlas(path.split(','));
 			}
-			catch (e)
-			{
-				loadGraphic(Paths.image(path.split(',')[0]));
-			}
 		}
 	}
 	
@@ -343,13 +339,13 @@ class Bopper extends FlxSprite
 		else return animation.curAnim.curFrame = value;
 	}
 	
-	public function addAnimByPrefix(anim:String, prefix:String, fps:Int = 24, looping:Bool = true, flipX:Bool = false, flipY:Bool = true)
+	public function addAnimByPrefix(anim:String, prefix:String, fps:Int = 24, looping:Bool = true, flipX:Bool = false, flipY:Bool = false)
 	{
 		if (animateAtlas != null) animateAtlas.anim.addBySymbol(anim, prefix, fps, looping, flipX, flipY);
 		else animation.addByPrefix(anim, prefix, fps, looping, flipX, flipY);
 	}
 	
-	public function addAnimByIndices(anim:String, prefix:String, indices:Array<Int>, fps:Int = 24, looping:Bool = true, flipX:Bool = false, flipY:Bool = true)
+	public function addAnimByIndices(anim:String, prefix:String, indices:Array<Int>, fps:Int = 24, looping:Bool = true, flipX:Bool = false, flipY:Bool = false)
 	{
 		if (animateAtlas != null) animateAtlas.anim.addBySymbolIndices(anim, prefix, indices, fps, looping, flipX, flipY);
 		else animation.addByIndices(anim, prefix, indices, '', fps, looping, flipX, flipY);
