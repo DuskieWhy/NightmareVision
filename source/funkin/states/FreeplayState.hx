@@ -1,5 +1,6 @@
 package funkin.states;
 
+import funkin.backend.FallbackState;
 import funkin.states.editors.ChartConverterState;
 import funkin.data.Chart.ChartFormat;
 
@@ -19,6 +20,7 @@ import funkin.states.substates.*;
 import funkin.data.*;
 import funkin.objects.*;
 
+// todo rewrite this its kinda messy and not that safe
 class FreeplayState extends MusicBeatState
 {
 	public static var vocals:Null<FlxSound> = null;
@@ -64,9 +66,16 @@ class FreeplayState extends MusicBeatState
 		WeekData.reloadWeekFiles(false);
 		
 		#if DISCORD_ALLOWED
-		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
+		
+		if (WeekData.weeksList.length == 0)
+		{
+			CoolUtil.setTransSkip(true, false);
+			persistentUpdate = false;
+			FlxG.switchState(() -> new FallbackState('cannot load Freeplay as there are no weeks loaded.', () -> FlxG.switchState(MainMenuState.new)));
+			return;
+		}
 		
 		for (i in 0...WeekData.weeksList.length)
 		{
@@ -220,6 +229,8 @@ class FreeplayState extends MusicBeatState
 		{
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 		}
+		
+		if (WeekData.weeksList.length == 0) return;
 		
 		if (isHardcodedState())
 		{
