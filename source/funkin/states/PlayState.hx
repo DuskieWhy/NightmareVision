@@ -643,9 +643,6 @@ class PlayState extends MusicBeatState
 		startCharacterScript(boyfriend.curCharacter, boyfriend);
 		boyfriendMap.set(boyfriend.curCharacter, boyfriend);
 		
-		abot = new funkin.objects.stageobjects.ABot(0, 0, FlxG.sound.music, 'poop');
-		add(abot);
-		
 		scripts.set('dad', dad);
 		scripts.set('dadGroup', dadGroup);
 		
