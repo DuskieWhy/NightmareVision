@@ -257,7 +257,8 @@ class ChartConverterState extends MusicBeatState
 					{
 						if (!path.endsWith('.json')) throw "Did not recieve a Json!";
 						
-						final p1Chart = new FNFPsych().fromFile(path);
+						final p1Chart = new FNFPsych().fromFile(path); // feels a bit funny to do this but yes we r converting a psych to a psych
+						
 						saveFromFormat(path, p1Chart);
 					}
 					catch (e)
@@ -276,7 +277,9 @@ class ChartConverterState extends MusicBeatState
 	
 	function saveFromFormat(path:String, format:OneOfArray<DynamicFormat>, ?diff:FormatDifficulty)
 	{
-		final saveResult = new FNFLegacy().fromFormat(format, diff).save(path.replace('.json', '-converted.json'));
+		final nmvChart = new FNFPsych().fromFormat(format, diff);
+		nmvChart.beautify = true;
+		final saveResult = nmvChart.save(path.replace('.json', '-converted.json'));
 		if (saveResult == null) throw "failed to save.";
 		Logger.log('Successfuly saved chart at ${saveResult.dataPath}', NOTICE, true);
 	}
