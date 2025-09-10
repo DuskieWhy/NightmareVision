@@ -1541,6 +1541,8 @@ class PlayState extends MusicBeatState
 					sustainNote.mustPress = gottaHitNote;
 					sustainNote.gfNote = swagNote.gfNote;
 					sustainNote.noteType = type;
+					
+					if (ClientPrefs.newSustains) sustainNote.blockHit = true; // stops you from holding a note without key pressing first
 					if (!sustainNote.alive) break;
 					
 					sustainNote.ID = unspawnNotes.length;
@@ -3023,10 +3025,29 @@ class PlayState extends MusicBeatState
 				if (!daNote.playField.autoPlayed && daNote.playField.inControl && daNote.playField.playerControls)
 				{
 					if (daNote.isSustainNote
+						&& !daNote.blockHit
 						&& FlxG.keys.anyPressed(keysArray[daNote.noteData])
 						&& daNote.canBeHit
 						&& !daNote.tooLate
 						&& !daNote.wasGoodHit) daNote.playField.noteHitCallback.dispatch(daNote, daNote.playField);
+				}
+				
+				if (ClientPrefs.newSustains)
+				{
+					// hold note drop
+					
+					if (!daNote.playField.autoPlayed && daNote.playField.inControl && daNote.playField.playerControls)
+					{
+						if (daNote.isSustainNote
+							&& !daNote.blockHit
+							&& !daNote.ignoreNote
+							&& !FlxG.keys.anyPressed(keysArray[daNote.noteData])
+							&& !endingSong
+							&& (daNote.tooLate || !daNote.wasGoodHit))
+						{
+							daNote.playField.noteMissCallback.dispatch(daNote, daNote.playField);
+						}
+					}
 				}
 			});
 			
@@ -3097,6 +3118,33 @@ class PlayState extends MusicBeatState
 		
 		final noteScriptRet = callNoteTypeScript(daNote.noteType, 'noteMiss', [daNote]);
 		if (noteScriptRet != Globals.Function_Stop) scripts.call('noteMiss', [daNote], false, [daNote.noteType]);
+		
+		if (ClientPrefs.newSustains)
+		{
+			// hold note missing stuff, makes the hold unhittable (and kills it, might make it just transparent if i can fix some stuff)
+			if (daNote.isSustainNote)
+			{
+				var tail = daNote.parent.tail;
+				for (note in tail)
+				{
+					note.blockHit = true;
+					note.ignoreNote = true;
+					note.alpha = 0.3;
+					note.copyAlpha = false;
+				}
+			}
+			else
+			{
+				var tail = daNote.tail;
+				for (note in tail)
+				{
+					note.blockHit = true;
+					note.ignoreNote = true;
+					note.alpha = 0.3;
+					note.copyAlpha = false;
+				}
+			}
+		}
 	}
 	
 	function noteMissPress(direction:Int = 1, anim:Bool = true):Void // You pressed a key when there was no notes to press for this key
@@ -3254,6 +3302,15 @@ class PlayState extends MusicBeatState
 			field.forEach(function(spr:StrumNote) {
 				if (Math.abs(note.noteData) == spr.ID) spr.playAnim('confirm', true, note);
 			});
+		}
+		
+		if (ClientPrefs.newSustains)
+		{
+			if (!note.isSustainNote)
+			{
+				for (sus in note.tail)
+					sus.blockHit = false; // makes the hold note active when you press the base note
+			}
 		}
 		
 		final hscriptArgs = [note];
