@@ -35,7 +35,7 @@ In a cmd within the project directory, in order run...
 > haxelib run hxpkg install
 
 ### Quick Note
-- Haxe 4.3.6 or newer is recommended
+- Haxe 4.3.6 or newer is expected
 - This engine ENFORCES the use of local libraries with hxpkg/hmm to prevent issues in relation to `hxvlc`
 - The recommended library versions are listed within the .hxpkg file.
 
