@@ -1542,7 +1542,7 @@ class PlayState extends MusicBeatState
 					sustainNote.gfNote = swagNote.gfNote;
 					sustainNote.noteType = type;
 					
-					if (ClientPrefs.newSustains) sustainNote.blockHit = true; // stops you from holding a note without key pressing first
+					if (ClientPrefs.guitarHeroSustains) sustainNote.blockHit = true; // stops you from holding a note without key pressing first
 					if (!sustainNote.alive) break;
 					
 					sustainNote.ID = unspawnNotes.length;
@@ -3032,7 +3032,7 @@ class PlayState extends MusicBeatState
 						&& !daNote.wasGoodHit) daNote.playField.noteHitCallback.dispatch(daNote, daNote.playField);
 				}
 				
-				if (ClientPrefs.newSustains)
+				if (ClientPrefs.guitarHeroSustains)
 				{
 					// hold note drop
 					
@@ -3119,29 +3119,29 @@ class PlayState extends MusicBeatState
 		final noteScriptRet = callNoteTypeScript(daNote.noteType, 'noteMiss', [daNote]);
 		if (noteScriptRet != Globals.Function_Stop) scripts.call('noteMiss', [daNote], false, [daNote.noteType]);
 		
-		if (ClientPrefs.newSustains)
+		if (ClientPrefs.guitarHeroSustains)
 		{
+			inline function invalidateSustatin(note:Note)
+			{
+				note.blockHit = true;
+				note.ignoreNote = true;
+				note.alpha = 0.3;
+				note.copyAlpha = false;
+			}
+			
 			// hold note missing stuff, makes the hold unhittable (and kills it, might make it just transparent if i can fix some stuff)
 			if (daNote.isSustainNote)
 			{
-				var tail = daNote.parent.tail;
-				for (note in tail)
+				for (sustain in daNote.parent.tail)
 				{
-					note.blockHit = true;
-					note.ignoreNote = true;
-					note.alpha = 0.3;
-					note.copyAlpha = false;
+					invalidateSustatin(sustain);
 				}
 			}
 			else
 			{
-				var tail = daNote.tail;
-				for (note in tail)
+				for (sustain in daNote.tail)
 				{
-					note.blockHit = true;
-					note.ignoreNote = true;
-					note.alpha = 0.3;
-					note.copyAlpha = false;
+					invalidateSustatin(sustain);
 				}
 			}
 		}
@@ -3304,12 +3304,14 @@ class PlayState extends MusicBeatState
 			});
 		}
 		
-		if (ClientPrefs.newSustains)
+		if (ClientPrefs.guitarHeroSustains)
 		{
 			if (!note.isSustainNote)
 			{
-				for (sus in note.tail)
-					sus.blockHit = false; // makes the hold note active when you press the base note
+				for (sustain in note.tail)
+				{
+					sustain.blockHit = false; // makes the hold note active when you press the base note
+				}
 			}
 		}
 		

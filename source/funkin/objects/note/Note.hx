@@ -85,6 +85,11 @@ class Note extends FlxSprite
 	
 	public var tail:Array<Note> = []; // for sustains
 	public var parent:Note;
+	
+	/**
+	 * if true, the note cannot be hit.
+	 * 
+	 */
 	public var blockHit:Bool = false;
 	
 	public var sustainLength:Float = 0;
