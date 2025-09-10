@@ -20,9 +20,9 @@ body:
   - type: dropdown
     id: modding
     attributes:
-      label: "Are you modding a build from source or with Lua?"
+      label: "Are you modding a build from source or with scripting?"
       options:
-        - Lua
+        - Scripting
         - Source
     validations:
       required: true
