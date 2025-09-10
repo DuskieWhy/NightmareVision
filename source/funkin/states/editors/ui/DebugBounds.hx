@@ -21,9 +21,9 @@ class DebugBounds extends FlxBasic
 		this.target = target;
 		
 		top = new FlxSprite().makeGraphic(1, 1, FlxColor.WHITE);
-		left = new FlxSprite().makeGraphic(1, 1, FlxColor.WHITE);
-		right = new FlxSprite().makeGraphic(1, 1, FlxColor.WHITE);
-		bottom = new FlxSprite().makeGraphic(1, 1, FlxColor.WHITE);
+		left = new FlxSprite().loadGraphic(top.graphic);
+		right = new FlxSprite().loadGraphic(top.graphic);
+		bottom = new FlxSprite().loadGraphic(top.graphic);
 	}
 	
 	override function update(elapsed:Float)
