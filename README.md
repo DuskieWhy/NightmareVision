@@ -14,6 +14,13 @@ Havee fun with NightmareVision V1! (***[follow me on twitter](https://twitter.co
 
 ## How to compile NMV Engine
 
+### Quick Note
+- Haxe 4.3.6 or newer is expected
+- This engine ENFORCES the use of local libraries with hxpkg/hmm to prevent issues in relation to `hxvlc`
+- The expected library versions are listed within the .hxpkg file. 
+
+if compilation errors arise, Ensure your Haxe version is correct and your haxelibs match what is listed in the .hxpkg file
+
 ### Download the prerequisites... (skip this if you already have compiled any fnf project, or any flixel project basically lol)
 
 [Haxe](https://haxe.org/download/)
@@ -33,11 +40,5 @@ In a cmd within the project directory, in order run...
 > haxelib run hxpkg setup
 
 > haxelib run hxpkg install
-
-### Quick Note
-- Haxe 4.3.6 or newer is expected
-- This engine ENFORCES the use of local libraries with hxpkg/hmm to prevent issues in relation to `hxvlc`
-- The recommended library versions are listed within the .hxpkg file.
-
 
 After that is complete, run `lime test windows` and you should be compiling
