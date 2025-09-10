@@ -2888,9 +2888,9 @@ class PlayState extends MusicBeatState
 				RecalculateRating(false);
 			}
 		}
-		scripts.call('popupScore', [note, daRating]);
+		scripts.call('onPopUpScore', [note, daRating]);
 		callHUDFunc(hud -> hud.popUpScore(daRating.image, combo)); // only pushing the image bc is anyone ever gonna need anything else???
-		scripts.call('popupScorePost', [note, daRating]);
+		scripts.call('onPopUpScorePost', [note, daRating]);
 	}
 	
 	function onKeyPress(event:KeyboardEvent):Void
