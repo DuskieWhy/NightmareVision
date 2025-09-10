@@ -266,16 +266,21 @@ class CreditsState extends MusicBeatState
 					Mods.currentModDirectory = creditsStuff[i][5];
 				}
 				
-				var icon = creditsStuff[i][1];
+				var isVisible = true;
 				
 				// i wonder if fileExists should be used more
-				if (!Paths.fileExists('images/credits/$icon.png', IMAGE)) icon = 'missing_icon';
+				if (!Paths.fileExists('images/credits/${creditsStuff[i][1]}.png', IMAGE))
+				{
+					isVisible = false;
+				}
 				
-				var icon:AttachedSprite = new AttachedSprite('credits/$icon');
+				var icon:AttachedSprite = new AttachedSprite('credits/${creditsStuff[i][1]}');
 				icon.setGraphicSize(130);
 				icon.updateHitbox();
 				icon.xAdd = optionText.width + 10;
 				icon.sprTracker = optionText;
+				icon.copyVisible = false;
+				icon.visible = isVisible;
 				
 				// using a FlxGroup is too much fuss!
 				iconArray.push(icon);
