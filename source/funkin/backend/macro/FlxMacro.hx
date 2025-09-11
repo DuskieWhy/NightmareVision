@@ -11,6 +11,9 @@ using Lambda;
 
 class FlxMacro
 {
+	/**
+	 * Adds a variety of functions related to loading sprites for convenienec
+	 */
 	public static macro function buildFlxSprite():Array<haxe.macro.Expr.Field>
 	{
 		var fields:Array<haxe.macro.Expr.Field> = Context.getBuildFields();
@@ -121,7 +124,9 @@ class FlxMacro
 		return fields;
 	}
 	
-	// this is from base game i wanted smth like this since forever
+	/**
+	 * Adds zIndex to `FlxBasic`'
+	 */
 	public static macro function buildFlxBasic():Array<haxe.macro.Expr.Field>
 	{
 		var fields:Array<haxe.macro.Expr.Field> = Context.getBuildFields();
@@ -139,7 +144,6 @@ class FlxMacro
 	
 	public static macro function buildFlxCamera():Array<haxe.macro.Expr.Field>
 	{
-		//
 		var fields:Array<haxe.macro.Expr.Field> = Context.getBuildFields();
 		
 		fields.push(

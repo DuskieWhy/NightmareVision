@@ -291,7 +291,6 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		set("MusicBeatState", funkin.backend.MusicBeatState);
 		set("Paths", Paths);
 		set("Conductor", funkin.backend.Conductor);
-		set("Song", funkin.data.Song);
 		set("ClientPrefs", funkin.data.ClientPrefs);
 		set("CoolUtil", funkin.utils.CoolUtil);
 		set("StageData", funkin.data.StageData);
