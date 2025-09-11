@@ -238,7 +238,9 @@ class RGBPaletteShader extends FlxShader
 				return vec4(color.rgb, color.a);
 			}
 			return vec4(0.0, 0.0, 0.0, 0.0);
-		}')
+		}
+            
+    ')
 	@:glFragmentSource('
 		#pragma header
 
@@ -257,7 +259,7 @@ class RGBPaletteShader extends FlxShader
 			gl_FragColor = texOutput;
 		}
 			
-		')
+	')
 	public function new()
 	{
 		super();
