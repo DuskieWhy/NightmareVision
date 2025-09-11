@@ -1,5 +1,7 @@
 package funkin.states;
 
+import funkin.game.Countdown;
+
 import haxe.Timer;
 import haxe.ds.Vector;
 
@@ -1414,7 +1416,7 @@ class PlayState extends MusicBeatState
 		{
 			if (!noteTypesPushed.contains(type))
 			{
-				final baseScriptFile = 'custom_notetypes/$type';
+				final baseScriptFile = 'notetypes/$type';
 				
 				final scriptFile = FunkinHScript.getPath(baseScriptFile);
 				
@@ -1430,7 +1432,7 @@ class PlayState extends MusicBeatState
 			
 			if (!eventsPushed.contains(eventName))
 			{
-				final baseScriptFile:String = 'custom_events/$eventName';
+				final baseScriptFile:String = 'events/$eventName';
 				
 				final scriptFile = FunkinHScript.getPath(baseScriptFile);
 				

@@ -1401,10 +1401,10 @@ class ChartEditorState extends MusicBeatState
 		var directories:Array<String> = [];
 		
 		#if MODS_ALLOWED
-		directories.push(Paths.mods('custom_notetypes/'));
-		directories.push(Paths.mods(Mods.currentModDirectory + '/custom_notetypes/'));
+		directories.push(Paths.mods('notetypes/'));
+		directories.push(Paths.mods(Mods.currentModDirectory + '/notetypes/'));
 		for (mod in Mods.globalMods)
-			directories.push(Paths.mods(mod + '/custom_notetypes/'));
+			directories.push(Paths.mods(mod + '/notetypes/'));
 		#end
 		
 		for (i in 0...directories.length)
@@ -1477,10 +1477,10 @@ class ChartEditorState extends MusicBeatState
 		var directories:Array<String> = [];
 		
 		#if MODS_ALLOWED
-		directories.push(Paths.mods('custom_events/'));
-		directories.push(Paths.mods(Mods.currentModDirectory + '/custom_events/'));
+		directories.push(Paths.mods('events/'));
+		directories.push(Paths.mods(Mods.currentModDirectory + '/events/'));
 		for (mod in Mods.globalMods)
-			directories.push(Paths.mods(mod + '/custom_events/'));
+			directories.push(Paths.mods(mod + '/events/'));
 		#end
 		
 		var eventexts = ['.txt', '.hx', '.hxs', '.hscript'];
