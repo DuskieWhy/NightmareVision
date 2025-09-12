@@ -1,4 +1,6 @@
 #if !macro
+import haxe.io.Path;
+
 // flixel
 import flixel.FlxG;
 import flixel.FlxSprite;

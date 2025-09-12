@@ -25,7 +25,7 @@ class PluginsManager
 		{
 			if (FunkinHScript.isHxFile(file))
 			{
-				final scriptName = file.substring(file.lastIndexOf('/') + 1, file.lastIndexOf('.'));
+				final scriptName = Path.withoutExtension(Path.withoutDirectory(file));
 				var script = FunkinHScript.fromFile(file, scriptName);
 				if (script.__garbage)
 				{

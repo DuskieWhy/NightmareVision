@@ -179,7 +179,7 @@ class Paths
 	}
 	
 	// uise this more
-	public static function findFileAndAddExts(file:String, exts:Array<String>):String
+	public static function findFileWithExts(file:String, exts:Array<String>):String
 	{
 		for (ext in exts)
 		{
