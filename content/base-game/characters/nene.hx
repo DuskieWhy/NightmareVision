@@ -1,27 +1,24 @@
 import funkin.objects.stageobjects.ABotVis;
 
+import animate.FlxAnimateFrames;
+import animate.FlxAnimate;
+
 var abotSpeaker:FlxAnimate;
 var pupil:FlxAnimate;
 var abotVis:ABotVis;
+var abot:FlxSpriteGroup;
 
-function onCreate()
+function onCreatePost()
 {
 	dadGroup.zIndex += 1;
 	boyfriendGroup.zIndex += 1;
 	gfGroup.zIndex += 1;
 	
 	aBot = new FlxSpriteGroup();
-	aBot.setPosition(gf.x + 25, gf.y + 365);
-	aBot.zIndex = gfGroup.zIndex - 1;
-	// add(aBot);
-	stage.add(aBot);
-	refreshZ(stage);
 	
 	eyeWhites = new FlxSprite(-120, 200).makeGraphic(160, 60, FlxColor.WHITE);
-	aBot.add(eyeWhites);
 	
 	stereoBG = new FlxSprite(-20, -20).loadGraphic(Paths.image('characters/abot/stereoBG'));
-	aBot.add(stereoBG);
 	
 	pupil = new FlxAnimate(-125, 190);
 	pupil.frames = FlxAnimateFrames.fromAnimate((Paths.textureAtlas('characters/abot/systemEyes')));
@@ -29,24 +26,38 @@ function onCreate()
 	pupil.anim.addBySymbol('right', 'abot eyes', 24, false);
 	pupil.anim.addBySymbolIndices('lookin left', 'a bot eyes lookin', [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], 24, false);
 	pupil.anim.addBySymbolIndices('lookin right', 'a bot eyes lookin', [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 24, false);
-	pupil.anim.play('lookin right');
-	aBot.add(pupil);
+	pupil.anim.play('lookin left');
+	pupil.antialiasing = true;
 	
 	abotSpeaker = new FlxAnimate(-175, -50);
 	abotSpeaker.frames = FlxAnimateFrames.fromAnimate((Paths.textureAtlas('characters/abot/abotSystem')));
 	abotSpeaker.anim.addBySymbol('sys', 'Abot System', 24, false);
 	abotSpeaker.anim.play('sys');
+	abotSpeaker.antialiasing = true;
 	
 	abotVis = new ABotVis(FlxG.sound.music, false);
 	abotVis.x += 30;
 	abotVis.y += 35;
+	
+	aBot.setPosition(gf.x + 25, gf.y + 365);
+	aBot.zIndex = gfGroup.zIndex - 1;
+	// add(aBot);
+	stage.add(aBot);
+	refreshZ(stage);
+	
+	aBot.add(eyeWhites);
+	aBot.add(stereoBG);
+	aBot.add(pupil);
 	aBot.add(abotVis);
-	abotVis.snd = FlxG.sound.music;
-	abotVis.initAnalyzer();
+	
 	aBot.add(abotSpeaker);
 }
 
-function onSongStart() {}
+function onSongStart()
+{
+	abotVis.snd = FlxG.sound.music;
+	abotVis.initAnalyzer();
+}
 
 function onDestroy()
 {
