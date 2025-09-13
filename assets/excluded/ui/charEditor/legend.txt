@@ -1,0 +1,11 @@
+> Pressing [W, A, S, D] plays the corresponding sing animation.\nHolding shift while doing so will attempt to play alt animations.
+> Pressing [Z, X] will move a frame forward/backward of the currently playing animation.
+> Pressing C will replay the current animation.
+> Pressing [Q, E] can zoom in/out the camera.
+> You can Press CTRL+Z and CTRL+X to undo and redo changes.
+
+Mouse Controls:
+> Click and hold the mouse wheel to drag the camera and scroll to zoom.
+> Holding the right mouse button will let you drag the current animations offset.
+> Hovering over the camera pointer and holding left click will allow you to drag it.
+

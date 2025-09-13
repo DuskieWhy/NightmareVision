@@ -67,4 +67,21 @@ class MacroUtil
 		var finalResult = {expr: EObjectDecl(expressions), pos: Context.currentPos()};
 		return macro $b{[macro $finalResult]};
 	}
+	
+	/**
+	 * Gets the content from a file before compilation.
+	 * 
+	 * You must provide the full path to file
+	 */
+	public static macro function getPrecompliedContent(path:String)
+	{
+		if (!sys.FileSystem.exists(path))
+		{
+			Context.fatalError('could not find content at $path', Context.currentPos());
+		}
+		
+		final ret = sys.io.File.getContent(path);
+		
+		return macro $v{ret};
+	}
 }

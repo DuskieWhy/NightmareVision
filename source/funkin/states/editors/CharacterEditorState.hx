@@ -1089,7 +1089,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			FlxG.camera.zoom += FlxG.mouse.wheel * (0.1 * FlxG.camera.zoom);
 		}
 		
-		FlxG.camera.zoom = FlxMath.bound(FlxG.camera.zoom, 0.1, 3);
+		FlxG.camera.zoom = FlxMath.bound(FlxG.camera.zoom, 0.1, 6);
 	}
 	
 	function refreshCharDropDown() // rewrite this
