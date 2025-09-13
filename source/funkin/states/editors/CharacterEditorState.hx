@@ -1100,7 +1100,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		{
 			if (file.endsWith('.json') || file.endsWith('.xml'))
 			{
-				var charToCheck:String = Path.withoutExtension(Path.withoutDirectory(file));
+				var charToCheck:String = file.withoutDirectory().withoutExtension();
 				
 				if (!characterList.contains(charToCheck)) characterList.push(charToCheck);
 			}
@@ -1550,6 +1550,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			],
 			sing_duration: 6.1,
 			scale: 1,
-			dance_every: 2
+			dance_every: 2,
+			scalableOffsets: true
 		};
 }

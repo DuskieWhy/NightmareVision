@@ -179,7 +179,7 @@ class Paths
 	}
 	
 	// uise this more
-	public static function findFileWithExts(file:String, exts:Array<String>):String
+	public static function findFileWithExt(file:String, exts:Array<String>):String
 	{
 		for (ext in exts)
 		{
@@ -223,12 +223,10 @@ class Paths
 	
 	public static inline function getMultiAtlas(keys:Array<String>, ?library:String, ?allowGPU:Bool = true):FlxAtlasFrames // from psych
 	{
-		// todo add wat for this to work with fucking uhhhhh packeratlas
 		var frames = getAtlasFrames(keys.shift().trim(), library, allowGPU);
 		
 		if (keys.length != 0)
 		{
-			// odd
 			final originalCollection = frames;
 			frames = new FlxAtlasFrames(originalCollection.parent);
 			frames.addAtlas(originalCollection, true);
@@ -237,7 +235,7 @@ class Paths
 				final newFrames = getAtlasFrames(i.trim(), library, allowGPU);
 				if (newFrames != null)
 				{
-					frames.addAtlas(newFrames, false); // ? okay
+					frames.addAtlas(newFrames, false);
 				}
 			}
 		}
@@ -268,10 +266,7 @@ class Paths
 	
 	public static inline function getSparrowAtlas(key:String, ?library:String, ?allowGPU:Bool = true):FlxAtlasFrames
 	{
-		final xml = getPath('images/$key.xml', TEXT, library, true);
-		final img = image(key, library, allowGPU);
-		
-		return FlxAtlasFrames.fromSparrow(img, FunkinAssets.getContent(xml));
+		return FlxAtlasFrames.fromSparrow(image(key, library, allowGPU), FunkinAssets.getContent(getPath('images/$key.xml', TEXT, library, true)));
 	}
 	
 	public static inline function getPackerAtlas(key:String, ?library:String, ?allowGPU:Bool = true)

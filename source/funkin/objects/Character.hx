@@ -324,7 +324,8 @@ class Character extends Bopper
 		specialAnim = false;
 		super.playAnim(animToPlay, isForced, isReversed, frame);
 		
-		if (!debugMode && ((isPlayer && flipX == originalFlipX) || (!isPlayer && flipX != originalFlipX)))
+		if (!debugMode
+			&& ((isPlayer && flipX == originalFlipX) || (!isPlayer && flipX != originalFlipX))) // rewrite this condition later maybe
 		{
 			var appliedOffset = offset.x;
 			
@@ -334,6 +335,18 @@ class Character extends Bopper
 			
 			offset.x = ((frameWidth * scaleFactor) - this.width) - appliedOffset;
 		}
+		
+		if (flipY) // maybe a corrected offsets var
+		{
+			var appliedOffset = offset.y;
+			
+			final frameHeight = animateAtlas?.frameHeight ?? frameHeight;
+			
+			final scaleFactor = scalableOffsets ? scale.y : 1.0;
+			
+			offset.y = ((frameHeight * scaleFactor) - this.height) - appliedOffset;
+		}
+		
 		offset.degrees += angle;
 	}
 	

@@ -1,11 +1,12 @@
 package funkin;
 
 #if !macro
-import extensions.flixel.FlxCameraEx;
-
-import funkin.utils.*;
-
 import flixel.util.FlxDestroyUtil;
 
+import extensions.flixel.FlxCameraEx;
+
 import funkin.backend.Logger;
+import funkin.utils.*;
+
+using haxe.io.Path;
 #end

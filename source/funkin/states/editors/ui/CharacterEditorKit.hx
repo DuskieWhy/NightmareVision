@@ -108,15 +108,15 @@ class CharEditorUI extends FlxTypedSpriteContainer<FlxSprite>
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-		for (i in WindowManager.instance.windows)
+		if (legendWindow != null)
 		{
-			if (i.height < 51)
+			if (legendWindow.height < 51)
 			{
-				i.height = 51;
+				legendWindow.height = 51;
 			}
-			if (i.width < 76)
+			if (legendWindow.width < 76)
 			{
-				i.width = 76;
+				legendWindow.width = 76;
 			}
 		}
 	}

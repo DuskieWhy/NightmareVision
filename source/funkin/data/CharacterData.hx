@@ -16,7 +16,7 @@ class CharacterParser
 	 */
 	public static function fetchInfo(id:String):CharacterInfo
 	{
-		var charPath = Paths.findFileWithExts('characters/$id', ['json', 'xml']);
+		var charPath = Paths.findFileWithExt('characters/$id', ['json', 'xml']);
 		
 		if (!FunkinAssets.exists(charPath))
 		{

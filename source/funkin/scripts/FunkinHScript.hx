@@ -26,8 +26,6 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 	{
 		for (extension in H_EXTS)
 		{
-			if (path.endsWith(extension)) return path;
-			
 			final file = '$path.$extension';
 			
 			final targetPath = Paths.getPath(file, TEXT, null, true);
