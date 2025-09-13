@@ -153,6 +153,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			silhouettes.add(dad);
 			silhouettes.add(bf);
 		}
+		catch (e) {}
 		
 		charLayer = new FlxContainer();
 		add(charLayer);

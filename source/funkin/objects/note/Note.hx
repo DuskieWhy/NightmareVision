@@ -189,7 +189,7 @@ class Note extends FlxSprite
 	public function resizeByRatio(ratio:Float)
 	{
 		// for some fuckin reason this shit is still crashing but i cant figure it out. data got that 👀👀👀
-		try
+		try // why try catch
 		{
 			if (isSustainNote && (skipScale || !isSustainEnd))
 			{
@@ -199,6 +199,7 @@ class Note extends FlxSprite
 				updateHitbox();
 			}
 		}
+		catch (e) {}
 	}
 	
 	private function set_texture(value:String):String

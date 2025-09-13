@@ -82,4 +82,6 @@
             "source.sortImports": "never"
         }
     },
+
+    "json.format.keepLines": true
 }
