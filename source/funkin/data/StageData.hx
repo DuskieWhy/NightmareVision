@@ -1,5 +1,7 @@
 package funkin.data;
 
+import funkin.data.CharacterData.AnimationInfo;
+
 import haxe.Json;
 
 typedef StageFile =
@@ -74,6 +76,121 @@ typedef StageFile =
 	 * default is 0
 	 */
 	var ?bfZIndex:Null<Int>;
+	
+	/**
+	 * Optional array of data to make background sprites.
+	 */
+	var ?stageObjects:Array<StageObject>;
+}
+
+typedef StageObject =
+{
+	/**
+	 * ID attached to the object.
+	 * 
+	 * Used to identify the object in scripts.
+	 */
+	var ?id:String;
+	
+	/**
+	 * The path to an asset to load.
+	 * 
+	 * This can be the path to a `Texture Atlas`, `Sparrow Atlas`, `Packer Atlas` or a regular image
+	 * 
+	 * If unused, a 1x1 graphic will be made
+	 */
+	var ?asset:String;
+	
+	/**
+	 * Position to where the object should be as [x, y]
+	 * 
+	 * Default is [0, 0]
+	 */
+	var ?position:Array<Float>;
+	
+	/**
+	 * The objects scrollFactor as [x, y]
+	 * 
+	 * Default is [1, 1]
+	 */
+	var ?scrollFactor:Array<Float>;
+	
+	/**
+	 * Scale of the object as [x, y]
+	 * 
+	 * Default is [1, 1]
+	 */
+	var ?scale:Array<Float>;
+	
+	/**
+	 * Sets the objects Alpha/Transparency from 0 - 1
+	 */
+	var ?alpha:Float;
+	
+	/**
+	 * Whether the object should be flipped on the X axis
+	 */
+	var ?flipX:Bool;
+	
+	/**
+	 * Whether the object should be flipped on the Y axis
+	 */
+	var ?flipY:Bool;
+	
+	/**
+	 * The Z index of the object
+	 * 
+	 * Set this really high to go in front of the characters
+	 * 
+	 * Default is 0
+	 */
+	var ?zIndex:Int;
+	
+	/**
+	 * The angle of the object in degrees
+	 */
+	var ?angle:Float;
+	
+	/**
+	 * A hex colour to be multiplied over the sprite
+	 * 
+	 * If you are making a solid graphic and `asset` is not used, use this to change its colour
+	 */
+	var ?colour:String;
+	
+	/**
+	 * Blend mode of the object
+	 */
+	var ?blend:String;
+	
+	/**
+	 * unsupported currently
+	 */
+	var ?dance_every:Int;
+	
+	/**
+	 * Whether the object should have antialiasing enabled.
+	 */
+	var ?antialiasing:Bool;
+	
+	/**
+	 * Array of the fields to be used for an animation
+	 * 
+	 * The first animation in the array will be played on creation
+	 * 
+	 * Used if the `asset` exists
+	 */
+	var ?animations:Array<AnimationInfo>;
+	
+	/**
+	 * Additional functionality that can be used in case there is more specific functions needed
+	 * 
+	 * @param method The name of a function to call
+	 * @param args Optional values to be used in the function
+	 */
+	var ?callableMethods:Array<{method:String, ?args:Array<Dynamic>}>;
+	
+	// maybe a setproperty later
 }
 
 @:nullSafety

@@ -163,6 +163,7 @@ class Mods
 				final json = FunkinAssets.getContent(path);
 				if (json != null && json.length > 0) return Json.parse(json);
 			}
+			catch (e) {}
 		}
 		#end
 		return null;

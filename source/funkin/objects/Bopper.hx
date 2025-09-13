@@ -118,6 +118,7 @@ class Bopper extends FlxSprite
 			{
 				frames = Paths.getMultiAtlas(path.split(','));
 			}
+			catch (e) {}
 		}
 	}
 	
