@@ -35,7 +35,7 @@ class Stage extends FlxTypedContainer<FlxBasic>
 		
 		this.curStage = curStage;
 		
-		stageData = StageData.getStageFile(curStage) ?? funkin.data.StageData.generateDefault();
+		stageData = StageData.getStageFile(curStage) ?? funkin.data.StageData.getTemplateStageFile();
 	}
 	
 	/**

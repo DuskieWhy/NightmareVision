@@ -4,18 +4,76 @@ import haxe.Json;
 
 typedef StageFile =
 {
+	/**
+	 * The default camera zoom that the game will be set to
+	 */
 	var defaultZoom:Float;
+	
+	/**
+	 * If enabled, pixelUI will be enabled
+	 */
 	var isPixelStage:Bool;
 	
-	var boyfriend:Array<Dynamic>;
-	var girlfriend:Array<Dynamic>;
-	var opponent:Array<Dynamic>;
-	var hide_girlfriend:Bool;
+	/**
+	 * The boyfriend postion as [x, y]
+	 */
+	var boyfriend:Array<Float>;
 	
-	var camera_boyfriend:Array<Float>;
-	var camera_opponent:Array<Float>;
-	var camera_girlfriend:Array<Float>;
-	var camera_speed:Null<Float>;
+	/**
+	 * The girlfriend position as [x, y]
+	 */
+	var girlfriend:Array<Float>;
+	
+	/**
+	 * The dad position as [x, y]
+	 */
+	var opponent:Array<Float>;
+	
+	/**
+	 * If true, the girlfriend will not be loaded in anyway
+	 */
+	var ?hide_girlfriend:Null<Bool>;
+	
+	/**
+	 * Additional offset for the boyfriend camera position as [x, y]
+	 */
+	var ?camera_boyfriend:Null<Array<Float>>;
+	
+	/**
+	 * Addtional offset for the dad camera position as [x, y]
+	 */
+	var ?camera_opponent:Null<Array<Float>>;
+	
+	/**
+	 * Additional offset for the girlfriend camera position as [x, y]
+	 */
+	var ?camera_girlfriend:Null<Array<Float>>;
+	
+	/**
+	 * Multiplier onto the camera movement speed.
+	 */
+	var ?camera_speed:Null<Float>;
+	
+	/**
+	 * The dad Characters Z index.
+	 * 
+	 * default is 0
+	 */
+	var ?dadZIndex:Null<Int>;
+	
+	/**
+	 * The girlfriend Characters Z index.
+	 * 
+	 * default is 0
+	 */
+	var ?gfZIndex:Null<Int>;
+	
+	/**
+	 * The boyfriend Characters Z index.
+	 * 
+	 * default is 0
+	 */
+	var ?bfZIndex:Null<Int>;
 }
 
 @:nullSafety
@@ -29,7 +87,7 @@ class StageData
 		return FunkinAssets.exists(path, TEXT) ? cast FunkinAssets.parseJson(FunkinAssets.getContent(path)) : null;
 	}
 	
-	public static function generateDefault():StageFile return
+	public static function getTemplateStageFile():StageFile return
 		{
 			isPixelStage: false,
 			defaultZoom: 0.8,

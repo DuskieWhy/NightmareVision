@@ -504,6 +504,10 @@ class PlayState extends MusicBeatState
 		gfGroup ??= new FlxSpriteGroup();
 		gfGroup.x = GF_X;
 		gfGroup.y = GF_Y;
+		
+		boyfriendGroup.zIndex = file.bfZIndex ?? 0;
+		dadGroup.zIndex = file.dadZIndex ?? 0;
+		gfGroup.zIndex = file.gfZIndex ?? 0;
 	}
 	
 	// null checking
