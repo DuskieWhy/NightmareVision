@@ -36,6 +36,18 @@ class Stage extends FlxTypedContainer<FlxBasic>
 	 */
 	public final objects:Map<String, FlxSprite> = [];
 	
+	/**
+	 * The default camera zoom defined in the stage json.
+	 * 
+	 * Accesor to `stageData.defaultZoom`
+	 */
+	public var defaultZoom(get, never):Float;
+	
+	function get_defaultZoom():Float
+	{
+		return stageData.defaultZoom;
+	}
+	
 	public function new(curStage:String = "stage")
 	{
 		super();
