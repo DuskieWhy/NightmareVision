@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="pico-cheer.png">
+	<!-- Created with Adobe Animate version 24.0.5.40 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="Pico HEY!!0000" x="0" y="0" width="512" height="475" frameX="-2" frameY="0" frameWidth="514" frameHeight="477"/>
+	<SubTexture name="Pico HEY!!0001" x="0" y="0" width="512" height="475" frameX="-2" frameY="0" frameWidth="514" frameHeight="477"/>
+	<SubTexture name="Pico HEY!!0002" x="512" y="0" width="487" height="474" frameX="0" frameY="-3" frameWidth="514" frameHeight="477"/>
+	<SubTexture name="Pico HEY!!0003" x="512" y="0" width="487" height="474" frameX="0" frameY="-3" frameWidth="514" frameHeight="477"/>
+	<SubTexture name="Pico HEY!!0004" x="0" y="475" width="497" height="475" frameX="0" frameY="-2" frameWidth="514" frameHeight="477"/>
+	<SubTexture name="Pico HEY!!0005" x="0" y="475" width="497" height="475" frameX="0" frameY="-2" frameWidth="514" frameHeight="477"/>
+	<SubTexture name="Pico HEY!!0006" x="0" y="475" width="497" height="475" frameX="0" frameY="-2" frameWidth="514" frameHeight="477"/>
+	<SubTexture name="Pico HEY!!0007" x="0" y="475" width="497" height="475" frameX="0" frameY="-2" frameWidth="514" frameHeight="477"/>
+</TextureAtlas>

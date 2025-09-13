@@ -1,0 +1,57 @@
+{
+	"songs": [
+		[
+			"Darnell",
+			"darnell",
+			[
+				200,
+				100,
+				200
+			]
+		],
+		[
+			"lit up",
+			"darnell",
+			[
+				200,
+				100,
+				200
+			]
+		],
+		[
+			"2hot",
+			"darnell",
+			[
+				200,
+				100,
+				200
+			]
+		],
+		[
+			"blazin",
+			"darnell",
+			[
+				200,
+				100,
+				200
+			]
+		]
+	],
+	"hideFreeplay": false,
+	"weekBackground": "tank",
+	"weekCharacters": [
+		"tankman",
+		"bf",
+		"gf"
+	],
+	"storyName": "Tankman",
+	"weekName": "Week 7",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"hideStoryMode": false,
+	"weekBefore": "week6",
+	"startUnlocked": true
+}

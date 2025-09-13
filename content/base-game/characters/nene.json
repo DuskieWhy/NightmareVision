@@ -1,10 +1,44 @@
 {
 	"animations": [
 		{
+			"loop": false,
+			"flipY": false,
 			"offsets": [
 				0,
-				-9
+				0
 			],
+			"anim": "danceLeft",
+			"fps": 24,
+			"name": "Idle0",
+			"indices": [
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14
+			],
+			"flipX": false
+		},
+		{
+			"loop": false,
+			"flipY": false,
+			"offsets": [
+				0,
+				0
+			],
+			"anim": "danceRight",
+			"fps": 24,
+			"name": "Idle0",
 			"indices": [
 				15,
 				16,
@@ -22,20 +56,292 @@
 				28,
 				29
 			],
-			"fps": 24,
-			"flipX": false,
-			"flipY": false,
-			"anim": "danceRight",
-			"loop": false,
-			"name": "Idle"
+			"flipX": false
 		},
 		{
+			"loop": false,
+			"flipY": false,
+			"offsets": [
+				-120,
+				50
+			],
+			"anim": "combo50",
+			"fps": 24,
+			"name": "ComboCheer0",
+			"indices": [],
+			"flipX": false
+		},
+		{
+			"loop": false,
+			"flipY": false,
 			"offsets": [
 				0,
-				-9
+				0
 			],
+			"anim": "drop70",
+			"fps": 24,
+			"name": "Laugh0",
 			"indices": [
-				30,
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				7,
+				8,
+				9,
+				10,
+				11,
+				7,
+				8,
+				9,
+				10,
+				11,
+				7,
+				8,
+				9,
+				10,
+				11,
+				7,
+				8,
+				9,
+				10,
+				11,
+				7,
+				8,
+				9,
+				10,
+				11
+			],
+			"flipX": false
+		},
+		{
+			"loop": false,
+			"flipY": false,
+			"offsets": [
+				0,
+				0
+			],
+			"anim": "laughCutscene",
+			"fps": 24,
+			"name": "Laugh0",
+			"indices": [
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				7,
+				8,
+				9,
+				10,
+				11,
+				7,
+				8,
+				9,
+				10,
+				11,
+				7,
+				8,
+				9,
+				10,
+				11,
+				7,
+				8,
+				9,
+				10,
+				11,
+				7,
+				8,
+				9,
+				10,
+				11
+			],
+			"flipX": false
+		},
+		{
+			"loop": false,
+			"flipY": false,
+			"offsets": [
+				-50,
+				-25
+			],
+			"anim": "combo200",
+			"fps": 24,
+			"name": "ComboFawn0",
+			"indices": [
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				6,
+				6,
+				6,
+				6,
+				6,
+				6,
+				6,
+				6,
+				6,
+				6,
+				6,
+				6,
+				6,
+				6,
+				6,
+				6,
+				6,
+				6,
+				6,
+				6,
+				6,
+				6,
+				6
+			],
+			"flipX": false
+		},
+		{
+			"loop": false,
+			"flipY": false,
+			"offsets": [
+				0,
+				52
+			],
+			"anim": "raiseKnife",
+			"fps": 24,
+			"name": "KnifeRaise0",
+			"indices": [],
+			"flipX": false
+		},
+		{
+			"loop": false,
+			"flipY": false,
+			"offsets": [
+				-99,
+				52
+			],
+			"anim": "idleKnife",
+			"fps": 24,
+			"name": "KnifeIdle0",
+			"indices": [],
+			"flipX": false
+		},
+		{
+			"loop": false,
+			"flipY": false,
+			"offsets": [
+				135,
+				52
+			],
+			"anim": "lowerKnife",
+			"fps": 24,
+			"name": "KnifeLower0",
+			"indices": [],
+			"flipX": false
+		},
+		{
+			"loop": false,
+			"flipY": false,
+			"offsets": [
+				0,
+				0
+			],
+			"anim": "hairBlowNormal",
+			"fps": 24,
+			"name": "HairBlow0",
+			"indices": [
+				0,
+				1,
+				2,
+				3,
+				0,
+				1,
+				2,
+				3
+			],
+			"flipX": false
+		},
+		{
+			"loop": false,
+			"flipY": false,
+			"offsets": [
+				0,
+				0
+			],
+			"anim": "hairFallNormal",
+			"fps": 24,
+			"name": "HairBlow0",
+			"indices": [
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16
+			],
+			"flipX": false
+		},
+		{
+			"loop": false,
+			"flipY": false,
+			"offsets": [
+				-79,
+				51
+			],
+			"anim": "hairBlowKnife",
+			"fps": 24,
+			"name": "HairBlowKnife0",
+			"indices": [
+				0,
+				1,
+				2,
+				3,
+				0,
+				1,
+				2,
+				3
+			],
+			"flipX": false
+		},
+		{
+			"loop": false,
+			"flipY": false,
+			"offsets": [
+				-79,
+				51
+			],
+			"anim": "hairFallKnife",
+			"fps": 24,
+			"name": "HairBlowKnife0",
+			"indices": [
 				0,
 				1,
 				2,
@@ -52,42 +358,11 @@
 				13,
 				14
 			],
-			"fps": 24,
-			"flipX": false,
-			"flipY": false,
-			"anim": "danceLeft",
-			"loop": false,
-			"name": "Idle"
-		},
-		{
-			"offsets": [
-				3,
-				-16
-			],
-			"indices": [],
-			"fps": 24,
-			"flipX": false,
-			"flipY": false,
-			"anim": "sad",
-			"loop": false,
-			"name": "Laugh"
-		},
-		{
-			"offsets": [
-				-103,
-				36
-			],
-			"indices": [],
-			"fps": 24,
-			"flipX": false,
-			"flipY": false,
-			"anim": "cheer",
-			"loop": false,
-			"name": "ComboCheer"
+			"flipX": false
 		}
 	],
 	"no_antialiasing": false,
-	"image": "characters/Nene",
+	"image": "characters/Nene,characters/Nene_Hair_Blowing",
 	"position": [
 		0,
 		0
@@ -96,13 +371,13 @@
 	"gameover_intial_sound": null,
 	"scalableOffsets": false,
 	"gameover_confirm_sound": null,
-	"healthicon": "gf",
+	"healthicon": "face",
 	"gameover_character": null,
 	"flip_x": false,
-	"healthbar_colour": -5963699,
+	"healthbar_colour": -8355712,
 	"camera_position": [
-		17,
-		27
+		0,
+		0
 	],
 	"gameover_loop_sound": null,
 	"sing_duration": 4,
