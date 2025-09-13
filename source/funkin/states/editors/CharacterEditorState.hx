@@ -1379,6 +1379,8 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		
 		characterGhost.scale.copyFrom(character.scale);
 		
+		characterGhost.flipX = character.flipX;
+		
 		// this part isnt final...
 		characterGhost.playAnim(character.getAnimName());
 		characterGhost.pauseAnim();
