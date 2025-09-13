@@ -53,7 +53,6 @@ class Stage extends FlxTypedContainer<FlxBasic>
 	 */
 	public function buildStage():Bool
 	{
-		//
 		if (stageData.stageObjects != null)
 		{
 			for (info in stageData.stageObjects)
@@ -147,9 +146,9 @@ class Stage extends FlxTypedContainer<FlxBasic>
 				
 				obj.updateHitbox();
 				
-				if (info.callableMethods != null) // dangerous territory
+				if (info.objMethods != null) // dangerous territory
 				{
-					for (i in info.callableMethods)
+					for (i in info.objMethods)
 					{
 						final method = Reflect.field(obj, i.method);
 						if (method != null && Reflect.isFunction(method))
