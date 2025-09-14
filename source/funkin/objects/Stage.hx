@@ -39,7 +39,7 @@ class Stage extends FlxTypedContainer<FlxBasic>
 	/**
 	 * The default camera zoom defined in the stage json.
 	 * 
-	 * Accesor to `stageData.defaultZoom`
+	 * Accessor to `stageData.defaultZoom`
 	 */
 	public var defaultZoom(get, never):Float;
 	
