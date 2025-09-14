@@ -1,6 +1,6 @@
 package funkin.audio.waveform;
 
-import funkin.backend.MeshRender;
+import funkin.objects.MeshRender;
 
 import flixel.util.FlxColor;
 

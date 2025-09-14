@@ -6,7 +6,7 @@ import flixel.sound.FlxSound;
 import flixel.util.FlxColor;
 
 import funkin.audio.visualize.VisShit.CurAudioInfo;
-import funkin.backend.MeshRender;
+import funkin.objects.MeshRender;
 
 import lime.utils.Int16Array;
 
