@@ -32,7 +32,14 @@
 	<!--Switch-specific-->
 	<window if="switch" orientation="landscape" fullscreen="true" width="0" height="0" resizable="true" />
 
-	<!-- _____________________________ Path Settings ____________________________ -->
+	<!-- _____________________________ Engine Config Settings ____________________________ -->
+	
+	<!--ENGINE CUSTOMIZATION-->
+	<define name="MODS_ALLOWED" if="desktop" />
+	<define name="VIDEOS_ALLOWED" if="cpp" />
+	<define name="DISCORD_ALLOWED" if="cpp"/>
+
+    <!-- _____________________________ Path Settings ____________________________ -->
 
 	<classpath name="source" />
 
@@ -44,21 +51,12 @@
 	<set name="BUILD_DIR" value="export/32bit" if="32bits" />
 	<set name="BUILD_DIR" value="${BUILD_DIR}-tracy" if="FEATURE_DEBUG_TRACY"/>
 
-
 	<assets path='assets/embeds' rename='assets' embed="true" />
 	<assets path="assets/game" rename="assets"/>
 
 	<assets path='content' embed='false' if="MODS_ALLOWED"/>
 
-	<!-- _____________________________ Engine Config Settings ____________________________ -->
-	
-	<!--ENGINE CUSTOMIZATION-->
-	<define name="MODS_ALLOWED" if="desktop" />
-	<define name="VIDEOS_ALLOWED" if="cpp" />
-	<define name="DISCORD_ALLOWED" if="cpp"/>
-
-
-	<!--OpenAL config--> 	<!-- appreciate you cyn0x8 and smokey for finding this -->
+    <!--OpenAL config--> 	<!-- appreciate you cyn0x8 and smokey for finding this -->
 	<section if="desktop">
 		<assets path="projFiles/alsoft.ini" rename="alsoft.ini" type="text" if="windows"/>
 		<assets path="projFiles/alsoft.ini" rename="alsoft.conf" type="text" unless="windows"/>
