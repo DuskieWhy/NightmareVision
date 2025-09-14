@@ -93,14 +93,14 @@ class Stage extends FlxTypedContainer<FlxBasic>
 							final animName:String = '' + anim.name;
 							final animFps:Int = anim.fps;
 							final animLoop:Bool = !!anim.loop; // Bruh
-							final animIndices:Array<Int> = anim.indices;
+							final animIndices:Array<Int> = anim.indices ?? [];
 							
 							final flipX = anim.flipX ?? false;
 							final flipY = anim.flipY ?? false;
 							
 							if (firstAnim == null) firstAnim = animAnim;
 							
-							if (animIndices != null && animIndices.length > 0)
+							if (animIndices.length > 0)
 							{
 								obj.addAnimByIndices(animAnim, animName, animIndices, animFps, animLoop, flipX, flipY);
 							}
