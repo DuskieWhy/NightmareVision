@@ -1,6 +1,7 @@
 package extensions.openfl;
 
 import haxe.io.Path;
+import haxe.Timer;
 
 import lime.ui.FileDialogType;
 
@@ -43,6 +44,7 @@ class FileReferenceEx extends FileReference
 	public var onFileSelect:Null<Null<String>->Void> = null;
 	public var onFileCancel:Null<Void->Void> = null;
 	public var onFileSelectMultiple:Null<Null<Array<String>>->Void> = null;
+	public var onFileSave:Null<String->Void> = null;
 	
 	public function openFileDialog_onSelectMultiple(paths:Array<String>)
 	{
@@ -64,11 +66,25 @@ class FileReferenceEx extends FileReference
 		if (onFileCancel != null) onFileCancel();
 	}
 	
+	override function saveFileDialog_onSelect(path:String):Void
+	{
+		Timer.delay(() -> {
+			previousPath = Path.normalize(path);
+			if (onFileSave != null) onFileSave(previousPath);
+		}, 1);
+	}
+	
+	override function saveFileDialog_onCancel():Void
+	{
+		if (onFileCancel != null) onFileCancel();
+	}
+	
 	public function destroy()
 	{
 		onFileSelect = null;
 		onFileCancel = null;
 		onFileSelectMultiple = null;
+		onFileSave = null;
 	}
 	
 	/**

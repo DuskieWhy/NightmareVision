@@ -1,5 +1,7 @@
 package funkin.states.editors;
 
+import extensions.openfl.FileReferenceEx;
+
 import haxe.io.Path;
 
 import flixel.group.FlxSpriteContainer;
@@ -1409,12 +1411,10 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		charLayer.sort(SortUtil.sortByZ, flixel.util.FlxSort.ASCENDING);
 	}
 	
-	var _fileReference:Null<FileReference> = null;
+	var fileRef = new FileReferenceEx();
 	
 	function saveCharToFile()
 	{
-		if (_fileReference != null) return;
-		
 		final json =
 			{
 				"animations": character.animations,
@@ -1441,42 +1441,24 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		
 		if (dataToSave.length > 0)
 		{
-			_fileReference = new FileReference(); // maybe do smth about this idk
+			fileRef.onFileSave = (path) -> {
+				final char = path.withoutDirectory().withoutExtension();
+				ToolKitUtils.makeNotification('Character File Saving', 'Character ($char) was successfully saved.', Success);
+				FlxG.sound.play(Paths.sound('ui/success'));
+			};
+			fileRef.onFileCancel = () -> {
+				ToolKitUtils.makeNotification('Character File Saving', 'Character saving was canceled.', Warning);
+				FlxG.sound.play(Paths.sound('ui/warn'));
+			};
 			
-			_fileReference.addEventListener(Event.SELECT, onFileSaveComplete);
-			_fileReference.addEventListener(Event.CANCEL, onFileSaveCancel);
-			_fileReference.save(dataToSave, '$characterId.json');
+			fileRef.save(dataToSave, '$characterId.json');
 		}
 	}
 	
-	function cleanUpFileReference()
+	override function destroy()
 	{
-		if (_fileReference == null) return;
-		
-		_fileReference.removeEventListener(Event.SELECT, onFileSaveComplete);
-		_fileReference.removeEventListener(Event.CANCEL, onFileSaveCancel);
-		
-		_fileReference = null;
-	}
-	
-	function onFileSaveComplete(_)
-	{
-		if (_fileReference == null) return;
-		
-		cleanUpFileReference();
-		
-		ToolKitUtils.makeNotification('Character File Saving', 'Character was successfully saved.', Success);
-		FlxG.sound.play(Paths.sound('ui/success'));
-	}
-	
-	function onFileSaveCancel(_)
-	{
-		if (_fileReference == null) return;
-		
-		cleanUpFileReference();
-		
-		ToolKitUtils.makeNotification('Character File Saving', 'Character saving was canceled.', Warning);
-		FlxG.sound.play(Paths.sound('ui/warn'));
+		fileRef?.destroy();
+		super.destroy();
 	}
 	
 	final templateCharacterFile:CharacterInfo =
