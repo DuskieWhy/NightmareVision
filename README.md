@@ -12,6 +12,8 @@ Havee fun with NightmareVision V1! (***[follow me on twitter](https://twitter.co
 
 * Rozebud for the chart editor little buddies ([Check out their engine too](https://github.com/ThatRozebudDude/FPS-Plus-Public))
 
+* Cne crew for camera rotation support ([Check out codename engine](https://github.com/CodenameCrew/CodenameEngine))
+
 ## How to compile NMV Engine
 
 ### Quick Note

@@ -69,7 +69,7 @@ class CreditsState extends MusicBeatState
 		}
 		#end
 		
-		// were gonna need to update these credits later lol //data todo //still todo lol
+		// were gonna need to update these credits later lol //data todo //still todo lol //STILL REDO THIS
 		var pisspoop:Array<Array<String>> = [
 			// Name - Icon name - Description - Link - BG Color
 			['NIGHTMARISH FEDS'],
