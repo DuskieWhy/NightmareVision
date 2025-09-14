@@ -68,6 +68,7 @@ class FileReferenceEx extends FileReference
 	
 	override function saveFileDialog_onSelect(path:String):Void
 	{
+		super.saveFileDialog_onSelect(path);
 		Timer.delay(() -> {
 			previousPath = Path.normalize(path);
 			if (onFileSave != null) onFileSave(previousPath);
