@@ -1,29 +1,5 @@
 import funkin.objects.BGSprite;
 
-var halloweenWhite:BGSprite;
-
-function onLoad()
-{
-	if (!ClientPrefs.lowQuality)
-	{
-		halloweenBG = new BGSprite('week2/halloween_bg', -200, -100, 1, 1, ['halloweem bg0', 'halloweem bg lightning strike']);
-	}
-	else
-	{
-		halloweenBG = new BGSprite('week2/halloween_bg_low', -200, -100);
-	}
-	halloweenBG.scale.x *= 1.1;
-	halloweenBG.scale.y *= 1.1;
-	add(halloweenBG);
-	
-	halloweenWhite = new FlxSprite(-FlxG.width, -FlxG.height).makeScaledGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.WHITE);
-	halloweenWhite.scrollFactor.set();
-	halloweenWhite.alpha = 0;
-	halloweenWhite.blend = BlendMode.ADD;
-	halloweenWhite.zIndex = 12;
-	add(halloweenWhite);
-}
-
 var lightningStrikeBeat:Int = 0;
 var lightningOffset:Int = 8;
 
@@ -35,7 +11,7 @@ function onBeatHit()
 function lightningStrikeShit()
 {
 	FlxG.sound.play(Paths.sound("thunder_" + FlxG.random.int(1, 2)));
-	if (!ClientPrefs.lowQuality) halloweenBG.animation.play("halloweem bg lightning strike");
+	if (!ClientPrefs.lowQuality) bg.playAnim('lightning');
 	
 	lightningStrikeBeat = curBeat;
 	lightningOffset = FlxG.random.int(8, 24);
@@ -54,9 +30,9 @@ function lightningStrikeShit()
 	
 	if (ClientPrefs.flashing)
 	{
-		halloweenWhite.alpha = 0.4;
-		FlxTween.tween(halloweenWhite, {alpha: 0.5}, 0.075);
-		FlxTween.tween(halloweenWhite, {alpha: 0}, 0.25, {startDelay: 0.15});
+		whiteFlash.alpha = 0.4;
+		FlxTween.tween(whiteFlash, {alpha: 0.5}, 0.075);
+		FlxTween.tween(whiteFlash, {alpha: 0}, 0.25, {startDelay: 0.15});
 	}
 }
 

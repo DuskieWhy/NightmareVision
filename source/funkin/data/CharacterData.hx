@@ -385,7 +385,7 @@ typedef AnimationInfo =
 	/**
 	 * The given frame order for the animation
 	 */
-	var indices:Array<Int>;
+	var ?indices:Array<Int>;
 	
 	/**
 	 * The offsets to the animation

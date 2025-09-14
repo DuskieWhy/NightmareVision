@@ -92,7 +92,7 @@
 		50,
 		0
 	],
-	"dance_every": 2,
+	"dance_every": 1,
 	"flip_x": false,
 	"gameover_character": null,
 	"gameover_confirm_sound": null,
