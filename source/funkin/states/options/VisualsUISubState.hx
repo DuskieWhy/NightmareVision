@@ -1,6 +1,7 @@
 package funkin.states.options;
 
 import funkin.states.options.Option;
+import funkin.backend.DebugDisplay;
 
 import flixel.FlxG;
 
