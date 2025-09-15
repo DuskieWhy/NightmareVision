@@ -1,5 +1,7 @@
 package funkin.states.options;
 
+import funkin.states.options.Option;
+
 import flixel.FlxG;
 
 class VisualsUISubState extends BaseOptionsMenu
@@ -53,6 +55,9 @@ class VisualsUISubState extends BaseOptionsMenu
 		// addOption(option);
 		
 		var option:Option = new Option('Camera Note Follow', "If unchecked, hitting notes will no longer have the camera follow in its direction.", 'camFollowsCharacters', 'bool', true);
+		addOption(option);
+		
+		var option:Option = new Option('Toggle NMV Splash Screen', "If unchecked, it will completely skip the splash screen upon the engine's boot up.", 'toggleSplashScreen', 'bool', true);
 		addOption(option);
 		
 		super();

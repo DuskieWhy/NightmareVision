@@ -57,7 +57,7 @@
         },
     ],
     "[haxe]": {
-        "editor.formatOnSave": true,
+        "editor.formatOnSave": false,
         "editor.formatOnSaveMode": "file",
         "editor.formatOnPaste": false,
         "editor.codeActionsOnSave": {
