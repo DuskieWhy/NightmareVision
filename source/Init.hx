@@ -92,7 +92,7 @@ class Init extends FlxState
 		
 		super.create();
 		
-		final nextState:Class<FlxState> = Main.startMeta.skipSplash ? Main.startMeta.initialState : Splash;
+		final nextState:Class<FlxState> = Main.startMeta.skipSplash || !ClientPrefs.toggleSplashScreen ? Main.startMeta.initialState : Splash;
 		FlxG.switchState(() -> Type.createInstance(nextState, []));
 	}
 	
