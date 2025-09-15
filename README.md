@@ -14,7 +14,8 @@ Havee fun with NightmareVision V1! (***[follow me on twitter](https://twitter.co
 
 * Cne crew for camera rotation support ([Check out codename engine](https://github.com/CodenameCrew/CodenameEngine))
 
-* MaybeMaru for [MoonChart](https://github.com/MaybeMaru/moonchart)
+* MaybeMaru for [MoonChart](https://github.com/MaybeMaru/moonchart) and [Flixel-Animate](https://github.com/MaybeMaru/flixel-animate)
+
 
 ## How to compile NMV Engine
 
