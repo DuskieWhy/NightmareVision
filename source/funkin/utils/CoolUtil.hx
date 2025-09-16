@@ -196,7 +196,7 @@ class CoolUtil
 			case 'sineout': FlxEase.sineOut;
 			case 'smoothstepin': FlxEase.smoothStepIn;
 			case 'smoothstepinout': FlxEase.smoothStepInOut;
-			case 'smoothstepout': FlxEase.smoothStepInOut;
+			case 'smoothstepout': FlxEase.smoothStepOut;
 			case 'smootherstepin': FlxEase.smootherStepIn;
 			case 'smootherstepinout': FlxEase.smootherStepInOut;
 			case 'smootherstepout': FlxEase.smootherStepOut;
