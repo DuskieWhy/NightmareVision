@@ -158,9 +158,9 @@ class Stage extends FlxTypedContainer<FlxBasic>
 				
 				obj.updateHitbox();
 				
-				if (info.objMethods != null) // dangerous territory
+				if (info.advancedCalls != null) // dangerous territory
 				{
-					for (i in info.objMethods)
+					for (i in info.advancedCalls)
 					{
 						final method = Reflect.field(obj, i.method);
 						if (method != null && Reflect.isFunction(method))

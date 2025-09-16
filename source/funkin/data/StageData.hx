@@ -185,12 +185,12 @@ typedef StageObject =
 	/**
 	 * Additional functionality that can be used in case there is more specific functions needed
 	 * 
-	 * These will be called at the end of initialization
+	 * These get called at the end of initialization
 	 * 
 	 * @param method The name of a function to call
 	 * @param args Optional values to be used in the function
 	 */
-	var ?objMethods:Array<{method:String, ?args:Array<Dynamic>}>;
+	var ?advancedCalls:Array<{method:String, ?args:Array<Dynamic>}>;
 	
 	// maybe a setproperty later
 }
