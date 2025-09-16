@@ -2665,12 +2665,14 @@ class PlayState extends MusicBeatState
 		
 		if (char.isPlayer)
 		{
-			desiredPos.x -= 100 + offsets[0] + char.cameraPosition[0];
+			desiredPos.x -= 100 + char.cameraPosition[0];
 		}
 		else
 		{
-			desiredPos.x += 100 + offsets[0] + char.cameraPosition[0];
+			desiredPos.x += 100 + char.cameraPosition[0];
 		}
+		
+		desiredPos.x += offsets[0];
 		
 		return desiredPos;
 	}
