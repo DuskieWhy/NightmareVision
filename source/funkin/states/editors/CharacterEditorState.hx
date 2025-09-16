@@ -341,7 +341,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			characterId = 'dad';
 			
 			updateAnimList();
-			updateDialogueBox();
+			updateDialogBox();
 			resetActions();
 		}
 		
@@ -944,8 +944,6 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		uiElements.animationList.animationList.dataSource = uiElements.animationList.animationList.dataSource;
 	}
 	
-	// var holdingMoveTime:Float = 0;
-	
 	function controlOffsets(elapsed:Float):Bool
 	{
 		if (FlxG.mouse.pressedRight && !FlxG.mouse.pressedMiddle)
@@ -1056,8 +1054,6 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		}
 	}
 	
-	var accumulatedScrolls:Int = 0;
-	
 	function controlCamera(elapsed:Float)
 	{
 		if (FlxG.keys.pressed.E && FlxG.camera.zoom < 3)
@@ -1116,7 +1112,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		uiElements.toolBar.characterDropdown.dataSource.sort(null, ASCENDING);
 	}
 	
-	function updateDialogueBox()
+	function updateDialogBox()
 	{
 		if (character == null) return;
 		
@@ -1249,7 +1245,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			addAnim(animAnim, animName, animFps, animLoop, animIndices, flipX, flipY);
 		}
 		
-		if (lastAnim.length != 0) character.playAnim(lastAnim);
+		if (lastAnim.length != 0 && character.hasAnim(lastAnim)) character.playAnim(lastAnim);
 		else dance();
 		
 		updateAnimList();
@@ -1283,13 +1279,12 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			character = new Character(characterId, isPlayer);
 			charLayer.add(character);
 			character.debugMode = true;
-			// uiElements.toolBar.isPlayerCheckBox.value = character.isPlayer;
 		}
 		else
 		{
 			character.isPlayer = isPlayer;
 			
-			var file = CharacterParser.fetchInfo(characterId);
+			final file = CharacterParser.fetchInfo(characterId);
 			character.loadFile(file);
 		}
 		
@@ -1306,9 +1301,9 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		positionCharacter();
 		
 		updateAnimList();
-		updateDialogueBox();
+		updateDialogBox();
 		
-		dance();
+		FlxTimer.wait(0, dance); // this is bandaid fix do a real one later
 	}
 	
 	inline function positionCharacter()
