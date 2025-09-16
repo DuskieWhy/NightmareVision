@@ -68,7 +68,6 @@ class MainMenuState extends MusicBeatState
 			bg.setGraphicSize(Std.int(bg.width * 1.175));
 			bg.updateHitbox();
 			bg.screenCenter();
-			bg.antialiasing = ClientPrefs.globalAntialiasing;
 			add(bg);
 			
 			magenta = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
@@ -77,7 +76,6 @@ class MainMenuState extends MusicBeatState
 			magenta.updateHitbox();
 			magenta.screenCenter();
 			magenta.visible = false;
-			magenta.antialiasing = ClientPrefs.globalAntialiasing;
 			magenta.color = 0xFFfd719b;
 			add(magenta);
 			
@@ -98,7 +96,6 @@ class MainMenuState extends MusicBeatState
 				var scr:Float = (optionShit.length - 4) * 0.135;
 				if (optionShit.length < 6) scr = 0;
 				menuItem.scrollFactor.set(0, scr);
-				menuItem.antialiasing = ClientPrefs.globalAntialiasing;
 				menuItem.updateHitbox();
 			}
 			

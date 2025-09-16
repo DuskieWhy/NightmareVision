@@ -75,6 +75,8 @@ class Init extends FlxState
 		
 		if (FlxG.save.data.weekCompleted != null) funkin.states.StoryMenuState.weekCompleted = FlxG.save.data.weekCompleted;
 		
+		FlxSprite.defaultAntialiasing = ClientPrefs.globalAntialiasing;
+		
 		#if FEATURE_DEBUG_TRACY
 		funkin.utils.WindowUtil.initTracy();
 		#end
@@ -92,7 +94,8 @@ class Init extends FlxState
 		
 		super.create();
 		
-		final nextState:Class<FlxState> = Main.startMeta.skipSplash || !ClientPrefs.toggleSplashScreen ? Main.startMeta.initialState : Splash;
+		final nextState:Class<FlxState> = Main.startMeta.skipSplash
+			|| !ClientPrefs.toggleSplashScreen ? Main.startMeta.initialState : Splash;
 		FlxG.switchState(() -> Type.createInstance(nextState, []));
 	}
 	

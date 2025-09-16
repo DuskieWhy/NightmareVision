@@ -74,7 +74,6 @@ class Bopper extends FlxSprite
 	{
 		super(x, y);
 		this.danceEveryNumBeats = danceEveryNumBeats;
-		this.antialiasing = ClientPrefs.globalAntialiasing;
 		
 		this.animation.onFinish.add((anim) -> onAnimationFinish.dispatch(anim));
 		this.animation.onFrameChange.add((anim, num, idx) -> onAnimationFrameChange.dispatch(anim, num, idx));

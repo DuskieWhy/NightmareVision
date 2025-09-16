@@ -261,12 +261,12 @@ class PsychHUD extends BaseHUD
 			
 			if (!PlayState.isPixelStage)
 			{
-				ratingGraphic.antialiasing = ClientPrefs.globalAntialiasing;
 				ratingGraphic.scale.set(0.785, 0.785);
 				FlxTween.tween(ratingGraphic.scale, {x: 0.7, y: 0.7}, 0.5, {ease: FlxEase.expoOut});
 			}
 			else
 			{
+				ratingGraphic.antialiasing = false;
 				ratingGraphic.setGraphicSize(Std.int(ratingGraphic.width * pixelZoom * 0.85));
 			}
 			ratingGraphic.updateHitbox();
@@ -301,13 +301,14 @@ class PsychHUD extends BaseHUD
 				
 				if (!PlayState.isPixelStage)
 				{
-					numScore.antialiasing = ClientPrefs.globalAntialiasing;
 					numScore.scale.set(0.6, 0.6);
 					FlxTween.cancelTweensOf(numScore, ['scale.x', 'scale.y']);
 					FlxTween.tween(numScore.scale, {x: 0.5, y: 0.5}, 0.5, {ease: FlxEase.expoOut});
 				}
 				else
 				{
+					numScore.antialiasing = false;
+					
 					numScore.setGraphicSize(Std.int(numScore.width * pixelZoom));
 				}
 				numScore.updateHitbox();

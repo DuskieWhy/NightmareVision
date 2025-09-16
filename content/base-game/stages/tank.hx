@@ -332,10 +332,8 @@ function tankIntro()
 			stage.add(tankman);
 			
 			var gfDance:FlxSprite = new FlxSprite(gf.x - 107, gf.y + 140);
-			gfDance.antialiasing = ClientPrefs.globalAntialiasing;
 			
 			var gfCutscene:FlxSprite = new FlxSprite(gf.x - 104, gf.y + 122);
-			gfCutscene.antialiasing = ClientPrefs.globalAntialiasing;
 			
 			if (!ClientPrefs.lowQuality)
 			{
@@ -355,12 +353,10 @@ function tankIntro()
 			
 			picoCutscene = new AnimateSprite(gf.x - 849, gf.y - 264, Paths.textureAtlas('cutscenes/stressPico'));
 			picoCutscene.anim.addBySymbol('anim', 'Pico Badass', 0, 0, 24);
-			picoCutscene.antialiasing = ClientPrefs.globalAntialiasing;
 			picoCutscene.alpha = 0;
 			stage.add(picoCutscene);
 			
 			var boyfriendCutscene:FlxSprite = new FlxSprite(boyfriend.x + 5, boyfriend.y + 20);
-			boyfriendCutscene.antialiasing = ClientPrefs.globalAntialiasing;
 			boyfriendCutscene.frames = Paths.getSparrowAtlas('characters/BOYFRIEND');
 			boyfriendCutscene.animation.addByPrefix('idle', 'BF idle dance', 24, false);
 			boyfriendCutscene.animation.play('idle', true);

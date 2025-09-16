@@ -481,7 +481,7 @@ class Note extends FlxSprite
 			baseScaleY = scale.y;
 		}
 		
-		antialiasing = ClientPrefs.globalAntialiasing && NoteSkinHelper.instance.data.antialiasing;
+		if (!NoteSkinHelper.instance.data.antialiasing) antialiasing = false;
 		
 		if (noteScript != null) noteScript.executeFunc("postReloadNote", [this, prefix, texture, suffix], this);
 	}

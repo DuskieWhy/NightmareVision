@@ -129,7 +129,6 @@ class StrumNote extends FlxSprite
 		{
 			frames = Paths.getSparrowAtlas(br);
 			
-			antialiasing = ClientPrefs.globalAntialiasing;
 			setGraphicSize(Std.int(width * NoteSkinHelper.instance.data.scale));
 			
 			loadAnimations();
@@ -137,8 +136,7 @@ class StrumNote extends FlxSprite
 		defScale.copyFrom(scale);
 		updateHitbox();
 		
-		antialiasing = NoteSkinHelper.instance.data.antialiasing;
-		if (NoteSkinHelper.instance.data.antialiasing) antialiasing = ClientPrefs.globalAntialiasing;
+		if (!NoteSkinHelper.instance.data.antialiasing) antialiasing = false;
 		
 		if (lastAnim != null)
 		{

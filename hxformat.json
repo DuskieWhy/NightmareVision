@@ -1,5 +1,5 @@
 {
-	"wrapping": {"maxLineLength": 200,"arrayWrap": {"defaultWrap": "keep"}},
+	"wrapping": {"maxLineLength": 200,"arrayWrap": {"defaultWrap": "keep"},"opBoolChain": {"defaultWrap": "keep"}},
 	"lineEnds": {
 		"anonFunctionCurly": {
 		  "emptyCurly": "break",

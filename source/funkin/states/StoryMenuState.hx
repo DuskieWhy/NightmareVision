@@ -76,7 +76,6 @@ class StoryMenuState extends MusicBeatState
 			var ui_tex = Paths.getSparrowAtlas('campaign_menu_UI_assets');
 			var bgYellow:FlxSprite = new FlxSprite(0, 56).makeGraphic(FlxG.width, 386, 0xFFF9CF51);
 			bgSprite = new FlxSprite(0, 56);
-			bgSprite.antialiasing = ClientPrefs.globalAntialiasing;
 			
 			grpWeekText = new FlxTypedGroup<MenuItem>();
 			add(grpWeekText);
@@ -109,7 +108,6 @@ class StoryMenuState extends MusicBeatState
 					grpWeekText.add(weekThing);
 					
 					weekThing.screenCenter(X);
-					weekThing.antialiasing = ClientPrefs.globalAntialiasing;
 					// weekThing.updateHitbox();
 					
 					// Needs an offset thingie
@@ -120,7 +118,6 @@ class StoryMenuState extends MusicBeatState
 						lock.animation.addByPrefix('lock', 'lock');
 						lock.animation.play('lock');
 						lock.ID = i;
-						lock.antialiasing = ClientPrefs.globalAntialiasing;
 						grpLocks.add(lock);
 					}
 					num++;
@@ -144,7 +141,6 @@ class StoryMenuState extends MusicBeatState
 			leftArrow.animation.addByPrefix('idle', "arrow left");
 			leftArrow.animation.addByPrefix('press', "arrow push left");
 			leftArrow.animation.play('idle');
-			leftArrow.antialiasing = ClientPrefs.globalAntialiasing;
 			difficultySelectors.add(leftArrow);
 			
 			Difficulty.reset();
@@ -155,7 +151,6 @@ class StoryMenuState extends MusicBeatState
 			curDifficulty = Math.round(Math.max(0, Difficulty.defaultDifficulties.indexOf(lastDifficultyName)));
 			
 			sprDifficulty = new FlxSprite(0, leftArrow.y);
-			sprDifficulty.antialiasing = ClientPrefs.globalAntialiasing;
 			difficultySelectors.add(sprDifficulty);
 			
 			rightArrow = new FlxSprite(leftArrow.x + 376, leftArrow.y);
@@ -163,7 +158,6 @@ class StoryMenuState extends MusicBeatState
 			rightArrow.animation.addByPrefix('idle', 'arrow right');
 			rightArrow.animation.addByPrefix('press', "arrow push right", 24, false);
 			rightArrow.animation.play('idle');
-			rightArrow.antialiasing = ClientPrefs.globalAntialiasing;
 			difficultySelectors.add(rightArrow);
 			
 			add(bgYellow);
@@ -171,7 +165,6 @@ class StoryMenuState extends MusicBeatState
 			add(grpWeekCharacters);
 			
 			var tracksSprite:FlxSprite = new FlxSprite(FlxG.width * 0.07, bgSprite.y + 425).loadGraphic(Paths.image('Menu_Tracks'));
-			tracksSprite.antialiasing = ClientPrefs.globalAntialiasing;
 			add(tracksSprite);
 			
 			txtTracklist = new FlxText(FlxG.width * 0.05, tracksSprite.y + 60, 0, "", 32);
@@ -179,7 +172,8 @@ class StoryMenuState extends MusicBeatState
 			txtTracklist.font = rankText.font;
 			txtTracklist.color = 0xFFe55777;
 			add(txtTracklist);
-			// add(rankText);
+			add(rankText);
+			rankText.kill();
 			add(scoreText);
 			add(txtWeekTitle);
 			

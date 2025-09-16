@@ -32,8 +32,6 @@ class NoteSplash extends FlxSprite
 		
 		loadAnims(getPlayStateSplash('noteSplashes'));
 		setupNoteSplash(x, y, noteData);
-		
-		antialiasing = ClientPrefs.globalAntialiasing;
 	}
 	
 	public function setupNoteSplash(x:Float = 0, y:Float = 0, note:Int = 0, ?texture:String, ?quantIdx:Int, ?field:PlayField)

@@ -47,7 +47,6 @@ class Bar extends FlxSpriteGroup
 		this.valueFunction = valueFunction;
 		
 		bg = new FlxSprite().loadGraphic(Paths.image(image));
-		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		bg.setPosition(bg.x, bg.y);
 		
 		@:bypassAccessor barWidth = Std.int(bg.width - 6);
@@ -63,8 +62,6 @@ class Bar extends FlxSpriteGroup
 		add(bg);
 		
 		setBounds(boundX, boundY);
-		
-		antialiasing = ClientPrefs.globalAntialiasing;
 		
 		regenerateClips();
 	}
