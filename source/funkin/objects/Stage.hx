@@ -1,5 +1,7 @@
 package funkin.objects;
 
+import funkin.data.CharacterData.AnimationInfo;
+
 import flixel.group.FlxContainer.FlxTypedContainer;
 import flixel.FlxBasic;
 
@@ -36,6 +38,8 @@ class Stage extends FlxTypedContainer<FlxBasic>
 	 */
 	public final objects:Map<String, FlxSprite> = [];
 	
+	public var boppers:Array<Bopper> = [];
+	
 	/**
 	 * The default camera zoom defined in the stage json.
 	 * 
@@ -69,7 +73,22 @@ class Stage extends FlxTypedContainer<FlxBasic>
 		{
 			for (info in stageData.stageObjects)
 			{
-				final obj = new Bopper();
+				inline function makeObject():FlxSprite
+				{
+					if (info.customInstance != null && info.customInstance.length > 0)
+					{
+						final cl = Type.resolveClass(info.customInstance);
+						
+						if (cl == null) return new Bopper();
+						else return Type.createInstance(cl, []);
+					}
+					else
+					{
+						return new Bopper();
+					}
+				}
+				
+				final obj:FlxSprite = makeObject();
 				
 				if (info.asset == null)
 				{
@@ -77,46 +96,31 @@ class Stage extends FlxTypedContainer<FlxBasic>
 				}
 				else
 				{
-					obj.loadAtlas(info.asset);
-					@:nullSafety(Off)
-					if (obj.frames == null && obj.animateAtlas == null) obj.loadGraphic(Paths.image(info.asset));
-					
-					if (info.animations != null && info.animations.length != 0)
+					if (obj is Bopper)
 					{
-						// maybe have a real resolve animation info func somehwere ?
-						
-						var firstAnim:Null<String> = null;
-						
-						for (anim in info.animations)
+						@:nullSafety(Off)
 						{
-							final animAnim:String = '' + anim.anim;
-							final animName:String = '' + anim.name;
-							final animFps:Int = anim.fps;
-							final animLoop:Bool = !!anim.loop; // Bruh
-							final animIndices:Array<Int> = anim.indices ?? [];
+							(cast obj : Bopper).loadAtlas(info.asset);
 							
-							final flipX = anim.flipX ?? false;
-							final flipY = anim.flipY ?? false;
-							
-							if (firstAnim == null) firstAnim = animAnim;
-							
-							if (animIndices.length > 0)
+							if (obj.frames == null && (cast obj : Bopper).animateAtlas == null) obj.loadGraphic(Paths.image(info.asset));
+						}
+					}
+					else
+					{
+						@:nullSafety(Off)
+						{
+							try
 							{
-								obj.addAnimByIndices(animAnim, animName, animIndices, animFps, animLoop, flipX, flipY);
+								obj.frames = Paths.getMultiAtlas(info.asset.split(','));
 							}
-							else
+							catch (e)
 							{
-								obj.addAnimByPrefix(animAnim, animName, animFps, animLoop, flipX, flipY);
-							}
-							
-							if (anim.offsets != null && anim.offsets.length > 1)
-							{
-								obj.addOffset(anim.anim, anim.offsets[0], anim.offsets[1]);
+								obj.loadGraphic(Paths.image(info.asset));
 							}
 						}
-						
-						if (firstAnim != null) obj.playAnim(firstAnim);
 					}
+					
+					loadAnimationToSprite(obj, info.animations);
 				}
 				
 				if (info.alpha != null) obj.alpha = info.alpha;
@@ -165,7 +169,7 @@ class Stage extends FlxTypedContainer<FlxBasic>
 						final method = Reflect.field(obj, i.method);
 						if (method != null && Reflect.isFunction(method))
 						{
-							Reflect.callMethod(obj, method, i.args ?? []);
+							Reflect.callMethod(obj, method, i.args ?? []); // todo more powerful utils
 						}
 					}
 				}
@@ -173,6 +177,8 @@ class Stage extends FlxTypedContainer<FlxBasic>
 				add(obj);
 			}
 		}
+		
+		//--------------------- script stuff below
 		
 		final baseScriptFile:String = 'stages/$curStage/script';
 		
@@ -192,6 +198,61 @@ class Stage extends FlxTypedContainer<FlxBasic>
 	public function onBeatHit()
 	{
 		//
+	}
+	
+	inline function loadAnimationToSprite(spr:FlxSprite, anims:Null<Array<AnimationInfo>>)
+	{
+		if (anims != null && anims.length != 0) // have to nest here instead of early return cuz null safety is a little dumb..
+		{
+			var firstAnim:Null<String> = null;
+			
+			for (anim in anims)
+			{
+				final animAnim:String = '' + anim.anim;
+				final animName:String = '' + anim.name;
+				final animFps:Int = anim.fps;
+				final animLoop:Bool = !!anim.loop; // Bruh
+				final animIndices:Array<Int> = anim.indices ?? [];
+				
+				final flipX = anim.flipX ?? false;
+				final flipY = anim.flipY ?? false;
+				
+				if (firstAnim == null) firstAnim = animAnim;
+				
+				if (animIndices.length > 0)
+				{
+					if (spr is Bopper)
+					{
+						(cast spr : Bopper).addAnimByIndices(animAnim, animName, animIndices, animFps, animLoop, flipX, flipY);
+					}
+					else
+					{
+						spr.animation.addByIndices(animAnim, animName, animIndices, '', animFps, animLoop, flipX, flipY);
+					}
+				}
+				else
+				{
+					if (spr is Bopper)
+					{
+						(cast spr : Bopper).addAnimByPrefix(animAnim, animName, animFps, animLoop, flipX, flipY);
+					}
+					else
+					{
+						spr.animation.addByPrefix(animAnim, animName, animFps, animLoop, flipX, flipY);
+					}
+				}
+				
+				if (spr is Bopper && anim.offsets != null && anim.offsets.length > 1)
+				{
+					(cast spr : Bopper).addOffset(anim.anim, anim.offsets[0], anim.offsets[1]);
+				}
+			}
+			
+			if (spr is Bopper)
+			{
+				(cast spr : Bopper).playAnim(firstAnim);
+			}
+		}
 	}
 	
 	inline function prepareScript(scriptFile:String)

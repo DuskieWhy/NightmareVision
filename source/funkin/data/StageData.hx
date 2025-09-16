@@ -174,6 +174,20 @@ typedef StageObject =
 	var ?antialiasing:Bool;
 	
 	/**
+	 * If true, this object will only be added if `low Quality` is disabled.
+	 */
+	var ?highQuality:Bool;
+	
+	/**
+	 * Provide the full class path to a type to create a custom class
+	 * 
+	 * `Keep note some other options here will not work if using a custom instance!`
+	 * 
+	 * By default, a `Bopper` is made
+	 */
+	var ?customInstance:String;
+	
+	/**
 	 * Array of the fields to be used for an animation
 	 * 
 	 * The first animation in the array will be played on creation
@@ -193,6 +207,7 @@ typedef StageObject =
 	var ?advancedCalls:Array<{method:String, ?args:Array<Dynamic>}>;
 	
 	// maybe a setproperty later
+	var ?setProperties:Array<{property:String, value:Dynamic}>;
 }
 
 @:nullSafety
