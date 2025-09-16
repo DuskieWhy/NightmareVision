@@ -36,6 +36,9 @@ jobs:
         with:
           haxe-version: 4.3.7
       # Runs a set of commands using the runners shell
+      - name: install libvlc
+        run: |
+            sudo apt-get install vlc libvlc-dev libvlccore-dev vlc-bin
       - name: Install libraries
         run: |
           haxelib setup ~/haxelib
