@@ -11,6 +11,7 @@ import flixel.util.FlxTimer;
 import funkin.backend.PlayerSettings;
 import funkin.states.*;
 
+// rewrite this later
 class DialogueBox extends FlxSpriteGroup
 {
 	var box:FlxSprite;
@@ -140,7 +141,9 @@ class DialogueBox extends FlxSpriteGroup
 		swagDialogue.sounds = [FlxG.sound.load(Paths.sound('pixelText'), 0.6)];
 		add(swagDialogue);
 		
-		dialogue = new Alphabet(0, 80, "", false, true);
+		forEachAlive(spr -> spr.antialiasing = false);
+		
+		dialogue = new Alphabet(0, 80, "", false, true); // excuse me?????
 		// dialogue.x = 90;
 		// add(dialogue);
 	}

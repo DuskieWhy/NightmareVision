@@ -60,6 +60,7 @@ function onLoad()
 	{
 		bgGirls = new BackgroundGirls(-100, 190);
 		bgGirls.scrollFactor.set(0.9, 0.9);
+		bgGirls.antialiasing = false;
 		
 		// bgGirls.setGraphicSize(Std.int(bgGirls.width * daPixelZoom));
 		bgGirls.scale.set(6, 6);
