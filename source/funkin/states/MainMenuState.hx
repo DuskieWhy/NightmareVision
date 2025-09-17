@@ -25,7 +25,6 @@ class MainMenuState extends MusicBeatState
 	public static var curSelected:Int = 0;
 	
 	var menuItems:FlxTypedGroup<FlxSprite>;
-	var camAchievement:FlxCamera;
 	
 	var optionShit:Array<String> = ['story_mode', 'freeplay', 'credits', 'options'];
 	
@@ -47,11 +46,7 @@ class MainMenuState extends MusicBeatState
 		
 		debugKeys = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_1'));
 		
-		camAchievement = new FlxCamera();
-		camAchievement.bgColor = 0x0;
-		
 		FlxG.cameras.reset();
-		FlxG.cameras.add(camAchievement, false);
 		
 		persistentUpdate = persistentDraw = true;
 		
@@ -99,7 +94,7 @@ class MainMenuState extends MusicBeatState
 				menuItem.updateHitbox();
 			}
 			
-			FlxG.camera.follow(camFollow, null, 0.1);
+			FlxG.camera.follow(camFollow, null, 0.075);
 			
 			var gitHash = GitMacro.getGitCommitHash();
 			if (gitHash.length != 0) gitHash = ' - dev($gitHash)';
@@ -113,36 +108,11 @@ class MainMenuState extends MusicBeatState
 			add(verionDesc);
 			
 			changeItem();
-			
-			#if ACHIEVEMENTS_ALLOWED
-			Achievements.loadAchievements();
-			var leDate = Date.now();
-			if (leDate.getDay() == 5 && leDate.getHours() >= 18)
-			{
-				var achieveID:Int = Achievements.getAchievementIndex('friday_night_play');
-				if (!Achievements.isAchievementUnlocked(Achievements.achievementsStuff[achieveID][2]))
-				{
-					Achievements.achievementsMap.set(Achievements.achievementsStuff[achieveID][2], true);
-					giveAchievement();
-					ClientPrefs.flush();
-				}
-			}
-			#end
 		}
 		super.create();
 		
 		scriptGroup.call('onCreatePost', []);
 	}
-	
-	#if ACHIEVEMENTS_ALLOWED
-	// Unlocks "Freaky on a Friday Night" achievement
-	function giveAchievement()
-	{
-		add(new AchievementObject('friday_night_play', camAchievement));
-		FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
-		trace('Giving achievement "friday_night_play"');
-	}
-	#end
 	
 	var selectedSomethin:Bool = false;
 	

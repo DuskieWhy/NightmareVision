@@ -42,7 +42,6 @@ class Mods
 		'weeks',
 		'fonts',
 		'scripts',
-		'achievements',
 		'noteskins',
 	];
 	

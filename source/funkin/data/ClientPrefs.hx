@@ -213,9 +213,6 @@ class ClientPrefs
 	
 	public static function flush()
 	{
-		// FlxG.save.data.achievementsMap = Achievements.achievementsMap;
-		// FlxG.save.data.henchmenDeath = Achievements.henchmenDeath;
-		
 		FlxG.save.flush();
 		
 		var save:FlxSave = new FlxSave();
