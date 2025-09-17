@@ -92,6 +92,7 @@ function schoolIntro(dialogueBox)
 	senpaiEvil.updateHitbox();
 	senpaiEvil.screenCenter();
 	senpaiEvil.cameras = [camOther];
+	senpaiEvil.antialiasing = false;
 	senpaiEvil.x += 300;
 	
 	var songName:String = Paths.formatToSongPath(PlayState.SONG.song);
