@@ -86,6 +86,23 @@ class Logger
 			default: FlxColor.WHITE;
 		}
 	}
+	
+	public static function writeDump(content:String, folder:String, fileName:String)
+	{
+		#if sys
+		if (!FileSystem.exists(folder) && !FileSystem.isDirectory(folder))
+		{
+			FileSystem.createDirectory(folder);
+		}
+		
+		final dumpPath = '$folder/$fileName' + '_' + Paths.formatToSongPath(Date.now().toString()).replace(':', '_') + '.txt';
+		
+		try
+		{
+			File.saveContent(dumpPath, content);
+		}
+		#end
+	}
 }
 
 // copied from https://github.com/pisayesiwsi/hscript-iris/blob/master/crowplexus/iris/utils/Ansi.hx
