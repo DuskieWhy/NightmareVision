@@ -170,7 +170,7 @@ class TitleState extends MusicBeatState
 			add(logoBl);
 			logoBl.shader = swagShader.shader;
 			
-			titleText = new FlxSprite(titleJSON?.startx ?? 0.0, titleJSON?.starty ?? 0.0).loadSparrowFrames('titleEnter');
+			titleText = new FlxSprite(titleJSON?.startx ?? 0.0, titleJSON?.starty ?? 0.0).loadAtlasFrames(Paths.getAtlasFrames('titleEnter'));
 			
 			var animFrames:Array<FlxFrame> = [];
 			@:privateAccess {

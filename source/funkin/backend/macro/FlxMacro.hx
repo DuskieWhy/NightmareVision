@@ -18,8 +18,6 @@ class FlxMacro
 	{
 		var fields:Array<haxe.macro.Expr.Field> = Context.getBuildFields();
 		
-		var position = Context.currentPos();
-		
 		fields.push(
 			{
 				name: "loadFromSheet",
@@ -45,27 +43,26 @@ class FlxMacro
 							return this;
 						}
 					}),
-				pos: position,
+				pos: Context.currentPos(),
 			});
 			
 		fields.push(
 			{
-				doc: "shortcut to loading the frames of a sparrow atlas",
-				name: "loadSparrowFrames",
+				doc: "sets frames to the given collection.\nReturns `this` for chaining.",
+				name: "loadAtlasFrames",
 				access: [haxe.macro.Expr.Access.APublic],
 				kind: FFun(
 					{
 						args: [
-							{name: 'path', type: (macro :String)},
-							{name: 'library', opt: true, type: (macro :String)}
+							{name: 'frames', type: (macro :flixel.graphics.frames.FlxAtlasFrames)},
 						],
 						expr: macro
 						{
-							this.frames = funkin.Paths.getSparrowAtlas(path, library);
+							this.frames = frames;
 							return this;
 						}
 					}),
-				pos: position,
+				pos: Context.currentPos(),
 			});
 			
 		fields.push(
@@ -93,12 +90,12 @@ class FlxMacro
 							return this;
 						}
 					}),
-				pos: position,
+				pos: Context.currentPos(),
 			});
 			
 		fields.push(
 			{
-				doc: "centers the sprite onto a FlxObject",
+				doc: "centers the sprite onto a FlxObject by their hitboxes.",
 				name: "centerOnObject",
 				access: [haxe.macro.Expr.Access.APublic],
 				kind: FFun(
@@ -118,7 +115,7 @@ class FlxMacro
 							return this;
 						}
 					}),
-				pos: position,
+				pos: Context.currentPos(),
 			});
 			
 		return fields;
