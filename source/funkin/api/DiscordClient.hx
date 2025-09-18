@@ -29,7 +29,6 @@ class DiscordClient
 		{
 			DiscordRpc.process();
 			sleep(2);
-			// trace("Discord Client Update");
 		}
 		
 		DiscordRpc.shutdown();
@@ -61,11 +60,16 @@ class DiscordClient
 		trace('Disconnected! $_code : $_message');
 	}
 	
-	public static function initialize()
+	public static function init()
 	{
-		var DiscordDaemon = sys.thread.Thread.create(() -> {
+		if (isInitialized) return;
+		
+		final DiscordDaemon = sys.thread.Thread.create(() -> {
 			new DiscordClient();
 		});
+		
+		FlxG.stage.application.onExit.add((ec) -> DiscordClient.shutdown());
+		
 		trace("Discord Client initialized");
 		isInitialized = true;
 	}

@@ -1,12 +1,8 @@
 package;
 
-import lime.app.Application;
-
 import flixel.FlxState;
 import flixel.FlxG;
 import flixel.input.keyboard.FlxKey;
-
-import funkin.Mods;
 
 /**
  * Initiation state that prepares backend classes and returns to menus when finished
@@ -39,11 +35,42 @@ class Init extends FlxState
 	
 	override public function create():Void
 	{
+		// load settings/save
 		funkin.backend.PlayerSettings.init();
 		
 		ClientPrefs.load();
 		
 		funkin.data.Highscore.load();
+		
+		if (FlxG.save.data.weekCompleted != null) funkin.states.StoryMenuState.weekCompleted = FlxG.save.data.weekCompleted;
+		
+		FlxSprite.defaultAntialiasing = ClientPrefs.globalAntialiasing;
+		
+		#if MODS_ALLOWED
+		funkin.Mods.pushGlobalMods();
+		#end
+		
+		funkin.data.WeekData.loadTheFirstEnabledMod();
+		
+		// set some flixel settings
+		FlxG.fixedTimestep = false;
+		FlxG.game.focusLostFramerate = 60;
+		FlxG.sound.muteKeys = muteKeys;
+		FlxG.sound.volumeDownKeys = volumeDownKeys;
+		FlxG.sound.volumeUpKeys = volumeUpKeys;
+		FlxG.keys.preventDefaultKeys = [TAB];
+		FlxG.mouse.visible = false;
+		FlxG.plugins.drawOnTop = true;
+		
+		FlxG.scaleMode = new funkin.backend.FunkinRatioScaleMode();
+		FlxG.signals.preStateSwitch.add((cast FlxG.scaleMode : funkin.backend.FunkinRatioScaleMode).resetSize);
+		
+		// ready backends
+		funkin.backend.plugins.HotReloadPlugin.init();
+		
+		funkin.backend.plugins.DebugTextPlugin.init();
+		
+		funkin.backend.plugins.FullScreenPlugin.init();
 		
 		funkin.scripts.FunkinHScript.init();
 		
@@ -53,40 +80,12 @@ class Init extends FlxState
 		
 		funkin.data.NoteSkinHelper.init();
 		
-		initFlxPlugins();
-		
-		#if MODS_ALLOWED
-		Mods.pushGlobalMods();
-		#end
-		
-		funkin.data.WeekData.loadTheFirstEnabledMod();
-		
-		FlxG.fixedTimestep = false;
-		FlxG.game.focusLostFramerate = 60;
-		FlxG.sound.muteKeys = muteKeys;
-		FlxG.sound.volumeDownKeys = volumeDownKeys;
-		FlxG.sound.volumeUpKeys = volumeUpKeys;
-		FlxG.keys.preventDefaultKeys = [TAB];
-		
-		FlxG.mouse.visible = false;
-		
-		FlxG.scaleMode = new funkin.backend.FunkinRatioScaleMode();
-		FlxG.signals.preStateSwitch.add((cast FlxG.scaleMode : funkin.backend.FunkinRatioScaleMode).resetSize);
-		
-		if (FlxG.save.data.weekCompleted != null) funkin.states.StoryMenuState.weekCompleted = FlxG.save.data.weekCompleted;
-		
-		FlxSprite.defaultAntialiasing = ClientPrefs.globalAntialiasing;
-		
 		#if FEATURE_DEBUG_TRACY
 		funkin.utils.WindowUtil.initTracy();
 		#end
 		
 		#if DISCORD_ALLOWED
-		if (!DiscordClient.isInitialized)
-		{
-			DiscordClient.initialize();
-			Application.current.onExit.add((ec) -> DiscordClient.shutdown());
-		}
+		DiscordClient.init();
 		#end
 		
 		funkin.scripting.PluginsManager.prepareSignals();
@@ -94,19 +93,7 @@ class Init extends FlxState
 		
 		super.create();
 		
-		final nextState:Class<FlxState> = Main.startMeta.skipSplash
-			|| !ClientPrefs.toggleSplashScreen ? Main.startMeta.initialState : Splash;
+		final nextState:Class<FlxState> = Main.startMeta.skipSplash || !ClientPrefs.toggleSplashScreen ? Main.startMeta.initialState : Splash;
 		FlxG.switchState(() -> Type.createInstance(nextState, []));
-	}
-	
-	function initFlxPlugins()
-	{
-		FlxG.plugins.drawOnTop = true;
-		
-		funkin.backend.plugins.HotReloadPlugin.init();
-		
-		funkin.backend.plugins.DebugTextPlugin.init();
-		
-		funkin.backend.plugins.FullScreenPlugin.init();
 	}
 }
