@@ -2,7 +2,7 @@ package funkin.utils;
 
 import funkin.scripts.Globals;
 
-class ReflectUtils
+class ReflectUtil
 {
 	public static function getPropertyLoop(split:Array<String>, getProperty:Bool = true):Dynamic
 	{
@@ -41,5 +41,49 @@ class ReflectUtils
 		}
 		if (instance.exists != null && instance.keyValueIterator != null) return instance.get(variable);
 		else return Reflect.getProperty(instance, variable);
+	}
+	
+	/**
+	 * Identical to `Reflect.getProperty` but allows for nested fields
+	 */
+	@:inheritDoc(Reflect.getProperty)
+	public static function getProperty(obj:Dynamic, field:String):Null<Dynamic>
+	{
+		if (!field.contains('.')) return Reflect.getProperty(obj, field);
+		
+		final splitFields = field.split('.');
+		
+		var property:Dynamic = Reflect.getProperty(obj, splitFields.shift());
+		
+		while (splitFields.length > 0)
+		{
+			property = Reflect.getProperty(property, splitFields.shift());
+		}
+		
+		return property;
+	}
+	
+	/**
+	 * Identical to `Reflect.setProperty` but allows for nested fields
+	 */
+	@:inheritDoc(Reflect.setProperty)
+	public static function setProperty(obj:Dynamic, field:String, value:Dynamic):Void
+	{
+		if (!field.contains('.'))
+		{
+			Reflect.setProperty(obj, field, value);
+			return;
+		}
+		
+		final splitFields = field.split('.');
+		
+		var property:Dynamic = Reflect.getProperty(obj, splitFields.shift());
+		
+		while (splitFields.length > 1)
+		{
+			property = Reflect.getProperty(property, splitFields.shift());
+		}
+		
+		Reflect.setProperty(property, splitFields[0], value);
 	}
 }

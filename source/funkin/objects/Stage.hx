@@ -174,6 +174,21 @@ class Stage extends FlxTypedContainer<FlxBasic>
 					}
 				}
 				
+				if (info.setProperties != null)
+				{
+					for (i in info.setProperties)
+					{
+						try
+						{
+							ReflectUtil.setProperty(obj, i.property, i.value);
+						}
+						catch (e)
+						{
+							//
+						}
+					}
+				}
+				
 				add(obj);
 			}
 		}

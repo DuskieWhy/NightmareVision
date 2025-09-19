@@ -2614,7 +2614,7 @@ class PlayState extends MusicBeatState
 				
 			case 'Set Property':
 				var props:Array<String> = value1.split('.');
-				if (props.length > 1) Reflect.setProperty(ReflectUtils.getPropertyLoop(props, true), props[props.length - 1], value2);
+				if (props.length > 1) Reflect.setProperty(ReflectUtil.getPropertyLoop(props, true), props[props.length - 1], value2);
 				else Reflect.setProperty(this, value1, value2);
 		}
 		
