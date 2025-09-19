@@ -11,6 +11,9 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 		title = 'Graphics';
 		rpcTitle = 'Graphics Settings Menu'; // for Discord Rich Presence
 		
+		var option:Option = new Option('GPU Caching', 'If checked, GPU caching will be enabled.', 'gpuCaching', 'bool', false);
+		addOption(option);
+		
 		// I'd suggest using "Low Quality" as an example for making your own option since it is the simplest here
 		var option:Option = new Option('Low Quality', // Name
 			'If checked, disables some background details,\ndecreases loading times and improves performance.', // Description

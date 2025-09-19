@@ -30,6 +30,8 @@ class HotReloadPlugin extends FlxBasic
 	{
 		super.update(elapsed);
 		
+		if (!ClientPrefs.inDevMode) return;
+		
 		if (FlxG.keys.justPressed.F5)
 		{
 			FlxTransitionableState.skipNextTransIn = FlxTransitionableState.skipNextTransOut = true;

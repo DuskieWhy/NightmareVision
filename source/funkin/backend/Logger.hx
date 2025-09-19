@@ -47,7 +47,7 @@ class Logger
 		output = output.stripColor();
 		#end
 		
-		if (showInGame)
+		if (showInGame && ClientPrefs.inDevMode)
 		{
 			DebugTextPlugin.addText(Std.string(data), getHexColourFromSeverity(severity));
 		}

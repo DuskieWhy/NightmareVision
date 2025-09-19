@@ -18,6 +18,9 @@ import funkin.data.Controls.KeyboardScheme;
 @:build(funkin.backend.macro.SaveMacro.buildSaveVars('im gonna make this do smth later okay just not rn'))
 class ClientPrefs
 {
+	// debug ------------------------------------------------------------------------//
+	@saveVar public static var inDevMode:Bool = false;
+	
 	// graphics ------------------------------------------------------------------------//
 	@saveVar public static var gpuCaching:Bool = true;
 	
