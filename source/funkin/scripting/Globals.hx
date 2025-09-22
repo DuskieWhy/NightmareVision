@@ -1,4 +1,4 @@
-package funkin.scripts;
+package funkin.scripting;
 
 import funkin.states.*;
 import funkin.states.substates.*;

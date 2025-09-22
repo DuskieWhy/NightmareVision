@@ -1,9 +1,5 @@
 package funkin.states.substates;
 
-import funkin.backend.Difficulty;
-import funkin.utils.CameraUtil;
-import funkin.states.options.OptionsState;
-
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
@@ -17,7 +13,11 @@ import flixel.util.FlxColor;
 import flixel.FlxCamera;
 import flixel.util.FlxStringUtil;
 
+import funkin.backend.Difficulty;
+import funkin.utils.CameraUtil;
+import funkin.states.options.OptionsState;
 import funkin.backend.MusicBeatSubstate;
+import funkin.scripting.Globals;
 import funkin.data.*;
 import funkin.states.*;
 import funkin.objects.*;
@@ -162,7 +162,7 @@ class PauseSubState extends MusicBeatSubstate
 		}
 		
 		super.create();
-
+		
 		scriptGroup.call('onCreatePost', []);
 	}
 	

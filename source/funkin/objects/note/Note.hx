@@ -1,5 +1,7 @@
 package funkin.objects.note;
 
+import math.Vector3;
+
 import flixel.FlxSprite;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
@@ -11,8 +13,7 @@ import funkin.objects.Character;
 import funkin.scripts.*;
 import funkin.states.*;
 import funkin.states.editors.ChartEditorState;
-
-import math.Vector3;
+import funkin.scripting.Globals;
 
 typedef EventNote =
 {

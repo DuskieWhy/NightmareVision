@@ -45,6 +45,7 @@ import funkin.states.editors.*;
 import funkin.game.modchart.*;
 import funkin.backend.SyncedFlxSoundGroup;
 import funkin.game.StoryMeta;
+import funkin.scripting.Globals;
 #if VIDEOS_ALLOWED
 import funkin.video.FunkinVideoSprite;
 #end

@@ -232,9 +232,9 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		set('curBpm', Conductor.bpm);
 		set('crotchet', Conductor.crotchet);
 		set('stepCrotchet', Conductor.stepCrotchet);
-		set('Function_Halt', Globals.Function_Halt);
-		set('Function_Stop', Globals.Function_Stop);
-		set('Function_Continue', Globals.Function_Continue);
+		set('Function_Halt', funkin.scripting.Globals.Function_Halt);
+		set('Function_Stop', funkin.scripting.Globals.Function_Stop);
+		set('Function_Continue', funkin.scripting.Globals.Function_Continue);
 		set('curBeat', 0);
 		set('curStep', 0);
 		set('curSection', 0);
@@ -295,7 +295,7 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		set("PlayState", PlayState);
 		set("FunkinHScript", FunkinHScript);
 		set('WindowUtil', funkin.utils.WindowUtil); // temp till i fix some shit
-		set('Globals', funkin.scripts.Globals);
+		set('Globals', funkin.scripting.Globals);
 		
 		set('HScriptState', funkin.scripting.HScriptState);
 		set('HScriptSubstate', funkin.scripting.HScriptSubstate);
@@ -358,7 +358,7 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 			
 			set("game", currentState);
 			set("global", PlayState.instance.variables);
-			set("getInstance", funkin.scripts.Globals.getInstance);
+			set("getInstance", funkin.scripting.Globals.getInstance);
 			
 			set('setVar', (varName:String, val:Dynamic) -> PlayState.instance.variables.set(varName, val));
 			set('getVar', (varName:String) -> PlayState.instance.variables.get(varName));

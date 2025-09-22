@@ -5,7 +5,7 @@ import extensions.hscript.InterpEx;
 import flixel.util.FlxDestroyUtil;
 import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 
-import funkin.scripts.Globals;
+import funkin.scripting.Globals;
 
 /**
  * Container of `FunkinHScript` instances

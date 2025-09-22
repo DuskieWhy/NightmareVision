@@ -10,7 +10,7 @@ import flixel.util.FlxTimer;
 import funkin.game.shaders.ColorSwap;
 import funkin.data.WeekData;
 import funkin.objects.Alphabet;
-import funkin.scripts.Globals;
+import funkin.scripting.Globals;
 
 @:nullSafety
 class TitleState extends MusicBeatState

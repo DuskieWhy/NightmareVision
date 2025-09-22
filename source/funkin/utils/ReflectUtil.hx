@@ -1,6 +1,6 @@
 package funkin.utils;
 
-import funkin.scripts.Globals;
+import funkin.scripting.Globals;
 
 class ReflectUtil
 {
