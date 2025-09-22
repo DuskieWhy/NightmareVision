@@ -2636,7 +2636,7 @@ class PlayState extends MusicBeatState
 			
 			if (ClientPrefs.camFollowsCharacters)
 			{
-				final displacement = gf.returnDisplacePoint();
+				final displacement = gf.getSingDisplacement();
 				
 				camFollow.x += displacement.x;
 				camFollow.y += displacement.y;
@@ -2695,7 +2695,7 @@ class PlayState extends MusicBeatState
 		
 		if (ClientPrefs.camFollowsCharacters)
 		{
-			final displacement = curCharacter.returnDisplacePoint();
+			final displacement = curCharacter.getSingDisplacement();
 			
 			camFollow.x += displacement.x;
 			camFollow.y += displacement.y;

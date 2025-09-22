@@ -440,7 +440,7 @@ class CharacterOLD extends FlxSprite
 		}
 	}
 	
-	public function returnDisplacePoint():FlxPoint
+	public function getSingDisplacement():FlxPoint
 	{
 		return switch (getAnimName().substr(4).split('-')[0].toLowerCase())
 		{
