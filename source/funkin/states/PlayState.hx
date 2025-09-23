@@ -388,9 +388,9 @@ class PlayState extends MusicBeatState
 	
 	var songLength:Float = 0;
 	
-	public var boyfriendCameraOffset:Array<Float> = null;
-	public var opponentCameraOffset:Array<Float> = null;
-	public var girlfriendCameraOffset:Array<Float> = null;
+	public var boyfriendCameraOffset:Array<Float> = [0, 0];
+	public var opponentCameraOffset:Array<Float> = [0, 0];
+	public var girlfriendCameraOffset:Array<Float> = [0, 0];
 	
 	#if DISCORD_ALLOWED
 	// Discord RPC variables
