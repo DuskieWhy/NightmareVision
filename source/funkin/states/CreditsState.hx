@@ -11,6 +11,7 @@ import flixel.tweens.FlxEase;
 
 import funkin.objects.*;
 
+// todo rewrite this menu
 class CreditsState extends MusicBeatState
 {
 	var curSelected:Int = -1;
@@ -143,8 +144,8 @@ class CreditsState extends MusicBeatState
 				'0x444444'
 			],
 			[
-				'RiverOaken',
-				'riveroaken',
+				'Riveren',
+				'riveren',
 				'Main Artist/Animator of Psych Engine',
 				'https://twitter.com/RiverOaken',
 				'0xC30085'
