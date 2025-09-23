@@ -31,6 +31,11 @@ import hxvlc.util.Location;
 class FunkinVideoSprite extends FlxVideoSprite
 {
 	/**
+	 * All currently active video instances
+	 */
+	public static final instances:Array<FunkinVideoSprite> = [];
+	
+	/**
 	 * Video loading argument to make the video loop
 	 * 
 	 * Usage:
@@ -64,7 +69,7 @@ class FunkinVideoSprite extends FlxVideoSprite
 	 * 
 	 * Disable this if you dont want your video to pause when paused in `PlayState`
 	 */
-	public var isStateAffected:Bool = true;
+	public var tiedToGame:Bool = true;
 	
 	/**
 	 * Creates a new FunkinVideoSprite
@@ -75,6 +80,8 @@ class FunkinVideoSprite extends FlxVideoSprite
 	public function new(x:Float = 0, y:Float = 0, oneTimeUse:Bool = true)
 	{
 		super(x, y);
+		
+		instances.push(this);
 		
 		if (oneTimeUse) bitmap.onEndReached.add(this.destroy, true, -10);
 	}
@@ -132,6 +139,8 @@ class FunkinVideoSprite extends FlxVideoSprite
 	
 	override function destroy()
 	{
+		if (instances.contains(this)) instances.remove(this);
+		
 		if (bitmap != null)
 		{
 			bitmap.stop();
@@ -146,6 +155,24 @@ class FunkinVideoSprite extends FlxVideoSprite
 		}
 		
 		super.destroy();
+	}
+	
+	/**
+	 * Iterates over `FunkinVideoSprite.instances` and calls a function on them
+	 */
+	public static function forEach(func:FunkinVideoSprite->Void)
+	{
+		for (video in instances)
+			if (video != null) func(video);
+	}
+	
+	/**
+	 * Iterates over `FunkinVideoSprite.instances` and calls a function on them
+	 */
+	public static function forEachAlive(func:FunkinVideoSprite->Void)
+	{
+		for (video in instances)
+			if (video != null && video.exists && video.alive) func(video);
 	}
 }
 #end

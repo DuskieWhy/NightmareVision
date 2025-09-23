@@ -1735,7 +1735,7 @@ class PlayState extends MusicBeatState
 			FlxTween.globalManager.forEach((i:FlxTween) -> if (!i.finished) i.active = false);
 			
 			#if VIDEOS_ALLOWED
-			forEachOfType(FunkinVideoSprite, video -> if (video != null && video.isStateAffected) video.pause(), true);
+			FunkinVideoSprite.forEachAlive((video) -> if (video.tiedToGame) video.pause());
 			#end
 			
 			for (field in playFields?.members)
@@ -1767,7 +1767,7 @@ class PlayState extends MusicBeatState
 			FlxTween.globalManager.forEach((i:FlxTween) -> if (!i.finished) i.active = true);
 			
 			#if VIDEOS_ALLOWED
-			forEachOfType(FunkinVideoSprite, video -> if (video != null && video.isStateAffected) video.resume(), true);
+			FunkinVideoSprite.forEachAlive((video) -> if (video.tiedToGame) video.resume());
 			#end
 			
 			paused = false;

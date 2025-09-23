@@ -109,14 +109,7 @@ class Paths
 	
 	static public function video(key:String):String
 	{
-		#if MODS_ALLOWED
-		final file:String = modsVideo(key);
-		if (FileSystem.exists(file))
-		{
-			return file;
-		}
-		#end
-		return '$CORE_DIRECTORY/videos/$key.$VIDEO_EXT';
+		return findFileWithExt('videos/$key', ['mp4', 'mov']);
 	}
 	
 	static public function textureAtlas(key:String, ?library:String):String
@@ -340,11 +333,6 @@ class Paths
 	public static inline function modsJson(key:String):String
 	{
 		return modFolders('songs/' + key + '.json');
-	}
-	
-	public static inline function modsVideo(key:String):String
-	{
-		return modFolders('videos/' + key + '.' + VIDEO_EXT);
 	}
 	
 	public static inline function modsSounds(path:String, key:String):String
