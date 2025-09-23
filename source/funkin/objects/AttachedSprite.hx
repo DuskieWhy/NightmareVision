@@ -49,4 +49,10 @@ class AttachedSprite extends FlxSprite
 			if (copyVisible) visible = sprTracker.visible;
 		}
 	}
+	
+	override function makeGraphic(width:Int, height:Int, color:FlxColor = FlxColor.WHITE, unique:Bool = false, ?key:String)
+	{
+		super.makeGraphic(width, height, color, unique, key);
+		return this;
+	}
 }
