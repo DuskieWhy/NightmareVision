@@ -49,29 +49,21 @@ class TitleState extends MusicBeatState
 		
 		setUpScript();
 		
+		if (FlxG.save.data.flashing == null && !FlashingState.leftState)
+		{
+			CoolUtil.setTransSkip();
+			FlxG.switchState(FlashingState.new);
+		}
+		else
+		{
+			startIntro();
+		}
+		
 		super.create();
 		
 		persistentUpdate = true;
 		
 		FlxG.mouse.visible = false;
-		
-		if (FlxG.save.data.flashing == null && !FlashingState.leftState)
-		{
-			FlxTransitionableState.skipNextTransIn = true;
-			FlxTransitionableState.skipNextTransOut = true;
-			FlxG.switchState(FlashingState.new);
-		}
-		else
-		{
-			if (initialized)
-			{
-				startIntro();
-			}
-			else
-			{
-				FlxTimer.wait(1, startIntro);
-			}
-		}
 	}
 	
 	function startIntro()
@@ -91,14 +83,14 @@ class TitleState extends MusicBeatState
 		{
 			swagShader = new ColorSwap();
 			
-			logo = new FlxSprite(-150, -100).loadAtlasFrames(Paths.getSparrowAtlas('logoBumpin'));
+			logo = new FlxSprite(-150, -100).loadAtlasFrames(Paths.getAtlasFrames('logoBumpin'));
 			logo.animation.addByPrefix('bump', 'logo bumpin', 24, false);
 			logo.animation.play('bump');
 			logo.updateHitbox();
 			add(logo);
 			logo.shader = swagShader.shader;
 			
-			gfDance = new FlxSprite(512, 40).loadAtlasFrames(Paths.getSparrowAtlas('gfDanceTitle'));
+			gfDance = new FlxSprite(512, 40).loadAtlasFrames(Paths.getAtlasFrames('gfDanceTitle'));
 			gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 			gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
 			add(gfDance);
@@ -269,9 +261,8 @@ class TitleState extends MusicBeatState
 				{
 					case 1:
 						@:nullSafety(Off)
-						{
-							FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
-						}
+						FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
+						
 						FlxG.sound.music.fadeIn(4, 0, 0.7);
 					case 2:
 						createCoolText(['ninjamuffin99', 'phantomArcade', 'kawaisprite', 'evilsk8er']);

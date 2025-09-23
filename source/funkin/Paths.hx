@@ -109,7 +109,7 @@ class Paths
 	
 	static public function video(key:String):String
 	{
-		return findFileWithExt('videos/$key', ['mp4', 'mov']);
+		return findFileWithExts('videos/$key', ['mp4', 'mov']);
 	}
 	
 	static public function textureAtlas(key:String, ?library:String):String
@@ -159,20 +159,11 @@ class Paths
 	{
 		final key = getPath('images/$key.png', IMAGE, library, true);
 		
-		final cacheGraphic = FunkinAssets.getGraphic(key, true, allowGPU);
-		
-		if (cacheGraphic == null)
-		{
-			return FlxG.bitmap.add('flixel/images/logo/default.png'); // to be compliant with nullsafety
-		}
-		else
-		{
-			return cacheGraphic;
-		}
+		return FunkinAssets.getGraphic(key, true, allowGPU) ?? FlxG.bitmap.add('flixel/images/logo/default.png');
 	}
 	
 	// uise this more
-	public static function findFileWithExt(file:String, exts:Array<String>):String
+	public static function findFileWithExts(file:String, exts:Array<String>):String
 	{
 		for (ext in exts)
 		{
@@ -180,7 +171,7 @@ class Paths
 			if (FunkinAssets.exists(joined)) return joined;
 		}
 		
-		return getPath('$file.${exts[0]}', TEXT, null, true);
+		return getPath(file, TEXT, null, true); // assuming u mightve added a ext already
 	}
 	
 	static public function getTextFromFile(key:String, ignoreMods:Bool = false):String
@@ -192,14 +183,7 @@ class Paths
 	
 	public static inline function font(key:String):String
 	{
-		#if MODS_ALLOWED
-		var file:String = modsFont(key);
-		if (FileSystem.exists(file))
-		{
-			return file;
-		}
-		#end
-		return '$CORE_DIRECTORY/fonts/$key';
+		return findFileWithExts('fonts/$key', ['ttf', 'otf']);
 	}
 	
 	public static inline function fileExists(key:String, type:AssetType, ?ignoreMods:Bool = false, ?library:String):Bool
@@ -216,7 +200,9 @@ class Paths
 	
 	public static inline function getMultiAtlas(keys:Array<String>, ?library:String, ?allowGPU:Bool = true):FlxAtlasFrames // from psych
 	{
-		var frames = getAtlasFrames(keys.shift().trim(), library, allowGPU);
+		final firstKey:Null<String> = keys.shift()?.trim();
+		
+		var frames = getAtlasFrames(firstKey, library, allowGPU);
 		
 		if (keys.length != 0)
 		{
@@ -251,10 +237,12 @@ class Paths
 		// packer
 		if (FunkinAssets.exists(txtPath))
 		{
-			return FlxAtlasFrames.fromSpriteSheetPacker(graphic, FunkinAssets.getContent(txtPath));
+			@:nullSafety(Off) // until flixel does null safety
+			return FlxAtlasFrames.fromSpriteSheetPacker(graphic, FunkinAssets.exists(txtPath) ? FunkinAssets.getContent(txtPath) : null);
 		}
 		
-		return FlxAtlasFrames.fromSparrow(graphic, FunkinAssets.getContent(xmlPath));
+		@:nullSafety(Off) // until flixel does null safety
+		return FlxAtlasFrames.fromSparrow(graphic, FunkinAssets.exists(xmlPath) ? FunkinAssets.getContent(xmlPath) : null);
 	}
 	
 	public static inline function getSparrowAtlas(key:String, ?library:String, ?allowGPU:Bool = true):FlxAtlasFrames
@@ -323,41 +311,6 @@ class Paths
 	public static inline function mods(key:String = ''):String
 	{
 		return '$MODS_DIRECTORY/' + key;
-	}
-	
-	public static inline function modsFont(key:String):String
-	{
-		return modFolders('fonts/' + key);
-	}
-	
-	public static inline function modsJson(key:String):String
-	{
-		return modFolders('songs/' + key + '.json');
-	}
-	
-	public static inline function modsSounds(path:String, key:String):String
-	{
-		return modFolders(path + '/' + key + '.' + SOUND_EXT);
-	}
-	
-	public static inline function modsImages(key:String):String
-	{
-		return modFolders('images/' + key + '.png');
-	}
-	
-	public static inline function modsXml(key:String):String
-	{
-		return modFolders('images/' + key + '.xml');
-	}
-	
-	public static inline function modsTxt(key:String):String
-	{
-		return modFolders('images/' + key + '.txt');
-	}
-	
-	public static inline function modsNoteskin(key:String)
-	{
-		return modFolders('noteskins/$key.json');
 	}
 	
 	static public function modFolders(key:String):String
