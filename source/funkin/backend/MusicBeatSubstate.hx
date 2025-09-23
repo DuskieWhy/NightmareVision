@@ -35,10 +35,8 @@ class MusicBeatSubstate extends FlxSubState
 	public var scriptPrefix:String = 'menus/substates'; // not rlly a fan of the folder being named menus tbh - data5
 	public var scriptGroup:HScriptGroup = new HScriptGroup();
 	
-	public function setUpScript(?scriptName:String, callOnCreate:Bool = true):Bool
+	public function initStateScript(?scriptName:String, callOnCreate:Bool = true):Bool
 	{
-		scriptGroup.parent = this;
-		
 		if (scriptName == null)
 		{
 			final stateName = Type.getClassName(Type.getClass(this)).split('.').pop();
@@ -58,7 +56,9 @@ class MusicBeatSubstate extends FlxSubState
 				return false;
 			}
 			
-			Logger.log('script [$scriptName] initialized');
+			scriptGroup.parent = this;
+			
+			Logger.log('script [$scriptName] initialized', NOTICE);
 			
 			scriptGroup.addScript(_script);
 			scripted = true;

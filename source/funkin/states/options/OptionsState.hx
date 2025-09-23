@@ -56,7 +56,7 @@ class OptionsState extends MusicBeatState
 		DiscordClient.changePresence("Options Menu", null);
 		#end
 		
-		setUpScript('OptionsState');
+		initStateScript('OptionsState');
 		scriptGroup.set('this', this);
 		
 		if (isHardcodedState())

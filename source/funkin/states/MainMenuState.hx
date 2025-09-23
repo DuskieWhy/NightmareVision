@@ -53,7 +53,7 @@ class MainMenuState extends MusicBeatState
 		camFollow = new FlxObject(FlxG.width / 2, 0, 1, 1);
 		add(camFollow);
 		
-		setUpScript();
+		initStateScript();
 		
 		if (isHardcodedState())
 		{

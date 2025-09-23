@@ -1,12 +1,11 @@
 package funkin.states.options;
 
-
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.util.FlxColor;
-import funkin.backend.MusicBeatSubstate;
 
+import funkin.backend.MusicBeatSubstate;
 import funkin.game.shaders.*;
 import funkin.objects.*;
 
@@ -31,7 +30,7 @@ class NotesSubState extends MusicBeatSubstate
 	{
 		super();
 		
-		setUpScript('NotesSubState');
+		initStateScript('NotesSubState');
 		scriptGroup.set('this', this);
 		
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));

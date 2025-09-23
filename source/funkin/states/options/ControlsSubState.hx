@@ -57,7 +57,7 @@ class ControlsSubState extends MusicBeatSubstate
 	{
 		super();
 		
-		setUpScript('ControlsSubState');
+		initStateScript('ControlsSubState');
 		scriptGroup.set('this', this);
 		
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));

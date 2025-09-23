@@ -36,15 +36,13 @@ class MusicBeatState extends FlxUIState
 	
 	// script related vars
 	public var scripted:Bool = false;
-	public var scriptName:String = 'Placeholder';
+	public var scriptName:String = '';
 	public var scriptGroup:HScriptGroup = new HScriptGroup();
 	
 	inline function isHardcodedState() return (scriptGroup != null && !scriptGroup.call('customMenu') == true) || (scriptGroup == null);
 	
-	public function setUpScript(?scriptName:String, callOnCreate:Bool = true):Bool
+	public function initStateScript(?scriptName:String, callOnCreate:Bool = true):Bool
 	{
-		scriptGroup.parent = this;
-		
 		if (scriptName == null)
 		{
 			final stateName = Type.getClassName(Type.getClass(this)).split('.').pop();
@@ -65,7 +63,9 @@ class MusicBeatState extends FlxUIState
 				return false;
 			}
 			
-			Logger.log('script [$scriptName] initialized');
+			scriptGroup.parent = this;
+			
+			Logger.log('script [$scriptName] initialized', NOTICE);
 			
 			scriptGroup.addScript(newScript);
 			scripted = true;

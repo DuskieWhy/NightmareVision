@@ -9,7 +9,7 @@ class HScriptState extends MusicBeatState
 	{
 		super();
 		
-		setUpScript(scriptName, false);
+		initStateScript(scriptName, false);
 		scriptGroup.parent = this;
 	}
 	

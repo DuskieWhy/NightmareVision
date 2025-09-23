@@ -51,7 +51,7 @@ class StoryMenuState extends MusicBeatState
 		FunkinAssets.cache.clearStoredMemory();
 		FunkinAssets.cache.clearUnusedMemory();
 		
-		setUpScript();
+		initStateScript();
 		
 		if (isHardcodedState())
 		{

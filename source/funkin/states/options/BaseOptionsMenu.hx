@@ -42,7 +42,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		DiscordClient.changePresence(rpcTitle, null);
 		#end
 		
-		setUpScript('Options');
+		initStateScript('Options');
 		scriptGroup.set('this', this);
 		scriptGroup.set('title', title);
 		

@@ -104,7 +104,7 @@ class FreeplayState extends MusicBeatState
 		}
 		WeekData.loadTheFirstEnabledMod();
 		
-		setUpScript();
+		initStateScript();
 		
 		scriptGroup.set('SongMetadata', SongMetadata);
 		scriptGroup.set('WeekData', WeekData);

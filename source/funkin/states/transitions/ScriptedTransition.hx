@@ -22,7 +22,7 @@ class ScriptedTransition extends BaseTransitionState
 	override function create()
 	{
 		scriptPrefix = 'transitions';
-		setUpScript(_transition, false);
+		initStateScript(_transition, false);
 		
 		scriptGroup.call('onCreate', []);
 	}

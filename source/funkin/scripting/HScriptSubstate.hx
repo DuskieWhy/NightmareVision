@@ -9,7 +9,7 @@ class HScriptSubstate extends funkin.backend.MusicBeatSubstate
 	{
 		super();
 		
-		setUpScript(scriptName, false);
+		initStateScript(scriptName, false);
 		scriptGroup.parent = this;
 	}
 	

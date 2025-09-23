@@ -47,7 +47,7 @@ class TitleState extends MusicBeatState
 		
 		randomIntroText = FlxG.random.getObject(getIntroText());
 		
-		setUpScript();
+		initStateScript();
 		
 		if (FlxG.save.data.flashing == null && !FlashingState.leftState)
 		{
