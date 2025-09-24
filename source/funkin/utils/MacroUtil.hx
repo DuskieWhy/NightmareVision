@@ -75,6 +75,7 @@ class MacroUtil
 	 */
 	public static macro function getPrecompliedContent(path:String)
 	{
+		#if !display
 		if (!sys.FileSystem.exists(path))
 		{
 			Context.fatalError('could not find content at $path', Context.currentPos());
@@ -83,5 +84,6 @@ class MacroUtil
 		final ret = sys.io.File.getContent(path);
 		
 		return macro $v{ret};
+		#end
 	}
 }

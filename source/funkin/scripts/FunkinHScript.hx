@@ -213,22 +213,6 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		set("Assets", lime.utils.Assets);
 		set("OpenFlAssets", openfl.utils.Assets);
 		
-		set('inGameOver', false);
-		set('downscroll', ClientPrefs.downScroll);
-		set('middlescroll', ClientPrefs.middleScroll);
-		set('framerate', ClientPrefs.framerate);
-		set('ghostTapping', ClientPrefs.ghostTapping);
-		set('hideHud', ClientPrefs.hideHud);
-		set('timeBarType', ClientPrefs.timeBarType);
-		set('scoreZoom', ClientPrefs.scoreZoom);
-		set('cameraZoomOnBeat', ClientPrefs.camZooms);
-		set('flashingLights', ClientPrefs.flashing);
-		set('noteOffset', ClientPrefs.noteOffset);
-		set('healthBarAlpha', ClientPrefs.healthBarAlpha);
-		set('noResetButton', ClientPrefs.noReset);
-		set('lowQuality', ClientPrefs.lowQuality);
-		set("scriptName", name);
-		
 		set('curBpm', Conductor.bpm);
 		set('crotchet', Conductor.crotchet);
 		set('stepCrotchet', Conductor.stepCrotchet);
@@ -241,6 +225,7 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		set('curDecBeat', 0);
 		set('curDecStep', 0);
 		set('version', Main.NMV_VERSION.trim());
+		set('Defines', funkin.data.Defines);
 		
 		// set flixel related stuff
 		set("FlxG", flixel.FlxG);
@@ -299,6 +284,7 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		
 		set('HScriptState', funkin.scripting.HScriptState);
 		set('HScriptSubstate', funkin.scripting.HScriptSubstate);
+		set("GameOverSubstate", funkin.states.substates.GameOverSubstate);
 		
 		// objects
 		set("Note", funkin.objects.note.Note);
@@ -332,10 +318,9 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		set("EaseEvent", funkin.game.modchart.events.EaseEvent);
 		set("SetEvent", funkin.game.modchart.events.SetEvent);
 		
-		set("GameOverSubstate", funkin.states.substates.GameOverSubstate);
+		set('inGameOver', false);
 		
-		var currentState = FlxG.state;
-		if ((currentState is PlayState))
+		if ((FlxG.state is PlayState))
 		{
 			set("inPlaystate", true);
 			set('bpm', PlayState.SONG.bpm);
@@ -356,7 +341,7 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 			set('startedCountdown', false);
 			set('mustHitSection', PlayState.SONG?.notes[0]?.mustHitSection ?? false);
 			
-			set("game", currentState);
+			set("game", FlxG.state);
 			set("global", PlayState.instance.variables);
 			set("getInstance", funkin.scripting.Globals.getInstance);
 			

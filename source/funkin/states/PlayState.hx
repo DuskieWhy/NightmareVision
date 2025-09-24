@@ -614,11 +614,9 @@ class PlayState extends MusicBeatState
 			stage.add(boyfriendGroup);
 		}
 		
-		for (file in Paths.listAllFilesInDirectory('scripts/'))
+		for (file in Paths.listAllFilesInDirectory('scripts/').filter(path -> FunkinHScript.isHxFile(path)))
 		{
 			final scriptPath = FunkinHScript.getPath(file);
-			
-			if (!FunkinHScript.isHxFile(scriptPath)) continue;
 			
 			initFunkinHScript(file);
 		}
