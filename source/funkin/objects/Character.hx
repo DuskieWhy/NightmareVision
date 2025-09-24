@@ -315,7 +315,7 @@ class Character extends Bopper
 	 */
 	override function dance(forced:Bool = false)
 	{
-		if (debugMode) return;
+		if (debugMode || specialAnim) return;
 		super.dance(forced);
 	}
 	
