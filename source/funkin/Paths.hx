@@ -77,101 +77,101 @@ class Paths
 		return '$CORE_DIRECTORY/$file';
 	}
 	
-	public static inline function txt(key:String, ?library:String):String
+	public static inline function txt(key:String, ?library:String, checkMods:Bool = true):String
 	{
-		return getPath('data/$key.txt', TEXT, library, true);
+		return getPath('data/$key.txt', TEXT, library, checkMods);
 	}
 	
-	public static inline function xml(key:String, ?library:String):String
+	public static inline function xml(key:String, ?library:String, checkMods:Bool = true):String
 	{
-		return getPath('data/$key.xml', TEXT, library, true);
+		return getPath('data/$key.xml', TEXT, library, checkMods);
 	}
 	
-	public static inline function json(key:String, ?library:String):String
+	public static inline function json(key:String, ?library:String, checkMods:Bool = true):String
 	{
-		return getPath('songs/$key.json', TEXT, library, true);
+		return getPath('songs/$key.json', TEXT, library, checkMods);
 	}
 	
-	public static inline function noteskin(key:String, ?library:String):String
+	public static inline function noteskin(key:String, ?library:String, checkMods:Bool = true):String
 	{
-		return getPath('noteskins/$key.json', TEXT, library, true);
+		return getPath('noteskins/$key.json', TEXT, library, checkMods);
 	}
 	
-	public static inline function shaderFrag(key:String):String
+	public static inline function shaderFragment(key:String, checkMods:Bool = true):String
 	{
-		return getPath('shaders/$key.frag', TEXT, null, true);
+		return getPath('shaders/$key.frag', TEXT, null, checkMods);
 	}
 	
-	public static inline function shaderVert(key:String):String
+	public static inline function shaderVertex(key:String, checkMods:Bool = true):String
 	{
-		return getPath('shaders/$key.vert', TEXT, null, true);
+		return getPath('shaders/$key.vert', TEXT, null, checkMods);
 	}
 	
-	static public function video(key:String):String
+	static public function video(key:String, checkMods:Bool = true):String
 	{
-		return findFileWithExts('videos/$key', ['mp4', 'mov']);
+		return findFileWithExts('videos/$key', ['mp4', 'mov'], checkMods);
 	}
 	
-	static public function textureAtlas(key:String, ?library:String):String
+	static public function textureAtlas(key:String, ?library:String, checkMods:Bool = true):String
 	{
-		return getPath('images/$key', AssetType.BINARY, library, true);
+		return getPath('images/$key', BINARY, library, checkMods);
 	}
 	
-	static public function sound(key:String, ?library:String):Null<openfl.media.Sound>
+	static public function sound(key:String, ?library:String, checkMods:Bool = true):Null<openfl.media.Sound>
 	{
-		final key = getPath('sounds/$key.$SOUND_EXT', SOUND, library, true);
+		final key = getPath('sounds/$key.$SOUND_EXT', SOUND, library, checkMods);
 		
 		return FunkinAssets.getSound(key);
 	}
 	
-	public static inline function soundRandom(key:String, min:Int, max:Int, ?library:String):Null<openfl.media.Sound>
+	public static inline function soundRandom(key:String, min:Int, max:Int, ?library:String, checkMods:Bool = true):Null<openfl.media.Sound>
 	{
-		return sound(key + FlxG.random.int(min, max), library);
+		return sound(key + FlxG.random.int(min, max), library, checkMods);
 	}
 	
-	public static inline function music(key:String, ?library:String):Null<openfl.media.Sound>
+	public static inline function music(key:String, ?library:String, checkMods:Bool = true):Null<openfl.media.Sound>
 	{
-		final path = getPath('music/$key.$SOUND_EXT', SOUND, library, true);
+		final path = getPath('music/$key.$SOUND_EXT', SOUND, library, checkMods);
 		
 		return FunkinAssets.getSound(path);
 	}
 	
-	public static inline function voices(song:String, ?postFix:String, safety:Bool = true):Null<openfl.media.Sound>
+	public static inline function voices(song:String, ?postFix:String, safety:Bool = true, checkMods:Bool = true):Null<openfl.media.Sound>
 	{
 		var songKey:String = '${formatToSongPath(song)}/Voices';
 		if (postFix != null) songKey += '-$postFix';
 		
-		songKey = getPath('songs/$songKey.$SOUND_EXT', SOUND, null, true);
+		songKey = getPath('songs/$songKey.$SOUND_EXT', SOUND, null, checkMods);
 		
 		return FunkinAssets.getSound(songKey, true, safety);
 	}
 	
-	public static inline function inst(song:String):Null<openfl.media.Sound>
+	public static inline function inst(song:String, checkMods:Bool = true):Null<openfl.media.Sound>
 	{
 		var songKey:String = '${formatToSongPath(song)}/Inst';
 		
-		songKey = getPath('songs/$songKey.$SOUND_EXT', SOUND, null, true);
+		songKey = getPath('songs/$songKey.$SOUND_EXT', SOUND, null, checkMods);
 		
 		return FunkinAssets.getSound(songKey);
 	}
 	
-	public static inline function image(key:String, ?library:String, allowGPU:Bool = true):FlxGraphic
+	public static inline function image(key:String, ?library:String, allowGPU:Bool = true, checkMods:Bool = true):FlxGraphic
 	{
-		final key = getPath('images/$key.png', IMAGE, library, true);
+		final key = getPath('images/$key.png', IMAGE, library, checkMods);
 		
 		return FunkinAssets.getGraphic(key, true, allowGPU) ?? FlxG.bitmap.add('flixel/images/logo/default.png');
 	}
 	
 	// uise this more
-	public static function findFileWithExts(file:String, exts:Array<String>):String
+	public static function findFileWithExts(file:String, exts:Array<String>, checkMods:Bool = true):String
 	{
 		for (ext in exts)
 		{
-			final joined = getPath('$file.$ext', TEXT, null, true);
+			final joined = getPath('$file.$ext', TEXT, null, checkMods);
 			if (FunkinAssets.exists(joined)) return joined;
 		}
 		
-		return getPath(file, TEXT, null, true); // assuming u mightve added a ext already
+		return getPath(file, TEXT, null, checkMods); // assuming u mightve added a ext already
 	}
 	
 	static public function getTextFromFile(key:String, ignoreMods:Bool = false):String
@@ -181,15 +181,15 @@ class Paths
 		return FunkinAssets.getContent(path);
 	}
 	
-	public static inline function font(key:String):String
+	public static inline function font(key:String, checkMods:Bool = true):String
 	{
-		return findFileWithExts('fonts/$key', ['ttf', 'otf']);
+		return findFileWithExts('fonts/$key', ['ttf', 'otf'], checkMods);
 	}
 	
-	public static inline function fileExists(key:String, type:AssetType, ?ignoreMods:Bool = false, ?library:String):Bool
+	public static inline function fileExists(key:String, type:AssetType = TEXT, ?ignoreMods:Bool = false, ?library:String, checkMods:Bool = true):Bool
 	{
 		#if MODS_ALLOWED
-		if (FileSystem.exists(mods(Mods.currentModDirectory + '/' + key)) || FileSystem.exists(mods(key)))
+		if (checkMods && (FileSystem.exists(mods(Mods.currentModDirectory + '/' + key)) || FileSystem.exists(mods(key))))
 		{
 			return true;
 		}
@@ -198,11 +198,11 @@ class Paths
 		return FunkinAssets.exists(getPath(key, type));
 	}
 	
-	public static inline function getMultiAtlas(keys:Array<String>, ?library:String, ?allowGPU:Bool = true):FlxAtlasFrames // from psych
+	public static inline function getMultiAtlas(keys:Array<String>, ?library:String, ?allowGPU:Bool = true, checkMods:Bool = true):FlxAtlasFrames // from psych
 	{
 		final firstKey:Null<String> = keys.shift()?.trim();
 		
-		var frames = getAtlasFrames(firstKey, library, allowGPU);
+		var frames = getAtlasFrames(firstKey, library, allowGPU, checkMods);
 		
 		if (keys.length != 0)
 		{
@@ -211,7 +211,7 @@ class Paths
 			frames.addAtlas(originalCollection, true);
 			for (i in keys)
 			{
-				final newFrames = getAtlasFrames(i.trim(), library, allowGPU);
+				final newFrames = getAtlasFrames(i.trim(), library, allowGPU, checkMods);
 				if (newFrames != null)
 				{
 					frames.addAtlas(newFrames, false);
@@ -227,12 +227,12 @@ class Paths
 	 * @param library 
 	 * @param allowGPU 
 	 */
-	public static inline function getAtlasFrames(key:String, ?library:String, allowGPU:Bool = true):FlxAtlasFrames
+	public static inline function getAtlasFrames(key:String, ?library:String, allowGPU:Bool = true, checkMods:Bool = true):FlxAtlasFrames
 	{
-		final xmlPath = getPath('images/$key.xml', TEXT, library, true);
-		final txtPath = getPath('images/$key.txt', TEXT, library, true);
+		final xmlPath = getPath('images/$key.xml', TEXT, library, checkMods);
+		final txtPath = getPath('images/$key.txt', TEXT, library, checkMods);
 		
-		final graphic = image(key, library, allowGPU);
+		final graphic = image(key, library, allowGPU, checkMods);
 		
 		// packer
 		if (FunkinAssets.exists(txtPath))
@@ -245,14 +245,14 @@ class Paths
 		return FlxAtlasFrames.fromSparrow(graphic, FunkinAssets.exists(xmlPath) ? FunkinAssets.getContent(xmlPath) : null);
 	}
 	
-	public static inline function getSparrowAtlas(key:String, ?library:String, ?allowGPU:Bool = true):FlxAtlasFrames
+	public static inline function getSparrowAtlas(key:String, ?library:String, ?allowGPU:Bool = true, checkMods:Bool = true):FlxAtlasFrames
 	{
-		return FlxAtlasFrames.fromSparrow(image(key, library, allowGPU), FunkinAssets.getContent(getPath('images/$key.xml', TEXT, library, true)));
+		return FlxAtlasFrames.fromSparrow(image(key, library, allowGPU, checkMods), FunkinAssets.getContent(getPath('images/$key.xml', TEXT, library, checkMods)));
 	}
 	
-	public static inline function getPackerAtlas(key:String, ?library:String, ?allowGPU:Bool = true)
+	public static inline function getPackerAtlas(key:String, ?library:String, ?allowGPU:Bool = true, checkMods:Bool = true)
 	{
-		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library, allowGPU), FunkinAssets.getContent(getPath('images/$key.txt', TEXT, library, true)));
+		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library, allowGPU, checkMods), FunkinAssets.getContent(getPath('images/$key.txt', TEXT, library, checkMods)));
 	}
 	
 	public static inline function formatToSongPath(path:String):String
