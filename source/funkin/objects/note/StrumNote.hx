@@ -87,6 +87,8 @@ class StrumNote extends FlxSprite
 		if (rgbShader == null || !NoteSkinHelper.instance?.data?.inGameColoring ?? false) return;
 		
 		var arr:Array<FlxColor> = ClientPrefs.arrowRGBdef[noteData];
+		if (arr == null) arr = ClientPrefs.arrowRGBdef[0];
+		
 		if (ClientPrefs.noteSkin.contains('Quant'))
 		{
 			if (note != null) arr = ClientPrefs.arrowRGBquant[Note.quants.indexOf(note.quant)];

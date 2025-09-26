@@ -1,0 +1,40 @@
+<menubar id="_menuBar" width="100%" height="40" horizontalAlign='right'>
+
+
+    <spacer width="50%"/>
+
+    <menu text="Options" id="optionsMenu">        
+        <menu-item id="openHelpWindow" text="Open Help Window"/>
+        <menu-separator />
+        <menu-item id="exitMenuButton" text="Exit"/>
+    </menu>
+
+    <spacer width="50%"/>
+
+    <menu text="BG View" id="bgView" style="padding:10px;">
+        <vbox width="100%" horizontalAlign="center" verticalAlign="center">
+
+            <checkbox text="Stylized BG" id="coolBGCheckbox" verticalAlign="center"/>
+
+            <checkbox text="Grid Bg" id="gridBGCheckbox" verticalAlign="center"/>
+
+            <hbox tooltip="if Stylized Bg is disabled, change the colour of the bg.">
+                <label text="Bg Colour" verticalAlign="center" />
+                <color-picker-popup id="bgColour" verticalAlign="center"/>
+            </hbox>
+        </vbox>
+    </menu>
+
+    
+    <label text="Skin Name:" verticalAlign="center" />
+    <textfield placeholder="default" width="150" verticalAlign="center" id="skinName"/>    
+    
+    <spacer width="10"/>
+    <rule direction="vertical" width="20" height="30"/>
+    <spacer width="10"/>
+    
+    <button allowFocus="false" id="refreshButton" text="Refresh Skin" style="background-color: #575213;" verticalAlign="center"/>
+    <button allowFocus="false" id="saveButton" text="Save Skin" style="background-color: #156015;" verticalAlign="center"/>
+    
+    <dropdown width="150" dropdownHeight="200" searchable="true" searchPrompt="default" id="skinDropdown" verticalAlign="center" tooltip="List of currently found characters."/>
+</menubar>

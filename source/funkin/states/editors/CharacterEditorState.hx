@@ -9,7 +9,6 @@ import flixel.group.FlxSpriteContainer;
 import haxe.ui.components.Stepper;
 import haxe.Json;
 import haxe.ui.components.popups.ColorPickerPopup;
-import haxe.ui.core.Screen;
 import haxe.ui.components.CheckBox;
 import haxe.ui.components.Button;
 import haxe.ui.components.Slider;
@@ -824,10 +823,10 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		}
 		else
 		{
-			if (!isHaxeUIHovered()) isTextFieldFocused = false;
+			if (!ToolKitUtils.isHaxeUIHovered(camHUD)) isTextFieldFocused = false;
 		}
 		
-		if ((isHaxeUIHovered() && FlxG.mouse.justPressed) || FlxG.mouse.justPressedRight)
+		if ((ToolKitUtils.isHaxeUIHovered(camHUD) && FlxG.mouse.justPressed) || FlxG.mouse.justPressedRight)
 		{
 			FlxG.sound.play(Paths.sound('ui/mouseClick'));
 		}
@@ -888,7 +887,8 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		
 		if (pointerBounds.target != null
 			&& (wasDraggingCursor
-				|| (!isHaxeUIHovered() && FlxG.mouse.overlaps(pointerBounds.target, pointerBounds.target.getDefaultCamera())))
+				|| (!ToolKitUtils.isHaxeUIHovered(camHUD)
+					&& FlxG.mouse.overlaps(pointerBounds.target, pointerBounds.target.getDefaultCamera())))
 			&& character != null)
 		{
 			pointerAlpha = 1;
@@ -995,15 +995,6 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		super.startOutro(onOutroComplete);
 	}
 	
-	inline function isHaxeUIHovered()
-	{
-		// ok just dont fucking work sure
-		// trace(FocusManager.instance.focus);
-		
-		var mousePos = FlxG.mouse.getViewPosition(camHUD);
-		return Screen.instance.hasSolidComponentUnderPoint(mousePos.x, mousePos.y);
-	}
-	
 	function playSings()
 	{
 		final isAlt = FlxG.keys.pressed.SHIFT;
@@ -1067,7 +1058,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		
 		if (FlxG.mouse.justReleasedMiddle) isCameraDragging = false;
 		
-		if (isHaxeUIHovered() && !isCameraDragging) return;
+		if (ToolKitUtils.isHaxeUIHovered(camHUD) && !isCameraDragging) return;
 		
 		if (FlxG.mouse.justPressedMiddle)
 		{

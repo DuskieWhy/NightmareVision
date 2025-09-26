@@ -1,0 +1,131 @@
+<collapsible-dialog id="_NoteSettings" width="550" height="330" title="Settings" style="padding: 5px;">
+    <tabview id="tabbox" width="100%" styleName="full-width-buttons">
+        <box text="Textures & Settings">
+            <hbox>
+                <vbox>
+                    <section-header text="Textures"/>
+                    <vbox>
+                        <label text="Note Splash Texture" verticalAlign="center" />
+                        <textfield placeholder="noteSplashes" width="225" id="splashTexture" tooltip="Texture used for Note Splashes"/>
+
+                        <label text="Player Texture" verticalAlign="center" />
+                        <textfield placeholder="NOTE_assets" width="225" id="playerTexture" tooltip="Texture used on PLAYER's note field"/>    
+
+                        <label text="Opponent Texture" verticalAlign="center" />
+                        <textfield placeholder="NOTE_assets" width="225" id="opponentTexture" tooltip="Texture used on OPPONENT's note field"/>  
+
+                        <label text="Extra Texture" verticalAlign="center" />
+                        <textfield placeholder="NOTE_assets" width="225" id="extraTexture" tooltip="Texture used on any note field beyond the player's and the opponent's"/>  
+                    </vbox>
+
+                    <spacer height="1"/>
+                    <button text="Reload Textures" id="reloadTextures"/>
+                </vbox>   
+                <vbox>
+                    <section-header text="Settings"/>
+
+                    <hbox style="justify-content:space-evenly">
+                        <vbox>
+                            <label text="Scale"  verticalAlign="center" horizontalAlign="center"/>
+                            <number-stepper pos="0.7" id="scalecount" precision="2" min ="0.1" max="16" step="0.05" text="Scale" tooltip="Scale of notes and receptors"/>
+                        </vbox>
+                        <vbox>
+                            <label text="Key Count" verticalAlign="center" horizontalAlign="center"/>
+                            <number-stepper pos="4" id="keycount"  step="1" min="1" max="16"/>    
+                        </vbox>
+                        <vbox>
+                            <label text="Lane Count" verticalAlign="center" horizontalAlign="center"/>
+                            <number-stepper pos="1" id="lanecount" step="1" min="1" max="8"/>
+                        </vbox>
+                    </hbox>
+
+                    <spacer height="1"/>
+                    <rule />
+                    <spacer height="1"/>
+
+                    <checkbox text="In-Engine Coloring Enabled?" id="shaderColoringBox"/>
+                    <checkbox text="Note Splashes Enabled?" id="splashBox"/>
+                    <checkbox text="Anti-aliasing Enabled?" id="antialiasingBox"/>
+                </vbox>
+            </hbox>
+        </box>
+        <box text="Pixel Settings">
+            <vbox>
+                    <label text="Pixel Sustains Suffix" verticalAlign="center" />
+                    <hbox style="justify-content:space-evenly">
+                        <textfield placeholder="ENDS" width="300" id="pixSus" tooltip="Texture used for the Sustain Notes in a pixel noteskin."/>
+                        <spacer width="5"/>
+                        <checkbox text="Pixel Noteskin?" id="isPixel" verticalAlign="center" tooltip="If enabled, your noteskin will load based on pixel division instead of via a spritesheet."/>
+                    </hbox>
+                    <spacer height="2"/>
+                    <hbox style="justify-content:space-evenly">
+                        <vbox>
+                            <label text="Width Division Factor"  verticalAlign="center" horizontalAlign="center"/>
+                            <number-stepper pos="4" id="widthDiv" verticalAlign="center" horizontalAlign="center" precision="0" min ="1" max="16" step="1" tooltip="Width division factor used for pixel noteskins. FOR CHANGES TO APPEAR IN-EDITOR, RELOAD THE TEXTURE"/>
+                        </vbox>
+                        <spacer width="10"/>
+                        <vbox>
+                            <label text="Height Division Factor"  verticalAlign="center" horizontalAlign="center"/>
+                            <number-stepper pos="4" id="heightDiv" verticalAlign="center" horizontalAlign="center" precision="0" min ="1" max="16" step="1" tooltip="Height division factor used for pixel noteskins. obsFOR CHANGES TO APPEAR IN-EDITOR, RELOAD THE TEXTURE"/>
+                        </vbox>                    
+                    </hbox>
+            </vbox>
+        </box>
+        <box text="Animations">
+            <vbox>
+                <label text="Animations:" verticalAlign="center" />
+                <dropdown width="200" searchable="true" searchPrompt="idle" id="animationsDropdown">
+                    <data>
+        
+                    </data>
+                </dropdown>
+
+                <spacer height="1"/>
+                <rule />
+                <spacer height="1"/>
+
+                <hbox>
+                    <vbox>
+                        <label text="Animation Name" verticalAlign="center" />
+                        <textfield placeholder="" width="300" id="animationNameTextField"/>
+                    </vbox>
+
+                    <vbox>
+                        <label text="Framerate:" verticalAlign="center"/>
+                        <number-stepper pos="24" step="1" min="0" id="animationFramerateStepper"/>
+                    </vbox>
+                </hbox>
+
+                <hbox>
+                    <vbox>
+                        <label text="XML/TXT Animation Prefix" verticalAlign="center" />
+                        <hbox>
+
+                            <textfield placeholder="" width="300" id="animationPrefixTextField"/>
+                            <checkbox text="Should it loop?" id="animationLoopCheckbox" verticalAlign="center" tooltip="If enabled, this animation will play repeatedly"/>
+
+                        </hbox>
+                    </vbox>
+                </hbox>
+
+                <hbox>
+                    <vbox>
+                        <hbox>
+                            <checkbox text="Flip X?" id="flipXAnimCheckbox"  verticalAlign="center"  tooltip="If enabled, this animation will be flipped horizontally"/>
+                            <checkbox text="Flip Y?" id="flipYAnimCheckbox"  verticalAlign="center"  tooltip="If enabled, this animation will be flipped vertically"/>
+                        </hbox> 
+                    </vbox>
+                </hbox>
+
+                <spacer height="1"/>
+                <rule />
+                <spacer height="1"/>
+
+                <hbox>
+                    <button allowFocus="false" id="removeAnimationButton" text="Remove Animation" horizontalAlign="right" style="background-color: #a01926;"/>
+                    <button allowFocus="false" id="addAnimationButton" text="Add/Update Animation" horizontalAlign="right" style="background-color: #156015;"/>
+                </hbox>
+            </vbox>
+        </box>
+    </tabview>
+</collapsible-dialog>

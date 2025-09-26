@@ -3,6 +3,7 @@ package funkin.states.editors.ui;
 import haxe.ui.notifications.NotificationType;
 import haxe.ui.notifications.NotificationManager;
 import haxe.ui.containers.ListView;
+import haxe.ui.core.Screen;
 
 import flixel.util.typeLimit.OneOfTwo;
 import flixel.FlxG;
@@ -132,6 +133,14 @@ class ToolKitUtils
 				noti.addClass("blue-notification");
 			default:
 		}
+	}
+	
+	public static function isHaxeUIHovered(camera:FlxCamera)
+	{
+		// ok just dont fucking work sure
+		// trace(FocusManager.instance.focus);
+		var mousePos = FlxG.mouse.getViewPosition(camera);
+		return Screen.instance.hasSolidComponentUnderPoint(mousePos.x, mousePos.y);
 	}
 }
 

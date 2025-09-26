@@ -2172,7 +2172,11 @@ class PlayState extends MusicBeatState
 		paused = true;
 		CoolUtil.cancelMusicFadeTween();
 		
+		#if debug
+		FlxG.switchState(() -> new WIPNoteSkinEditor(arrowSkin, noteSkin));
+		#else
 		FlxG.switchState(() -> new NoteSkinEditor(SONG.arrowSkin, noteSkin));
+		#end
 		chartingMode = true;
 		
 		#if DISCORD_ALLOWED

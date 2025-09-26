@@ -31,10 +31,8 @@
                     <vbox>
                         <label text="XML/TXT Animation Prefix" verticalAlign="center" />
                         <hbox>
-
                             <textfield placeholder="" width="300" id="animationPrefixTextField"/>
                             <checkbox text="Should it loop?" id="animationLoopCheckbox" verticalAlign="center" tooltip="If enabled, this animation will play repeatedly"/>
-
                         </hbox>
                     </vbox>
                 </hbox>
@@ -170,6 +168,4 @@
         </box> 
 
     </tabview>
-
-
 </collapsible-dialog>
