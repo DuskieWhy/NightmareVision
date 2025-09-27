@@ -101,8 +101,9 @@ class FlxCameraEx extends FlxCamera
 		}
 		else
 		{
-			var targetGraphics:Graphics = (graphics == null) ? canvas.graphics : graphics;
+			final targetGraphics:Graphics = (graphics == null) ? canvas.graphics : graphics;
 			
+			targetGraphics.overrideBlendMode(null);
 			targetGraphics.beginFill(Color, FxAlpha);
 			// i'm drawing rect with these parameters to avoid light lines at the top and left of the camera,
 			// which could appear while cameras fading
