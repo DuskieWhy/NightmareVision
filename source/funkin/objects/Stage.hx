@@ -73,22 +73,7 @@ class Stage extends FlxTypedContainer<FlxBasic>
 		{
 			for (info in stageData.stageObjects)
 			{
-				inline function makeObject():FlxSprite
-				{
-					if (info.customInstance != null && info.customInstance.length > 0)
-					{
-						final cl = Type.resolveClass(info.customInstance);
-						
-						if (cl == null) return new Bopper();
-						else return Type.createInstance(cl, []);
-					}
-					else
-					{
-						return new Bopper();
-					}
-				}
-				
-				final obj:FlxSprite = makeObject();
+				final obj:FlxSprite = resolveStageObject(info.customInstance ?? '');
 				
 				if (info.asset == null)
 				{
@@ -109,14 +94,13 @@ class Stage extends FlxTypedContainer<FlxBasic>
 					{
 						@:nullSafety(Off)
 						{
-							try
+							final frames = Paths.getMultiAtlas(info.asset.split(','));
+							if (frames != null)
 							{
-								obj.frames = Paths.getMultiAtlas(info.asset.split(','));
+								obj.frames = frames;
 							}
-							catch (e)
-							{
-								obj.loadGraphic(Paths.image(info.asset));
-							}
+							
+							obj.loadGraphic(Paths.image(info.asset));
 						}
 					}
 					
@@ -267,6 +251,27 @@ class Stage extends FlxTypedContainer<FlxBasic>
 			{
 				(cast spr : Bopper).playAnim(firstAnim);
 			}
+		}
+	}
+	
+	function resolveStageObject(objInstance:String):FlxSprite
+	{
+		if (objInstance.length > 0)
+		{
+			var cl:Null<Class<Dynamic>> = Type.resolveClass(objInstance);
+			
+			if (cl != null)
+			{
+				var instance = Type.createInstance(cl, []);
+				if (!(instance is FlxSprite)) throw '$curStage attempted to create a custom instance of $objInstance which is not a FlxSprite.';
+				
+				return instance;
+			}
+			else return new Bopper();
+		}
+		else
+		{
+			return new Bopper();
 		}
 	}
 	

@@ -2,8 +2,6 @@ package funkin.data;
 
 import funkin.data.CharacterData.AnimationInfo;
 
-import haxe.Json;
-
 typedef StageFile =
 {
 	/**
@@ -234,4 +232,19 @@ class StageData
 			camera_girlfriend: [0, 0],
 			camera_speed: 1
 		}
+		
+	/**
+	 * Helper function to figure out a StageFile `customInstance` field
+	 */
+	public static function resolveObjectInstance(obj:String):Null<Class<Dynamic>> // add moire later
+	{
+		obj = obj.toLowerCase();
+		
+		if (obj.contains('tiledsprite')) return flixel.addons.display.FlxTiledSprite;
+		else if (obj.contains('backdrop')) return flixel.addons.display.FlxBackdrop;
+		else if (obj.contains('character')) return funkin.objects.Character;
+		else if (obj.contains('flxbgsprite')) return flixel.system.FlxBGSprite;
+		
+		return null;
+	}
 }
