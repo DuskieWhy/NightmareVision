@@ -97,7 +97,7 @@ class WeekData
 		#if MODS_ALLOWED
 		var disabledMods:Array<String> = [];
 		var modsListPath:String = 'modsList.txt';
-		var directories:Array<String> = [Paths.mods(), Paths.getPrimaryPath() #if ASSET_REDIRECT, 'assets/' #end];
+		var directories:Array<String> = [Paths.mods(), Paths.getCorePath() #if ASSET_REDIRECT, 'assets/' #end];
 		var originalLength:Int = directories.length;
 		if (FileSystem.exists(modsListPath))
 		{
@@ -136,7 +136,7 @@ class WeekData
 			}
 		}
 		#else
-		var directories:Array<String> = [Paths.getPrimaryPath()];
+		var directories:Array<String> = [Paths.getCorePath()];
 		var originalLength:Int = directories.length;
 		#end
 		

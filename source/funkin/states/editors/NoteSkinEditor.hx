@@ -1364,7 +1364,7 @@ class NoteSkinEditor extends MusicBeatState
 		var directories:Array<String> = [
 			Paths.mods('noteskins/'),
 			Paths.mods(Mods.currentModDirectory + '/noteskins/'),
-			Paths.getPrimaryPath('noteskins/')
+			Paths.getCorePath('noteskins/')
 		];
 		for (mod in Mods.globalMods)
 			directories.push(Paths.mods(mod + '/noteskins/'));

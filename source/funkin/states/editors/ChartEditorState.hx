@@ -70,7 +70,7 @@ class OurLittleFriend extends FlxSprite
 	{
 		super();
 		final basePath = 'images/editors/friends/$char';
-		if (FileSystem.exists(Paths.getPrimaryPath('$basePath.png')))
+		if (FileSystem.exists(Paths.getCorePath('$basePath.png')))
 		{
 			frames = Paths.getSparrowAtlas(basePath.substr(basePath.indexOf('/') + 1));
 			animation.addByPrefix('idle', 'i', 24);
@@ -91,7 +91,7 @@ class OurLittleFriend extends FlxSprite
 	function buildOffsets(?path:String)
 	{
 		path ??= _offsetPath;
-		if (FileSystem.exists(Paths.getPrimaryPath('$path.txt'))) for (k => i in File.getContent(Paths.getPrimaryPath('$path.txt')).trim().split('\n'))
+		if (FileSystem.exists(Paths.getCorePath('$path.txt'))) for (k => i in File.getContent(Paths.getCorePath('$path.txt')).trim().split('\n'))
 		{
 			var value = i.trim().split(',');
 			offsets.set(k, [Std.parseFloat(value[0]), Std.parseFloat(value[1])]);
@@ -718,12 +718,12 @@ class ChartEditorState extends MusicBeatState
 		var directories:Array<String> = [
 			Paths.mods('characters/'),
 			Paths.mods(Mods.currentModDirectory + '/characters/'),
-			Paths.getPrimaryPath('characters/')
+			Paths.getCorePath('characters/')
 		];
 		for (mod in Mods.globalMods)
 			directories.push(Paths.mods(mod + '/characters/'));
 		#else
-		var directories:Array<String> = [Paths.getPrimaryPath('characters/')];
+		var directories:Array<String> = [Paths.getCorePath('characters/')];
 		#end
 		
 		var tempMap:Map<String, Bool> = new Map<String, Bool>();
@@ -782,12 +782,12 @@ class ChartEditorState extends MusicBeatState
 		var directories:Array<String> = [
 			Paths.mods('stages/'),
 			Paths.mods(Mods.currentModDirectory + '/stages/'),
-			Paths.getPrimaryPath('stages/')
+			Paths.getCorePath('stages/')
 		];
 		for (mod in Mods.globalMods)
 			directories.push(Paths.mods(mod + '/stages/'));
 		#else
-		var directories:Array<String> = [Paths.getPrimaryPath('stages/')];
+		var directories:Array<String> = [Paths.getCorePath('stages/')];
 		#end
 		
 		tempMap.clear();
@@ -3258,16 +3258,16 @@ class ChartEditorState extends MusicBeatState
 		var path:String = Paths.modFolders(characterPath);
 		if (!FileSystem.exists(path))
 		{
-			path = Paths.getPrimaryPath(characterPath);
+			path = Paths.getCorePath(characterPath);
 		}
 		
 		if (!FileSystem.exists(path))
 		#else
-		var path:String = Paths.getPrimaryPath(characterPath);
+		var path:String = Paths.getCorePath(characterPath);
 		if (!OpenFlAssets.exists(path))
 		#end
 		{
-			path = Paths.getPrimaryPath('characters/' + Character.DEFAULT_CHARACTER + '.json'); // If a character couldn't be found, change him to BF just to prevent a crash
+			path = Paths.getCorePath('characters/' + Character.DEFAULT_CHARACTER + '.json'); // If a character couldn't be found, change him to BF just to prevent a crash
 		}
 		
 		#if MODS_ALLOWED

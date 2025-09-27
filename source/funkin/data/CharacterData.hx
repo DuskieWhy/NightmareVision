@@ -20,7 +20,7 @@ class CharacterParser
 		
 		if (!FunkinAssets.exists(charPath))
 		{
-			charPath = Paths.getPrimaryPath('characters/${Character.DEFAULT_CHARACTER}.json');
+			charPath = Paths.getCorePath('characters/${Character.DEFAULT_CHARACTER}.json');
 		}
 		
 		var raw:String = '';

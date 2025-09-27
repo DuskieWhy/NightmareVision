@@ -95,7 +95,7 @@ class Mods
 	
 	public static inline function mergeAllTextsNamed(path:String, ?defaultDirectory:String = null, allowDuplicates:Bool = false)
 	{
-		if (defaultDirectory == null) defaultDirectory = Paths.getPrimaryPath();
+		if (defaultDirectory == null) defaultDirectory = Paths.getCorePath();
 		defaultDirectory = defaultDirectory.trim();
 		if (!defaultDirectory.endsWith('/')) defaultDirectory += '/';
 		if (!defaultDirectory.startsWith('assets/')) defaultDirectory = 'assets/$defaultDirectory';

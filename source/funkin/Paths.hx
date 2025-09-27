@@ -52,19 +52,19 @@ class Paths
 		if (parentFolder != null) return getLibraryPath(file, parentFolder);
 		
 		#if ASSET_REDIRECT
-		final embedCheck = getPrimaryPath().replace(CORE_DIRECTORY, trail + 'assets/embeds') + file;
+		final embedCheck = getCorePath().replace(CORE_DIRECTORY, trail + 'assets/embeds') + file;
 		if (FunkinAssets.exists(embedCheck))
 		{
 			return embedCheck;
 		}
 		#end
 		
-		return getPrimaryPath(file);
+		return getCorePath(file);
 	}
 	
 	public static function getLibraryPath(file:String, parentFolder:Null<String>):String
 	{
-		return parentFolder == null ? getPrimaryPath(file) : getLibraryPathForce(file, parentFolder);
+		return parentFolder == null ? getCorePath(file) : getLibraryPathForce(file, parentFolder);
 	}
 	
 	static inline function getLibraryPathForce(file:String, library:String):String
@@ -72,7 +72,7 @@ class Paths
 		return '$CORE_DIRECTORY/$library/$file';
 	}
 	
-	public static inline function getPrimaryPath(file:String = ''):String
+	public static inline function getCorePath(file:String = ''):String
 	{
 		return '$CORE_DIRECTORY/$file';
 	}
@@ -273,7 +273,7 @@ class Paths
 		var folders:Array<String> = [];
 		var files:Array<String> = [];
 		
-		if (FunkinAssets.exists(getPrimaryPath(directory))) folders.push(getPrimaryPath(directory));
+		if (FunkinAssets.exists(getCorePath(directory))) folders.push(getCorePath(directory));
 		
 		#if MODS_ALLOWED
 		if (checkMods)
