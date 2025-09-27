@@ -258,7 +258,7 @@ class Stage extends FlxTypedContainer<FlxBasic>
 	{
 		if (objInstance.length > 0)
 		{
-			var cl:Null<Class<Dynamic>> = Type.resolveClass(objInstance);
+			var cl:Null<Class<Dynamic>> = StageData.resolveObjectInstance(objInstance) ?? Type.resolveClass(objInstance);
 			
 			if (cl != null)
 			{
