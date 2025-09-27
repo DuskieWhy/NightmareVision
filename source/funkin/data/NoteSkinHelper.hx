@@ -18,8 +18,11 @@ typedef NoteSkinData =
 	?opponentSkin:String,
 	?extraSkin:String,
 	?noteSplashSkin:String,
+	
+	// depricated but leaving so it doesnt crash
 	?hasQuants:Bool,
 	?isQuants:Bool,
+	
 	?isPixel:Bool,
 	?pixelSize:Array<Int>,
 	?antialiasing:Bool,

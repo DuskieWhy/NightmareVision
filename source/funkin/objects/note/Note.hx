@@ -321,8 +321,6 @@ class Note extends FlxSprite
 		
 		if (isSustainNote && prevNote != null)
 		{
-			alpha = 0.6;
-			multAlpha = 0.6;
 			hitsoundDisabled = true;
 			
 			offsetX += width / 2;
