@@ -162,11 +162,11 @@ class PsychHUD extends BaseHUD
 	{
 		if (!updateIconScale) return;
 		
-		var mult:Float = FlxMath.lerp(1, iconP1.scale.x, Math.exp(-elapsed * 9));
+		final mult:Float = MathUtil.decayLerp(iconP1.scale.x, 1, 9, elapsed);
 		iconP1.scale.set(mult, mult);
 		iconP1.updateHitbox();
 		
-		var mult:Float = FlxMath.lerp(1, iconP2.scale.x, Math.exp(-elapsed * 9));
+		final mult:Float = MathUtil.decayLerp(iconP2.scale.x, 1, 9, elapsed);
 		iconP2.scale.set(mult, mult);
 		iconP2.updateHitbox();
 	}

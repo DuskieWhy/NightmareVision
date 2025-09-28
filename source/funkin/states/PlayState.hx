@@ -1853,8 +1853,7 @@ class PlayState extends MusicBeatState
 		
 		if (controls.PAUSE && startedCountdown && canPause)
 		{
-			final ret:Dynamic = scripts.call('onPause', []);
-			if (ret != Globals.Function_Stop) openPauseMenu();
+			if (scripts.call('onPause', []) != Globals.Function_Stop) openPauseMenu();
 		}
 		
 		if (canAccessEditors && !endingSong && !inCutscene)
@@ -1896,8 +1895,8 @@ class PlayState extends MusicBeatState
 		
 		if (camZooming)
 		{
-			FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom + defaultCamZoomAdd, FlxG.camera.zoom, Math.exp(-elapsed * 6.25 * camZoomingDecay));
-			camHUD.zoom = FlxMath.lerp(defaultHudZoom, camHUD.zoom, Math.exp(-elapsed * 6.25 * camZoomingDecay));
+			FlxG.camera.zoom = MathUtil.decayLerp(FlxG.camera.zoom, defaultCamZoom + defaultCamZoomAdd, 6.25 * camZoomingDecay, elapsed);
+			camHUD.zoom = MathUtil.decayLerp(camHUD.zoom, defaultHudZoom, 6.25 * camZoomingDecay, elapsed);
 		}
 		
 		if (!ClientPrefs.noReset && controls.RESET && canReset && !inCutscene && startedCountdown && !endingSong) health = 0;

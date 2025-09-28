@@ -8,7 +8,7 @@ class MathUtil
 	 * @param base The base of the logarithm.
 	 * @param value The value to get the logarithm of.
 	 * @return `log_base(value)`
-	*/
+	 */
 	public static function logBase(base:Float, value:Float):Float
 	{
 		return Math.log(value) / Math.log(base);
@@ -70,6 +70,15 @@ class MathUtil
 		FlxMath.lerp but accounts for FPS.
 	**/
 	public static inline function fpsLerp(v1:Float, v2:Float, ratio:Float) return FlxMath.lerp(v1, v2, FlxMath.getElapsedLerp(ratio, FlxG.elapsed));
+	
+	/**
+	 * referenced via https://youtu.be/LSNQuFEDOyQ
+	 * 
+	 * A frame independent lerp. Primary purpose is for the camera
+	 * 
+	 * your decay should be around 1 - 25
+	 */
+	public static function decayLerp(a:Float, b:Float, decay:Float, elapsed:Float) return b + (a - b) * Math.exp(-decay * elapsed);
 	
 	/**
 		crude version of FlxMath.wrap. supports floats though

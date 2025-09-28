@@ -34,42 +34,25 @@ class Paths
 	 */
 	public static inline final MODS_DIRECTORY = #if ASSET_REDIRECT trail + 'content' #else 'content' #end;
 	
-	public static inline final SOUND_EXT = "ogg";
-	public static inline final VIDEO_EXT = "mp4";
-	
-	// thinking of removing parentfolder its pointless ?
 	public static function getPath(file:String, ?type:AssetType = TEXT, ?parentFolder:String, checkMods:Bool = false):String
 	{
+		if (parentFolder != null) file = '$parentFolder/$file';
+		
 		#if MODS_ALLOWED
 		if (checkMods)
 		{
-			final modPath:String = modFolders(parentFolder == null ? file : parentFolder + '/' + file);
+			final modPath:String = modFolders(file);
 			
 			if (FileSystem.exists(modPath)) return modPath;
 		}
 		#end
 		
-		if (parentFolder != null) return getLibraryPath(file, parentFolder);
-		
 		#if ASSET_REDIRECT
-		final embedCheck = getCorePath().replace(CORE_DIRECTORY, trail + 'assets/embeds') + file;
-		if (FunkinAssets.exists(embedCheck))
-		{
-			return embedCheck;
-		}
+		final embedPath = getCorePath().replace(CORE_DIRECTORY, trail + 'assets/embeds') + file;
+		if (FunkinAssets.exists(embedPath)) return embedPath;
 		#end
 		
 		return getCorePath(file);
-	}
-	
-	public static function getLibraryPath(file:String, parentFolder:Null<String>):String
-	{
-		return parentFolder == null ? getCorePath(file) : getLibraryPathForce(file, parentFolder);
-	}
-	
-	static inline function getLibraryPathForce(file:String, library:String):String
-	{
-		return '$CORE_DIRECTORY/$library/$file';
 	}
 	
 	public static inline function getCorePath(file:String = ''):String
@@ -109,7 +92,7 @@ class Paths
 	
 	static public function video(key:String, checkMods:Bool = true):String
 	{
-		return findFileWithExts('videos/$key', ['mp4', 'mov'], checkMods);
+		return findFileWithExts('videos/$key', ['mp4', 'mov'], null, checkMods);
 	}
 	
 	static public function textureAtlas(key:String, ?library:String, checkMods:Bool = true):String
@@ -119,7 +102,7 @@ class Paths
 	
 	static public function sound(key:String, ?library:String, checkMods:Bool = true):Null<openfl.media.Sound>
 	{
-		final key = getPath('sounds/$key.$SOUND_EXT', SOUND, library, checkMods);
+		final key = findFileWithExts('sounds/$key', ['ogg', 'wav'], library, checkMods);
 		
 		return FunkinAssets.getSound(key);
 	}
@@ -131,9 +114,9 @@ class Paths
 	
 	public static inline function music(key:String, ?library:String, checkMods:Bool = true):Null<openfl.media.Sound>
 	{
-		final path = getPath('music/$key.$SOUND_EXT', SOUND, library, checkMods);
+		final key = findFileWithExts('music/$key', ['ogg', 'wav'], library, checkMods);
 		
-		return FunkinAssets.getSound(path);
+		return FunkinAssets.getSound(key);
 	}
 	
 	public static inline function voices(song:String, ?postFix:String, safety:Bool = true, checkMods:Bool = true):Null<openfl.media.Sound>
@@ -141,7 +124,7 @@ class Paths
 		var songKey:String = '${formatToSongPath(song)}/Voices';
 		if (postFix != null) songKey += '-$postFix';
 		
-		songKey = getPath('songs/$songKey.$SOUND_EXT', SOUND, null, checkMods);
+		songKey = findFileWithExts('songs/$songKey', ['ogg', 'wav'], null, checkMods);
 		
 		return FunkinAssets.getSound(songKey, true, safety);
 	}
@@ -150,7 +133,7 @@ class Paths
 	{
 		var songKey:String = '${formatToSongPath(song)}/Inst';
 		
-		songKey = getPath('songs/$songKey.$SOUND_EXT', SOUND, null, checkMods);
+		songKey = findFileWithExts('songs/$songKey', ['ogg', 'wav'], null, checkMods);
 		
 		return FunkinAssets.getSound(songKey);
 	}
@@ -162,28 +145,26 @@ class Paths
 		return FunkinAssets.getGraphic(key, true, allowGPU) ?? FlxG.bitmap.add('flixel/images/logo/default.png');
 	}
 	
+	public static inline function font(key:String, checkMods:Bool = true):String
+	{
+		return findFileWithExts('fonts/$key', ['ttf', 'otf'], null, checkMods);
+	}
+	
 	// uise this more
-	public static function findFileWithExts(file:String, exts:Array<String>, checkMods:Bool = true):String
+	public static function findFileWithExts(file:String, exts:Array<String>, ?library:String, checkMods:Bool = true):String
 	{
 		for (ext in exts)
 		{
-			final joined = getPath('$file.$ext', TEXT, null, checkMods);
+			final joined = getPath('$file.$ext', TEXT, library, checkMods);
 			if (FunkinAssets.exists(joined)) return joined;
 		}
 		
-		return getPath(file, TEXT, null, checkMods); // assuming u mightve added a ext already
+		return getPath(file, TEXT, library, checkMods); // assuming u mightve added a ext already
 	}
 	
-	static public function getTextFromFile(key:String, ignoreMods:Bool = false):String
+	static public function getTextFromFile(key:String, ignoreMods:Bool = false):String // safety
 	{
-		final path = Paths.getPath(key, TEXT, null, !ignoreMods);
-		
-		return FunkinAssets.getContent(path);
-	}
-	
-	public static inline function font(key:String, checkMods:Bool = true):String
-	{
-		return findFileWithExts('fonts/$key', ['ttf', 'otf'], checkMods);
+		return FunkinAssets.getContent(getPath(key, TEXT, null, !ignoreMods));
 	}
 	
 	public static inline function fileExists(key:String, type:AssetType = TEXT, ?ignoreMods:Bool = false, ?library:String, checkMods:Bool = true):Bool

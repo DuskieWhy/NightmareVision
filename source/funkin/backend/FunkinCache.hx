@@ -76,7 +76,7 @@ class FunkinCache
 	
 	public final localTrackedAssets:Array<String> = [];
 	
-	public final dumpExclusions:Array<String> = ['assets/music/freakyMenu.${Paths.SOUND_EXT}'];
+	public final dumpExclusions:Array<String> = ['assets/music/freakyMenu.ogg'];
 	
 	public function excludeAsset(key:String)
 	{
