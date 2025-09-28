@@ -482,8 +482,7 @@ class NoteOffsetState extends MusicBeatState
 		timeTxt.visible = !onComboMenu;
 		beatText.visible = !onComboMenu;
 		
-		changeModeText.text = onComboMenu ? '< Combo Offset (Press Accept to Switch) >' : 
-						'< Note/Beat Delay (Press Accept to Switch) >';
+		changeModeText.text = onComboMenu ? '< Combo Offset (Press Accept to Switch) >' : '< Note/Beat Delay (Press Accept to Switch) >';
 		
 		changeModeText.text = changeModeText.text.toUpperCase();
 		FlxG.mouse.visible = onComboMenu;

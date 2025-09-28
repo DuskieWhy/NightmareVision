@@ -1386,10 +1386,10 @@ class PlayState extends MusicBeatState
 		if (SONG.needsVoices)
 		{
 			final playerSound = Paths.voices(PlayState.SONG.song, 'player', false) ?? Paths.voices(PlayState.SONG.song, null, false);
-			if (playerSound != null) vocals.addPlayerVocals(new FlxSound().loadEmbedded(playerSound));
+			if (playerSound != null) vocals.addPlayerVocals(new FlxSoundEx().loadEmbedded(playerSound));
 			
 			final opponentSound = Paths.voices(PlayState.SONG.song, 'opp', false);
-			if (opponentSound != null) vocals.addOpponentVocals(new FlxSound().loadEmbedded(opponentSound));
+			if (opponentSound != null) vocals.addOpponentVocals(new FlxSoundEx().loadEmbedded(opponentSound));
 		}
 		
 		vocals.volume = 0;

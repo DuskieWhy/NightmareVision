@@ -65,6 +65,9 @@ class Init extends FlxState
 		FlxG.scaleMode = new funkin.backend.FunkinRatioScaleMode();
 		FlxG.signals.preStateSwitch.add((cast FlxG.scaleMode : funkin.backend.FunkinRatioScaleMode).resetSize);
 		
+		FlxG.sound.music = new extensions.flixel.FlxSoundEx();
+		FlxG.sound.music.persist = true;
+		
 		// ready backends
 		funkin.backend.plugins.HotReloadPlugin.init();
 		

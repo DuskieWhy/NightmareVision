@@ -490,7 +490,7 @@ class WIPNoteSkinEditor extends UIState
 		
 		if (key > -1 && (FlxG.keys.checkStatus(eventKey, JUST_PRESSED) || ClientPrefs.controllerMode))
 		{
- 			for (field in playfields.members)
+			for (field in playfields.members)
 			{
 				if (field.inControl && !field.autoPlayed && field.playerControls)
 				{

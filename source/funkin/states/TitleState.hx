@@ -70,11 +70,8 @@ class TitleState extends MusicBeatState
 	{
 		if (!initialized)
 		{
-			if (FlxG.sound.music == null)
-			{
-				@:nullSafety(Off)
-				FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
-			}
+			@:nullSafety(Off)
+			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
 		}
 		
 		Conductor.bpm = 102;
