@@ -69,7 +69,7 @@ class FunkinAssets
 	}
 	
 	/**
-	 *	Returns wheter a given path exists.
+	 *	Returns whether a given path exists.
 	 */
 	public static function exists(path:String, ?type:AssetType):Bool
 	{

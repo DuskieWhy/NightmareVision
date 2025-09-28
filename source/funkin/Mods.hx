@@ -25,7 +25,7 @@ class Mods
 	/**
 	 * The current primary loaded mod
 	 */
-	static public var currentModDirectory:String = '';
+	static public var currentModDirectory:Null<String> = '';
 	
 	public static final ignoreModFolders:Array<String> = [
 		'characters',

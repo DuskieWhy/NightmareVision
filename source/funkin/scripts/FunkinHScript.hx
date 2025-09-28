@@ -354,8 +354,8 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		}
 		
 		set("newShader", (?fragFile:String, ?vertFile:String) -> {
-			var fragPath = fragFile != null ? Paths.shaderFragment(fragFile) : null;
-			var vertPath = vertFile != null ? Paths.shaderVertex(vertFile) : null;
+			var fragPath = fragFile != null ? Paths.fragment(fragFile) : null;
+			var vertPath = vertFile != null ? Paths.vertex(vertFile) : null;
 			
 			if (fragPath != null)
 			{
