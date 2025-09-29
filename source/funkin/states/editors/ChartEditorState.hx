@@ -1890,7 +1890,7 @@ class ChartEditorState extends MusicBeatState
 	
 	function generateSong()
 	{
-		FlxG.sound.playMusic(Paths.inst(currentSongName), 0.6 /*, false*/);
+		FunkinSound.playMusic(Paths.inst(currentSongName), 0.6 /*, false*/);
 		if (instVolume != null) FlxG.sound.music.volume = instVolume.value;
 		if (check_mute_inst != null && check_mute_inst.checked) FlxG.sound.music.volume = 0;
 		
@@ -2293,7 +2293,7 @@ class ChartEditorState extends MusicBeatState
 			{
 				PlayState.chartingMode = false;
 				FlxG.switchState(funkin.states.editors.MasterEditorMenu.new);
-				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+				FunkinSound.playMusic(Paths.music('freakyMenu'));
 				FlxG.mouse.visible = false;
 				return;
 			}

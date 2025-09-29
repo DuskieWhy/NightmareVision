@@ -70,8 +70,7 @@ class TitleState extends MusicBeatState
 	{
 		if (!initialized)
 		{
-			@:nullSafety(Off)
-			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
+			FunkinSound.playMusic(Paths.music('freakyMenu'), 0);
 		}
 		
 		Conductor.bpm = 102;
@@ -151,10 +150,7 @@ class TitleState extends MusicBeatState
 					titleText.animation.play('press');
 				}
 				
-				@:nullSafety(Off)
-				{
-					FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
-				}
+				FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
 				
 				FlxTimer.wait(1, () -> {
 					FlxG.switchState(MainMenuState.new);
@@ -257,8 +253,7 @@ class TitleState extends MusicBeatState
 				switch (sickBeats)
 				{
 					case 1:
-						@:nullSafety(Off)
-						FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
+						FunkinSound.playMusic(Paths.music('freakyMenu'), 0);
 						
 						FlxG.sound.music.fadeIn(4, 0, 0.7);
 					case 2:

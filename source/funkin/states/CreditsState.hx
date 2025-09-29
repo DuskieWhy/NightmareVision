@@ -244,7 +244,6 @@ class CreditsState extends MusicBeatState
 			}
 			if (controls.BACK)
 			{
-				@:nullSafety(Off)
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				FlxG.switchState(MainMenuState.new);
 				canInteract = false;
@@ -271,7 +270,6 @@ class CreditsState extends MusicBeatState
 	
 	function changeSelection(change:Int = 0):Void
 	{
-		@:nullSafety(Off)
 		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 		
 		do

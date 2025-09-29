@@ -66,14 +66,14 @@ class VisualsUISubState extends BaseOptionsMenu
 	function onChangePauseMusic()
 	{
 		if (ClientPrefs.pauseMusic == 'None') FlxG.sound.music.volume = 0;
-		else FlxG.sound.playMusic(Paths.music(Paths.formatToSongPath(ClientPrefs.pauseMusic)));
+		else FunkinSound.playMusic(Paths.music(Paths.formatToSongPath(ClientPrefs.pauseMusic)));
 		
 		changedMusic = true;
 	}
 	
 	override function destroy()
 	{
-		if (changedMusic && !OptionsState.onPlayState) FlxG.sound.playMusic(Paths.music('freakyMenu'));
+		if (changedMusic && !OptionsState.onPlayState) FunkinSound.playMusic(Paths.music('freakyMenu'));
 		super.destroy();
 	}
 	

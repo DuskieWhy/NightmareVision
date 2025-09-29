@@ -24,7 +24,7 @@ class CutsceneHandler extends FlxBasic
 		timer(0, function() {
 			if (music != null)
 			{
-				FlxG.sound.playMusic(Paths.music(music), 0, false);
+				FunkinSound.playMusic(Paths.music(music), 0, false);
 				FlxG.sound.music.fadeIn();
 			}
 			if (onStart != null) onStart();

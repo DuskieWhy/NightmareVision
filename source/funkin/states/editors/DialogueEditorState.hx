@@ -408,7 +408,7 @@ class DialogueEditorState extends MusicBeatState
 			if (FlxG.keys.justPressed.ESCAPE)
 			{
 				FlxG.switchState(funkin.states.editors.MasterEditorMenu.new);
-				FlxG.sound.playMusic(Paths.music('freakyMenu'), 1);
+				FunkinSound.playMusic(Paths.music('freakyMenu'), 1);
 				transitioning = true;
 			}
 			var negaMult:Array<Int> = [1, -1];

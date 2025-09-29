@@ -195,7 +195,7 @@ class NoteOffsetState extends MusicBeatState
 		updateMode();
 		
 		Conductor.bpm = 128.0;
-		FlxG.sound.playMusic(Paths.music('offsetSong'), 1, true);
+		FunkinSound.playMusic(Paths.music('offsetSong'), 1, true);
 		
 		super.create();
 	}
@@ -362,7 +362,7 @@ class NoteOffsetState extends MusicBeatState
 			try
 			{
 				timeBar.destroy();
-				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+				FunkinSound.playMusic(Paths.music('freakyMenu'));
 				FlxG.switchState(MainMenuState.new);
 			}
 			catch (e)

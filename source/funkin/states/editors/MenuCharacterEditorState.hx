@@ -300,7 +300,7 @@ class MenuCharacterEditorState extends MusicBeatState
 			if (FlxG.keys.justPressed.ESCAPE)
 			{
 				FlxG.switchState(funkin.states.editors.MasterEditorMenu.new);
-				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+				FunkinSound.playMusic(Paths.music('freakyMenu'));
 			}
 			
 			var shiftMult:Int = 1;

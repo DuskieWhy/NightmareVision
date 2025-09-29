@@ -143,7 +143,7 @@ class GameOverSubstate extends MusicBeatSubstate
 			
 			FlxG.switchState(() -> PlayState.isStoryMode ? new StoryMenuState() : new FreeplayState());
 			
-			FlxG.sound.playMusic(Paths.music('freakyMenu'));
+			FunkinSound.playMusic(Paths.music('freakyMenu'));
 			PlayState.instance?.scripts.call('onGameOverConfirm', [false]);
 		}
 		
@@ -180,7 +180,7 @@ class GameOverSubstate extends MusicBeatSubstate
 	 */
 	function coolStartDeath(?volume:Float = 1):Void
 	{
-		if (loopSoundName != null) FlxG.sound.playMusic(Paths.music(loopSoundName), volume);
+		if (loopSoundName != null) FunkinSound.playMusic(Paths.music(loopSoundName), volume);
 		
 		PlayState.instance?.scripts.call('deathAnimStart', [volume]);
 	}

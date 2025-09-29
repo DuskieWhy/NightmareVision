@@ -198,7 +198,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		else
 		{
 			FlxG.switchState(funkin.states.editors.MasterEditorMenu.new);
-			FlxG.sound.playMusic(Paths.music('freakyMenu'));
+			FunkinSound.playMusic(Paths.music('freakyMenu'));
 		}
 		FlxG.mouse.visible = false;
 	}

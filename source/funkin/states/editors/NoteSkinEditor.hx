@@ -242,7 +242,7 @@ class NoteSkinEditor extends MusicBeatState
 		setMode(STRUMS);
 		
 		Conductor.bpm = 128.0;
-		FlxG.sound.playMusic(Paths.music('offsetSong'), 1, true);
+		FunkinSound.playMusic(Paths.music('offsetSong'), 1, true);
 		FlxG.mouse.visible = true;
 	}
 	
@@ -379,7 +379,7 @@ class NoteSkinEditor extends MusicBeatState
 						if (FlxG.keys.justPressed.ESCAPE)
 						{
 							FlxG.switchState(MasterEditorMenu.new);
-							FlxG.sound.playMusic(Paths.music('freakyMenu'));
+							FunkinSound.playMusic(Paths.music('freakyMenu'));
 							FlxG.mouse.visible = false;
 						}
 						
@@ -495,7 +495,7 @@ class NoteSkinEditor extends MusicBeatState
 			if (FlxG.keys.justPressed.ESCAPE)
 			{
 				FlxG.switchState(funkin.states.editors.MasterEditorMenu.new);
-				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+				FunkinSound.playMusic(Paths.music('freakyMenu'));
 				FlxG.mouse.visible = false;
 			}
 			

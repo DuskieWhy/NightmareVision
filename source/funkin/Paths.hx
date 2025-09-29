@@ -98,36 +98,36 @@ class Paths
 		return getPath('images/$key', BINARY, parentFolder, checkMods);
 	}
 	
-	static public function sound(key:String, ?parentFolder:String, checkMods:Bool = true):Null<openfl.media.Sound>
+	static public function sound(key:String, ?parentFolder:String, checkMods:Bool = true):Sound
 	{
 		final key = findFileWithExts('sounds/$key', ['ogg', 'wav'], parentFolder, checkMods);
 		
 		return FunkinAssets.getSound(key);
 	}
 	
-	public static inline function soundRandom(key:String, min:Int, max:Int, ?parentFolder:String, checkMods:Bool = true):Null<openfl.media.Sound>
+	public static inline function soundRandom(key:String, min:Int, max:Int, ?parentFolder:String, checkMods:Bool = true):Sound
 	{
 		return sound(key + FlxG.random.int(min, max), parentFolder, checkMods);
 	}
 	
-	public static inline function music(key:String, ?parentFolder:String, checkMods:Bool = true):Null<openfl.media.Sound>
+	public static inline function music(key:String, ?parentFolder:String, checkMods:Bool = true):Sound
 	{
 		final key = findFileWithExts('music/$key', ['ogg', 'wav'], parentFolder, checkMods);
 		
 		return FunkinAssets.getSound(key);
 	}
 	
-	public static inline function voices(song:String, ?postFix:String, safety:Bool = true, checkMods:Bool = true):Null<openfl.media.Sound>
+	public static inline function voices(song:String, ?postFix:String, checkMods:Bool = true):Null<Sound>
 	{
 		var songKey:String = '${formatToSongPath(song)}/Voices';
 		if (postFix != null) songKey += '-$postFix';
 		
 		songKey = findFileWithExts('songs/$songKey', ['ogg', 'wav'], null, checkMods);
 		
-		return FunkinAssets.getSound(songKey, true, safety);
+		return FunkinAssets.getSoundUnsafe(songKey);
 	}
 	
-	public static inline function inst(song:String, checkMods:Bool = true):Null<openfl.media.Sound>
+	public static inline function inst(song:String, checkMods:Bool = true):Sound
 	{
 		var songKey:String = '${formatToSongPath(song)}/Inst';
 		

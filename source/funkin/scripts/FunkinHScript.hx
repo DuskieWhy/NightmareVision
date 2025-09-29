@@ -271,8 +271,8 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		set("SetEvent", funkin.game.modchart.events.SetEvent);
 		
 		// FNF-specific things
-		set("MusicBeatState", funkin.backend.MusicBeatState);
 		set("Paths", Paths);
+		set("MusicBeatState", funkin.backend.MusicBeatState);
 		set("Conductor", funkin.backend.Conductor);
 		set("ClientPrefs", funkin.data.ClientPrefs);
 		set("CoolUtil", funkin.utils.CoolUtil);
@@ -281,6 +281,7 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		set("FunkinHScript", FunkinHScript);
 		set('WindowUtil', funkin.utils.WindowUtil); // temp till i fix some shit
 		set('Globals', funkin.scripting.Globals);
+		set('FunkinSound', funkin.audio.FunkinSound);
 		
 		set('HScriptState', funkin.scripting.HScriptState);
 		set('HScriptSubstate', funkin.scripting.HScriptSubstate);

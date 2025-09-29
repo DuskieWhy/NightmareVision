@@ -256,7 +256,7 @@ class PauseSubState extends MusicBeatSubstate
 						{
 							if (pauseMusic._sound != null)
 							{
-								FlxG.sound.playMusic(pauseMusic._sound, 0);
+								FunkinSound.playMusic(pauseMusic._sound, 0);
 								FlxTween.tween(FlxG.sound.music, {volume: 0.5}, 0.7);
 							}
 						}
@@ -306,7 +306,7 @@ class PauseSubState extends MusicBeatSubstate
 						PlayState.seenCutscene = false;
 						FlxG.switchState(() -> PlayState.isStoryMode ? new StoryMenuState() : new FreeplayState());
 						CoolUtil.cancelMusicFadeTween();
-						FlxG.sound.playMusic(Paths.music('freakyMenu'));
+						FunkinSound.playMusic(Paths.music('freakyMenu'));
 						PlayState.changedDifficulty = false;
 						PlayState.chartingMode = false;
 				}

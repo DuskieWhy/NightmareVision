@@ -90,7 +90,7 @@ class WIPNoteSkinEditor extends UIState
 		
 		FlxG.mouse.visible = true;
 		
-		FlxG.sound.playMusic(Paths.music('offsetSong'), 1, true);
+		FunkinSound.playMusic(Paths.music('offsetSong'), 1, true);
 	}
 	
 	function setUpControls()

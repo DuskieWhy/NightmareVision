@@ -332,7 +332,7 @@ class FreeplayState extends MusicBeatState
 					else vocals = new FlxSound();
 					
 					FlxG.sound.list.add(vocals);
-					FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), 0.7);
+					FunkinSound.playMusic(Paths.inst(PlayState.SONG.song), 0.7);
 					vocals.play();
 					vocals.persist = true;
 					vocals.looped = true;

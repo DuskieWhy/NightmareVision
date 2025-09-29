@@ -6,6 +6,7 @@ import flixel.util.FlxDestroyUtil;
 import extensions.flixel.FlxCameraEx;
 import extensions.flixel.FlxSoundEx;
 
+import funkin.audio.FunkinSound;
 import funkin.backend.Logger;
 import funkin.utils.*;
 

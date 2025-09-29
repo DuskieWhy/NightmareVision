@@ -139,12 +139,34 @@ class FunkinAssets
 	}
 	
 	/**
-	 * Retrives a sound instance from path.
+	 * Retrives a Sound instance from key.
+	 * 
+	 * If the sound could not be found, a beep sound will be given in place.
 	 * 
 	 * @param useCache Retrieves from the cache if possible. Otherwise, it will be cached
-	 * @param safety If true, will return a flixel Beep rather than null.
 	 */
-	public static function getSound(key:String, useCache:Bool = true, safety:Bool = true):Null<Sound>
+	public static function getSound(key:String, useCache:Bool = true):Sound
+	{
+		var sound:Null<Sound> = getSoundUnsafe(key, useCache);
+		
+		if (sound != null)
+		{
+			return sound;
+		}
+		
+		Logger.log('sound ($key) was not found. Returning beep instead');
+		
+		return FlxAssets.getSoundAddExtension('flixel/sounds/beep');
+	}
+	
+	/**
+	 * Retrives a Sound instance from key.
+	 * 
+	 * If the sound could not be found, null will be returned.
+	 * 
+	 * @param useCache Retrieves from the cache if possible. Otherwise, it will be cached
+	 */
+	public static function getSoundUnsafe(key:String, useCache:Bool = true):Null<Sound>
 	{
 		if (useCache && cache.currentTrackedSounds.exists(key))
 		{
@@ -160,17 +182,8 @@ class FunkinAssets
 		if (sound != null)
 		{
 			cache.cacheSound(key, sound);
-			return sound;
 		}
-		else if (safety)
-		{
-			Logger.log('sound ($key) was not found. Returning beep instead');
-			
-			return FlxAssets.getSoundAddExtension('flixel/sounds/beep');
-		}
-		else
-		{
-			return null;
-		}
+		
+		return sound;
 	}
 }

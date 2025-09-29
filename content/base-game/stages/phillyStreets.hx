@@ -286,7 +286,7 @@ function onStartCountdown()
 		switch (PlayState.SONG.song.toLowerCase())
 		{
 			case 'darnell':
-				FlxG.sound.playMusic(Paths.music('darnellCanCutscene/darnellCanCutscene'));
+				FunkinSound.playMusic(Paths.music('darnellCanCutscene/darnellCanCutscene'));
 				snapCamToPos(getCharacterCameraPos(boyfriend).x + 100, getCharacterCameraPos(boyfriend).y + 105, true);
 				
 				playHUD.visible = false;

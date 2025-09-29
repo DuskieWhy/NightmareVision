@@ -475,7 +475,7 @@ class WeekEditorState extends MusicBeatState
 			if (FlxG.keys.justPressed.ESCAPE)
 			{
 				FlxG.switchState(funkin.states.editors.MasterEditorMenu.new);
-				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+				FunkinSound.playMusic(Paths.music('freakyMenu'));
 			}
 		}
 		
@@ -862,7 +862,7 @@ class WeekEditorFreeplayState extends MusicBeatState
 			if (FlxG.keys.justPressed.ESCAPE)
 			{
 				FlxG.switchState(funkin.states.editors.MasterEditorMenu.new);
-				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+				FunkinSound.playMusic(Paths.music('freakyMenu'));
 			}
 			
 			if (controls.UI_UP_P) changeSelection(-1);

@@ -1278,7 +1278,7 @@ class PlayState extends MusicBeatState
 		
 		previousFrameTime = FlxG.game.ticks;
 		
-		FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), 1, false);
+		FunkinSound.playMusic(Paths.inst(PlayState.SONG.song), 1, false);
 		FlxG.sound.music.onComplete = finishSong.bind(false);
 		vocals.play();
 		vocals.volume = 1;
@@ -1385,10 +1385,10 @@ class PlayState extends MusicBeatState
 		
 		if (SONG.needsVoices)
 		{
-			final playerSound = Paths.voices(PlayState.SONG.song, 'player', false) ?? Paths.voices(PlayState.SONG.song, null, false);
+			final playerSound = Paths.voices(PlayState.SONG.song, 'player') ?? Paths.voices(PlayState.SONG.song, null);
 			if (playerSound != null) vocals.addPlayerVocals(new FlxSoundEx().loadEmbedded(playerSound));
 			
-			final opponentSound = Paths.voices(PlayState.SONG.song, 'opp', false);
+			final opponentSound = Paths.voices(PlayState.SONG.song, 'opp');
 			if (opponentSound != null) vocals.addOpponentVocals(new FlxSoundEx().loadEmbedded(opponentSound));
 		}
 		
@@ -2796,7 +2796,7 @@ class PlayState extends MusicBeatState
 				
 				if (storyMeta.playlist.length <= 0)
 				{
-					FlxG.sound.playMusic(Paths.music('freakyMenu'));
+					FunkinSound.playMusic(Paths.music('freakyMenu'));
 					FlxG.sound.music.volume = 1;
 					
 					CoolUtil.cancelMusicFadeTween();
@@ -2838,7 +2838,7 @@ class PlayState extends MusicBeatState
 				trace('WENT BACK TO FREEPLAY??');
 				CoolUtil.cancelMusicFadeTween();
 				FlxG.switchState(() -> new FreeplayState());
-				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+				FunkinSound.playMusic(Paths.music('freakyMenu'));
 				FlxG.sound.music.volume = 1;
 				changedDifficulty = false;
 			}

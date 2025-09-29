@@ -265,7 +265,7 @@ function tankIntro()
 			// tankman.anim.pause();
 			
 			// FlxG.sound.play(Paths.music('DISTORTO'));
-			FlxG.sound.playMusic(Paths.music('DISTORTO'));
+			FunkinSound.playMusic(Paths.music('DISTORTO'));
 			FlxG.sound.play(Paths.sound('wellWellWell'));
 			
 			FlxG.camera.zoom *= 1.2;
@@ -303,7 +303,7 @@ function tankIntro()
 			
 			tankman.anim.play('tight');
 			FlxG.sound.play(Paths.sound('tankSong2'));
-			FlxG.sound.playMusic(Paths.music('DISTORTO'));
+			FunkinSound.playMusic(Paths.music('DISTORTO'));
 			
 			FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom * 1.2}, 4, {ease: FlxEase.quadInOut});
 			FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom * 1.2 * 1.2}, 0.5, {ease: FlxEase.quadInOut, startDelay: 4});
@@ -376,7 +376,7 @@ function tankIntro()
 			var stressScene = new FlxSound().loadEmbedded(Paths.sound('stressCutscene'));
 			FlxG.sound.list.add(stressScene);
 			
-			FlxG.sound.playMusic(Paths.music('klaskii-romper'), 0.2);
+			FunkinSound.playMusic(Paths.music('klaskii-romper'), 0.2);
 			FlxG.sound.music.fadeIn(2, 0.0125, 0.1);
 			
 			FlxTimer.wait(0.1, () -> {
