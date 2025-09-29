@@ -80,8 +80,6 @@ class DebugDisplay extends Sprite
 		
 		this.x = x;
 		this.y = y;
-		
-		FlxG.signals.postStateSwitch.add(() -> updateText = __updateTxt);
 	}
 	
 	// Event Handlers
@@ -108,12 +106,12 @@ class DebugDisplay extends Sprite
 	}
 	
 	// rebind this function to set a custom fps counter
-	dynamic function updateText():Void
+	public dynamic function updateText():Void
 	{
-		__updateTxt();
+		__updateText();
 	}
 	
-	function __updateTxt()
+	function __updateText()
 	{
 		if (!canUpdate) return;
 		
