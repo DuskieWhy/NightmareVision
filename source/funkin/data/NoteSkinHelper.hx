@@ -86,7 +86,14 @@ class NoteSkinHelper implements IFlxDestroyable
 	
 	public function loadFromPath(path:String, keyCount:Int = -1)
 	{
-		data = cast FunkinAssets.parseJson(FunkinAssets.getContent(path).trim()) ?? {};
+		if (FunkinAssets.exists(path))
+		{
+			data = cast FunkinAssets.parseJson(FunkinAssets.getContent(path)) ?? {};
+		}
+		else
+		{
+			data = {};
+		}
 		
 		if (keyCount != -1) keys = keyCount;
 		resolveData(data);

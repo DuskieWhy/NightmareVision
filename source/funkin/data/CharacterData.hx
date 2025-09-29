@@ -29,15 +29,16 @@ class CharacterParser
 		{
 			raw = FunkinAssets.getContent(charPath);
 		}
+		catch (e) {}
 		
 		if (raw.trim().length != 0 && charPath.endsWith('.xml')) return fromCNE(raw); // if it was a xml its cne
 		
 		final rawJson:Null<Any> = FunkinAssets.parseJson(raw);
 		
-		if (rawJson == null) throw 'failed to parse json at $charPath'; // perhaps instead of throwing i could return a dummy thats flagged as invalid..
+		// if (rawJson == null) throw 'failed to parse json at $charPath'; // perhaps instead of throwing i could return a dummy thats flagged as invalid..
 		
 		// then check for vslice
-		if (Reflect.hasField(rawJson, 'version')) // idk if other formats use a version but for the time being i will assume its vslice
+		if (rawJson != null && Reflect.hasField(rawJson, 'version')) // idk if other formats use a version but for the time being i will assume its vslice
 		{
 			return fromVSlice(rawJson);
 		}
@@ -48,9 +49,11 @@ class CharacterParser
 	/**
 	 * Ensures the minimum required fields are not null.
 	 */
-	static function validateData(data:Dynamic):CharacterInfo
+	static function validateData(data:Null<Dynamic>):CharacterInfo
 	{
 		final baseInfo:CharacterInfo = getTemplateCharInfo();
+		
+		if (data == null) return baseInfo;
 		
 		data.sing_duration ??= baseInfo.sing_duration;
 		data.no_antialiasing ??= baseInfo.no_antialiasing;

@@ -791,8 +791,7 @@ class PlayState extends MusicBeatState
 	
 	function noteskinLoading(skin:String = 'default'):Void // cleanup later
 	{
-		final path = Paths.noteskin(skin);
-		if (FunkinAssets.exists(path, TEXT)) noteSkin = new NoteSkinHelper(path);
+		noteSkin = new NoteSkinHelper(Paths.noteskin(skin));
 	}
 	
 	function initNoteSkinning():Void // TODO: rewrite this
@@ -2956,7 +2955,7 @@ class PlayState extends MusicBeatState
 				if (field.inControl && !field.autoPlayed && field.playerControls)
 				{
 					var spr:StrumNote = field.members[key];
-					if (spr != null && spr.animation.curAnim.name != 'confirm')
+					if (spr != null && spr.animation.curAnim != null && spr.animation.curAnim.name != 'confirm')
 					{
 						spr.playAnim('pressed');
 						spr.resetAnim = 0;
