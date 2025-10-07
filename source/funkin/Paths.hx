@@ -127,9 +127,10 @@ class Paths
 		return FunkinAssets.getSoundUnsafe(songKey);
 	}
 	
-	public static inline function inst(song:String, checkMods:Bool = true):Sound
+	public static inline function inst(song:String, ?postFix:String, checkMods:Bool = true):Null<openfl.media.Sound>
 	{
 		var songKey:String = '${formatToSongPath(song)}/Inst';
+		if (postFix != null) songKey += '-$postFix';
 		
 		songKey = findFileWithExts('songs/$songKey', ['ogg', 'wav'], null, checkMods);
 		

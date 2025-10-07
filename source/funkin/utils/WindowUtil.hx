@@ -41,9 +41,6 @@ class WindowUtil
 				camera.height = Std.int(FlxG.height * (FlxG.width / newHeight));
 				scaledHeight = camera.height;
 			}
-			// if(newWidth == newHeight){
-			//     camera.y
-			// }
 		}
 		if (!FlxG.fullscreen)
 		{
@@ -51,12 +48,7 @@ class WindowUtil
 			FlxG.stage.window.x = Std.int((monitorResolutionWidth - newWidth) / 2);
 			FlxG.stage.window.y = Std.int((monitorResolutionHeight - newHeight) / 2);
 		}
-		
-		// else {
-		//     FlxG.stage.window.onResize = ()->{
-		//         FlxG.resizeWindow(newWidth, newHeight);
-		//     }
-		// }
+
 		var s = new funkin.backend.FunkinRatioScaleMode();
 		s.height = scaledHeight;
 		FlxG.scaleMode = s;
