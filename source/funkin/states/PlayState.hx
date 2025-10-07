@@ -2670,9 +2670,11 @@ class PlayState extends MusicBeatState
 				}
 				
 			case 'Set Property':
-				var props:Array<String> = value1.split('.');
-				if (props.length > 1) Reflect.setProperty(ReflectUtil.getPropertyLoop(props, true), props[props.length - 1], value2);
-				else Reflect.setProperty(this, value1, value2);
+				// var props:Array<String> = value1.split('.');
+				
+				// this line keeps crashing so im gonna comment this out until data fixes it OK?
+				// if (props.length > 1) Reflect.setProperty(ReflectUtil.getPropertyLoop(props, true), props[props.length - 1], value2);
+				// else Reflect.setProperty(this, value1, value2);
 		}
 		
 		scripts.call('onEvent', [eventName, value1, value2]);
