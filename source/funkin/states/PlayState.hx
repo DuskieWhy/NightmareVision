@@ -2717,7 +2717,7 @@ class PlayState extends MusicBeatState
 		scripts.call('onMoveCamera', [isDad ? 'dad' : 'boyfriend']);
 	}
 	
-	public function getCharacterCameraPos(char:Character):FlxPoint
+	public function getCharacterCameraPos(char:Null<Character>):FlxPoint
 	{
 		if (char == null) return FlxPoint.weak();
 		
