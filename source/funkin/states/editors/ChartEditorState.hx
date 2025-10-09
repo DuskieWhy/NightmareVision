@@ -1876,7 +1876,7 @@ class ChartEditorState extends MusicBeatState
 		
 		try
 		{
-			final oppVocals:Null<Sound> = Paths.voices(currentSongName, 'opp', false);
+			final oppVocals:Null<Sound> = Paths.voices(currentSongName, 'opp', true);
 			if (oppVocals != null)
 			{
 				opponentVocals.loadEmbedded(oppVocals);
