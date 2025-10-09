@@ -2678,7 +2678,7 @@ class PlayState extends MusicBeatState
 				}
 				catch (e)
 				{
-					//
+					Logger.log('Event [Set Property] failed Exception: ${e.toString()}', ERROR);
 				}
 		}
 		
