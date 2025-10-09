@@ -1859,7 +1859,9 @@ class ChartEditorState extends MusicBeatState
 		vocals.autoDestroy = false;
 		opponentVocals.autoDestroy = false;
 		
-		final playerVocalsSnd:Null<Sound> = Paths.voices(currentSongName, 'player', false) ?? Paths.voices(currentSongName, null, false);
+		final playerVocalsSnd:Null<Sound> = Paths.voices(currentSongName, 'player') ?? Paths.voices(currentSongName, null);
+		
+		trace(playerVocalsSnd);
 		
 		if (playerVocalsSnd != null)
 		{
