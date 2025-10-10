@@ -117,7 +117,7 @@ class FunkinAssets
 	 * @param useCache Retrieves from the cache if possible. Otherwise, it will be cached
 	 * @param allowGPU If true and is enabled in settings, the graphic will be cached on in video memory
 	 */
-	public static function getGraphic(key:String, useCache:Bool = true, allowGPU:Bool = true):Null<FlxGraphic>
+	public static function getGraphicUnsafe(key:String, useCache:Bool = true, allowGPU:Bool = true):Null<FlxGraphic>
 	{
 		if (useCache && cache.currentTrackedGraphics.exists(key))
 		{
@@ -139,6 +139,26 @@ class FunkinAssets
 	}
 	
 	/**
+	 * retrieves a flxgraphic instance from key.
+	 * 
+	 * @param useCache Retrieves from the cache if possible. Otherwise, it will be cached
+	 * @param allowGPU If true and is enabled in settings, the graphic will be cached on in video memory
+	 */
+	public static function getGraphic(key:String, useCache:Bool = true, allowGPU:Bool = true):FlxGraphic
+	{
+		final graphic:Null<FlxGraphic> = getGraphicUnsafe(key, useCache);
+		
+		if (graphic != null)
+		{
+			return graphic;
+		}
+		
+		Logger.log('graphic ($key) was not found. Returning flixel-logo instead');
+		
+		return FlxG.bitmap.add('flixel/images/logo/default.png');
+	}
+	
+	/**
 	 * Retrives a Sound instance from key.
 	 * 
 	 * If the sound could not be found, a beep sound will be given in place.
@@ -147,7 +167,7 @@ class FunkinAssets
 	 */
 	public static function getSound(key:String, useCache:Bool = true):Sound
 	{
-		var sound:Null<Sound> = getSoundUnsafe(key, useCache);
+		final sound:Null<Sound> = getSoundUnsafe(key, useCache);
 		
 		if (sound != null)
 		{

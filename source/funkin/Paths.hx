@@ -139,9 +139,7 @@ class Paths
 	
 	public static inline function image(key:String, ?parentFolder:String, allowGPU:Bool = true, checkMods:Bool = true):FlxGraphic
 	{
-		final key = getPath('images/$key.png', IMAGE, parentFolder, checkMods);
-		
-		return FunkinAssets.getGraphic(key, true, allowGPU) ?? FlxG.bitmap.add('flixel/images/logo/default.png');
+		return FunkinAssets.getGraphic(getPath('images/$key.png', IMAGE, parentFolder, checkMods), true, allowGPU);
 	}
 	
 	public static inline function font(key:String, checkMods:Bool = true):String
