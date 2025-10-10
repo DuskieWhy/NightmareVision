@@ -105,13 +105,10 @@ class OptionsState extends MusicBeatState
 		if (isHardcodedState())
 		{
 			if (controls.UI_UP_P)
-			{
 				changeSelection(-1);
-			}
+			
 			if (controls.UI_DOWN_P)
-			{
 				changeSelection(1);
-			}
 			
 			if (controls.BACK)
 			{
@@ -125,9 +122,7 @@ class OptionsState extends MusicBeatState
 			}
 			
 			if (controls.ACCEPT)
-			{
 				openSelectedSubstate(options[curSelected]);
-			}
 		}
 	}
 	
