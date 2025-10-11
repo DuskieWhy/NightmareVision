@@ -78,8 +78,12 @@ class StrumNote extends FlxSprite
 		
 		scrollFactor.set();
 		
-		rgbShader = new RGBShaderReference(this, Note.initializeGlobalRGBShader(leData));
-		if (NoteSkinHelper.instance?.data?.inGameColoring ?? false) shader = rgbShader.shader;
+		useRGBShader = NoteSkinHelper.instance?.data?.inGameColoring ?? false;
+		if (useRGBShader)
+		{
+			rgbShader = new RGBShaderReference(this, Note.initializeGlobalRGBShader(leData));
+			shader = rgbShader.shader;
+		}
 	}
 	
 	public function handleColors(anim:String, ?note:Note = null)
@@ -105,7 +109,7 @@ class StrumNote extends FlxSprite
 			}
 		}
 		
-		rgbShader.enabled = anim != 'static';
+		rgbShader.enabled = (anim != 'static' && useRGBShader);
 	}
 	
 	public function reloadNote()

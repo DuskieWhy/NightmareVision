@@ -229,12 +229,15 @@ class Note extends FlxSprite
 			rgbShader.g = 0xFF00FF00;
 			rgbShader.b = 0xFF0000FF;
 		}
+		
+		rgbShader.enabled = rgbEnabled;
 	}
 	
 	private function set_noteType(value:String):String
 	{
+		if (rgbEnabled) defaultRGB();
+		
 		noteSplashTexture = PlayState.SONG.splashSkin;
-		if (NoteSkinHelper.instance?.data?.inGameColoring ?? false) defaultRGB();
 		
 		noteScript = null;
 		
@@ -308,8 +311,13 @@ class Note extends FlxSprite
 		
 		if (noteData > -1)
 		{
-			rgbShader = new RGBShaderReference(this, initializeGlobalRGBShader(noteData));
-			if (NoteSkinHelper.instance?.data?.inGameColoring ?? false) shader = rgbShader.shader;
+			rgbEnabled = NoteSkinHelper.instance?.data?.inGameColoring ?? false;
+			
+			if (rgbEnabled)
+			{
+				rgbShader = new RGBShaderReference(this, initializeGlobalRGBShader(noteData));
+				shader = rgbShader.shader;
+			}
 			
 			texture = '';
 			

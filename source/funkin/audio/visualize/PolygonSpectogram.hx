@@ -5,6 +5,7 @@ import flixel.math.FlxPoint;
 import flixel.sound.FlxSound;
 import flixel.util.FlxColor;
 
+import funkin.audio.visualize.SpectogramSprite.SPECDIRECTION;
 import funkin.audio.visualize.VisShit.CurAudioInfo;
 import funkin.objects.MeshRender;
 
@@ -29,7 +30,9 @@ class PolygonSpectogram extends MeshRender
 	public var thickness:Float = 2;
 	public var waveAmplitude:Int = 100;
 	
-	public function new(?daSound:FlxSound, ?col:FlxColor = FlxColor.WHITE, ?height:Float = 720, ?detail:Float = 1)
+	public var direction:SPECDIRECTION = VERTICAL;
+	
+	public function new(?daSound:FlxSound, ?col:FlxColor = FlxColor.WHITE, ?height:Float = 720, ?detail:Float = 1, ?dir:SPECDIRECTION = VERTICAL)
 	{
 		super(0, 0, col);
 		
@@ -37,6 +40,7 @@ class PolygonSpectogram extends MeshRender
 		
 		if (height != null) this.daHeight = height;
 		
+		this.direction = dir;
 		this.detail = detail;
 		
 		// col not in yet
@@ -101,8 +105,19 @@ class PolygonSpectogram extends MeshRender
 				var curAud:CurAudioInfo = VisShit.getCurAud(audioData, sampleApprox);
 				
 				var coolPoint:FlxPoint = new FlxPoint();
-				coolPoint.x = (curAud.balanced * waveAmplitude);
-				coolPoint.y = (i / funnyPixels * daHeight);
+				var posX = (curAud.balanced * waveAmplitude);
+				var posY = (i / funnyPixels * daHeight);
+				
+				if (direction == VERTICAL)
+				{
+					coolPoint.x = posX;
+					coolPoint.y = posY;
+				}
+				if (direction == HORIZONTAL)
+				{
+					coolPoint.x = posY;
+					coolPoint.y = posX;
+				}
 				
 				build_quad(prevPoint.x, prevPoint.y, prevPoint.x
 					+ thickness, prevPoint.y, coolPoint.x, coolPoint.y, coolPoint.x
