@@ -169,6 +169,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		healthIcon.visible = false;
 		
 		cameraPointer = new FlxSprite().loadGraphic(FlxGraphic.fromClass(Crosshair));
+		cameraPointer.antialiasing = false;
 		cameraPointer.setGraphicSize(40, 40);
 		cameraPointer.updateHitbox();
 		cameraPointer.color = FlxColor.WHITE;
