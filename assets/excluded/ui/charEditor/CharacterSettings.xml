@@ -43,7 +43,7 @@
                         <label text="(Optional) Animation Indices" verticalAlign="center"  tooltip="Allows for changing the frame order or duration of a given animation"/>
 
                         <hbox>
-                            <textfield placeholder="0,1,2,3,4,5" width="300" id="animationIndicesTextField"/>
+                            <textfield width="300" id="animationIndicesTextField"/>
                         
                             <checkbox text="Flip X?" id="flipXAnimCheckbox"  verticalAlign="center"  tooltip="If enabled, this animation will be flipped horizontally"/>
                             <checkbox text="Flip Y?" id="flipYAnimCheckbox"  verticalAlign="center"  tooltip="If enabled, this animation will be flipped vertically"/>
