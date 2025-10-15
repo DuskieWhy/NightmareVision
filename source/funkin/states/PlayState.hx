@@ -587,7 +587,7 @@ class PlayState extends MusicBeatState
 		songStartCallback = startCountdown;
 		songEndCallback = endSong;
 		
-		// If u have epics enabled
+		// If u have kutty enabled
 		if (ClientPrefs.useEpicRankings) ratingsData.unshift(new Rating('epic'));
 		
 		FlxG.sound.music?.stop();
@@ -956,7 +956,7 @@ class PlayState extends MusicBeatState
 	 * Creates a new `FunkinHScript` from filepath and calls `onLoad`. Returns `null` if it couldnt be found
 	 * @param name sets a custom name to the script
 	 */
-	function initFunkinHScript(filePath:String, ?name:String):Null<FunkinHScript>
+	public function initFunkinHScript(filePath:String, ?name:String):Null<FunkinHScript>
 	{
 		if (scripts.exists(name ?? filePath)) return null;
 		
