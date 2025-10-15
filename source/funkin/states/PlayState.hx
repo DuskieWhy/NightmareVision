@@ -1134,13 +1134,12 @@ class PlayState extends MusicBeatState
 			scripts.set('opponentStrums', opponentStrums);
 			scripts.set('playFields', playFields);
 			
-			scripts.call('postReceptorGeneration', [isStoryMode || skipArrowStartTween]);
-			
 			modManager.receptors = [for (i in playFields) i.members];
 			
 			modManager.lanes = SONG.lanes;
 			
-			scripts.call('preModifierRegister', []);
+			scripts.call('postReceptorGeneration');
+			
 			modManager.registerEssentialModifiers();
 			modManager.registerDefaultModifiers();
 			scripts.call('postModifierRegister', []);

@@ -59,6 +59,8 @@ class StrumNote extends FlxSprite
 		return value;
 	}
 	
+	var rgbColourReference:Array<FlxColor>; // todo rewrite this
+	
 	public var rgbShader:RGBShaderReference;
 	public var useRGBShader:Bool = true;
 	
@@ -70,6 +72,7 @@ class StrumNote extends FlxSprite
 		this.noteData = leData;
 		this.parent = parent;
 		this.player = player;
+		this.rgbColourReference = ClientPrefs.arrowRGBdef[noteData];
 		super(x, y);
 		
 		var skin:String = 'NOTE_assets';
@@ -90,7 +93,7 @@ class StrumNote extends FlxSprite
 	{
 		if (rgbShader == null || !NoteSkinHelper.instance?.data?.inGameColoring ?? false) return;
 		
-		var arr:Array<FlxColor> = ClientPrefs.arrowRGBdef[noteData];
+		var arr:Array<FlxColor> = rgbColourReference;
 		if (arr == null) arr = ClientPrefs.arrowRGBdef[0];
 		
 		if (ClientPrefs.noteSkin.contains('Quant'))
