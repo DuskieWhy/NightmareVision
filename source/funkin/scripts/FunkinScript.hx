@@ -10,7 +10,7 @@ import funkin.objects.note.*;
 
 @:access(crowplexus.iris.Iris)
 @:access(funkin.states.PlayState)
-class FunkinHScript extends Iris implements IFlxDestroyable
+class FunkinScript extends Iris implements IFlxDestroyable
 {
 	/**
 	 * List of all accepted hscript extensions
@@ -76,18 +76,18 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 	}
 	
 	/**
-	 * Creates a new `FunkinHScript` from a string
+	 * Creates a new `FunkinScript` from a string
 	 * @param script 
 	 * @param name 
 	 * @param additionalVars 
 	 */
 	public static function fromString(script:String, ?name:String = "Script", ?additionalVars:Map<String, Any>)
 	{
-		return new FunkinHScript(script, name, additionalVars);
+		return new FunkinScript(script, name, additionalVars);
 	}
 	
 	/**
-	 * Creates a new `FunkinHScript` from a filepath
+	 * Creates a new `FunkinScript` from a filepath
 	 * 
 	 * @param file 
 	 * @param name 
@@ -97,7 +97,7 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 	{
 		name ??= file;
 		
-		return new FunkinHScript(FunkinAssets.getContent(file), name, additionalVars);
+		return new FunkinScript(FunkinAssets.getContent(file), name, additionalVars);
 	}
 	
 	/**
@@ -216,9 +216,9 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		set('curBpm', Conductor.bpm);
 		set('crotchet', Conductor.crotchet);
 		set('stepCrotchet', Conductor.stepCrotchet);
-		set('Function_Halt', funkin.scripting.Globals.Function_Halt);
-		set('Function_Stop', funkin.scripting.Globals.Function_Stop);
-		set('Function_Continue', funkin.scripting.Globals.Function_Continue);
+		set('Function_Halt', funkin.scripting.ScriptConstants.Function_Halt);
+		set('Function_Stop', funkin.scripting.ScriptConstants.Function_Stop);
+		set('Function_Continue', funkin.scripting.ScriptConstants.Function_Continue);
 		set('curBeat', 0);
 		set('curStep', 0);
 		set('curSection', 0);
@@ -276,15 +276,23 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 		set("Conductor", funkin.backend.Conductor);
 		set("ClientPrefs", funkin.data.ClientPrefs);
 		set("CoolUtil", funkin.utils.CoolUtil);
+		set('WindowUtil', funkin.utils.WindowUtil);
+		
 		set("StageData", funkin.data.StageData);
 		set("PlayState", PlayState);
-		set("FunkinHScript", FunkinHScript);
-		set('WindowUtil', funkin.utils.WindowUtil); // temp till i fix some shit
-		set('Globals', funkin.scripting.Globals);
 		set('FunkinSound', funkin.audio.FunkinSound);
 		
-		set('HScriptState', funkin.scripting.HScriptState);
-		set('HScriptSubstate', funkin.scripting.HScriptSubstate);
+		// script
+		set("FunkinScript", FunkinScript);
+		set('ScriptConstants', funkin.scripting.ScriptConstants);
+		
+		// for compat
+		set('HScriptState', funkin.scripting.ScriptedState);
+		set('HScriptSubstate', funkin.scripting.ScriptedSubstate);
+		
+		set('ScriptedState', funkin.scripting.ScriptedState);
+		set('ScriptedSubstate', funkin.scripting.ScriptedSubstate);
+		
 		set("GameOverSubstate", funkin.states.substates.GameOverSubstate);
 		
 		// objects
@@ -344,14 +352,14 @@ class FunkinHScript extends Iris implements IFlxDestroyable
 			
 			set("game", FlxG.state);
 			set("global", PlayState.instance.variables);
-			set("getInstance", funkin.scripting.Globals.getInstance);
+			set("getInstance", funkin.scripting.ScriptConstants.getInstance);
 			
 			set('setVar', (varName:String, val:Dynamic) -> PlayState.instance.variables.set(varName, val));
 			set('getVar', (varName:String) -> PlayState.instance.variables.get(varName));
 			
 			set('startHScript', (path:String) -> {
-				path = FunkinHScript.getPath(path);
-				if (!PlayState.instance.scripts.exists(path)) PlayState.instance.initFunkinHScript(path);
+				path = FunkinScript.getPath(path);
+				if (!PlayState.instance.scripts.exists(path)) PlayState.instance.initFunkinScript(path);
 			});
 		}
 		else

@@ -5,15 +5,13 @@ import extensions.hscript.InterpEx;
 import flixel.util.FlxDestroyUtil;
 import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 
-import funkin.scripting.Globals;
-
 /**
- * Container of `FunkinHScript` instances
+ * Container of `FunkinScript` instances
  * 
  * idea from friens static fyr thanks
  */
 @:nullSafety(Strict)
-class HScriptGroup implements IFlxDestroyable
+class ScriptGroup implements IFlxDestroyable
 {
 	/**
 	 * Global interp parent applied to all scripts in the group
@@ -37,9 +35,9 @@ class HScriptGroup implements IFlxDestroyable
 	}
 	
 	/**
-	 * array of all `FunkinHScript` instances
+	 * array of all `FunkinScript` instances
 	 */
-	public var members:Array<FunkinHScript> = [];
+	public var members:Array<FunkinScript> = [];
 	
 	public function new(?parent:Dynamic)
 	{
@@ -56,7 +54,7 @@ class HScriptGroup implements IFlxDestroyable
 	 * Adds a new script to the group
 	 * @param script 
 	 */
-	public function addScript(script:Null<FunkinHScript>, allowDupeNames:Bool = false):Bool
+	public function addScript(script:Null<FunkinScript>, allowDupeNames:Bool = false):Bool
 	{
 		if (script == null || (!allowDupeNames && exists(script.name))) return false;
 		
@@ -67,7 +65,7 @@ class HScriptGroup implements IFlxDestroyable
 		return true;
 	}
 	
-	@:inheritDoc(funkin.scripts.FunkinHScript.set)
+	@:inheritDoc(funkin.scripts.FunkinScript.set)
 	public function set(varName:String, arg:Dynamic)
 	{
 		for (i in members)
@@ -76,11 +74,11 @@ class HScriptGroup implements IFlxDestroyable
 		}
 	}
 	
-	@:inheritDoc(funkin.scripts.FunkinHScript.call)
+	@:inheritDoc(funkin.scripts.FunkinScript.call)
 	public function call(event:String, ?args:Array<Dynamic>, ignoreStops:Bool = false, ?exclusions:Array<String>):Dynamic
 	{
 		exclusions ??= [];
-		var returnVal:Dynamic = Globals.Function_Continue;
+		var returnVal:Dynamic = ScriptConstants.Function_Continue;
 		for (i in members)
 		{
 			if (i == null || !i.exists(event) || exclusions.contains(i.name))
@@ -91,13 +89,13 @@ class HScriptGroup implements IFlxDestroyable
 			var ret:Dynamic = i.call(event, args)?.returnValue;
 			if (ret != null)
 			{
-				if (ret == Globals.Function_Halt)
+				if (ret == ScriptConstants.Function_Halt)
 				{
 					ret = returnVal;
 					if (!ignoreStops) return returnVal;
 				};
 				
-				if (ret != Globals.Function_Continue) returnVal = ret;
+				if (ret != ScriptConstants.Function_Continue) returnVal = ret;
 			}
 		}
 		
@@ -107,7 +105,7 @@ class HScriptGroup implements IFlxDestroyable
 	/**
 	 * returns a script by name. returns `null` if it cannot be found
 	 */
-	public function getScript(name:String):Null<FunkinHScript>
+	public function getScript(name:String):Null<FunkinScript>
 	{
 		for (script in members)
 			if (script.name == name) return script;
@@ -148,4 +146,4 @@ class HScriptGroup implements IFlxDestroyable
 
 // this might be better..?
 
-class HScriptContainer extends HScriptGroup {}
+class HScriptContainer extends ScriptGroup {}

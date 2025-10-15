@@ -45,7 +45,6 @@ import funkin.states.editors.*;
 import funkin.game.modchart.*;
 import funkin.backend.SyncedFlxSoundGroup;
 import funkin.game.StoryMeta;
-import funkin.scripting.Globals;
 #if VIDEOS_ALLOWED
 import funkin.video.FunkinVideoSprite;
 #end
@@ -446,17 +445,17 @@ class PlayState extends MusicBeatState
 	/**
 	 * Group of general scripts.
 	 */
-	public var scripts:HScriptGroup;
+	public var scripts:ScriptGroup;
 	
 	/**
 	 * Group of note type scripts. these have some special functions for their use
 	 */
-	public var noteTypeScripts:HScriptGroup;
+	public var noteTypeScripts:ScriptGroup;
 	
 	/**
 	 * Group of event scripts. these have some special functions for their use
 	 */
-	public var eventScripts:HScriptGroup;
+	public var eventScripts:ScriptGroup;
 	
 	public static var noteSkin:funkin.data.NoteSkinHelper;
 	
@@ -569,9 +568,9 @@ class PlayState extends MusicBeatState
 		
 		GameOverSubstate.resetVariables();
 		
-		scripts = new HScriptGroup(this);
-		eventScripts = new HScriptGroup(this);
-		noteTypeScripts = new HScriptGroup(this);
+		scripts = new ScriptGroup(this);
+		eventScripts = new ScriptGroup(this);
+		noteTypeScripts = new ScriptGroup(this);
 		
 		debugKeysChart = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_1'));
 		debugKeysCharacter = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_2'));
@@ -650,7 +649,7 @@ class PlayState extends MusicBeatState
 		
 		if (isPixelStage) introSoundsSuffix = '-pixel';
 		
-		if (scripts.call("onAddSpriteGroups", []) != Globals.Function_Stop)
+		if (scripts.call("onAddSpriteGroups", []) != ScriptConstants.Function_Stop)
 		{
 			add(stage);
 			stage.add(gfGroup);
@@ -658,11 +657,11 @@ class PlayState extends MusicBeatState
 			stage.add(boyfriendGroup);
 		}
 		
-		for (file in Paths.listAllFilesInDirectory('scripts/').filter(path -> FunkinHScript.isHxFile(path)))
+		for (file in Paths.listAllFilesInDirectory('scripts/').filter(path -> FunkinScript.isHxFile(path)))
 		{
-			final scriptPath = FunkinHScript.getPath(file);
+			final scriptPath = FunkinScript.getPath(file);
 			
-			initFunkinHScript(file);
+			initFunkinScript(file);
 		}
 		
 		var gfVersion:String = SONG.gfVersion;
@@ -783,11 +782,11 @@ class PlayState extends MusicBeatState
 		
 		for (file in Paths.listAllFilesInDirectory('songs/${Paths.formatToSongPath(SONG.song)}/'))
 		{
-			final scriptPath = FunkinHScript.getPath(file);
+			final scriptPath = FunkinScript.getPath(file);
 			
-			if (!FunkinHScript.isHxFile(scriptPath)) continue;
+			if (!FunkinScript.isHxFile(scriptPath)) continue;
 			
-			initFunkinHScript(file);
+			initFunkinScript(file);
 		}
 		
 		if (songStartCallback == null)
@@ -947,20 +946,20 @@ class PlayState extends MusicBeatState
 	
 	function startCharacterScript(name:String, char:Character):Void
 	{
-		final hscriptPath = FunkinHScript.getPath('characters/$name');
+		final hscriptPath = FunkinScript.getPath('characters/$name');
 		
-		if (FunkinAssets.exists(hscriptPath, TEXT)) initFunkinHScript(hscriptPath);
+		if (FunkinAssets.exists(hscriptPath, TEXT)) initFunkinScript(hscriptPath);
 	}
 	
 	/**
-	 * Creates a new `FunkinHScript` from filepath and calls `onLoad`. Returns `null` if it couldnt be found
+	 * Creates a new `FunkinScript` from filepath and calls `onLoad`. Returns `null` if it couldnt be found
 	 * @param name sets a custom name to the script
 	 */
-	public function initFunkinHScript(filePath:String, ?name:String):Null<FunkinHScript>
+	public function initFunkinScript(filePath:String, ?name:String):Null<FunkinScript>
 	{
 		if (scripts.exists(name ?? filePath)) return null;
 		
-		var script:FunkinHScript = FunkinHScript.fromFile(filePath, name);
+		var script:FunkinScript = FunkinScript.fromFile(filePath, name);
 		if (script.__garbage)
 		{
 			script = FlxDestroyUtil.destroy(script);
@@ -1100,7 +1099,7 @@ class PlayState extends MusicBeatState
 		
 		final ret:Dynamic = scripts.call('onStartCountdown', []);
 		
-		if (ret != Globals.Function_Stop)
+		if (ret != ScriptConstants.Function_Stop)
 		{
 			if (skipCountdown || startOnTime > 0) skipArrowStartTween = true;
 			
@@ -1474,9 +1473,9 @@ class PlayState extends MusicBeatState
 			{
 				final baseScriptFile = 'notetypes/$type';
 				
-				final scriptFile = FunkinHScript.getPath(baseScriptFile);
+				final scriptFile = FunkinScript.getPath(baseScriptFile);
 				
-				if (FunkinAssets.exists(scriptFile, TEXT)) noteTypeScripts.addScript(initFunkinHScript(scriptFile, type));
+				if (FunkinAssets.exists(scriptFile, TEXT)) noteTypeScripts.addScript(initFunkinScript(scriptFile, type));
 				
 				noteTypesPushed.push(type);
 			}
@@ -1490,9 +1489,9 @@ class PlayState extends MusicBeatState
 			{
 				final baseScriptFile:String = 'events/$eventName';
 				
-				final scriptFile = FunkinHScript.getPath(baseScriptFile);
+				final scriptFile = FunkinScript.getPath(baseScriptFile);
 				
-				if (FunkinAssets.exists(scriptFile, TEXT)) eventScripts.addScript(initFunkinHScript(scriptFile, eventName));
+				if (FunkinAssets.exists(scriptFile, TEXT)) eventScripts.addScript(initFunkinScript(scriptFile, eventName));
 				
 				firstEventPush(event);
 				
@@ -1714,10 +1713,10 @@ class PlayState extends MusicBeatState
 	function eventNoteEarlyTrigger(event:EventNote):Float
 	{
 		var returnValue:Dynamic = scripts.call('eventEarlyTrigger', [event.event, event.value1, event.value2]);
-		if (returnValue != Globals.Function_Continue) return returnValue;
+		if (returnValue != ScriptConstants.Function_Continue) return returnValue;
 		
 		returnValue = callEventScript(event.event, 'offsetStrumTime', [event]);
-		if (returnValue != Globals.Function_Continue) return returnValue;
+		if (returnValue != ScriptConstants.Function_Continue) return returnValue;
 		
 		switch (event.event)
 		{
@@ -1907,7 +1906,7 @@ class PlayState extends MusicBeatState
 		
 		if (controls.PAUSE && startedCountdown && canPause)
 		{
-			if (scripts.call('onPause', []) != Globals.Function_Stop) openPauseMenu();
+			if (scripts.call('onPause', []) != ScriptConstants.Function_Stop) openPauseMenu();
 		}
 		
 		if (canAccessEditors && !endingSong && !inCutscene)
@@ -1969,9 +1968,9 @@ class PlayState extends MusicBeatState
 			{
 				final dunceNote:Note = unspawnNotes[0];
 				
-				var doSpawn:Bool = callNoteTypeScript(dunceNote.noteType, 'spawnNote', [dunceNote]) != Globals.Function_Stop;
+				var doSpawn:Bool = callNoteTypeScript(dunceNote.noteType, 'spawnNote', [dunceNote]) != ScriptConstants.Function_Stop;
 				
-				if (doSpawn) doSpawn = scripts.call('onSpawnNote', [dunceNote], false, [dunceNote.noteType]) != Globals.Function_Stop;
+				if (doSpawn) doSpawn = scripts.call('onSpawnNote', [dunceNote], false, [dunceNote.noteType]) != ScriptConstants.Function_Stop;
 				
 				if (doSpawn)
 				{
@@ -2017,7 +2016,7 @@ class PlayState extends MusicBeatState
 					unspawnNotes.splice(index, 1);
 					
 					var ret:Dynamic = callNoteTypeScript(dunceNote.noteType, 'postSpawnNote', [dunceNote]);
-					if (ret != Globals.Function_Stop) scripts.call('onSpawnNotePost', [dunceNote], false, [dunceNote.noteType]);
+					if (ret != ScriptConstants.Function_Stop) scripts.call('onSpawnNotePost', [dunceNote], false, [dunceNote.noteType]);
 				}
 				else
 				{
@@ -2240,7 +2239,7 @@ class PlayState extends MusicBeatState
 	public function updateScoreBar(miss:Bool = false):Void
 	{
 		if (scripts.call('onUpdateScore',
-			[miss]) != Globals.Function_Stop) callHUDFunc(hud -> hud.onUpdateScore(songScore, funkin.utils.MathUtil.floorDecimal(ratingPercent * 100, 2), songMisses, miss));
+			[miss]) != ScriptConstants.Function_Stop) callHUDFunc(hud -> hud.onUpdateScore(songScore, funkin.utils.MathUtil.floorDecimal(ratingPercent * 100, 2), songMisses, miss));
 	}
 	
 	public var isDead:Bool = false;
@@ -2250,7 +2249,7 @@ class PlayState extends MusicBeatState
 		if (((skipHealthCheck && instakillOnMiss) || health <= 0) && !practiceMode && !isDead)
 		{
 			final ret:Dynamic = scripts.call('onGameOver', []);
-			if (ret != Globals.Function_Stop)
+			if (ret != ScriptConstants.Function_Stop)
 			{
 				boyfriend.stunned = true;
 				deathCounter++;
@@ -2836,7 +2835,7 @@ class PlayState extends MusicBeatState
 		
 		final ret:Dynamic = scripts.call('onEndSong', []);
 		
-		if (ret != Globals.Function_Stop && !transitioning)
+		if (ret != ScriptConstants.Function_Stop && !transitioning)
 		{
 			playbackRate = 1;
 			var percent:Float = ratingPercent;
@@ -3190,7 +3189,7 @@ class PlayState extends MusicBeatState
 		}
 		
 		final noteScriptRet = callNoteTypeScript(daNote.noteType, 'noteMiss', [daNote]);
-		if (noteScriptRet != Globals.Function_Stop) scripts.call('noteMiss', [daNote], false, [daNote.noteType]);
+		if (noteScriptRet != ScriptConstants.Function_Stop) scripts.call('noteMiss', [daNote], false, [daNote.noteType]);
 		
 		if (ClientPrefs.guitarHeroSustains)
 		{
@@ -3316,7 +3315,7 @@ class PlayState extends MusicBeatState
 						{
 							if (note != animNote
 								&& !note.nextNote.isSustainNote
-								&& scripts.call('onGhostAnim', [animToPlay, note]) != Globals.Function_Stop)
+								&& scripts.call('onGhostAnim', [animToPlay, note]) != ScriptConstants.Function_Stop)
 							{
 								char.playGhostAnim(chord.indexOf(note), animToPlay, true);
 							}
@@ -3406,7 +3405,7 @@ class PlayState extends MusicBeatState
 		}
 		
 		final noteScriptRet = callNoteTypeScript(note.noteType, funcToCall, hscriptArgs);
-		if (noteScriptRet != Globals.Function_Stop) scripts.call(funcToCall, hscriptArgs, false, [note.noteType]);
+		if (noteScriptRet != ScriptConstants.Function_Stop) scripts.call(funcToCall, hscriptArgs, false, [note.noteType]);
 		
 		if (!note.isSustainNote) disposeNote(note);
 	}
@@ -3557,7 +3556,7 @@ class PlayState extends MusicBeatState
 	 */
 	function callEventScript(scriptName:String, func:String, args:Array<Dynamic>):Dynamic
 	{
-		if (!eventScripts.exists(scriptName)) return Globals.Function_Continue;
+		if (!eventScripts.exists(scriptName)) return ScriptConstants.Function_Continue;
 		
 		final script = eventScripts.getScript(scriptName);
 		
@@ -3569,7 +3568,7 @@ class PlayState extends MusicBeatState
 	 */
 	function callNoteTypeScript(noteType:String, func:String, args:Array<Dynamic>):Dynamic
 	{
-		if (!noteTypeScripts.exists(noteType)) return Globals.Function_Continue;
+		if (!noteTypeScripts.exists(noteType)) return ScriptConstants.Function_Continue;
 		
 		final script = noteTypeScripts.getScript(noteType);
 		
@@ -3579,13 +3578,13 @@ class PlayState extends MusicBeatState
 	/**
 	 * calls a function directly on a script if it exists
 	 */
-	public function callScript(script:FunkinHScript, event:String, args:Array<Dynamic>):Dynamic
+	public function callScript(script:FunkinScript, event:String, args:Array<Dynamic>):Dynamic
 	{
-		if (!script.exists(event)) return Globals.Function_Continue;
+		if (!script.exists(event)) return ScriptConstants.Function_Continue;
 		
 		var ret:Dynamic = script.call(event, args)?.returnValue;
 		
-		return ret ?? Globals.Function_Continue;
+		return ret ?? ScriptConstants.Function_Continue;
 	}
 	
 	function strumPlayAnim(field:PlayField, id:Int, time:Float, ?note:Note)
@@ -3606,7 +3605,7 @@ class PlayState extends MusicBeatState
 	public function RecalculateRating(badHit:Bool = false)
 	{
 		final ret:Dynamic = scripts.call('onRecalculateRating', []);
-		if (ret != Globals.Function_Stop)
+		if (ret != ScriptConstants.Function_Stop)
 		{
 			if (totalPlayed < 1) // Prevent divide by 0
 				ratingName = '?';

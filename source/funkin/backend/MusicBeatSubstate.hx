@@ -33,7 +33,7 @@ class MusicBeatSubstate extends FlxSubState
 	public var scripted:Bool = false;
 	public var scriptName:String = '';
 	public var scriptPrefix:String = 'menus/substates'; // not rlly a fan of the folder being named menus tbh - data5
-	public var scriptGroup:HScriptGroup = new HScriptGroup();
+	public var scriptGroup:ScriptGroup = new ScriptGroup();
 	
 	public function initStateScript(?scriptName:String, callOnCreate:Bool = true):Bool
 	{
@@ -45,11 +45,11 @@ class MusicBeatSubstate extends FlxSubState
 		
 		this.scriptName = scriptName;
 		
-		final scriptFile = FunkinHScript.getPath('scripts/$scriptPrefix/$scriptName');
+		final scriptFile = FunkinScript.getPath('scripts/$scriptPrefix/$scriptName');
 		
 		if (FunkinAssets.exists(scriptFile))
 		{
-			var _script = FunkinHScript.fromFile(scriptFile);
+			var _script = FunkinScript.fromFile(scriptFile);
 			if (_script.__garbage)
 			{
 				_script = FlxDestroyUtil.destroy(_script);

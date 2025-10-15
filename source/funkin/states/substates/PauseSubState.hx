@@ -17,7 +17,6 @@ import funkin.backend.Difficulty;
 import funkin.utils.CameraUtil;
 import funkin.states.options.OptionsState;
 import funkin.backend.MusicBeatSubstate;
-import funkin.scripting.Globals;
 import funkin.data.*;
 import funkin.states.*;
 import funkin.objects.*;
@@ -316,7 +315,7 @@ class PauseSubState extends MusicBeatSubstate
 	
 	public function restartSong(noTrans:Bool = false)
 	{
-		if (scriptGroup.call('onRestart', []) != Globals.Function_Stop)
+		if (scriptGroup.call('onRestart', []) != ScriptConstants.Function_Stop)
 		{
 			PlayState.instance.paused = true;
 			FlxG.sound.music.volume = 0;
@@ -344,7 +343,7 @@ class PauseSubState extends MusicBeatSubstate
 		curSelected = FlxMath.wrap(curSelected + change, 0, menuItems.length - 1);
 		var ret = scriptGroup.call('onChangeSelection', [curSelected]);
 		
-		if (ret != Globals.Function_Stop)
+		if (ret != ScriptConstants.Function_Stop)
 		{
 			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 			

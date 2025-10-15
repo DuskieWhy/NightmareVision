@@ -1,7 +1,5 @@
 package funkin.states;
 
-import funkin.scripting.Globals;
-
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -126,7 +124,7 @@ class CreditsState extends MusicBeatState
 		
 		initStateScript(null, false);
 		
-		if (isHardcodedState() && scriptGroup.call('onCreate') != Globals.Function_Stop)
+		if (isHardcodedState() && scriptGroup.call('onCreate') != ScriptConstants.Function_Stop)
 		{
 			bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 			add(bg);

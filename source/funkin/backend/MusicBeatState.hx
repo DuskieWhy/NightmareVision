@@ -37,7 +37,7 @@ class MusicBeatState extends FlxUIState
 	// script related vars
 	public var scripted:Bool = false;
 	public var scriptName:String = '';
-	public var scriptGroup:HScriptGroup = new HScriptGroup();
+	public var scriptGroup:ScriptGroup = new ScriptGroup();
 	
 	inline function isHardcodedState() return (scriptGroup != null && !scriptGroup.call('customMenu') == true) || (scriptGroup == null);
 	
@@ -49,14 +49,14 @@ class MusicBeatState extends FlxUIState
 			scriptName = stateName ?? '???';
 		}
 		
-		final scriptFile = FunkinHScript.getPath('scripts/menus/$scriptName');
+		final scriptFile = FunkinScript.getPath('scripts/menus/$scriptName');
 		if (scriptGroup.exists(scriptFile)) return true;
 		
 		this.scriptName = scriptName;
 		
 		if (FunkinAssets.exists(scriptFile))
 		{
-			var newScript = FunkinHScript.fromFile(scriptFile, scriptName);
+			var newScript = FunkinScript.fromFile(scriptFile, scriptName);
 			if (newScript.__garbage)
 			{
 				newScript = FlxDestroyUtil.destroy(newScript);

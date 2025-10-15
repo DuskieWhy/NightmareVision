@@ -3,7 +3,7 @@ package funkin.scripting;
 import funkin.backend.FallbackState;
 
 @:nullSafety
-class HScriptSubstate extends funkin.backend.MusicBeatSubstate
+class ScriptedState extends MusicBeatState
 {
 	public function new(scriptName:String)
 	{

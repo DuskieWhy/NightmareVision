@@ -1,7 +1,5 @@
 package funkin.utils;
 
-import funkin.scripting.Globals;
-
 class ReflectUtil
 {
 	public static function getPropertyLoop(split:Array<String>, getProperty:Bool = true):Dynamic
@@ -21,7 +19,7 @@ class ReflectUtil
 	{
 		var object:Dynamic = PlayState.instance?.getModchartObject(objectName);
 		
-		if (object == null) object = getVarInArray(Globals.getInstance(), objectName);
+		if (object == null) object = getVarInArray(ScriptConstants.getInstance(), objectName);
 		
 		return object;
 	}

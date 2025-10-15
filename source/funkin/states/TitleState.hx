@@ -10,7 +10,6 @@ import flixel.util.FlxTimer;
 import funkin.game.shaders.ColorSwap;
 import funkin.data.WeekData;
 import funkin.objects.Alphabet;
-import funkin.scripting.Globals;
 
 @:nullSafety
 class TitleState extends MusicBeatState
@@ -75,7 +74,7 @@ class TitleState extends MusicBeatState
 		
 		Conductor.bpm = 102;
 		
-		if (isHardcodedState() && scriptGroup.call('onStartIntro') != Globals.Function_Stop)
+		if (isHardcodedState() && scriptGroup.call('onStartIntro') != ScriptConstants.Function_Stop)
 		{
 			swagShader = new ColorSwap();
 			
@@ -140,7 +139,7 @@ class TitleState extends MusicBeatState
 		
 		if (!transitioning && skippedIntro)
 		{
-			if (pressedEnter && scriptGroup.call('onEnter', []) != Globals.Function_Stop)
+			if (pressedEnter && scriptGroup.call('onEnter', []) != ScriptConstants.Function_Stop)
 			{
 				FlxG.camera.flash(ClientPrefs.flashing ? FlxColor.WHITE : 0x4CFFFFFF, 1);
 				transitioning = true;
@@ -232,7 +231,7 @@ class TitleState extends MusicBeatState
 			scriptGroup.set('curBeat', sickBeats);
 		}
 		
-		if (!isHardcodedState() || scriptGroup.call('onBeatHit', []) == Globals.Function_Stop) return;
+		if (!isHardcodedState() || scriptGroup.call('onBeatHit', []) == ScriptConstants.Function_Stop) return;
 		
 		// just in case
 		if (isHardcodedState())
@@ -291,7 +290,7 @@ class TitleState extends MusicBeatState
 	
 	public function skipIntro():Void
 	{
-		if (scriptGroup.call('onSkipIntro', []) != Globals.Function_Stop && !skippedIntro)
+		if (scriptGroup.call('onSkipIntro', []) != ScriptConstants.Function_Stop && !skippedIntro)
 		{
 			ngSpr?.kill();
 			textGroup?.kill();

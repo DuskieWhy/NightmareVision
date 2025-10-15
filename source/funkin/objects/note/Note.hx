@@ -13,7 +13,6 @@ import funkin.objects.Character;
 import funkin.scripts.*;
 import funkin.states.*;
 import funkin.states.editors.ChartEditorState;
-import funkin.scripting.Globals;
 
 typedef EventNote =
 {
@@ -28,7 +27,7 @@ class Note extends FlxSprite
 	public var row:Int = 0;
 	public var lane:Int = 0;
 	
-	public var noteScript:Null<FunkinHScript> = null;
+	public var noteScript:Null<FunkinScript> = null;
 	
 	public static var quants:Array<Int> = [4, // quarter note
 		8, // eight
@@ -424,7 +423,7 @@ class Note extends FlxSprite
 		if (texture == null) texture = '';
 		if (suffix == null) suffix = '';
 		
-		if (noteScript != null) if (noteScript.executeFunc("onReloadNote", [this, prefix, texture, suffix], this) == Globals.Function_Stop) return;
+		if (noteScript != null) if (noteScript.executeFunc("onReloadNote", [this, prefix, texture, suffix], this) == ScriptConstants.Function_Stop) return;
 		
 		var skin:String = texture;
 		if (texture.length < 1)

@@ -9,7 +9,7 @@ class ScriptedTransition extends BaseTransitionState
 	
 	public static function setTransition(newTransition:String)
 	{
-		if (!FunkinAssets.exists(funkin.scripts.FunkinHScript.getPath('scripts/transitions/$newTransition')))
+		if (!FunkinAssets.exists(funkin.scripts.FunkinScript.getPath('scripts/transitions/$newTransition')))
 		{
 			Logger.log('scripted Transition [$newTransition] not found.', WARN);
 			return;

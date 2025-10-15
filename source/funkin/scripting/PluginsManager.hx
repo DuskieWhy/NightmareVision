@@ -1,7 +1,7 @@
 package funkin.scripting;
 
-import funkin.scripts.HScriptGroup;
-import funkin.scripts.FunkinHScript;
+import funkin.scripts.ScriptGroup;
+import funkin.scripts.FunkinScript;
 
 /**
  * Class that handles plugin like scripts.
@@ -13,7 +13,7 @@ class PluginsManager
 	/**
 	 * All scripts loaded by name
 	 */
-	public static final loadedScripts:HScriptGroup = new HScriptGroup();
+	public static final loadedScripts:ScriptGroup = new ScriptGroup();
 	
 	/**
 	 * Populates scripts for use
@@ -23,11 +23,11 @@ class PluginsManager
 		clear();
 		for (file in Paths.listAllFilesInDirectory('scripts/plugins/'))
 		{
-			if (FunkinHScript.isHxFile(file))
+			if (FunkinScript.isHxFile(file))
 			{
 				final scriptName = file.withoutDirectory().withoutExtension();
 				
-				var script = FunkinHScript.fromFile(file, scriptName);
+				var script = FunkinScript.fromFile(file, scriptName);
 				if (script.__garbage)
 				{
 					script = FlxDestroyUtil.destroy(script);

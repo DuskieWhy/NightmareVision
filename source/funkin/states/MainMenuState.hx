@@ -1,6 +1,5 @@
 package funkin.states;
 
-import funkin.scripting.Globals;
 import funkin.backend.macro.GitMacro;
 
 import flixel.FlxCamera;
@@ -149,7 +148,7 @@ class MainMenuState extends MusicBeatState
 				
 				if (controls.ACCEPT)
 				{
-					if (scriptGroup.call('onSelect', [optionShit[curSelected]]) != Globals.Function_Stop)
+					if (scriptGroup.call('onSelect', [optionShit[curSelected]]) != ScriptConstants.Function_Stop)
 					{
 						canInteract = true;
 						FunkinSound.play(Paths.sound('confirmMenu'));

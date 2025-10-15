@@ -123,7 +123,7 @@ class ChartEditorState extends MusicBeatState
 {
 	public static var instance:ChartEditorState;
 	
-	public var notetypeScripts:Map<String, FunkinHScript> = [];
+	public var notetypeScripts:Map<String, FunkinScript> = [];
 	
 	public static var noteTypeList:Array<String> = // Used for backwards compatibility with 0.1 - 0.3.2 charts, though, you should add your hardcoded custom note types here too.
 		[
@@ -1417,7 +1417,7 @@ class ChartEditorState extends MusicBeatState
 					var path = haxe.io.Path.join([directory, file]);
 					if (!FileSystem.isDirectory(path))
 					{
-						for (ext in FunkinHScript.H_EXTS)
+						for (ext in FunkinScript.H_EXTS)
 						{
 							if (file.endsWith(ext))
 							{
