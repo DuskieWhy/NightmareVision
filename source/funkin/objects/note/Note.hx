@@ -313,11 +313,8 @@ class Note extends FlxSprite
 		{
 			rgbEnabled = NoteSkinHelper.instance?.data?.inGameColoring ?? false;
 			
-			if (rgbEnabled)
-			{
-				rgbShader = new RGBShaderReference(this, initializeGlobalRGBShader(noteData));
-				shader = rgbShader.shader;
-			}
+			rgbShader = new RGBShaderReference(this, initializeGlobalRGBShader(noteData));
+			shader = rgbShader.shader;
 			
 			texture = '';
 			
@@ -378,24 +375,37 @@ class Note extends FlxSprite
 		baseScaleY = scale.y;
 	}
 	
-	public static function initializeGlobalRGBShader(noteData:Int, ?quant:Int = 0)
+	public static function initializeGlobalRGBShader(noteData:Int)
 	{
+		var enabled = NoteSkinHelper.instance?.data?.inGameColoring ?? false;
+		
 		if (globalRgbShaders[noteData] == null)
 		{
 			var newRGB:RGBPalette = new RGBPalette();
 			var arr:Array<FlxColor> = ClientPrefs.arrowRGBdef[noteData];
 			
-			if (arr != null && noteData > -1 && noteData <= arr.length)
+			if (enabled)
 			{
-				newRGB.r = arr[0];
-				newRGB.g = arr[1];
-				newRGB.b = arr[2];
+				if (arr != null && noteData > -1 && noteData <= arr.length)
+				{
+					newRGB.r = arr[0];
+					newRGB.g = arr[1];
+					newRGB.b = arr[2];
+				}
+				else
+				{
+					newRGB.r = 0xFFFF0000;
+					newRGB.g = 0xFF00FF00;
+					newRGB.b = 0xFF0000FF;
+				}
 			}
 			else
 			{
 				newRGB.r = 0xFFFF0000;
 				newRGB.g = 0xFF00FF00;
 				newRGB.b = 0xFF0000FF;
+				
+				newRGB.enabled = false;
 			}
 			
 			globalRgbShaders[noteData] = newRGB;

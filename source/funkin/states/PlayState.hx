@@ -622,7 +622,7 @@ class PlayState extends MusicBeatState
 		
 		arrowSkin = SONG.arrowSkin;
 		
-		initNoteSkinning();
+		initNoteSkinning(SONG.arrowSkin);
 		
 		#if DISCORD_ALLOWED
 		storyDifficultyText = Difficulty.difficulties[storyMeta.difficulty];
@@ -838,7 +838,7 @@ class PlayState extends MusicBeatState
 		noteSkin = new NoteSkinHelper(Paths.noteskin(skin));
 	}
 	
-	function initNoteSkinning():Void // TODO: rewrite this
+	public function initNoteSkinning(_skin:String = 'default'):Void // TODO: rewrite this
 	{
 		script_NOTEOffsets = new Vector<FlxPoint>(SONG.keys);
 		script_SUSTAINOffsets = new Vector<FlxPoint>(SONG.keys);
@@ -855,7 +855,7 @@ class PlayState extends MusicBeatState
 			script_SPLASHOffsets[i] = new FlxPoint();
 		}
 		
-		var skin = SONG.arrowSkin;
+		var skin = _skin;
 		if (skin == '' || skin == 'null' || skin == null) skin = 'default';
 		
 		noteskinLoading(skin);
