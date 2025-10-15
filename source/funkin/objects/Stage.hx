@@ -6,7 +6,7 @@ import flixel.group.FlxContainer.FlxTypedContainer;
 import flixel.FlxBasic;
 
 import funkin.data.StageData;
-import funkin.scripts.FunkinHScript;
+import funkin.scripts.FunkinScript;
 
 /**
  * Primary class holding all `FlxBasic`'s for the background of stage within `PlayState`
@@ -19,7 +19,7 @@ class Stage extends FlxTypedContainer<FlxBasic>
 	/**
 	 * Attached script to the stage
 	 */
-	public var script:Null<FunkinHScript> = null;
+	public var script:Null<FunkinScript> = null;
 	
 	/**
 	 * The name of the current stage
@@ -168,7 +168,8 @@ class Stage extends FlxTypedContainer<FlxBasic>
 						}
 						catch (e)
 						{
-							//
+							final objectName = info.id ?? 'object';
+							Logger.log('[$objectName]: could not set ${i.property}');
 						}
 					}
 				}
@@ -181,11 +182,11 @@ class Stage extends FlxTypedContainer<FlxBasic>
 		
 		final baseScriptFile:String = 'stages/$curStage/script';
 		
-		var scriptFile = FunkinHScript.getPath(baseScriptFile);
+		var scriptFile = FunkinScript.getPath(baseScriptFile);
 		if (FunkinAssets.exists(scriptFile)) prepareScript(scriptFile);
 		else
 		{
-			scriptFile = FunkinHScript.getPath('stages/$curStage');
+			scriptFile = FunkinScript.getPath('stages/$curStage');
 			if (FunkinAssets.exists(scriptFile)) prepareScript(scriptFile);
 		}
 		
@@ -262,22 +263,28 @@ class Stage extends FlxTypedContainer<FlxBasic>
 			
 			if (cl != null)
 			{
-				var instance = Type.createInstance(cl, []);
-				if (!(instance is FlxSprite)) throw '$curStage attempted to create a custom instance of $objInstance which is not a FlxSprite.';
+				var instance:Dynamic = Type.createInstance(cl, []);
+				if (!(instance is FlxSprite))
+				{
+					// if its a flixel or fl object it probably has one of these
+					// probably.
+					if (Reflect.hasField(instance, 'dispose')) instance.dispose();
+					else if (Reflect.hasField(instance, 'destroy')) instance.destroy();
+					
+					instance = null;
+					throw 'Stage [$curStage] attempted to create a custom instance of $objInstance which is not a FlxSprite.';
+				}
 				
 				return instance;
 			}
-			else return new Bopper();
 		}
-		else
-		{
-			return new Bopper();
-		}
+		
+		return new Bopper();
 	}
 	
 	inline function prepareScript(scriptFile:String)
 	{
-		script = FunkinHScript.fromFile(scriptFile);
+		script = FunkinScript.fromFile(scriptFile);
 		if (script.__garbage)
 		{
 			script = FlxDestroyUtil.destroy(script);
