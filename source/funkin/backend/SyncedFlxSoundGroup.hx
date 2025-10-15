@@ -4,6 +4,9 @@ import flixel.util.FlxSignal;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.sound.FlxSound;
 
+/**
+ * Container of FlxSounds with some functions to make multiple tracks act as one
+ */
 @:nullSafety(Strict)
 class SyncedFlxSoundGroup extends FlxTypedGroup<FlxSound>
 {

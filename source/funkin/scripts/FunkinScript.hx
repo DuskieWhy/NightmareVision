@@ -357,7 +357,7 @@ class FunkinScript extends Iris implements IFlxDestroyable
 			set('setVar', (varName:String, val:Dynamic) -> PlayState.instance.variables.set(varName, val));
 			set('getVar', (varName:String) -> PlayState.instance.variables.get(varName));
 			
-			set('startHScript', (path:String) -> {
+			set('initScript', (path:String) -> {
 				path = FunkinScript.getPath(path);
 				if (!PlayState.instance.scripts.exists(path)) PlayState.instance.initFunkinScript(path);
 			});

@@ -167,6 +167,10 @@ class PlayField extends FlxTypedContainer<StrumNote>
 	
 	public function getHoldNotes(dir:Int):Array<Note> return getNotes(dir, (note:Note) -> note.isSustainNote);
 	
+	/**
+	 * Removes a note from this
+	 * @param note 
+	 */
 	public inline function removeNote(note:Note)
 	{
 		notes.remove(note);

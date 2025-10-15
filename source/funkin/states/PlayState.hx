@@ -3388,7 +3388,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 		
-		final hscriptArgs = [note];
+		final scriptArgs = [note];
 		
 		final funcToCall = switch (field.ID)
 		{
@@ -3404,8 +3404,8 @@ class PlayState extends MusicBeatState
 				'extraNoteHit';
 		}
 		
-		final noteScriptRet = callNoteTypeScript(note.noteType, funcToCall, hscriptArgs);
-		if (noteScriptRet != ScriptConstants.Function_Stop) scripts.call(funcToCall, hscriptArgs, false, [note.noteType]);
+		final noteScriptRet = callNoteTypeScript(note.noteType, funcToCall, scriptArgs);
+		if (noteScriptRet != ScriptConstants.Function_Stop) scripts.call(funcToCall, scriptArgs, false, [note.noteType]);
 		
 		if (!note.isSustainNote) disposeNote(note);
 	}

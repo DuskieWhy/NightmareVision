@@ -143,7 +143,3 @@ class ScriptGroup implements IFlxDestroyable
 		}
 	}
 }
-
-// this might be better..?
-
-class HScriptContainer extends ScriptGroup {}

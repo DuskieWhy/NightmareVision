@@ -122,9 +122,9 @@ class MusicBeatState extends FlxUIState
 			}
 		}
 		
-		final hscriptArgs = [elapsed];
-		scriptGroup.call('onUpdate', hscriptArgs);
-		PluginsManager.callOnScripts('onUpdate', hscriptArgs);
+		final scriptArgs = [elapsed];
+		scriptGroup.call('onUpdate', scriptArgs);
+		PluginsManager.callOnScripts('onUpdate', scriptArgs);
 		super.update(elapsed);
 	}
 	

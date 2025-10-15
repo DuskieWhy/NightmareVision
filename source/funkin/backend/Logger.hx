@@ -21,6 +21,12 @@ enum abstract Severity(Int)
  */
 class Logger
 {
+	/**
+	 * Primary `trace` function
+	 * @param data The value to trace
+	 * @param severity provides ansi colour coding to better highlight specific messages
+	 * @param showInGame whether to have it display in game
+	 */
 	public static function log(data:Dynamic, severity:Severity = PRINT, showInGame:Bool = false, ?pos:PosInfos)
 	{
 		#if FLX_DEBUG
