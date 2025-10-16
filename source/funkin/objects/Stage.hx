@@ -99,8 +99,10 @@ class Stage extends FlxTypedContainer<FlxBasic>
 							{
 								obj.frames = frames;
 							}
-							
-							obj.loadGraphic(Paths.image(info.asset));
+							else
+							{
+								obj.loadGraphic(Paths.image(info.asset));
+							}
 						}
 					}
 					
@@ -141,7 +143,14 @@ class Stage extends FlxTypedContainer<FlxBasic>
 				
 				if (info.id != null)
 				{
-					objects.set(info.id, obj);
+					if (objects.exists(info.id))
+					{
+						Logger.log('Object cannot use id(${info.id}) as it is in use.', WARN, true);
+					}
+					else
+					{
+						objects.set(info.id, obj);
+					}
 				}
 				
 				obj.updateHitbox();
