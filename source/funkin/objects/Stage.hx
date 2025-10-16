@@ -143,13 +143,14 @@ class Stage extends FlxTypedContainer<FlxBasic>
 				
 				if (info.id != null)
 				{
+					final objId = info.id ?? ''; // we null checked already but to shut up null safety
 					if (objects.exists(info.id))
 					{
-						Logger.log('Object cannot use id(${info.id}) as it is in use.', WARN, true);
+						Logger.log('Object cannot use id($objId) as it is in use.', WARN, true);
 					}
 					else
 					{
-						objects.set(info.id, obj);
+						objects.set(objId, obj);
 					}
 				}
 				
