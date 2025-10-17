@@ -197,7 +197,7 @@ class Paths
 	/**
 	 * Retrieves atlas frames from either `Sparrow` or `Packer` 
 	 * 
-	 * `Packer` has priority.
+	 * `Sparrow` has priority.
 	 */
 	public static inline function getAtlasFrames(key:String, ?parentFolder:String, allowGPU:Bool = true, checkMods:Bool = true):FlxAtlasFrames
 	{
@@ -206,15 +206,15 @@ class Paths
 		
 		final graphic = image(key, parentFolder, allowGPU, checkMods);
 		
-		// packer
-		if (FunkinAssets.exists(txtPath))
+		// sparrow
+		if (FunkinAssets.exists(xmlPath))
 		{
 			@:nullSafety(Off) // until flixel does null safety
-			return FlxAtlasFrames.fromSpriteSheetPacker(graphic, FunkinAssets.exists(txtPath) ? FunkinAssets.getContent(txtPath) : null);
+			return FlxAtlasFrames.fromSparrow(graphic, FunkinAssets.exists(xmlPath) ? FunkinAssets.getContent(xmlPath) : null);
 		}
 		
 		@:nullSafety(Off) // until flixel does null safety
-		return FlxAtlasFrames.fromSparrow(graphic, FunkinAssets.exists(xmlPath) ? FunkinAssets.getContent(xmlPath) : null);
+		return FlxAtlasFrames.fromSpriteSheetPacker(graphic, FunkinAssets.exists(txtPath) ? FunkinAssets.getContent(txtPath) : null);
 	}
 	
 	public static inline function getSparrowAtlas(key:String, ?parentFolder:String, ?allowGPU:Bool = true, checkMods:Bool = true):FlxAtlasFrames
