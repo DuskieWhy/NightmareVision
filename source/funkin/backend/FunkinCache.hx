@@ -84,6 +84,33 @@ class FunkinCache
 	}
 	
 	/**
+	 * Removes a asset from the cache
+	 * @param key 
+	 * @param disposeToo 
+	 * @return Bool
+	 */
+	public function removeFromCache(key:String, disposeToo:Bool = true):Bool
+	{
+		if (currentTrackedGraphics.exists(key))
+		{
+			if (disposeToo) disposeGraphic(currentTrackedGraphics.get(key));
+			currentTrackedGraphics.remove(key);
+			
+			return true;
+		}
+		
+		if (currentTrackedSounds.exists(key))
+		{
+			if (disposeToo) Assets.cache.clear(key);
+			currentTrackedSounds.remove(key);
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Disposes of a flxgraphic
 	 * 
 	 * frees its gpu texture as well.
