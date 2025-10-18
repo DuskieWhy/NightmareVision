@@ -1,12 +1,12 @@
 {
-	"extraSkin": "noteskins/NOTE_assets",
+	"extraSkin": "NOTE_assets",
 	"singAnimations": [
 		"singLEFT",
 		"singDOWN",
 		"singUP",
 		"singRIGHT"
 	],
-	"playerSkin": "noteskins/NOTE_assets",
+	"playerSkin": "NOTE_assets",
 	"receptorAnimations": [
 		[
 			{
@@ -263,6 +263,6 @@
 	],
 	"hasQuants": true,
 	"noteSplashSkin": "noteSplashes",
-	"globalSkin": "noteskins/NOTE_assets",
-	"opponentSkin": "noteskins/NOTE_assets"
+	"globalSkin": "NOTE_assets",
+	"opponentSkin": "NOTE_assets"
 }
