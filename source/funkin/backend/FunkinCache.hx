@@ -11,6 +11,7 @@ import openfl.media.Sound;
 
 @:access(openfl.display.BitmapData)
 @:nullSafety
+@:allow(funkin.FunkinAssets)
 class FunkinCache
 {
 	/**
@@ -66,7 +67,7 @@ class FunkinCache
 		#end
 	}
 	
-	public function new() {}
+	function new() {}
 	
 	public final currentTrackedGraphics:Map<String, FlxGraphic> = [];
 	
