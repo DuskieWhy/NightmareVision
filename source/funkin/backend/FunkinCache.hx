@@ -37,10 +37,9 @@ class FunkinCache
 		// clear all sounds that are cached
 		for (key in currentTrackedSounds.keys())
 		{
-			if (!localTrackedAssets.contains(key) && !dumpExclusions.contains(key) && key != null)
+			if (!localTrackedAssets.contains(key) && !dumpExclusions.contains(key))
 			{
-				Assets.cache.clear(key);
-				currentTrackedSounds.remove(key);
+				removeFromCache(key);
 			}
 		}
 		// flags everything to be cleared out next unused memory clear
@@ -57,8 +56,7 @@ class FunkinCache
 		{
 			if (!localTrackedAssets.contains(key) && !dumpExclusions.contains(key))
 			{
-				disposeGraphic(currentTrackedGraphics.get(key));
-				currentTrackedGraphics.remove(key);
+				removeFromCache(key);
 			}
 		}
 		
@@ -96,6 +94,10 @@ class FunkinCache
 			if (disposeToo) disposeGraphic(currentTrackedGraphics.get(key));
 			currentTrackedGraphics.remove(key);
 			
+			#if VERBOSE_LOGS
+			Logger.log('Cleared Graphic [$key]');
+			#end
+			
 			return true;
 		}
 		
@@ -103,6 +105,10 @@ class FunkinCache
 		{
 			if (disposeToo) Assets.cache.clear(key);
 			currentTrackedSounds.remove(key);
+			
+			#if VERBOSE_LOGS
+			Logger.log('Cleared Sound [$key]');
+			#end
 			
 			return true;
 		}
