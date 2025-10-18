@@ -466,9 +466,9 @@ class WeekEditorState extends MusicBeatState
 		
 		if (!blockInput)
 		{
-			FlxG.sound.muteKeys = Init.muteKeys;
-			FlxG.sound.volumeDownKeys = Init.volumeDownKeys;
-			FlxG.sound.volumeUpKeys = Init.volumeUpKeys;
+			FlxG.sound.muteKeys = ClientPrefs.muteKeys;
+			FlxG.sound.volumeDownKeys = ClientPrefs.volumeDownKeys;
+			FlxG.sound.volumeUpKeys = ClientPrefs.volumeUpKeys;
 			
 			if (FlxG.keys.justPressed.ESCAPE)
 			{
@@ -854,9 +854,9 @@ class WeekEditorFreeplayState extends MusicBeatState
 		}
 		else
 		{
-			FlxG.sound.muteKeys = Init.muteKeys;
-			FlxG.sound.volumeDownKeys = Init.volumeDownKeys;
-			FlxG.sound.volumeUpKeys = Init.volumeUpKeys;
+			FlxG.sound.muteKeys = ClientPrefs.muteKeys;
+			FlxG.sound.volumeDownKeys = ClientPrefs.volumeDownKeys;
+			FlxG.sound.volumeUpKeys = ClientPrefs.volumeUpKeys;
 			if (FlxG.keys.justPressed.ESCAPE)
 			{
 				FlxG.switchState(funkin.states.editors.MasterEditorMenu.new);

@@ -214,6 +214,27 @@ class ClientPrefs
 		]
 	];
 	
+	/**
+	 * Contains keys that mute the game volume
+	 * 
+	 * default is `0`
+	 */
+	public static var muteKeys:Array<FlxKey> = [FlxKey.ZERO];
+	
+	/**
+	 * Contains keys that turn down the game volume
+	 * 
+	 * default is `-`
+	 */
+	public static var volumeDownKeys:Array<FlxKey> = [FlxKey.NUMPADMINUS, FlxKey.MINUS];
+	
+	/**
+	 * Contains keys that turn up the game volume
+	 * 
+	 * default is `+`
+	 */
+	public static var volumeUpKeys:Array<FlxKey> = [FlxKey.NUMPADPLUS, FlxKey.PLUS];
+	
 	public static function flush()
 	{
 		FlxG.save.flush();
@@ -270,12 +291,13 @@ class ClientPrefs
 	{
 		PlayerSettings.player1.controls.setKeyboardScheme(KeyboardScheme.Solo);
 		
-		FlxG.sound.muteKeys = Init.muteKeys;
-		FlxG.sound.volumeDownKeys = Init.volumeDownKeys;
-		FlxG.sound.volumeUpKeys = Init.volumeUpKeys;
-		Init.muteKeys = copyKey(keyBinds.get('volume_mute'));
-		Init.volumeDownKeys = copyKey(keyBinds.get('volume_down'));
-		Init.volumeUpKeys = copyKey(keyBinds.get('volume_up'));
+		ClientPrefs.muteKeys = copyKey(keyBinds.get('volume_mute'));
+		ClientPrefs.volumeDownKeys = copyKey(keyBinds.get('volume_down'));
+		ClientPrefs.volumeUpKeys = copyKey(keyBinds.get('volume_up'));
+		
+		FlxG.sound.muteKeys = ClientPrefs.muteKeys;
+		FlxG.sound.volumeDownKeys = ClientPrefs.volumeDownKeys;
+		FlxG.sound.volumeUpKeys = ClientPrefs.volumeUpKeys;
 	}
 	
 	public static function copyKey(arrayToCopy:Array<FlxKey>):Array<FlxKey>

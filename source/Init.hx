@@ -14,27 +14,6 @@ import flixel.input.keyboard.FlxKey;
 @:nullSafety(Strict)
 class Init extends FlxState
 {
-	/**
-	 * Contains keys that mute the game volume
-	 * 
-	 * default is `0`
-	 */
-	public static var muteKeys:Array<FlxKey> = [FlxKey.ZERO];
-	
-	/**
-	 * Contains keys that turn down the game volume
-	 * 
-	 * default is `-`
-	 */
-	public static var volumeDownKeys:Array<FlxKey> = [FlxKey.NUMPADMINUS, FlxKey.MINUS];
-	
-	/**
-	 * Contains keys that turn up the game volume
-	 * 
-	 * default is `+`
-	 */
-	public static var volumeUpKeys:Array<FlxKey> = [FlxKey.NUMPADPLUS, FlxKey.PLUS];
-	
 	override public function create():Void
 	{
 		// load settings/save
@@ -57,9 +36,9 @@ class Init extends FlxState
 		// set some flixel settings
 		FlxG.fixedTimestep = false;
 		FlxG.game.focusLostFramerate = 60;
-		FlxG.sound.muteKeys = muteKeys;
-		FlxG.sound.volumeDownKeys = volumeDownKeys;
-		FlxG.sound.volumeUpKeys = volumeUpKeys;
+		FlxG.sound.muteKeys = ClientPrefs.muteKeys;
+		FlxG.sound.volumeDownKeys = ClientPrefs.volumeDownKeys;
+		FlxG.sound.volumeUpKeys = ClientPrefs.volumeUpKeys;
 		FlxG.keys.preventDefaultKeys = [TAB];
 		FlxG.mouse.visible = false;
 		FlxG.plugins.drawOnTop = true;
