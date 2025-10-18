@@ -116,9 +116,9 @@ class FunkinCache
 			if (disposeToo) disposeGraphic(currentTrackedGraphics.get(key));
 			currentTrackedGraphics.remove(key);
 			
-			#if VERBOSE_LOGS
-			Logger.log('Cleared Graphic [$key]');
-			#end
+			// #if VERBOSE_LOGS
+			// Logger.log('Cleared Graphic [$key]');
+			// #end
 			
 			return true;
 		}
@@ -128,9 +128,9 @@ class FunkinCache
 			if (disposeToo) Assets.cache.clear(key);
 			currentTrackedSounds.remove(key);
 			
-			#if VERBOSE_LOGS
-			Logger.log('Cleared Sound [$key]');
-			#end
+			// #if VERBOSE_LOGS
+			// Logger.log('Cleared Sound [$key]');
+			// #end
 			
 			return true;
 		}

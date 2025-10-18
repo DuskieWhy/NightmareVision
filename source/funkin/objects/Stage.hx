@@ -63,7 +63,7 @@ class Stage extends FlxTypedContainer<FlxBasic>
 	
 	/**
 	 * 
-	 * instantiates any stage objects and runs the script for the stage.
+	 * instantiates any stage objects and attempts to load a script for the stage
 	 * 
 	 * returns `true` if the script was made successfully
 	 */
@@ -156,7 +156,7 @@ class Stage extends FlxTypedContainer<FlxBasic>
 				
 				obj.updateHitbox();
 				
-				if (info.advancedCalls != null) // dangerous territory
+				if (info.advancedCalls != null)
 				{
 					for (i in info.advancedCalls)
 					{
@@ -200,7 +200,12 @@ class Stage extends FlxTypedContainer<FlxBasic>
 			if (FunkinAssets.exists(scriptFile)) prepareScript(scriptFile);
 		}
 		
-		if (script == null) Logger.log('$curStage does not contain a script');
+		#if VERBOSE_LOGS
+		if (script == null)
+		{
+			Logger.log('$curStage is not scripted.');
+		}
+		#end
 		
 		return script != null;
 	}
