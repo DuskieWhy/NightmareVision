@@ -6,12 +6,23 @@ using funkin.backend.Logger.Ansi;
 
 import funkin.backend.plugins.DebugTextPlugin;
 
-enum abstract Severity(Int)
+enum abstract Severity(Int) to Int
 {
 	var PRINT;
 	var WARN;
 	var ERROR;
 	var NOTICE;
+	
+	public function toString():String
+	{
+		return switch (this)
+		{
+			default: '[LOG] ';
+			case WARN: '[WARN] ';
+			case ERROR: '[ERROR] ';
+			case NOTICE: '[NOTICE] ';
+		}
+	}
 }
 
 /**
@@ -44,7 +55,12 @@ class Logger
 		}
 		#end
 		
-		var output:String = haxe.Log.formatOutput(data, pos);
+		if (showInGame && ClientPrefs.inDevMode)
+		{
+			DebugTextPlugin.addText(Std.string(data), getHexColourFromSeverity(severity));
+		}
+		
+		var output:String = severity.toString() + haxe.Log.formatOutput(data, pos);
 		
 		output = output.fg(getAnsiColourFromSeverity(severity)).reset();
 		
@@ -52,11 +68,6 @@ class Logger
 		#if !FORCED_ANSI
 		output = output.stripColor();
 		#end
-		
-		if (showInGame && ClientPrefs.inDevMode)
-		{
-			DebugTextPlugin.addText(Std.string(data), getHexColourFromSeverity(severity));
-		}
 		
 		#if sys
 		Sys.println(output);
@@ -93,7 +104,7 @@ class Logger
 		}
 	}
 	
-	public static function writeDump(content:String, folder:String, fileName:String)
+	public static function writeDump(content:String, folder:String, fileName:String) // this isnt really a log.
 	{
 		#if sys
 		if (!FileSystem.exists(folder) && !FileSystem.isDirectory(folder))
@@ -107,6 +118,7 @@ class Logger
 		{
 			File.saveContent(dumpPath, content);
 		}
+		catch (e) {}
 		#end
 	}
 }
