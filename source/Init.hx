@@ -1,5 +1,7 @@
 package;
 
+import funkin.FunkinAssets;
+
 import flixel.FlxState;
 import flixel.FlxG;
 import flixel.input.keyboard.FlxKey;
@@ -91,6 +93,8 @@ class Init extends FlxState
 		
 		funkin.scripting.PluginsManager.prepareSignals();
 		funkin.scripting.PluginsManager.populate();
+		
+		FunkinAssets.cache.currentTrackedSounds.addPermanentKey('assets/music/freakyMenu.ogg');
 		
 		super.create();
 		

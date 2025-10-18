@@ -1,5 +1,7 @@
 package funkin.backend;
 
+import haxe.ds.IntMap;
+
 import flixel.util.FlxStringUtil;
 
 import openfl.Assets;
@@ -8,6 +10,32 @@ import flixel.graphics.FlxGraphic;
 
 import openfl.display.BitmapData;
 import openfl.media.Sound;
+
+class CacheMap<T>
+{
+	public function new() {}
+	
+	public var cache:Map<String, T> = [];
+	public var permanentKeys:Array<String> = [];
+	
+	public function get(key:String):Null<T> return cache.get(key);
+	
+	public function exists(key:String) return cache.exists(key);
+	
+	public function set(key:String, value:T) cache.set(key, value);
+	
+	public function remove(key:String) return cache.remove(key);
+	
+	public function keys() return cache.keys();
+	
+	/**
+	 * Adds a key to be considered permanent to the cache.
+	 */
+	public function addPermanentKey(key:String)
+	{
+		if (!permanentKeys.contains(key)) permanentKeys.push(key);
+	}
+}
 
 @:access(openfl.display.BitmapData)
 @:nullSafety
@@ -19,26 +47,26 @@ class FunkinCache
 	 * 
 	 * use `clearUnusedMemory` afterwards to purge everything
 	 */
-	public function clearStoredMemory()
+	public function clearStoredMemory() // maybe rename
 	{
-		@:privateAccess
-		for (key in FlxG.bitmap._cache.keys())
-		{
-			// ok this is dumb fix this later
-			if (!currentTrackedGraphics.exists(key)
-				&& !key.startsWith('pixels')
-				&& !key.contains('editors/notification_neutral.png')
-				&& !key.contains('editors/notification_success.png')
-				&& !key.contains('editors/notification_warn.png')) // for haxeui is a bit hacky will do for now //find out hwo to avoid haxeui nicer or just do a different caching method //rewrite soonish ok.
-			{
-				disposeGraphic(FlxG.bitmap.get(key));
-			}
-		}
+		// @:privateAccess
+		// for (key in FlxG.bitmap._cache.keys())
+		// {
+		// 	// ok this is dumb fix this later
+		// 	if (!currentTrackedGraphics.exists(key)
+		// 		&& !key.startsWith('pixels')
+		// 		&& !key.contains('editors/notification_neutral.png')
+		// 		&& !key.contains('editors/notification_success.png')
+		// 		&& !key.contains('editors/notification_warn.png')) // for haxeui is a bit hacky will do for now //find out hwo to avoid haxeui nicer or just do a different caching method //rewrite soonish ok.
+		// 	{
+		// 		disposeGraphic(FlxG.bitmap.get(key));
+		// 	}
+		// }
 		
 		// clear all sounds that are cached
 		for (key in currentTrackedSounds.keys())
 		{
-			if (!localTrackedAssets.contains(key) && !dumpExclusions.contains(key))
+			if (!localTrackedAssets.contains(key) && !currentTrackedSounds.permanentKeys.contains(key))
 			{
 				removeFromCache(key);
 			}
@@ -55,7 +83,7 @@ class FunkinCache
 	{
 		for (key in currentTrackedGraphics.keys())
 		{
-			if (!localTrackedAssets.contains(key) && !dumpExclusions.contains(key))
+			if (!localTrackedAssets.contains(key) && !currentTrackedGraphics.permanentKeys.contains(key))
 			{
 				removeFromCache(key);
 			}
@@ -69,18 +97,11 @@ class FunkinCache
 	
 	function new() {}
 	
-	public final currentTrackedGraphics:Map<String, FlxGraphic> = [];
+	public final currentTrackedGraphics:CacheMap<FlxGraphic> = new CacheMap();
 	
-	public final currentTrackedSounds:Map<String, Sound> = [];
+	public final currentTrackedSounds:CacheMap<Sound> = new CacheMap();
 	
 	public final localTrackedAssets:Array<String> = [];
-	
-	public final dumpExclusions:Array<String> = ['assets/music/freakyMenu.ogg'];
-	
-	public function excludeAsset(key:String)
-	{
-		if (!dumpExclusions.contains(key)) dumpExclusions.push(key);
-	}
 	
 	/**
 	 * Removes a asset from the cache
