@@ -363,11 +363,9 @@ class ChartEditorState extends MusicBeatState
 			NoteSkinHelper.keys = _song.keys;
 		}
 		
-		#if DISCORD_ALLOWED
 		// Updating Discord Rich Presence
 		// DiscordClient.changePresence("Chart Editor", StringTools.replace(_song.song, '-', ' '));
 		DiscordClient.changePresence("Chart Editor", "Uhm idk mane burp");
-		#end
 		
 		camHUD = new FlxCamera();
 		camHUD.bgColor = 0x0;

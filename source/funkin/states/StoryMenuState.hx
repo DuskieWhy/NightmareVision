@@ -88,10 +88,8 @@ class StoryMenuState extends MusicBeatState
 			grpLocks = new FlxTypedGroup<FlxSprite>();
 			add(grpLocks);
 			
-			#if DISCORD_ALLOWED
 			// Updating Discord Rich Presence
-			DiscordClient.changePresence("In the Menus", null);
-			#end
+			DiscordClient.changePresence("In the Menus");
 			
 			var num:Int = 0;
 			for (i in 0...WeekData.weeksList.length)

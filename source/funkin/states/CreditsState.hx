@@ -113,9 +113,7 @@ class CreditsState extends MusicBeatState
 	
 	override function create()
 	{
-		#if DISCORD_ALLOWED
-		DiscordClient.changePresence("In the Menus", null);
-		#end
+		DiscordClient.changePresence("In the Menus");
 		
 		persistentUpdate = true;
 		

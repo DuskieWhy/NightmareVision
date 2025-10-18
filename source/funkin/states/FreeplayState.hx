@@ -65,9 +65,7 @@ class FreeplayState extends MusicBeatState
 		PlayState.isStoryMode = false;
 		WeekData.reloadWeekFiles(false);
 		
-		#if DISCORD_ALLOWED
-		DiscordClient.changePresence("In the Menus", null);
-		#end
+		DiscordClient.changePresence("In the Menus");
 		
 		if (WeekData.weeksList.length == 0)
 		{

@@ -39,8 +39,6 @@ class DiscordClient
 	 */
 	public static final discordPresence:DiscordRichPresence = DiscordRichPresence.create();
 	
-	public static var discordPresences:Array<String> = []; // remove this later..
-	
 	/**
 	 * Initiates the discord thread and hooks to the rpc id
 	 */
@@ -174,8 +172,6 @@ class DiscordClient
 class DiscordClient
 {
 	public static var rpcId(default, set):String = '';
-	
-	public static var discordPresences:Array<String> = []; // remove this later..
 	
 	public static function changePresence(details:String = 'In the Menus', ?state:String, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float):Void {}
 	

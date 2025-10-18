@@ -38,9 +38,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		if (title == null) title = 'Options';
 		if (rpcTitle == null) rpcTitle = 'Options Menu';
 		
-		#if DISCORD_ALLOWED
-		DiscordClient.changePresence(rpcTitle, null);
-		#end
+		DiscordClient.changePresence(rpcTitle);
 		
 		initStateScript('Options');
 		scriptGroup.set('this', this);

@@ -435,12 +435,10 @@ class PlayState extends MusicBeatState
 	public var opponentCameraOffset:Array<Float> = [0, 0];
 	public var girlfriendCameraOffset:Array<Float> = [0, 0];
 	
-	#if DISCORD_ALLOWED
 	// Discord RPC variables
 	var storyDifficultyText:String = "";
 	var detailsText:String = "";
 	var detailsPausedText:String = "";
-	#end
 	
 	/**
 	 * Group of general scripts.
@@ -623,12 +621,10 @@ class PlayState extends MusicBeatState
 		
 		initNoteSkinning(SONG.arrowSkin);
 		
-		#if DISCORD_ALLOWED
 		storyDifficultyText = Difficulty.difficulties[storyMeta.difficulty];
 		
 		// String for when the game is paused
 		detailsPausedText = "Paused - " + detailsText;
-		#end
 		
 		scripts.set('isStoryMode', isStoryMode);
 		
@@ -808,10 +804,8 @@ class PlayState extends MusicBeatState
 		if (PauseSubState.songName != null) Paths.music(PauseSubState.songName);
 		else if (ClientPrefs.pauseMusic != 'None') Paths.music(Paths.formatToSongPath(ClientPrefs.pauseMusic));
 		
-		#if DISCORD_ALLOWED
 		// Updating Discord Rich Presence.
-		DiscordClient.changePresence(detailsText, FlxG.random.getObject(DiscordClient.discordPresences), null);
-		#end
+		DiscordClient.changePresence(detailsText, '${SONG.song} ($storyDifficultyText)');
 		
 		if (!ClientPrefs.controllerMode)
 		{
@@ -1345,10 +1339,9 @@ class PlayState extends MusicBeatState
 		// Song duration in a float, useful for the time left feature
 		songLength = FlxG.sound.music.length;
 		
-		#if DISCORD_ALLOWED
 		// Updating Discord Rich Presence (with Time Left)
-		DiscordClient.changePresence(detailsText, FlxG.random.getObject(DiscordClient.discordPresences), null, true, songLength);
-		#end
+		DiscordClient.changePresence(detailsText, '${SONG.song} ($storyDifficultyText)', null, true, songLength);
+		
 		scripts.set('songLength', songLength);
 		scripts.call('onSongStart', []);
 		callHUDFunc(hud -> hud.onSongStart());
@@ -1823,15 +1816,13 @@ class PlayState extends MusicBeatState
 			paused = false;
 			scripts.call('onResume', []);
 			
-			#if DISCORD_ALLOWED
 			if (startTimer != null && startTimer.finished)
 			{
-				DiscordClient.changePresence(detailsText, FlxG.random.getObject(DiscordClient.discordPresences), null, true, songLength
+				DiscordClient.changePresence(detailsText, '${SONG.song} ($storyDifficultyText)', null, true, songLength
 					- Conductor.songPosition
 					- ClientPrefs.noteOffset);
 			}
-			else DiscordClient.changePresence(detailsText, FlxG.random.getObject(DiscordClient.discordPresences));
-			#end
+			else DiscordClient.changePresence(detailsText, '${SONG.song} ($storyDifficultyText)');
 		}
 		scripts.call('onSubstateClose', []);
 		super.closeSubState();
@@ -1839,27 +1830,23 @@ class PlayState extends MusicBeatState
 	
 	override public function onFocus():Void
 	{
-		#if DISCORD_ALLOWED
 		if (health > 0 && !paused)
 		{
 			if (Conductor.songPosition > 0.0)
 			{
-				DiscordClient.changePresence(detailsText, FlxG.random.getObject(DiscordClient.discordPresences), null, true, songLength
+				DiscordClient.changePresence(detailsText, '${SONG.song} ($storyDifficultyText)', null, true, songLength
 					- Conductor.songPosition
 					- ClientPrefs.noteOffset);
 			}
-			else DiscordClient.changePresence(detailsText, FlxG.random.getObject(DiscordClient.discordPresences));
+			else DiscordClient.changePresence(detailsText, '${SONG.song} ($storyDifficultyText)');
 		}
-		#end
 		
 		super.onFocus();
 	}
 	
 	override public function onFocusLost():Void
 	{
-		#if DISCORD_ALLOWED
-		if (health > 0 && !paused) DiscordClient.changePresence(detailsPausedText, FlxG.random.getObject(DiscordClient.discordPresences));
-		#end
+		if (health > 0 && !paused) DiscordClient.changePresence(detailsPausedText, '${SONG.song} ($storyDifficultyText)');
 		
 		super.onFocusLost();
 	}
@@ -2181,9 +2168,7 @@ class PlayState extends MusicBeatState
 		}
 		openSubState(new PauseSubState());
 		
-		#if DISCORD_ALLOWED
-		DiscordClient.changePresence(detailsPausedText, FlxG.random.getObject(DiscordClient.discordPresences));
-		#end
+		DiscordClient.changePresence(detailsPausedText, 'Paused');
 	}
 	
 	function openChartEditor():Void
@@ -2197,9 +2182,7 @@ class PlayState extends MusicBeatState
 		FlxG.switchState(ChartEditorState.new);
 		chartingMode = true;
 		
-		#if DISCORD_ALLOWED
 		DiscordClient.changePresence("Chart Editor", null, null, true);
-		#end
 	}
 	
 	function openCharacterEditor():Void
@@ -2212,9 +2195,7 @@ class PlayState extends MusicBeatState
 		
 		FlxG.switchState(() -> new CharacterEditorState(SONG.player2, true));
 		
-		#if DISCORD_ALLOWED
 		DiscordClient.changePresence("Character Editor", null, null, true);
-		#end
 	}
 	
 	function openNoteskinEditor():Void
@@ -2231,9 +2212,7 @@ class PlayState extends MusicBeatState
 		#end
 		chartingMode = true;
 		
-		#if DISCORD_ALLOWED
 		DiscordClient.changePresence("Noteskin Editor", null, null, true);
-		#end
 	}
 	
 	public function updateScoreBar(miss:Bool = false):Void
@@ -2267,10 +2246,8 @@ class PlayState extends MusicBeatState
 				
 				openSubState(new GameOverSubstate(boyfriend));
 				
-				#if DISCORD_ALLOWED
 				// Game Over doesn't get his own variable because it's only used here
 				DiscordClient.changePresence("Game Over - " + detailsText, SONG.song);
-				#end
 				
 				isDead = true;
 				totalBeat = 0;

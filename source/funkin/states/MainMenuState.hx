@@ -43,7 +43,7 @@ class MainMenuState extends MusicBeatState
 		#end
 		WeekData.loadTheFirstEnabledMod();
 		
-		DiscordClient.changePresence("In the Menus", null);
+		DiscordClient.changePresence("In the Menus");
 		
 		FlxG.cameras.reset();
 		
