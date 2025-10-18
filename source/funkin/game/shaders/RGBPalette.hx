@@ -87,11 +87,19 @@ class RGBPalette
 		return enabled;
 	}
 	
+	public function setColors(colors:Array<FlxColor>)
+	{
+		r = colors[0];
+		g = colors[1];
+		b = colors[2];
+	}
+	
 	public function new()
 	{
-		r = 0xFFFF0000;
-		g = 0xFF00FF00;
-		b = 0xFF0000FF;
+		// r = 0xFFFF0000;
+		// g = 0xFF00FF00;
+		// b = 0xFF0000FF;
+		setColors([0xFFFF0000, 0xFF00FF00, 0xFF0000FF]);
 		mult = 1.0;
 		flash = 0.0;
 		alphaMult = 1.0;
@@ -180,6 +188,13 @@ class RGBShaderReference
 		return (enabled = parent.enabled = value);
 	}
 	
+	public function setColors(colors:Array<FlxColor>)
+	{
+		r = colors[0];
+		g = colors[1];
+		b = colors[2];
+	}
+	
 	public var allowNew = true;
 	
 	private function cloneOriginal()
@@ -190,9 +205,7 @@ class RGBShaderReference
 			if (_original != parent) return;
 			
 			parent = new RGBPalette();
-			parent.r = _original.r;
-			parent.g = _original.g;
-			parent.b = _original.b;
+			parent.setColors([_original.r, _original.g, _original.b]);
 			parent.mult = _original.mult;
 			
 			parent.alphaMult = _original.alphaMult;

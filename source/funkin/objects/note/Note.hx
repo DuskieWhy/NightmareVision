@@ -29,11 +29,6 @@ class Note extends FlxSprite
 	
 	public var noteScript:Null<FunkinScript> = null;
 	
-	public static var quants:Array<Int> = [4, // quarter note
-		8, // eight
-		12, // etc
-		16, 20, 24, 32, 48, 64, 96, 192];
-		
 	public var vec3Cache:Vector3 = new Vector3(); // for vector3 operations in modchart code
 	public var defScale:FlxPoint = FlxPoint.get(); // for modcharts to keep the scaling
 	
@@ -42,19 +37,6 @@ class Note extends FlxSprite
 	public var visualTime:Float = 0;
 	public var typeOffsetX:Float = 0; // used to offset notes, mainly for note types. use in place of offset.x and offset.y when offsetting notetypes
 	public var typeOffsetY:Float = 0;
-	
-	public static function getQuant(beat:Float)
-	{
-		var row = Conductor.beatToNoteRow(beat);
-		for (data in quants)
-		{
-			if (row % (Conductor.ROWS_PER_MEASURE / data) == 0)
-			{
-				return data;
-			}
-		}
-		return quants[quants.length - 1]; // invalid
-	}
 	
 	public var noteDiff:Float = 1000;
 	public var quant:Int = 4;
@@ -211,31 +193,8 @@ class Note extends FlxSprite
 		return (texture = value);
 	}
 	
-	public function defaultRGB()
-	{
-		var arr:Array<FlxColor> = ClientPrefs.arrowRGBdef[noteData];
-		if (ClientPrefs.noteSkin.contains('Quant')) arr = ClientPrefs.arrowRGBquant[quants.indexOf(quant)];
-		
-		if (arr != null && noteData > -1 && noteData <= arr.length)
-		{
-			rgbShader.r = arr[0];
-			rgbShader.g = arr[1];
-			rgbShader.b = arr[2];
-		}
-		else
-		{
-			rgbShader.r = 0xFFFF0000;
-			rgbShader.g = 0xFF00FF00;
-			rgbShader.b = 0xFF0000FF;
-		}
-		
-		rgbShader.enabled = rgbEnabled;
-	}
-	
 	private function set_noteType(value:String):String
 	{
-		if (rgbEnabled) defaultRGB();
-		
 		noteSplashTexture = PlayState.SONG.splashSkin;
 		
 		noteScript = null;
@@ -292,7 +251,7 @@ class Note extends FlxSprite
 		{
 			var beat = Conductor.getBeatInMeasure(strumTime);
 			if (prevNote != null && isSustainNote) quant = prevNote.quant;
-			else quant = getQuant(beat);
+			else quant = NoteSkinHelper.getQuant(beat);
 		}
 		this.inEditor = inEditor;
 		
@@ -312,8 +271,7 @@ class Note extends FlxSprite
 		{
 			rgbEnabled = NoteSkinHelper.instance?.data?.inGameColoring ?? false;
 			
-			rgbShader = new RGBShaderReference(this, initializeGlobalRGBShader(noteData));
-			shader = rgbShader.shader;
+			rgbShader = NoteSkinHelper.initRGBShader(this, noteData, quant);
 			
 			texture = '';
 			
@@ -372,44 +330,6 @@ class Note extends FlxSprite
 		x += offsetX;
 		baseScaleX = scale.x;
 		baseScaleY = scale.y;
-	}
-	
-	public static function initializeGlobalRGBShader(noteData:Int)
-	{
-		var enabled = NoteSkinHelper.instance?.data?.inGameColoring ?? false;
-		
-		if (globalRgbShaders[noteData] == null)
-		{
-			var newRGB:RGBPalette = new RGBPalette();
-			var arr:Array<FlxColor> = ClientPrefs.arrowRGBdef[noteData];
-			
-			if (enabled)
-			{
-				if (arr != null && noteData > -1 && noteData <= arr.length)
-				{
-					newRGB.r = arr[0];
-					newRGB.g = arr[1];
-					newRGB.b = arr[2];
-				}
-				else
-				{
-					newRGB.r = 0xFFFF0000;
-					newRGB.g = 0xFF00FF00;
-					newRGB.b = 0xFF0000FF;
-				}
-			}
-			else
-			{
-				newRGB.r = 0xFFFF0000;
-				newRGB.g = 0xFF00FF00;
-				newRGB.b = 0xFF0000FF;
-				
-				newRGB.enabled = false;
-			}
-			
-			globalRgbShaders[noteData] = newRGB;
-		}
-		return globalRgbShaders[noteData];
 	}
 	
 	var lastNoteOffsetXForPixelAutoAdjusting:Float = 0;

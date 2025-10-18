@@ -2,7 +2,9 @@ package funkin.data;
 
 import haxe.Json;
 
-// havent implemented this
+import funkin.game.shaders.*;
+import funkin.game.shaders.RGBPalette.RGBShaderReference;
+
 typedef Animation =
 {
 	?anim:String,
@@ -100,6 +102,25 @@ class NoteSkinHelper implements IFlxDestroyable
 	}
 	
 	public static var arrowSkins:Array<String> = [];
+	
+	// quant stuff
+	public static final quants:Array<Int> = [4, // quarter note
+		8, // eight
+		12, // etc
+		16, 20, 24, 32, 48, 64, 96, 192];
+		
+	public static function getQuant(beat:Float)
+	{
+		var row = Conductor.beatToNoteRow(beat);
+		for (data in quants)
+		{
+			if (row % (Conductor.ROWS_PER_MEASURE / data) == 0)
+			{
+				return data;
+			}
+		}
+		return quants[quants.length - 1]; // invalid
+	}
 	
 	// constants
 	public static final DEFAULT_KEYS:Int = 4;
@@ -376,5 +397,49 @@ class NoteSkinHelper implements IFlxDestroyable
 		data.splashesEnabled ??= true;
 		
 		data.inGameColoring ??= true;
+	}
+	
+	public static var shaderEnabled(get, default):Bool;
+	
+	static function get_shaderEnabled()
+	{
+		var en = instance?.data?.inGameColoring ?? false;
+		
+		return en;
+	}
+	
+	/**
+		* Basic setup for a note object's RGB palette. Sets the colors according to the current colors from `getCurColors()`
+
+		* @param id Note Object's ID (or noteData)
+		 
+		* @param quant If the note style is Quantized, it uses the quant variable to set the palette accordingly.
+	 */
+	public static function initRGBPalete(id:Int = 0, quant:Int = 4)
+	{
+		// custom noteskin colors soon i promise
+		var newRGB = new RGBPalette();
+		var arr = getCurColors(id, quant);
+		
+		if (shaderEnabled && arr != null && id > -1 && id <= arr.length) newRGB.setColors(arr);
+		else newRGB.setColors([0xFFFF0000, 0xFF00FF00, 0xFF0000FF]);
+		
+		return newRGB;
+	}
+	
+	public static function initRGBShader(object:FlxSprite, id:Int = 0, ?quant:Int = 0)
+	{
+		var rgbShader = new RGBShaderReference(object, initRGBPalete(id, quant));
+		object.shader = rgbShader.shader;
+		
+		return rgbShader;
+	}
+	
+	public static function getCurColors(id:Int = 0, quant:Int = 4)
+	{
+		var arr = ClientPrefs.arrowRGBdef[id];
+		if (ClientPrefs.noteSkin.contains('Quant')) arr = ClientPrefs.arrowRGBquant[quants.indexOf(quant)];
+		
+		return arr;
 	}
 }

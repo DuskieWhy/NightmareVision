@@ -59,8 +59,6 @@ class StrumNote extends FlxSprite
 		return value;
 	}
 	
-	var rgbColourReference:Array<FlxColor>; // todo rewrite this
-	
 	public var rgbShader:RGBShaderReference;
 	public var useRGBShader:Bool = true;
 	
@@ -72,7 +70,6 @@ class StrumNote extends FlxSprite
 		this.noteData = leData;
 		this.parent = parent;
 		this.player = player;
-		this.rgbColourReference = ClientPrefs.arrowRGBdef[noteData];
 		super(x, y);
 		
 		var skin:String = 'NOTE_assets';
@@ -83,45 +80,26 @@ class StrumNote extends FlxSprite
 		
 		useRGBShader = NoteSkinHelper.instance?.data?.inGameColoring ?? false;
 		
-		rgbShader = new RGBShaderReference(this, Note.initializeGlobalRGBShader(leData));
-		rgbShader.enabled = useRGBShader;
-		shader = rgbShader.shader;
-		handleColors('');
+		rgbShader = NoteSkinHelper.initRGBShader(this, noteData);
+		
+		handleColors();
 	}
 	
-	public function handleColors(anim:String, ?note:Note = null)
+	public function handleColors(anim:String = '', ?note:Note)
 	{
-		if (rgbShader == null || !NoteSkinHelper.instance?.data?.inGameColoring ?? false) return;
+		if (!NoteSkinHelper.shaderEnabled) return;
 		
-		var arr:Array<FlxColor> = rgbColourReference;
-		if (arr == null) arr = ClientPrefs.arrowRGBdef[0];
+		var arr:Array<FlxColor> = [];
+		arr = NoteSkinHelper.getCurColors(noteData, note != null ? note.quant : 4);
 		
-		if (ClientPrefs.noteSkin.contains('Quant'))
+		if (ClientPrefs.noteSkin.contains('Quant') && anim == 'pressed') arr = ClientPrefs.arrowRGBquant[0];
+		
+		if (rgbShader != null)
 		{
-			if (note != null) arr = ClientPrefs.arrowRGBquant[Note.quants.indexOf(note.quant)];
-			if (anim == 'pressed') arr = ClientPrefs.arrowRGBquant[0];
+			rgbShader.setColors(arr);
+			
+			rgbShader.enabled = (anim != 'static');
 		}
-		
-		if (useRGBShader)
-		{
-			if (noteData <= arr.length)
-			{
-				@:bypassAccessor
-				{
-					rgbShader.r = arr[0];
-					rgbShader.g = arr[1];
-					rgbShader.b = arr[2];
-				}
-			}
-		}
-		else
-		{
-			rgbShader.r = 0xFFFF0000;
-			rgbShader.g = 0xFF00FF00;
-			rgbShader.b = 0xFF0000FF;
-		}
-		
-		rgbShader.enabled = (anim != 'static' && useRGBShader);
 	}
 	
 	public function reloadNote()
@@ -161,7 +139,7 @@ class StrumNote extends FlxSprite
 			playAnim(lastAnim, true);
 		}
 		
-		handleColors('');
+		handleColors();
 	}
 	
 	function loadAnimations()

@@ -27,8 +27,7 @@ class NoteSplash extends FlxSprite
 	{
 		super(x, y);
 		
-		rgbShader = new RGBShaderReference(this, Note.initializeGlobalRGBShader(noteData));
-		if (NoteSkinHelper.instance?.data?.inGameColoring ?? false) shader = rgbShader.shader;
+		rgbShader = NoteSkinHelper.initRGBShader(this, noteData);
 		
 		loadAnims(getPlayStateSplash('noteSplashes'));
 		setupNoteSplash(x, y, noteData);
@@ -65,22 +64,7 @@ class NoteSplash extends FlxSprite
 				offset.set(-20, -20);
 		}
 		
-		// gonna make it togglable soon im just lazy rn shruggg
-		if (NoteSkinHelper.instance?.data?.inGameColoring ?? false && rgbShader != null)
-		{
-			var arr:Array<FlxColor> = ClientPrefs.arrowRGBdef[note];
-			if (ClientPrefs.noteSkin.contains('Quant')) arr = ClientPrefs.arrowRGBquant[Note.quants.indexOf(quant)];
-			
-			if (note <= arr.length)
-			{
-				@:bypassAccessor
-				{
-					rgbShader.r = arr[0];
-					rgbShader.g = arr[1];
-					rgbShader.b = arr[2];
-				}
-			}
-		}
+		if (NoteSkinHelper.shaderEnabled) rgbShader.setColors(NoteSkinHelper.getCurColors(note, quant));
 	}
 	
 	public function playAnim()
