@@ -127,5 +127,50 @@
                 </hbox>
             </vbox>
         </box>
+        <box text="Colors">
+            <vbox>
+                <hbox>
+                    <vbox>
+                        <label text="Type:" verticalAlign="center" />
+                        <dropdown width="200" searchable="true" searchPrompt="Default" id="colorOptionsDropdown">
+                            <data>
+                                <menu-item id="defaultButton" text="Default"/>
+                                <menu-item id="quantButton" text="Quants"/>
+                            </data>
+                        </dropdown>
+
+                        <label text="Current color:"/>
+                        <dropdown width="200" searchable="true" searchPrompt="Red" id="curColorDropdown">
+                            <data>
+                                <menu-item id="redButton" text="Red"/>
+                                <menu-item id="greenButton" text="Green"/>
+                                <menu-item id="blueButton" text="Blue"/>
+                            </data>
+                        </dropdown>
+                    </vbox>
+                    <vbox horizontalAlign="right">
+                        <vbox>
+                            <label text="Currently selected note:"/>
+                            <number-stepper pos="0" step="1" min="0" max="4" id="noteColorStepper" horizontalAlign="center"/>
+                        </vbox>
+                        <color-picker-popup id="noteColorPicker" horizontalAlign="center"/>
+
+                    </vbox>        
+                    <vbox horizontalAlign="center">
+                        <button allowFocus="false" id="resetDefColors" text="Reset to Default Colors?" style="background-color: #a01926;" horizontalAlign="center"/>
+                        <button allowFocus="false" id="resetJsonColors" text="Reset to File's Colors?" style="background-color: #a01926;" horizontalAlign="center"/>
+
+                    </vbox>
+                </hbox>
+                    
+                <spacer height="1"/>
+                <rule />
+                <spacer height="1"/>
+                
+                <checkbox text="In-Engine Coloring Enabled?" id="shaderColoringBox" verticalAlign="center"/>
+
+            </vbox>
+        </box>
+
     </tabview>
 </collapsible-dialog>

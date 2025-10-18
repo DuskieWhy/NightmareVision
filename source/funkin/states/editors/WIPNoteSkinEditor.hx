@@ -22,6 +22,7 @@ import funkin.states.editors.ui.NoteskinEditorKit.NoteEditorUI;
 import funkin.data.*;
 import funkin.objects.*;
 import funkin.objects.note.*;
+import funkin.data.NoteSkinHelper.ColorList;
 
 using funkin.states.editors.ui.ToolKitUtils;
 
@@ -43,6 +44,8 @@ class WIPNoteSkinEditor extends UIState
 	var playfields:FlxTypedGroup<PlayField>;
 	
 	var uiElements:NoteEditorUI;
+	
+	var curColorString:String = "Red";
 	
 	public function new(file:String = 'default', ?t_helper:NoteSkinHelper = null)
 	{
@@ -66,7 +69,7 @@ class WIPNoteSkinEditor extends UIState
 		bg.setGraphicSize(1280);
 		bg.updateHitbox();
 		bg.screenCenter();
-		bg.alpha = 0.75;
+		bg.alpha = 0.7;
 		bg.scrollFactor.set();
 		bg.camera = camBG;
 		add(bg);
@@ -77,7 +80,7 @@ class WIPNoteSkinEditor extends UIState
 		scrollingBG.screenCenter();
 		scrollingBG.scrollFactor.set();
 		scrollingBG.camera = camBG;
-		scrollingBG.alpha = 0.8;
+		scrollingBG.alpha = 0.75;
 		add(scrollingBG);
 		
 		playfields = new FlxTypedGroup<PlayField>();
@@ -87,8 +90,6 @@ class WIPNoteSkinEditor extends UIState
 		buildUI();
 		buildNotes();
 		setUpControls();
-		
-		FlxG.mouse.visible = true;
 		
 		FunkinSound.playMusic(Paths.music('offsetSong'), 1, true);
 	}
@@ -115,7 +116,7 @@ class WIPNoteSkinEditor extends UIState
 			noteskin = new NoteSkinHelper(Paths.noteskin(file));
 			curName = file;
 		}
-		if (noteskin == null)
+		else
 		{
 			noteskin = new NoteSkinHelper(Paths.noteskin('default'));
 			curName = 'default';
@@ -132,6 +133,8 @@ class WIPNoteSkinEditor extends UIState
 		NoteSkinHelper.keys = helper.data.noteAnimations.length;
 		NoteSkinHelper.arrowSkins = [helper.data.playerSkin, helper.data.opponentSkin];
 	}
+	
+	var resettingColor = false;
 	
 	function buildUI()
 	{
@@ -288,6 +291,45 @@ class WIPNoteSkinEditor extends UIState
 		uiElements.settingsBox.heightDiv.onChange = (ui) -> {
 			helper.data.pixelSize[1] = ui.value.toInt();
 		}
+		
+		uiElements.settingsBox.curColorDropdown.onChange = (ui) -> {
+			curColorString = uiElements.settingsBox.curColorDropdown.selectedItem.text;
+			
+			var id = uiElements.settingsBox.noteColorStepper.value;
+			switch (curColorString)
+			{
+				case 'Red':
+					uiElements.settingsBox.noteColorPicker.value = helper.data.arrowRGBdefault[id].r;
+				case 'Green':
+					uiElements.settingsBox.noteColorPicker.value = helper.data.arrowRGBdefault[id].g;
+				case 'Blue':
+					uiElements.settingsBox.noteColorPicker.value = helper.data.arrowRGBdefault[id].b;
+			}
+		}
+		
+		uiElements.settingsBox.noteColorPicker.onChange = (ui) -> {
+			if (!resettingColor)
+			{
+				final colour = FlxColor.fromString(ui.value.toString());
+				var id = uiElements.settingsBox.noteColorStepper.value;
+				
+				switch (curColorString)
+				{
+					case 'Red':
+						helper.data.arrowRGBdefault[id].r = colour;
+					case 'Green':
+						helper.data.arrowRGBdefault[id].g = colour;
+					case 'Blue':
+						helper.data.arrowRGBdefault[id].b = colour;
+				}
+				trace('Changing $curColorString to $colour');
+				updateStrumColors();
+			}
+		}
+		
+		uiElements.settingsBox.resetDefColors.onClick = (ui) -> {
+			resetColorValues();
+		}
 	}
 	
 	function refreshUIValues()
@@ -302,7 +344,6 @@ class WIPNoteSkinEditor extends UIState
 		uiElements.settingsBox.lanecount.value = 1;
 		
 		uiElements.settingsBox.splashBox.value = helper.data.splashesEnabled;
-		uiElements.settingsBox.shaderColoringBox.value = helper.data.inGameColoring;
 		uiElements.settingsBox.antialiasingBox.value = helper.data.antialiasing;
 		
 		uiElements.settingsBox.pixSus.value = helper.data.sustainSuffix;
@@ -311,6 +352,37 @@ class WIPNoteSkinEditor extends UIState
 		uiElements.settingsBox.heightDiv.value = helper.data.pixelSize[1];
 		
 		uiElements.toolBar.coolBGCheckbox.value = true;
+		
+		uiElements.settingsBox.shaderColoringBox.value = helper.data.inGameColoring;
+		
+		uiElements.settingsBox.noteColorPicker.value = helper.data.arrowRGBdefault[0].r;
+	}
+	
+	function resetColorValues()
+	{
+		resettingColor = true;
+		helper.data.arrowRGBquant = [];
+		helper.data.arrowRGBquant = NoteSkinHelper.quantDefaultColors;
+		helper.data.arrowRGBdefault = [];
+		helper.data.arrowRGBdefault = NoteSkinHelper.defaultColors;
+		
+		uiElements.settingsBox.noteColorStepper.value = 0;
+		uiElements.settingsBox.curColorDropdown.value = 'Red';
+		uiElements.settingsBox.noteColorPicker.value = helper.data.arrowRGBdefault[0].r;
+		resettingColor = false;
+		
+		updateStrumColors();
+	}
+	
+	function updateStrumColors()
+	{
+		for (field in playfields.members)
+		{
+			for (strumnote in field.members)
+			{
+				if (strumnote.animation.curAnim.name != 'static') strumnote.rgbShader.setColors(NoteSkinHelper.colorToArray(helper.data.arrowRGBdefault[strumnote.noteData]));
+			}
+		}
 	}
 	
 	function buildNotes(?skipTween:Bool = false)
@@ -357,6 +429,7 @@ class WIPNoteSkinEditor extends UIState
 		super.update(elapsed);
 		
 		if (scrollingBG != null) scrollingBG.x += 0.25 * (elapsed * 240);
+		FlxG.mouse.visible = true;
 		
 		controlCamera(elapsed);
 		
@@ -437,7 +510,10 @@ class WIPNoteSkinEditor extends UIState
 				"singAnimations": helper.data.singAnimations,
 				"scale": helper.data.scale,
 				"splashesEnabled": helper.data.splashesEnabled,
-				"inGameColoring": helper.data.inGameColoring
+				
+				"inGameColoring": helper.data.inGameColoring,
+				"arrowRGBdefault": helper.data.arrowRGBdefault,
+				"arrowRGBquant": helper.data.arrowRGBquant
 			}
 			
 		final dataToSave:String = Json.stringify(json, "\t");
@@ -490,13 +566,24 @@ class WIPNoteSkinEditor extends UIState
 		
 		if (key > -1 && (FlxG.keys.checkStatus(eventKey, JUST_PRESSED) || ClientPrefs.controllerMode))
 		{
-			for (field in playfields.members)
+			// this keeps crashing idk why
+			try
 			{
-				if (field.inControl && !field.autoPlayed && field.playerControls)
+				if (playfields != null && playfields.members.length > 0)
 				{
-					var spr:StrumNote = field.members[key];
-					shuffleThroughAnims(spr);
+					for (field in playfields.members)
+					{
+						if (field.inControl && !field.autoPlayed && field.playerControls)
+						{
+							var spr:StrumNote = field.members[key];
+							shuffleThroughAnims(spr);
+						}
+					}
 				}
+			}
+			catch (e)
+			{
+				trace(e);
 			}
 		}
 	}
@@ -517,27 +604,6 @@ class WIPNoteSkinEditor extends UIState
 			key.resetAnim = 0;
 		}
 	}
-	
-	// function onKeyRelease(event:KeyboardEvent):Void
-	// {
-	// 	var eventKey:FlxKey = event.keyCode;
-	// 	var key:Int = getKeyFromEvent(eventKey);
-	// 	if (key > -1)
-	// 	{
-	// 		for (field in playfields.members)
-	// 		{
-	// 			if (field.inControl && !field.autoPlayed && field.playerControls)
-	// 			{
-	// 				var spr:StrumNote = field.members[key];
-	// 				if (spr != null)
-	// 				{
-	// 					spr.playAnim('static');
-	// 					spr.resetAnim = 0;
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// }
 	
 	function getKeyFromEvent(key:FlxKey):Int
 	{

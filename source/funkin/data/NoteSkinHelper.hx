@@ -13,6 +13,13 @@ typedef Animation =
 	?looping:Bool
 }
 
+typedef ColorList =
+{
+	?r:FlxColor,
+	?g:FlxColor,
+	?b:FlxColor
+}
+
 typedef NoteSkinData =
 {
 	?globalSkin:String,
@@ -29,35 +36,20 @@ typedef NoteSkinData =
 	?pixelSize:Array<Int>,
 	?antialiasing:Bool,
 	?sustainSuffix:String,
-	/*
-		[
-			{ anim: "idle", xmlName: "fuck", offsets: [x, y]},
-			{ anim: "sustain", xmlName: "fuck", offsets: [x, y]},
-			{ anim: "sustain end", xmlName: "fuck", offsets: [x, y]},
-		]
-	 */
+	
 	?noteAnimations:Array<Array<Animation>>,
 	
-	/*
-		[
-			{ anim: "idle", xmlName: "fuck", offsets: [x, y]},
-			{ anim: "press", xmlName: "fuck", offsets: [x, y]},
-			{ anim: "confirm", xmlName: "fuck", offsets: [x, y]},
-		]
-	 */
 	?receptorAnimations:Array<Array<Animation>>,
 	
-	/*
-		[
-
-		]
-	 */
 	?noteSplashAnimations:Array<Animation>,
 	
 	?singAnimations:Array<String>,
 	?scale:Float,
 	?splashesEnabled:Bool,
-	?inGameColoring:Bool
+	
+	?inGameColoring:Bool,
+	?arrowRGBdefault:Array<ColorList>,
+	?arrowRGBquant:Array<ColorList>
 }
 
 // should be rewritten ngl
@@ -369,7 +361,28 @@ class NoteSkinHelper implements IFlxDestroyable
 		return anim;
 	}
 	
-	static final defaultSingAnimations:Array<String> = ['singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
+	public static final defaultSingAnimations:Array<String> = ['singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
+	
+	public static final defaultColors = [
+		{r: 0xFFC24B99, g: 0xFFFFFFFF, b: 0xFF3C1F56},
+		{r: 0xFF00FFFF, g: 0xFFFFFFFF, b: 0xFF1542B7},
+		{r: 0xFF12FA05, g: 0xFFFFFFFF, b: 0xFF0A4447},
+		{r: 0xFFF9393F, g: 0xFFFFFFFF, b: 0xFF651038}
+	];
+	
+	public static final quantDefaultColors = [
+		{r: 0xFFE51919, g: 0xFFFFFF, b: 0xFF5B0A30}, // 4th
+		{r: 0xFF193BE5, g: 0xFFFFFF, b: 0xFF0A3B5B}, // 8th
+		{r: 0xFFA119E5, g: 0xFFFFFF, b: 0xFF1D0A5B}, // 12th
+		{r: 0xFF26D93E, g: 0xFFFFFF, b: 0xFF24560F}, // 16th
+		{r: 0xFF0000B2, g: 0xFFFFFF, b: 0xFF002247}, // 20th
+		{r: 0xFFA119E5, g: 0xFFFFFF, b: 0xFF1D0A5B}, // 24th
+		{r: 0xFFE5C319, g: 0xFFFFFF, b: 0xFF5B2A0A}, // 32nd
+		{r: 0xFFA119E5, g: 0xFFFFFF, b: 0xFF1D0A5B}, // 48th
+		{r: 0xFF13ECA4, g: 0xFFFFFF, b: 0xFF085D18}, // 64th
+		{r: 0xFF3A3A6C, g: 0xFFFFFF, b: 0xFF17202B}, // 96th
+		{r: 0xFF3A3A6C, g: 0xFFFFFF, b: 0xFF17202B} // 192nd
+	];
 	
 	public static function resolveData(data:NoteSkinData)
 	{
@@ -396,6 +409,8 @@ class NoteSkinHelper implements IFlxDestroyable
 		data.scale ??= 0.7;
 		data.splashesEnabled ??= true;
 		
+		data.arrowRGBdefault ??= defaultColors;
+		data.arrowRGBquant ??= quantDefaultColors;
 		data.inGameColoring ??= true;
 	}
 	
@@ -437,9 +452,17 @@ class NoteSkinHelper implements IFlxDestroyable
 	
 	public static function getCurColors(id:Int = 0, quant:Int = 4)
 	{
-		var arr = ClientPrefs.arrowRGBdef[id];
-		if (ClientPrefs.noteSkin.contains('Quant')) arr = ClientPrefs.arrowRGBquant[quants.indexOf(quant)];
+		var arr = instance.data.arrowRGBdefault[id];
+		if (ClientPrefs.noteSkin.contains('Quant')) arr = instance.data.arrowRGBquant[quants.indexOf(quant)];
 		
+		if (arr == null) arr = defaultColors[0];
+		
+		return colorToArray(arr);
+	}
+	
+	public static function colorToArray(color:ColorList):Array<FlxColor>
+	{
+		var arr:Null<Array<FlxColor>> = [color.r, color.g, color.b];
 		return arr;
 	}
 }
