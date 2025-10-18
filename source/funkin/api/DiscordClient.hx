@@ -40,7 +40,7 @@ class DiscordClient
 	public static final discordPresence:DiscordRichPresence = DiscordRichPresence.create();
 	
 	/**
-	 * Initiates the discord thread and hooks to the rpc id
+	 * Initiates the discord thread and hooks to `rpcId`
 	 */
 	public static function init()
 	{
