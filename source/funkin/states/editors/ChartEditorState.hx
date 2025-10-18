@@ -389,6 +389,8 @@ class ChartEditorState extends MusicBeatState
 		// gradient.alpha = 1;
 		add(gradient);
 		
+		createFriends();
+		
 		shit = new FlxSprite();
 		shit.visible = false;
 		add(shit);
@@ -575,8 +577,6 @@ class ChartEditorState extends MusicBeatState
 		lastSong = currentSongName;
 		
 		updateGrid();
-		
-		createFriends();
 		
 		super.create();
 	}
