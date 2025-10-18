@@ -49,7 +49,7 @@
 	<!-- <define name="ASSET_REDIRECT" if="debug" /> -->
 	
 	<!--ENGINE CUSTOMIZATION-->
-	<define name="MODS_ALLOWED" if="desktop" />
+	<define name="MODS_ALLOWED" if="desktop || android" />
 	<define name="LUA_ALLOWED" if="cpp" />
 	<define name="VIDEOS_ALLOWED" if="cpp" />
 	<define name="DISCORD_ALLOWED" if="cpp"/>
