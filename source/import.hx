@@ -21,9 +21,7 @@ import sys.*;
 import sys.io.*;
 #end
 
-#if DISCORD_ALLOWED
 import funkin.api.DiscordClient;
-#end
 
 #if VIDEOS_ALLOWED
 import hxvlc.flixel.*;

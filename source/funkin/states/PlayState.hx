@@ -2269,7 +2269,7 @@ class PlayState extends MusicBeatState
 				
 				#if DISCORD_ALLOWED
 				// Game Over doesn't get his own variable because it's only used here
-				DiscordClient.changePresence("Game Over - " + detailsText, FlxG.random.getObject(DiscordClient.discordPresences));
+				DiscordClient.changePresence("Game Over - " + detailsText, SONG.song);
 				#end
 				
 				isDead = true;

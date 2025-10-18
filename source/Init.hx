@@ -87,9 +87,7 @@ class Init extends FlxState
 		funkin.utils.WindowUtil.initTracy();
 		#end
 		
-		#if DISCORD_ALLOWED
 		DiscordClient.init();
-		#end
 		
 		funkin.scripting.PluginsManager.prepareSignals();
 		funkin.scripting.PluginsManager.populate();
