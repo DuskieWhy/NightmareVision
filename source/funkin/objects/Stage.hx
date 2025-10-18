@@ -179,7 +179,7 @@ class Stage extends FlxTypedContainer<FlxBasic>
 						catch (e)
 						{
 							final objectName = info.id ?? 'object';
-							Logger.log('[$objectName]: could not set ${i.property}');
+							Logger.log('[$objectName]: could not set ${i.property}', WARN, true);
 						}
 					}
 				}
