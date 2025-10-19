@@ -148,15 +148,7 @@
                             </data>
                         </dropdown>
                     </vbox>
-                    <vbox horizontalAlign="right">
-                        <vbox>
-                            <label text="Currently selected note:"/>
-                            <number-stepper pos="0" step="1" min="0" max="4" id="noteColorStepper" horizontalAlign="center"/>
-                        </vbox>
-                        <color-picker-popup id="noteColorPicker" horizontalAlign="center"/>
-
-                    </vbox>        
-                    <vbox horizontalAlign="center">
+                    <vbox verticalAlign="center">
                         <button allowFocus="false" id="resetDefColors" text="Reset to Default Colors?" style="background-color: #a01926;" horizontalAlign="center"/>
                         <button allowFocus="false" id="resetJsonColors" text="Reset to File's Colors?" style="background-color: #a01926;" horizontalAlign="center"/>
 
@@ -167,8 +159,13 @@
                 <rule />
                 <spacer height="1"/>
                 
-                <checkbox text="In-Engine Coloring Enabled?" id="shaderColoringBox" verticalAlign="center"/>
-
+                <vbox>
+                    <checkbox text="In-Engine Coloring Enabled?" id="shaderColoringBox" verticalAlign="center"/>
+                    <vbox verticalAlign="center">
+                        <color-picker-popup id="noteColorPicker" horizontalAlign="center"/>
+                    </vbox>    
+                </vbox>
+                    
             </vbox>
         </box>
 

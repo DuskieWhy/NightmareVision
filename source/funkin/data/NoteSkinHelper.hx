@@ -363,14 +363,14 @@ class NoteSkinHelper implements IFlxDestroyable
 	
 	public static final defaultSingAnimations:Array<String> = ['singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
 	
-	public static final defaultColors = [
+	public static var defaultColors:Array<ColorList> = [
 		{r: 0xFFC24B99, g: 0xFFFFFFFF, b: 0xFF3C1F56},
 		{r: 0xFF00FFFF, g: 0xFFFFFFFF, b: 0xFF1542B7},
 		{r: 0xFF12FA05, g: 0xFFFFFFFF, b: 0xFF0A4447},
 		{r: 0xFFF9393F, g: 0xFFFFFFFF, b: 0xFF651038}
 	];
 	
-	public static final quantDefaultColors = [
+	public static var quantDefaultColors:Array<ColorList> = [
 		{r: 0xFFE51919, g: 0xFFFFFF, b: 0xFF5B0A30}, // 4th
 		{r: 0xFF193BE5, g: 0xFFFFFF, b: 0xFF0A3B5B}, // 8th
 		{r: 0xFFA119E5, g: 0xFFFFFF, b: 0xFF1D0A5B}, // 12th
@@ -409,8 +409,8 @@ class NoteSkinHelper implements IFlxDestroyable
 		data.scale ??= 0.7;
 		data.splashesEnabled ??= true;
 		
-		data.arrowRGBdefault ??= defaultColors;
-		data.arrowRGBquant ??= quantDefaultColors;
+		data.arrowRGBdefault ??= defaultColors.copy();
+		data.arrowRGBquant ??= quantDefaultColors.copy();
 		data.inGameColoring ??= true;
 	}
 	

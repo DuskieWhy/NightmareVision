@@ -282,6 +282,12 @@
 		4,
 		5
 	],
+    "arrowRGBdefault": [
+        {"r": -1935617, "g": -1537, "b": -10485619},
+        {"r": -12727553, "g": -720897, "b": -16764832},
+        {"r": -9313536, "g": -589850, "b": -16764672},
+        {"r": -30642, "g": -1291, "b": -9699328}
+    ],
 	"hasQuants": true,
 	"noteSplashSkin": "noteSplashes",
 	"isQuants": false,
@@ -289,6 +295,6 @@
 	"antialiasing": false,
 	"isPixel": true,
 	"opponentSkin": "pixelUI/NOTE_assets",
-	"scale": 5.99999999999999,
+	"scale": 6,
 	"sustainSuffix": "ENDS"
 }
