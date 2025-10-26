@@ -30,7 +30,9 @@ class HotReloadPlugin extends FlxBasic
 	{
 		super.update(elapsed);
 		
+		#if !debug
 		if (!ClientPrefs.inDevMode) return;
+		#end
 		
 		if (FlxG.keys.justPressed.F5)
 		{

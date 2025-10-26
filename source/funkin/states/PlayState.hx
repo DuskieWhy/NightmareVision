@@ -2129,7 +2129,7 @@ class PlayState extends MusicBeatState
 			i.scroll.copyFrom(FlxG.camera.scroll);
 		}
 		
-		if (#if debug true || #end chartingMode)
+		if (#if debug true || #end chartingMode || ClientPrefs.inDevMode)
 		{
 			if (!endingSong && !startingSong)
 			{
