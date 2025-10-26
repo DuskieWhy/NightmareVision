@@ -636,7 +636,9 @@ class PlayState extends MusicBeatState
 		scripts.set('stage', stage);
 		applyStageData(stage.stageData);
 		
-		if (stage.buildStage())
+		stage.buildStage();
+		
+		if (stage.runScript(scripts))
 		{
 			scripts.addScript(stage.script);
 			
@@ -953,7 +955,7 @@ class PlayState extends MusicBeatState
 	{
 		if (scripts.exists(name ?? filePath)) return null;
 		
-		var script:FunkinScript = FunkinScript.fromFile(filePath, name);
+		var script:FunkinScript = FunkinScript.fromFile(filePath, name, scripts.scriptShareables);
 		if (script.__garbage)
 		{
 			script = FlxDestroyUtil.destroy(script);

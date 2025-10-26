@@ -1,5 +1,6 @@
 package funkin.objects;
 
+import funkin.scripts.ScriptGroup;
 import funkin.data.CharacterData.AnimationInfo;
 
 import flixel.group.FlxContainer.FlxTypedContainer;
@@ -64,10 +65,8 @@ class Stage extends FlxTypedContainer<FlxBasic>
 	/**
 	 * 
 	 * instantiates any stage objects and attempts to load a script for the stage
-	 * 
-	 * returns `true` if the script was made successfully
 	 */
-	public function buildStage():Bool
+	public function buildStage()
 	{
 		if (stageData.stageObjects != null)
 		{
@@ -187,17 +186,38 @@ class Stage extends FlxTypedContainer<FlxBasic>
 				add(obj);
 			}
 		}
-		
-		//--------------------- script stuff below
-		
+	}
+	
+	public function runScript(?group:ScriptGroup):Bool
+	{
 		final baseScriptFile:String = 'stages/$curStage/script';
 		
+		inline function startScript(scriptFile:String)
+		{
+			script = FunkinScript.fromFile(scriptFile, null, null, group?.scriptShareables);
+			if (script.__garbage)
+			{
+				script = FlxDestroyUtil.destroy(script);
+				return;
+			}
+			
+			@:nullSafety(Off) // trust me bro
+			{
+				script.set("add", add);
+				script.set("stage", this);
+				
+				for (id => obj in objects)
+					script.set(id, obj);
+				if (script.exists('onLoad')) script.call("onLoad");
+			}
+		}
+		
 		var scriptFile = FunkinScript.getPath(baseScriptFile);
-		if (FunkinAssets.exists(scriptFile)) prepareScript(scriptFile);
+		if (FunkinAssets.exists(scriptFile)) startScript(scriptFile);
 		else
 		{
 			scriptFile = FunkinScript.getPath('stages/$curStage');
-			if (FunkinAssets.exists(scriptFile)) prepareScript(scriptFile);
+			if (FunkinAssets.exists(scriptFile)) startScript(scriptFile);
 		}
 		
 		#if VERBOSE_LOGS
@@ -295,25 +315,5 @@ class Stage extends FlxTypedContainer<FlxBasic>
 		}
 		
 		return new Bopper();
-	}
-	
-	inline function prepareScript(scriptFile:String)
-	{
-		script = FunkinScript.fromFile(scriptFile);
-		if (script.__garbage)
-		{
-			script = FlxDestroyUtil.destroy(script);
-			return;
-		}
-		
-		@:nullSafety(Off) // trust me bro
-		{
-			script.set("add", add);
-			script.set("stage", this);
-			
-			for (id => obj in objects)
-				script.set(id, obj);
-			if (script.exists('onLoad')) script.call("onLoad");
-		}
 	}
 }

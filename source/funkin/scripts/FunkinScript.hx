@@ -1,5 +1,8 @@
 package funkin.scripts;
 
+import extensions.hscript.Sharables;
+import extensions.hscript.IrisEx;
+
 import crowplexus.iris.Iris;
 
 import extensions.hscript.InterpEx;
@@ -10,7 +13,7 @@ import funkin.objects.note.*;
 
 @:access(crowplexus.iris.Iris)
 @:access(funkin.states.PlayState)
-class FunkinScript extends Iris implements IFlxDestroyable
+class FunkinScript extends IrisEx implements IFlxDestroyable
 {
 	/**
 	 * List of all accepted hscript extensions
@@ -81,9 +84,9 @@ class FunkinScript extends Iris implements IFlxDestroyable
 	 * @param name 
 	 * @param additionalVars 
 	 */
-	public static function fromString(script:String, ?name:String = "Script", ?additionalVars:Map<String, Any>)
+	public static function fromString(script:String, ?name:String = "Script", ?additionalVars:Map<String, Any>, ?shareables:Sharables)
 	{
-		return new FunkinScript(script, name, additionalVars);
+		return new FunkinScript(script, name, additionalVars, shareables);
 	}
 	
 	/**
@@ -93,11 +96,11 @@ class FunkinScript extends Iris implements IFlxDestroyable
 	 * @param name 
 	 * @param additionalVars 
 	 */
-	public static function fromFile(file:String, ?name:String, ?additionalVars:Map<String, Any>)
+	public static function fromFile(file:String, ?name:String, ?additionalVars:Map<String, Any>, ?shareables:Sharables)
 	{
 		name ??= file;
 		
-		return new FunkinScript(FunkinAssets.getContent(file), name, additionalVars);
+		return new FunkinScript(FunkinAssets.getContent(file), name, additionalVars, shareables);
 	}
 	
 	/**
@@ -105,11 +108,12 @@ class FunkinScript extends Iris implements IFlxDestroyable
 	 */
 	@:noCompletion public var __garbage:Bool = false;
 	
-	public function new(script:String, ?name:String = "Script", ?additionalVars:Map<String, Any>)
+	public function new(script:String, ?name:String = "Script", ?additionalVars:Map<String, Any>, ?shareables:Sharables)
 	{
-		super(script, {name: name, autoRun: false, autoPreset: false});
+		super(script, {name: name, autoRun: false, autoPreset: false}, shareables);
 		
-		interp = new InterpEx(FlxG.state);
+		(cast interp : InterpEx).parent = FlxG.state;
+		// interp = new InterpEx(FlxG.state);
 		
 		preset();
 		

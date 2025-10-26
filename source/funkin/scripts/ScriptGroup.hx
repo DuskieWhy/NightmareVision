@@ -1,5 +1,6 @@
 package funkin.scripts;
 
+import extensions.hscript.Sharables;
 import extensions.hscript.InterpEx;
 
 import flixel.util.FlxDestroyUtil;
@@ -13,6 +14,8 @@ import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 @:nullSafety(Strict)
 class ScriptGroup implements IFlxDestroyable
 {
+	public var scriptShareables:Sharables = new Sharables();
+	
 	/**
 	 * Global interp parent applied to all scripts in the group
 	 */
@@ -28,6 +31,7 @@ class ScriptGroup implements IFlxDestroyable
 			if (interp.parent != parent)
 			{
 				interp.parent = parent;
+				interp.sharedFields = scriptShareables;
 			}
 		}
 		
@@ -61,6 +65,7 @@ class ScriptGroup implements IFlxDestroyable
 		@:privateAccess
 		final interp:InterpEx = cast script.interp;
 		if (interp.parent != parent) interp.parent = parent;
+		interp.sharedFields = scriptShareables;
 		members.push(script);
 		return true;
 	}
@@ -128,6 +133,9 @@ class ScriptGroup implements IFlxDestroyable
 	 */
 	public function destroy()
 	{
+		scriptShareables.clear();
+		@:nullSafety(Off)
+		scriptShareables = null;
 		members = FlxDestroyUtil.destroyArray(members);
 		@:bypassAccessor parent = null;
 	}
