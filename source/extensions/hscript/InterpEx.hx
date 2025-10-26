@@ -174,9 +174,6 @@ class InterpEx extends crowplexus.hscript.Interp
 					}
 					else if (!variables.exists(id) && sharedFields != null && sharedFields.exists(id))
 					{
-						trace('assiging ${Std.string(id)} with ${Std.string(v)}');
-						
-						trace('removed ? ' + sharedFields.remove(id));
 						sharedFields.set(id, v);
 					}
 					else
