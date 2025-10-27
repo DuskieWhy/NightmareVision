@@ -1,6 +1,9 @@
 package funkin.scripts;
 
-class HScriptColor
+import flixel.math.FlxMath;
+import flixel.math.FlxRandom;
+
+class ScriptedFlxColor
 {
 	public static final BLACK:Int = FlxColor.BLACK;
 	public static final BLUE:Int = FlxColor.BLUE;
@@ -34,4 +37,109 @@ class HScriptColor
 	public static function interpolate(color1:FlxColor, color2:FlxColor, factor:Float = 0.5):Int return cast FlxColor.interpolate(color1, color2, factor);
 	
 	public static function fromString(string:String):Int return cast FlxColor.fromString(string);
+}
+
+/**
+ * Wrapper class to be used in place of `FlxG.random`. 
+ * 
+ * Necessary due to generics
+ */
+@:access(flixel.math.FlxRandom)
+class ScriptedFlxRandom
+{
+	@:inheritDoc(flixel.math.FlxRandom.resetInitialSeed)
+	public static inline function resetInitialSeed():Int
+	{
+		return FlxG.random.initialSeed = FlxRandom.rangeBound(Std.int(Math.random() * FlxMath.MAX_VALUE_INT));
+	}
+	
+	@:inheritDoc(flixel.math.FlxRandom.int)
+	public function int(min:Int = 0, max:Int = FlxMath.MAX_VALUE_INT, ?excludes:Array<Int>):Int
+	{
+		return FlxG.random.int(min, max, excludes);
+	}
+	
+	@:inheritDoc(flixel.math.FlxRandom.float)
+	public static function float(min:Float = 0, max:Float = 1, ?excludes:Array<Float>):Float
+	{
+		return FlxG.random.float(min, max, excludes);
+	}
+	
+	@:inheritDoc(flixel.math.FlxRandom.floatNormal)
+	public function floatNormal(mean:Float = 0, stdDev:Float = 1):Float
+	{
+		return FlxG.random.floatNormal(mean, stdDev);
+	}
+	
+	@:inheritDoc(flixel.math.FlxRandom.bool)
+	public static inline function bool(chance:Float = 50):Bool
+	{
+		return float(0, 100) < chance;
+	}
+	
+	@:inheritDoc(flixel.math.FlxRandom.sign)
+	public static inline function sign(chance:Float = 50):Int
+	{
+		return bool(chance) ? 1 : -1;
+	}
+	
+	@:inheritDoc(flixel.math.FlxRandom.weightedPick)
+	public static function weightedPick(weightsArray:Array<Float>):Int
+	{
+		return FlxG.random.weightedPick(weightsArray);
+	}
+	
+	@:inheritDoc(flixel.math.FlxRandom.getObject)
+	public static function getObject<T>(objects:Array<T>, ?weightsArray:Array<Float>, startIndex:Int = 0, ?endIndex:Null<Int>)
+	{
+		var selected:Null<T> = null;
+		
+		if (objects.length != 0)
+		{
+			weightsArray ??= [for (i in 0...objects.length) 1];
+			
+			endIndex ??= objects.length - 1;
+			
+			startIndex = Std.int(FlxMath.bound(startIndex, 0, objects.length - 1));
+			endIndex = Std.int(FlxMath.bound(endIndex, 0, objects.length - 1));
+			
+			// Swap values if reversed
+			if (endIndex < startIndex)
+			{
+				startIndex = startIndex + endIndex;
+				endIndex = startIndex - endIndex;
+				startIndex = startIndex - endIndex;
+			}
+			
+			if (endIndex > weightsArray.length - 1)
+			{
+				endIndex = weightsArray.length - 1;
+			}
+			
+			final arrayHelper = [for (i in startIndex...endIndex + 1) weightsArray[i]];
+			
+			selected = objects[startIndex + weightedPick(arrayHelper)];
+		}
+		
+		return selected;
+	}
+	
+	@:inheritDoc(flixel.math.FlxRandom.shuffle)
+	public static function shuffle<T>(array:Array<T>):Void
+	{
+		var maxValidIndex = array.length - 1;
+		for (i in 0...maxValidIndex)
+		{
+			var j = FlxG.random.int(i, maxValidIndex);
+			var tmp = array[i];
+			array[i] = array[j];
+			array[j] = tmp;
+		}
+	}
+	
+	@:inheritDoc(flixel.math.FlxRandom.color)
+	public static function color(?min:FlxColor, ?max:FlxColor, ?alpha:Int, greyScale:Bool = false):FlxColor
+	{
+		return FlxG.random.color(min, max, alpha, greyScale);
+	}
 }

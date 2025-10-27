@@ -242,7 +242,6 @@ class FunkinScript extends IrisEx implements IFlxDestroyable
 		set("FlxTween", flixel.tweens.FlxTween);
 		set("FlxEase", flixel.tweens.FlxEase);
 		set("FlxSound", flixel.sound.FlxSound);
-		set('FlxColor', funkin.scripts.ScriptClasses.HScriptColor);
 		set("FlxRuntimeShader", funkin.backend.FunkinShader.FunkinRuntimeShader);
 		set("FlxFlicker", flixel.effects.FlxFlicker);
 		set('FlxSpriteUtil', flixel.util.FlxSpriteUtil);
@@ -285,6 +284,10 @@ class FunkinScript extends IrisEx implements IFlxDestroyable
 		set("StageData", funkin.data.StageData);
 		set("PlayState", PlayState);
 		set('FunkinSound', funkin.audio.FunkinSound);
+		
+		// custom
+		set('FlxColor', funkin.scripts.ScriptClasses.ScriptedFlxColor);
+		set('Random', funkin.scripts.ScriptClasses.ScriptedFlxRandom);
 		
 		// script
 		set("FunkinScript", FunkinScript);
