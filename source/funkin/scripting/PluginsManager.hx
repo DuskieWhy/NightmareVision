@@ -65,6 +65,13 @@ class PluginsManager
 		loadedScripts.call(func, args);
 	}
 	
+	public static function callPluginFunc(plugin:String, func:String, ?args:Array<Dynamic>)
+	{
+		var func = loadedScripts.getScript(plugin).call(func, args);
+		
+		return func.returnValue;
+	}
+
 	static function onStateSwitchPost()
 	{
 		callOnScripts('onStateSwitchPost', [FlxG.state]);
