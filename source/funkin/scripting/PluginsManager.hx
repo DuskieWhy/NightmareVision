@@ -8,6 +8,7 @@ import funkin.scripts.FunkinScript;
  * 
  * these scripts are always running in the background.
  */
+@:nullSafety
 class PluginsManager
 {
 	/**
