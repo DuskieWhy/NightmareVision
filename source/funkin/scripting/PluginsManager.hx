@@ -18,7 +18,7 @@ class PluginsManager
 	/**
 	 * Populates scripts for use
 	 */
-	public static function populate()
+	public static function populate():Void
 	{
 		clear();
 		for (file in Paths.listAllFilesInDirectory('scripts/plugins/'))
@@ -43,16 +43,16 @@ class PluginsManager
 	/**
 	 * sets some flxsignals for use on scripts
 	 */
-	public static function prepareSignals()
+	public static function prepareSignals():Void
 	{
 		FlxG.signals.postStateSwitch.add(onStateSwitchPost);
 		FlxG.signals.preStateSwitch.add(onStateSwitch);
 	}
 	
 	/**
-	 * Clears all scripts
+	 * Clears all loaded plugins
 	 */
-	public static function clear()
+	public static function clear():Void
 	{
 		loadedScripts.clear(true);
 	}
@@ -60,24 +60,31 @@ class PluginsManager
 	/**
 	 * Calls a function on the global scripts.
 	 */
-	public static function callOnScripts(func:String, ?args:Array<Dynamic>)
+	public static function callOnScripts(func:String, ?args:Array<Dynamic>):Void
 	{
 		loadedScripts.call(func, args);
 	}
 	
-	public static function callPluginFunc(plugin:String, func:String, ?args:Array<Dynamic>)
+	public static function getPlugin(plugin:String):Null<FunkinScript>
 	{
-		var func = loadedScripts.getScript(plugin).call(func, args);
-		
-		return func.returnValue;
+		return loadedScripts.getScript(plugin);
 	}
-
-	static function onStateSwitchPost()
+	
+	public static function callPluginFunc(plugin:String, func:String, ?args:Array<Dynamic>):Null<Dynamic>
+	{
+		final script = getPlugin(plugin);
+		
+		if (script == null) return null;
+		
+		return script.call(func, args).returnValue;
+	}
+	
+	static function onStateSwitchPost():Void
 	{
 		callOnScripts('onStateSwitchPost', [FlxG.state]);
 	}
 	
-	static function onStateSwitch()
+	static function onStateSwitch():Void
 	{
 		callOnScripts('onStateSwitch', [FlxG.state]);
 	}
