@@ -188,19 +188,20 @@ class MainMenuState extends MusicBeatState
 	
 	function changeItem(huh:Int = 0)
 	{
-		final prevObj = menuItems.members[curSelected];
-		prevObj.animation.play('idle');
-		prevObj.updateHitbox();
-		
-		curSelected = FlxMath.wrap(curSelected + huh, 0, menuItems.length - 1);
-		
-		var newObj = menuItems.members[curSelected];
-		newObj.animation.play('selected');
-		newObj.centerOffsets();
-		
-		final add:Float = menuItems.length > 4 ? menuItems.length * 8 : 0;
-		camFollow.y = newObj.getGraphicMidpoint().y - add;
-		
-		scriptGroup.call('onChangeItem', [curSelected]);
+		if(scriptGroup.call('onChangeItem', [huh]) != ScriptConstants.Function_Stop)
+		{
+			final prevObj = menuItems.members[curSelected];
+			prevObj.animation.play('idle');
+			prevObj.updateHitbox();
+			
+			curSelected = FlxMath.wrap(curSelected + huh, 0, menuItems.length - 1);
+			
+			var newObj = menuItems.members[curSelected];
+			newObj.animation.play('selected');
+			newObj.centerOffsets();
+			
+			final add:Float = menuItems.length > 4 ? menuItems.length * 8 : 0;
+			camFollow.y = newObj.getGraphicMidpoint().y - add;
+		}
 	}
 }

@@ -29,6 +29,13 @@ class ScaleModifier extends NoteModifier
 		
 		scale.x *= 1 - miniX;
 		scale.y *= 1 - miniY;
+
+		if(sprite is StrumNote)
+		{
+			scale.x *= 1 - getSubmodValue('receptor${data}ScaleX', player);
+			scale.y *= 1 - getSubmodValue('receptor${data}ScaleX', player);
+		}
+
 		var angle = 0;
 		
 		var stretch = getSubmodValue("stretch", player) + getSubmodValue('stretch${data}', player);

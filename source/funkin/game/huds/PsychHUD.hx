@@ -32,7 +32,7 @@ class PsychHUD extends BaseHUD
 	var updateIconPos:Bool = true;
 	var updateIconScale:Bool = true;
 	var comboOffsets:Null<Array<Int>> = null; // So u can overwrite the users combo offset if needed without messing with clientprefs
-	
+
 	// TODO: Make combo shit change for week 6, the ground work is already there so incase someone else wants to come on in and mess w it.
 	override function init()
 	{

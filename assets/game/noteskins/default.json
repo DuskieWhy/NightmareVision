@@ -282,12 +282,6 @@
 		4,
 		5
 	],
-    "arrowRGBdefault": [
-        {"r": -1, "g": -1, "b": -1},
-        {"r": -1, "g": -1, "b": -1},
-        {"r": -1, "g": -1, "b": -1},
-        {"r": -1, "g": -1, "b": -1}
-    ],
 	"noteSplashSkin": "noteSplashes",
 	"globalSkin": "NOTE_assets",
 	"antialiasing": true,
