@@ -42,6 +42,9 @@ class PauseSubState extends MusicBeatSubstate
 	// var botplayText:FlxText;
 	public static var songName:String = '';
 	
+	var debugBG:FlxSprite;
+	var debugTxt:FlxText;
+	
 	override function create()
 	{
 		var cam:FlxCamera = CameraUtil.lastCamera;
@@ -150,6 +153,16 @@ class PauseSubState extends MusicBeatSubstate
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
 		add(grpMenuShit);
 		
+		debugBG = new FlxSprite().makeScaledGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		debugBG.alpha = 0;
+		add(debugBG);
+		
+		debugTxt = new FlxText(25, 0, FlxG.width - 50, '', 32);
+		debugTxt.setFormat(Paths.DEFAULT_FONT, 32, FlxColor.WHITE, CENTER, OUTLINE_FAST, FlxColor.BLACK);
+		debugTxt.borderSize = 2;
+		debugTxt.screenCenter(Y);
+		add(debugTxt);
+		
 		regenMenu();
 		cameras = [cam];
 		
@@ -215,7 +228,21 @@ class PauseSubState extends MusicBeatSubstate
 			{
 				if (menuItems.length - 1 != curSelected && difficultyChoices.contains(daSelected))
 				{
-					PlayState.SONG = Chart.fromSong(PlayState.SONG.song, curSelected);
+					if (debugBG.alpha != 0) debugBG.alpha = 0;
+					if (debugTxt.text != "") debugTxt.text = "";
+					
+					try
+					{
+						PlayState.SONG = Chart.fromSong(PlayState.SONG.song, curSelected);
+					}
+					catch (e:Dynamic)
+					{
+						FlxG.sound.play(Paths.sound('cancelMenu'), 0.7);
+						debugBG.alpha = 0.7;
+						debugTxt.text = e;
+						return;
+					}
+					
 					PlayState.storyMeta.difficulty = curSelected;
 					FlxG.resetState();
 					FlxG.sound.music.volume = 0;
@@ -230,6 +257,7 @@ class PauseSubState extends MusicBeatSubstate
 						skipTimeText.destroy();
 					}
 					skipTimeText = null;
+					
 					return;
 				}
 				
@@ -364,10 +392,14 @@ class PauseSubState extends MusicBeatSubstate
 				}
 			}
 		}
+		
+		if (debugBG.alpha != 0) debugBG.alpha = 0;
+		if (debugTxt.text != "") debugTxt.text = "";
 	}
 	
 	function regenMenu():Void
 	{
+		deleteSkipTimeText();
 		for (i in 0...grpMenuShit.members.length)
 		{
 			var obj = grpMenuShit.members[0];
