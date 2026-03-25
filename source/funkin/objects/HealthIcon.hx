@@ -98,7 +98,7 @@ class HealthIcon extends FlxSprite implements IUiSprite
 		if (!Paths.fileExists('images/' + name + '.png')) name = 'icons/icon-face'; // Prevents crash from missing icon
 		
 		final graphic = Paths.image(name, null, false);
-		
+		var iSize:Float = Math.round(graphic.width / graphic.height);
 		loadGraphic(graphic, true, Math.floor(graphic.width / frameCount), Math.floor(graphic.height));
 		iconOffsets[0] = (width - 150) / 2;
 		iconOffsets[1] = (width - 150) / 2;
