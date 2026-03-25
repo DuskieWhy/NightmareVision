@@ -49,6 +49,17 @@ class HealthIcon extends FlxSprite implements IUiSprite
 	// Used to determine if the icon has a winning or not
 	public var hasWinIcon:Bool = false;
 	
+	/**
+	 * Whether the sprite is pixel art or not.
+	 */
+	public var isPixel(default, set):Bool = false;
+	
+	/**
+	 * Size of the pixel icon.
+	 * Only used if `isPixel` is true, and is used to determine the size of each frame in the animation.
+	 */
+	public var pixelIconSize:Int = 32;
+	
 	function set_alphaMultipler(v:Float):Float
 	{
 		alphaMultipler = FlxMath.bound(v, 0, 1);
@@ -131,7 +142,7 @@ class HealthIcon extends FlxSprite implements IUiSprite
 			iconOffsets[1] = (height - 150) / iSize;
 			animation.add(char, [for (i in 0...frames.frames.length) i], 0, false, isPlayer);
 			animation.play(char); // i do plan on adding more functionality to icons at a later date
-
+			
 			if (animation.curAnim.numFrames == 3) hasWinIcon = true;
 		}
 		updateHitbox();
