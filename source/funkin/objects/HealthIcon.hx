@@ -131,6 +131,8 @@ class HealthIcon extends FlxSprite implements IUiSprite
 			iconOffsets[1] = (height - 150) / iSize;
 			animation.add(char, [for (i in 0...frames.frames.length) i], 0, false, isPlayer);
 			animation.play(char); // i do plan on adding more functionality to icons at a later date
+
+			if (animation.curAnim.numFrames == 3) hasWinIcon = true;
 		}
 		updateHitbox();
 		antialiasing = char.endsWith('-pixel') ? false : ClientPrefs.globalAntialiasing;
