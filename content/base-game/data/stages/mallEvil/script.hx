@@ -18,29 +18,23 @@ function onStartCountdown()
 {
 	if (!allowCountdown)
 	{
-		var blackScreen:FlxSprite = new FlxSprite().makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
-		add(blackScreen);
-		blackScreen.scrollFactor.set();
-		camHUD.visible = false;
+		FlxG.camera.fade(FlxColor.BLACK, 0.000001);
+		camHUD.alpha = 0.0001;
 		inCutscene = true;
 		
-		FlxTween.tween(blackScreen, {alpha: 0}, 0.7,
-			{
-				ease: FlxEase.linear,
-				onComplete: function(twn:FlxTween) {
-					remove(blackScreen);
-				}
-			});
+		new FlxTimer().start(0.01, function(tmr:FlxTimer) FlxG.camera.fade(FlxColor.BLACK, 0.7, true));
 		FlxG.sound.play(Paths.sound('Lights_Turn_On'));
 		snapCamToPos(400, -2050);
 		FlxG.camera.zoom = 1.5;
 		
-		new FlxTimer().start(0.8, function(tmr:FlxTimer) {
-			camHUD.visible = true;
+		new FlxTimer().start(0.8, function(tmr:FlxTimer)
+        {
 			FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, 2.5,
 				{
 					ease: FlxEase.quadInOut,
-					onComplete: function(twn:FlxTween) {
+					onComplete: function(twn:FlxTween)
+                    {
+						FlxTween.tween(camHUD, {alpha: 1}, 0.7);
 						allowCountdown = true;
 						inCutscene = false;
 						startCountdown();
