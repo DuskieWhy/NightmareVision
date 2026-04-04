@@ -263,7 +263,7 @@ class Character extends Bopper
 			return;
 		}
 		
-		if (animTimer > 0)
+		if (animTimer > 0 && !getAnimName().endsWith('-end'))
 		{
 			animTimer -= elapsed;
 			if (animTimer <= 0)
@@ -283,6 +283,10 @@ class Character extends Bopper
 			dance(forceDance);
 			finishAnim();
 		}
+		else if (getAnimName().endsWith('-end') && isAnimFinished())
+		{
+			dance(forceDance);
+		}
 		
 		if (getAnimName().startsWith('sing'))
 		{
@@ -292,7 +296,15 @@ class Character extends Bopper
 		
 		if (!isPlayer && holdTimer >= Conductor.stepCrotchet * 0.0011 * singDuration)
 		{
-			dance(forceDance);
+			if (hasAnim(getAnimName() + '-end'))
+			{
+				playEndAnim(getAnimName(), true);
+			}
+			else
+			{
+				dance(forceDance);
+			}
+			
 			holdTimer = 0;
 		}
 		
@@ -355,6 +367,12 @@ class Character extends Bopper
 		}
 		
 		offset.degrees += angle;
+	}
+	
+	public function playEndAnim(animName:String, isForced:Bool = false, isReversed:Bool = false, frame:Int = 0)
+	{
+		specialAnim = false;
+		playAnim(animName + '-end', isForced, isReversed, frame);
 	}
 	
 	override function onBeatHit(beat:Int)
