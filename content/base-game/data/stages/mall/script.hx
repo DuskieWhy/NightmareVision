@@ -39,6 +39,8 @@ function onLoad()
 	
 	santa = new BGSprite('christmas/santa', -840, 150, 1, 1, ['santa idle in fear']);
 	add(santa);
+	
+	songEndCallback = doHorrorlandTransition;
 }
 
 function onCountdownTick()
@@ -52,33 +54,22 @@ function onCountdownTick()
 	santa.dance(true);
 }
 
-// rewrite this
-function onEndSong()
+function doHorrorlandTransition()
 {
-	// Check to see if horrorland is next up in the song list, and that we are in story mode.
-	if (Paths.sanitize(PlayState.SONG.song) == "eggnog" && PlayState.isStoryMode)
+	// Check to see if we are in story mode and if the current song is Eggnog.
+	if (PlayState.isStoryMode && PlayState.SONG.song.toLowerCase() == "eggnog")
 	{
-		var blackShit:FlxSprite = new FlxSprite(-FlxG.width * FlxG.camera.zoom, -FlxG.height * FlxG.camera.zoom).makeGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.BLACK);
-		blackShit.scrollFactor.set();
-		blackShit.cameras = [camOther];
-		add(blackShit);
+		for (cam in FlxG.cameras.list)
+			cam.visible = false;
 		
-		FlxG.sound.play(Paths.sound('Lights_Shut_off'));
+		FlxG.sound.play(Paths.sound('Lights_Shut_off')).persist = true;
 		
-		// Begin our transition!
-		new FlxTimer().start(1.5, (_) -> {
-			PlayState.storyMeta.score += songScore;
-			PlayState.storyMeta.misses += songScore;
-			
-			PlayState.storyMeta.playlist.remove(PlayState.storyMeta.playlist[0]);
-			
-			PlayState.SONG = Chart.fromSong(PlayState.storyMeta.playlist[0], PlayState.storyMeta.difficulty);
-			CoolUtil.cancelMusicFadeTween();
-			FlxG.switchState(() -> new PlayState());
-		});
-		
-		return Function_Stop;
+		new FlxTimer().start(1.5, () -> endSong());
+
+		return;
 	}
+
+	endSong();
 }
 
 function onBeatHit()

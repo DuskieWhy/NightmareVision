@@ -64,8 +64,8 @@
             },
             {
                 "name": "haxeui-core",
-                "link": "https://github.com/haxeui/haxeui-core",
-                "branch": "cfb6a1fa92540bab4d29fe4861b23278709dcfbb"
+                "link": "https://github.com/FunkinCrew/haxeui-core",
+                "branch": "09f2512564b45e92229e21433e6dd482391f7b7d"
             },
             {
                 "name": "moonchart",

@@ -189,7 +189,11 @@ class DebugDisplay extends Sprite
 		
 		if (!canUpdate || (displayType == FpsDisplayMode.DISABLED)) return;
 		
+		#if cpp
 		var str = 'FPS: $currentFPS • [GC: ${FlxStringUtil.formatBytes(gcMemory)} | Task: ${FlxStringUtil.formatBytes(taskMemory)}]';
+		#else
+		var str = 'FPS: $currentFPS • GC: ${FlxStringUtil.formatBytes(gcMemory)}';
+		#end
 		
 		if (displayType == FpsDisplayMode.ADVANCED)
 		{

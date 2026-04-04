@@ -203,8 +203,8 @@ class ToolKitUtils
 	{
 		// some duct tape
 		// to make using haxe ui more stable
-		
-		if (FlxG.mouse.justMoved || FlxG.mouse.justPressed || FlxG.mouse.justReleased)
+		@:privateAccess
+		if (FlxG.game._nextState == null && (FlxG.mouse.justMoved || FlxG.mouse.justPressed || FlxG.mouse.justReleased))
 		{
 			iterated.resize(0);
 			currentFocus = null;

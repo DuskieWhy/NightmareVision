@@ -14,15 +14,15 @@ import funkin.objects.*;
 class MasterEditorMenu extends MusicBeatState
 {
 	var options:Array<String> = [
+		'Chart Editor',
+		'Character Editor',
+		'Note Skin Editor',
+		'Chart Converter',
 		'Mods Manager',
 		'Week Editor',
 		'Menu Character Editor',
 		'Dialogue Editor',
-		'Dialogue Portrait Editor',
-		'Character Editor',
-		'Chart Editor',
-		'Note Skin Editor',
-		'Chart Converter'
+		'Dialogue Portrait Editor'
 	];
 	private var grpTexts:FlxTypedGroup<Alphabet>;
 	private var directories:Array<String> = [null];
