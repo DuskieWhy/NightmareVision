@@ -1,9 +1,0 @@
-{
-    "name": "Friday Night Funkin",
-    "description": "The iconic newgrounds-born rhythm game! You play as boyfriend, and fight to prove your worth to your sexy demon girlfriend's parents! Think you got what it takes?",
-    "global": true,
-
-    "windowTitle": "Friday Night Funkin",
-    "iconFile": "icon64",
-    "defaultTransition": "swipe"
-}
