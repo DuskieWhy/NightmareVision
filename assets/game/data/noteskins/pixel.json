@@ -132,7 +132,7 @@
 				-2
 			],
 			"xmlName": "splash1",
-			"anim": "splash1"
+			"anim": "note0"
 		},		
         {
 			"offsets": [
@@ -140,15 +140,23 @@
 				-2
 			],
 			"xmlName": "splash2",
-			"anim": "splash2"
+			"anim": "note1"
 		},
         {
 			"offsets": [
 				-2,
 				-2
 			],
+			"xmlName": "splash1",
+			"anim": "note2"
+		},
+		{
+			"offsets": [
+				-2,
+				-2
+			],
 			"xmlName": "splash2",
-			"anim": "splash3"
+			"anim": "note3"
 		}
 	],
 	"noteAnimations": [
