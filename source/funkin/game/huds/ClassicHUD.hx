@@ -9,7 +9,7 @@ import funkin.objects.HealthIcon;
 
 // if the hud resembles psych u can just extend this instead of base
 @:access(funkin.states.PlayState)
-class PsychHUD extends BaseHUD
+class ClassicHUD extends BaseHUD
 {
 	var ratingGraphic:FlxSprite;
 	var ratingNumGroup:FlxTypedGroup<FlxSprite>;
@@ -38,16 +38,10 @@ class PsychHUD extends BaseHUD
 	var updateIconScale:Bool = true;
 	var comboOffsets:Null<Array<Int>> = null; // So u can overwrite the users combo offset if needed without messing with clientprefs
 	
-	public function new(parent, ?psychStyle:Bool = false)
-	{
-		super(parent);
-		_psychStyle = psychStyle;
-	}
-	
 	// TODO: Make combo shit change for week 6, the ground work is already there so incase someone else wants to come on in and mess w it.
 	override function init()
 	{
-		name = 'PSYCH';
+		name = 'CLASSIC';
 		
 		ratingPrefix = Paths.RATINGS_PREFIX;
 		comboPrefix = Paths.COMBO_PREFIX;

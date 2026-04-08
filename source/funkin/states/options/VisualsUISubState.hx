@@ -14,6 +14,9 @@ class VisualsUISubState extends BaseOptionsMenu
 		var option:Option = new Option('Hide HUD', 'If checked, hides most HUD elements.', 'hideHud', 'bool', false);
 		addOption(option);
 		
+		var option:Option = new Option('HUD Style:', "What style should the HUD use?", 'hudStyle', 'string', 'NightmareVision', ['NightmareVision', 'Psych', 'Kade', 'Classic']);
+		addOption(option);
+		
 		var option:Option = new Option('Show Ratings', 'If checked, rating graphics will appear on your HUD.', 'showRatings', 'bool', true);
 		addOption(option);
 		

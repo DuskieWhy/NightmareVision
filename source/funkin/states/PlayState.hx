@@ -756,7 +756,7 @@ class PlayState extends MusicBeatState
 		notes = new FlxTypedGroup<Note>();
 		add(notes);
 		
-		playHUD = new funkin.game.huds.PsychHUD(this);
+		playHUD = getHUD();
 		insert(members.indexOf(playFields), playHUD); // Data told me to do this
 		playHUD.cameras = [camHUD];
 		
@@ -919,6 +919,19 @@ class PlayState extends MusicBeatState
 	public var skipArrowStartTween:Bool = false;
 	
 	var splashLayering:Array<Dynamic> = [];
+	
+	public function getHUD():BaseHUD
+	{
+		final style = ClientPrefs.hudStyle;
+		switch (style)
+		{
+			default:
+				new funkin.game.huds.PsychHUD(this, style == 'Psych');
+			case 'Classic':
+				return new funkin.game.huds.ClassicHUD(this);
+		}
+		return null;
+	}
 	
 	public function generatePlayfields()
 	{

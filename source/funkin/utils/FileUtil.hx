@@ -27,17 +27,6 @@ class FileUtil
 		final title = options.title;
 		final filters = options.typeFilter;
 		final startPath = options.defaultSearch;
-		
-		FileDialog.openFile(FlxG.stage.window, title, (files, filter) -> {
-			if (files != null && files.length > 0)
-			{
-				if (onSelect != null) onSelect(files[0]);
-			}
-			else
-			{
-				if (onCancel != null) onCancel();
-			}
-		}, @:privateAccess @:nullSafety(Off) File.__getFilterTypes(filters), startPath);
 	}
 	
 	public static function browseForMultipleFiles(options:BrowseOptions, ?onSelect:Array<String>->Void, ?onCancel:Void->Void)
@@ -45,17 +34,6 @@ class FileUtil
 		final title = options.title;
 		final filters = options.typeFilter;
 		final startPath = options.defaultSearch;
-		
-		FileDialog.openFile(FlxG.stage.window, title, (files, filter) -> {
-			if (files != null && files.length > 0)
-			{
-				if (onSelect != null) onSelect(files);
-			}
-			else
-			{
-				if (onCancel != null) onCancel();
-			}
-		}, @:privateAccess @:nullSafety(Off) File.__getFilterTypes(filters), startPath, true);
 	}
 	
 	public static function saveFile(data:Dynamic, ?fileName:String, ?onSelect:String->Void, ?onCancel:Void->Void)
@@ -66,21 +44,8 @@ class FileUtil
 		if (fileName != null && fileName.extension().length > 0)
 		{
 			final ext:String = fileName.extension();
-			filters = [new lime.ui.FileDialogFilter('*.$ext', ext)];
+			filters = [];
 		}
-		
-		FileDialog.saveFile(FlxG.stage.window, 'Save', (file, filter) -> {
-			if (file != null && file.length > 0)
-			{
-				Bytes.toFile(file, dynamicToBytes(data));
-				
-				if (onSelect != null) onSelect(file);
-			}
-			else
-			{
-				if (onCancel != null) onCancel();
-			}
-		}, filters, fileName);
 	}
 	
 	public static function saveFileToPath(data:Dynamic, path:String, ensureDirectory:Bool = true):Bool
@@ -92,7 +57,7 @@ class FileUtil
 				FileSystem.createDirectory(path.directory());
 			}
 			
-			Bytes.toFile(path, dynamicToBytes(data));
+			sys.io.File.saveBytes(path, dynamicToBytes(data));
 			return true;
 		}
 		catch (e)

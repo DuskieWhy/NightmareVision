@@ -104,6 +104,8 @@ class ClientPrefs
 	
 	@saveVar public static var quants:Bool = false;
 	
+	@:saveVar public static var hudStyle:String = 'NightmareVision';
+	
 	// @saveVar public static var noteSkin:String = 'Vanilla';
 	@saveVar public static var comboOffset:Array<Int> = [0, 0, 0, 0];
 	
