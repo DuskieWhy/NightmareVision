@@ -926,11 +926,10 @@ class PlayState extends MusicBeatState
 		switch (style)
 		{
 			default:
-				new funkin.game.huds.PsychHUD(this, style == 'Psych');
+				return new funkin.game.huds.PsychHUD(this, style == 'Psych');
 			case 'Classic':
 				return new funkin.game.huds.ClassicHUD(this);
 		}
-		return null;
 	}
 	
 	public function generatePlayfields()

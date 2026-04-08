@@ -19,8 +19,6 @@ class ClassicHUD extends BaseHUD
 	var iconP2:HealthIcon;
 	var scoreTxt:FlxText;
 	
-	var timeTxt:FlxText;
-	var timeBar:Bar;
 	var pixelZoom:Float = 6; // idgaf
 	
 	var ratingPrefix:String = "";
@@ -70,32 +68,9 @@ class ClassicHUD extends BaseHUD
 		iconP2.alphaMultipler = ClientPrefs.healthBarAlpha;
 		add(iconP2);
 		
-		scoreTxt = new FlxText(0, healthBar.y + 40, FlxG.width, "", 20);
-		scoreTxt.setFormat(Paths.DEFAULT_FONT, 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		scoreTxt.scrollFactor.set();
-		scoreTxt.borderSize = 1.25;
-		scoreTxt.visible = !ClientPrefs.hideHud;
+		scoreTxt = new FlxText(healthBar.x + healthBar.width - 190, healthBar.y + 30, 0, "", 20);
+		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(scoreTxt);
-		
-		var showTime:Bool = (ClientPrefs.timeBarType != 'Disabled');
-		timeTxt = new FlxText(0, 19, FlxG.width, "", 32);
-		timeTxt.setFormat(Paths.DEFAULT_FONT, 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		timeTxt.scrollFactor.set();
-		timeTxt.alpha = 0;
-		timeTxt.borderSize = 2;
-		timeTxt.visible = parent.updateTime = showTime;
-		if (ClientPrefs.downScroll) timeTxt.y = FlxG.height - 44;
-		if (ClientPrefs.timeBarType == 'Song Name') timeTxt.text = PlayState.SONG.song;
-		
-		final timeGraphic = FunkinAssets.exists(Paths.mods('images/${Paths.UI_PREFIX}timeBar')) ? '${Paths.UI_PREFIX}timeBar' : 'UI/timeBar';
-		
-		timeBar = new Bar(0, timeTxt.y + (timeTxt.height / 4), timeGraphic, function() return parent.songPercent, 0, 1);
-		timeBar.scrollFactor.set();
-		timeBar.screenCenter(X);
-		timeBar.alpha = 0;
-		timeBar.visible = showTime;
-		add(timeBar);
-		add(timeTxt);
 		
 		ratingGraphic = new FlxSprite();
 		ratingGraphic.alpha = 0;
@@ -110,8 +85,6 @@ class ClassicHUD extends BaseHUD
 		parent.scripts.set('iconP1', iconP1);
 		parent.scripts.set('iconP2', iconP2);
 		parent.scripts.set('scoreTxt', scoreTxt);
-		parent.scripts.set('timeBar', timeBar);
-		parent.scripts.set('timeTxt', timeTxt);
 		parent.scripts.set('ratingPrefix', ratingPrefix);
 		parent.scripts.set('ratingSuffix', ratingSuffix);
 		parent.scripts.set('comboPrefix', comboPrefix);
@@ -123,38 +96,10 @@ class ClassicHUD extends BaseHUD
 		}
 	}
 	
-	override function onSongStart()
-	{
-		FlxTween.tween(timeBar, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
-		FlxTween.tween(timeTxt, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
-	}
-	
 	override function onUpdateScore(score:Int = 0, accuracy:Float = 0, misses:Int = 0, missed:Bool = false)
 	{
-		var str:String = 'N/A';
-		if (parent.totalPlayed != 0)
-		{
-			str = '${accuracy}% - ${parent.ratingFC}';
-		}
-		
-		final tempScore:String = 'Score: ${FlxStringUtil.formatMoney(score, false)}'
-			+ (!parent.instakillOnMiss ? ' $textDivider Misses: ${misses}' : "")
-			+ ' $textDivider Accuracy: ${str}';
-			
-		if (!missed && !parent.cpuControlled) doScoreBop();
-		
+		final tempScore:String = 'Score: ${FlxStringUtil.formatMoney(score, false)}';
 		scoreTxt.text = '${tempScore}\n';
-	}
-	
-	var scoreTextTwn:Null<FlxTween> = null;
-	
-	public function doScoreBop():Void
-	{
-		if (!ClientPrefs.scoreZoom) return;
-		
-		scoreTextTwn?.cancel();
-		scoreTxt.scale.set(1.075, 1.075);
-		scoreTextTwn = FlxTween.tween(scoreTxt.scale, {x: 1, y: 1}, 0.2);
 	}
 	
 	public function updateIconsPosition()
@@ -178,13 +123,15 @@ class ClassicHUD extends BaseHUD
 	{
 		if (!updateIconScale) return;
 		
-		final mult:Float = MathUtil.decayLerp(iconP1.scale.x, 1, 9, elapsed);
+		final mult:Float = MathUtil.decayLerp(iconP1.scale.x, 1, 18, elapsed);
 		iconP1.scale.set(mult, mult);
 		iconP1.updateHitbox();
 		
-		final mult:Float = MathUtil.decayLerp(iconP2.scale.x, 1, 9, elapsed);
+		final mult:Float = MathUtil.decayLerp(iconP2.scale.x, 1, 18, elapsed);
 		iconP2.scale.set(mult, mult);
 		iconP2.updateHitbox();
+		
+		iconP1.origin.y = iconP2.origin.y = 0;
 	}
 	
 	public function updateIconsAnimation()
@@ -199,11 +146,11 @@ class ClassicHUD extends BaseHUD
 		var boyfriend = parent.boyfriend;
 		if (!healthBar.leftToRight)
 		{
-			healthBar.setColors(dad.healthColour, boyfriend.healthColour);
+			healthBar.setColors(0xFFFF0000, 0xFF66FF33);
 		}
 		else
 		{
-			healthBar.setColors(boyfriend.healthColour, dad.healthColour);
+			healthBar.setColors(0xFF66FF33, 0xFFFF0000);
 		}
 	}
 	
@@ -221,20 +168,6 @@ class ClassicHUD extends BaseHUD
 		updateIconsPosition();
 		updateIconsScale(elapsed);
 		updateIconsAnimation();
-		
-		if (!parent.startingSong && !parent.paused && parent.updateTime && !parent.endingSong)
-		{
-			var curTime:Float = Math.max(0, Conductor.songPosition - ClientPrefs.noteOffset);
-			parent.songPercent = (curTime / parent.songLength);
-			
-			var songCalc:Float = (parent.songLength - curTime);
-			if (ClientPrefs.timeBarType == 'Time Elapsed') songCalc = curTime;
-			
-			var secondsTotal:Int = Math.floor(songCalc / 1000);
-			if (secondsTotal < 0) secondsTotal = 0;
-			
-			if (ClientPrefs.timeBarType != 'Song Name') timeTxt.text = flixel.util.FlxStringUtil.formatTime(secondsTotal, false);
-		}
 	}
 	
 	override function beatHit()
