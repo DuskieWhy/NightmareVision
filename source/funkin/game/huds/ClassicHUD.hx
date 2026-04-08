@@ -7,7 +7,7 @@ import flixel.util.FlxStringUtil;
 import funkin.objects.Bar;
 import funkin.objects.HealthIcon;
 
-// if the hud resembles psych u can just extend this instead of base
+
 @:access(funkin.states.PlayState)
 class ClassicHUD extends BaseHUD
 {
