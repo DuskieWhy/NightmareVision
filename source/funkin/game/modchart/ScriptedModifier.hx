@@ -3,7 +3,6 @@ package funkin.game.modchart;
 import funkin.scripts.FunkinScript;
 
 // could be added automaticaly instead of manually (todo ???)
-
 class ScriptedModifier extends Modifier
 {
 	var name:String;
@@ -16,7 +15,7 @@ class ScriptedModifier extends Modifier
 	var script:Null<FunkinScript> = null;
 	
 	public function new(modMgr:ModManager, name:String = '', prefix:String = '', ?parent:Modifier)
-	{	
+	{
 		this.prefix = prefix;
 		
 		modName = (this.name = name).toLowerCase();
@@ -43,7 +42,7 @@ class ScriptedModifier extends Modifier
 			script.set('DEFAULT', DEFAULT);
 			script.set('LAST', LAST);
 			
-			@:privateAccess (cast script.interp : extensions.hscript.InterpEx).parent = this;
+			script.parent = this;
 			
 			modName = (script.executeFunc('getName', this) ?? modName);
 			
@@ -60,11 +59,14 @@ class ScriptedModifier extends Modifier
 	}
 	
 	public override function getOrder():Int return modOrder;
+	
 	public override function getName():String return modName;
+	
 	public override function doesUpdate():Bool return modUpdate;
+	
 	public override function getModType():ModifierType return modType;
 	
-	public override function getSubmods():Array<String> return cast (script?.executeFunc('getSubmods', this) ?? []);
+	public override function getSubmods():Array<String> return cast(script?.executeFunc('getSubmods', this) ?? []);
 	
 	public override function getPos(time:Float, visualDiff:Float, timeDiff:Float, beat:Float, pos:Vector3, data:Int, player:Int, obj:FlxSprite)
 	{
@@ -72,9 +74,13 @@ class ScriptedModifier extends Modifier
 	}
 	
 	public override function update(elapsed:Float):Void script?.executeFunc('onUpdate', [elapsed], this);
+	
 	public override function updateNote(beat, obj, pos, player) script?.executeFunc('updateNote', [beat, obj, pos, player], this);
+	
 	public override function updateReceptor(beat, obj, pos, player) script?.executeFunc('updateReceptor', [beat, obj, pos, player], this);
+	
 	public override function updateNoteSplash(beat, obj, pos, player) script?.executeFunc('updateNoteSplash', [beat, obj, pos, player], this);
+	
 	public override function updateSustainSplash(beat, obj, pos, player) script?.executeFunc('updateSustainSplash', [beat, obj, pos, player], this);
 	
 	public override function destroy():Void

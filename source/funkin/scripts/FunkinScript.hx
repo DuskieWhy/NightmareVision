@@ -1,11 +1,16 @@
 package funkin.scripts;
 
+import extensions.hscript.InsanityInterpEx;
+
+import insanity.Config;
+import insanity.backend.Interp;
+import insanity.backend.Expr;
+
+import haxe.Exception;
+
+import insanity.Script;
+
 import extensions.hscript.Sharables;
-import extensions.hscript.IrisEx;
-
-import crowplexus.iris.Iris;
-
-import extensions.hscript.InterpEx;
 
 import funkin.backend.plugins.DebugTextPlugin;
 import funkin.objects.*;
@@ -13,7 +18,7 @@ import funkin.objects.note.*;
 
 @:access(crowplexus.iris.Iris)
 @:access(funkin.states.PlayState)
-class FunkinScript extends IrisEx implements IFlxDestroyable
+class FunkinScript extends Script implements IFlxDestroyable
 {
 	/**
 	 * List of all accepted hscript extensions
@@ -54,29 +59,34 @@ class FunkinScript extends IrisEx implements IFlxDestroyable
 	 */
 	public static function init()
 	{
-		Iris.warn = (x, ?pos) -> {
-			final output:String = '[${pos.fileName}:${pos.lineNumber}]: $x';
-			
-			DebugTextPlugin.addText(Std.string(output), Logger.getHexColourFromSeverity(WARN));
-			
-			Iris.logLevel(ERROR, x, pos);
-		}
+		/*
+			Iris.warn = (x, ?pos) -> {
+				final output:String = '[${pos.fileName}:${pos.lineNumber}]: $x';
+				
+				DebugTextPlugin.addText(Std.string(output), Logger.getHexColourFromSeverity(WARN));
+				
+				Iris.logLevel(ERROR, x, pos);
+			}
+
+			Iris.error = (x, ?pos) -> {
+				final output:String = '[${pos.fileName}:${pos.lineNumber}]: $x';
+				
+				DebugTextPlugin.addText(Std.string(output), Logger.getHexColourFromSeverity(ERROR));
+				
+				Iris.logLevel(NONE, x, pos);
+			}
+
+			Iris.print = (x, ?pos) -> {
+				final output:String = '[${pos.fileName}:${pos.lineNumber}]: $x';
+				
+				DebugTextPlugin.addText(Std.string(output), Logger.getHexColourFromSeverity(PRINT));
+				
+				Iris.logLevel(NONE, x, pos);
+			}
+		 */
 		
-		Iris.error = (x, ?pos) -> {
-			final output:String = '[${pos.fileName}:${pos.lineNumber}]: $x';
-			
-			DebugTextPlugin.addText(Std.string(output), Logger.getHexColourFromSeverity(ERROR));
-			
-			Iris.logLevel(NONE, x, pos);
-		}
-		
-		Iris.print = (x, ?pos) -> {
-			final output:String = '[${pos.fileName}:${pos.lineNumber}]: $x';
-			
-			DebugTextPlugin.addText(Std.string(output), Logger.getHexColourFromSeverity(PRINT));
-			
-			Iris.logLevel(NONE, x, pos);
-		}
+		Config.interpClass = InsanityInterpEx;
+		Config.preprocessorValues; // idea: maybe implement some nmv specific preprocessors? ex: version, deprecation fields, etc.
 	}
 	
 	/**
@@ -109,99 +119,140 @@ class FunkinScript extends IrisEx implements IFlxDestroyable
 	 */
 	@:noCompletion public var __garbage:Bool = false;
 	
-	public function new(script:String, ?name:String = "Script", ?additionalVars:Map<String, Any>, ?shareables:Sharables)
+	// an attempt to redoing parent variables!
+	@:isVar
+	public var parent(get, set):Dynamic;
+	
+	@:isVar
+	public var sharables(get, set):Sharables;
+	
+	public function new(script:String, ?name:String = "Script", ?additionalVars:Map<String, Any>, ?shareables:Sharables, ?autoStart:Bool = true)
 	{
-		super(script, {name: name, autoRun: false, autoPreset: false}, shareables);
-		
-		(cast interp : InterpEx).parent = FlxG.state;
-		// interp = new InterpEx(FlxG.state);
-		
-		preset();
+		super(script, name ?? 'unknown');
 		
 		if (additionalVars != null)
 		{
-			for (key => obj in additionalVars)
-				set(key, additionalVars.get(obj));
+			for (key => value in additionalVars)
+			{
+				set(key, additionalVars.get(value));
+			}
 		}
 		
-		tryExecute();
+		this.parent = FlxG.state;
+		
+		if (autoStart)
+		{
+			start();
+		}
 	}
 	
-	/**
-	 * safer parsing
-	 */
-	inline function tryExecute()
+	public function getInterp():InsanityInterpEx
 	{
-		var ret:Dynamic = null;
+		if (interp != null) return cast(interp, InsanityInterpEx);
+		return null;
+	}
+	
+	override function parse(string:String):Expr
+	{
 		try
 		{
-			ret = execute();
+			parser.resumeErrors = true;
+			program = parser.parseScript(string, name);
 		}
-		catch (e)
+		catch (e:haxe.Exception)
 		{
-			__garbage = true;
-			Logger.log('[${name}]: PARSING ERROR: $e', ERROR, true);
+			onParsingError(e);
+			program = null;
 		}
-		return ret;
+		
+		return program;
+	}
+	
+	override function start(?expr:Expr):Any
+	{
+		try
+		{
+			if (program == null) throw 'Program is uninitialized';
+			
+			failed = false;
+			
+			setDefaults();
+			
+			if (interp.environment != null)
+			{
+				for (k => v in interp.environment.variables)
+					if (!variables.exists(k)) variables.set(k, v);
+			}
+			
+			return interp.execute(program);
+		}
+		catch (e:haxe.Exception)
+		{
+			onProgramError(e);
+			failed = true;
+		}
+		
+		return null;
+	}
+	
+	override function onProgramError(e:Exception)
+	{
+		Logger.log('An error has occurred in script ${this.name}\n${e.details()}', ERROR, true);
+	}
+	
+	override function onParsingError(e:Exception)
+	{
+		Logger.log('A parsing error has occurred in script ${this.name}\n${e.details()}', ERROR, true);
+	}
+	
+	public function set(variable:String, value:Dynamic)
+	{
+		getInterp().variables?.set(variable, value);
+	}
+	
+	public function get(variable:String)
+	{
+		return getInterp().variables?.get(variable) ?? null;
+	}
+	
+	public function exists(variable:String)
+	{
+		return getInterp().variables?.exists(variable) ?? false;
+	}
+	
+	override function call(variable:String, ?args:Array<Dynamic>):Any
+	{
+		if (interp == null) throw 'Interpreter is uninitialized';
+		
+		var fun = (getInterp().variables.exists(variable) ? getInterp().variables.get(variable) : getInterp().getGlobal(variable, true));
+		
+		if (!Reflect.isFunction(fun))
+		{
+			Logger.log('$variable isn\'t a function', WARN);
+			return null;
+		}
+		
+		return Reflect.callMethod(interp, fun, args ?? []);
 	}
 	
 	// kept for notescript stuff
+	// I did not put jackshit effort into reimplementing this function - TG
 	public function executeFunc(func:String, ?parameters:Array<Dynamic>, ?theObject:Any, ?extraVars:Map<String, Dynamic>):Dynamic
 	{
 		extraVars ??= [];
 		
-		if (exists(func))
+		if (!exists(func))
 		{
-			var daFunc = get(func);
-			if (Reflect.isFunction(daFunc))
-			{
-				var returnVal:Dynamic = null;
-				var defaultShit:Map<String, Dynamic> = [];
-				
-				if (theObject != null) extraVars.set("this", theObject);
-				
-				for (key in extraVars.keys())
-				{
-					defaultShit.set(key, get(key));
-					set(key, extraVars.get(key));
-				}
-				
-				try
-				{
-					returnVal = Reflect.callMethod(theObject, daFunc, parameters ?? []);
-				}
-				catch (e:haxe.Exception)
-				{
-					#if sys
-					Sys.println(e.message);
-					#end
-				}
-				
-				for (key in defaultShit.keys())
-				{
-					set(key, defaultShit.get(key));
-				}
-				
-				return returnVal;
-			}
+			Logger.log('Function $func doesn\'t exist in ${this.name}!', WARN);
+			return null;
 		}
-		return null;
+		
+		return call(func, parameters ?? []);
 	}
 	
-	@:inheritDoc
-	override function preset()
+	override function setDefaults()
 	{
-		super.preset();
-		#if hl
-		set('Math', hl.HLFixes.HLMath);
-		set('Std', hl.HLFixes.HLStd);
-		set("trace", Reflect.makeVarArgs(function(x:Array<Dynamic>) {
-			var pos = this.interp != null ? this.interp.posInfos() : Iris.getDefaultPos(this.name);
-			var v = x.shift();
-			if (x.length > 0) pos.customParams = x;
-			Iris.print(Std.string(v), pos);
-		}));
-		#end
+		super.setDefaults();
 		
 		set("StringTools", StringTools);
 		
@@ -407,5 +458,61 @@ class FunkinScript extends IrisEx implements IFlxDestroyable
 			
 			return new funkin.backend.FunkinShader.FunkinRuntimeShader(fragPath, vertPath);
 		});
+	}
+	
+	public function destroy() {}
+	
+	public function set_parent(value:Dynamic)
+	{
+		if (parent == value || value == null || this.interp == null) return parent;
+		
+		if (this.interp != null && this.interp is InsanityInterpEx)
+		{
+			var i:InsanityInterpEx = getInterp();
+			
+			i.scriptParent = value;
+		}
+		
+		return parent = value;
+	}
+	
+	public function get_parent():Dynamic
+	{
+		if (this.interp == null) return null;
+		
+		if (this.interp is InsanityInterpEx)
+		{
+			var i:InsanityInterpEx = getInterp();
+			return i.scriptParent;
+		}
+		
+		return null;
+	}
+	
+	function set_sharables(value:Sharables):Sharables
+	{
+		if (this.interp == null) return new Sharables();
+		
+		if (this.interp is InsanityInterpEx)
+		{
+			var i:InsanityInterpEx = getInterp();
+			i.sharedFields = value ?? i.sharedFields; // ensure nothing stupid happens!
+		}
+		
+		return new Sharables();
+	}
+	
+	function get_sharables():Sharables
+	{
+		if (this.interp == null) return new Sharables();
+		
+		if (this.interp is InsanityInterpEx)
+		{
+			var i:InsanityInterpEx = getInterp();
+			
+			return i.sharedFields;
+		}
+		
+		return new Sharables();
 	}
 }

@@ -1,7 +1,6 @@
 package funkin.scripts;
 
 import extensions.hscript.Sharables;
-import extensions.hscript.InterpEx;
 
 import flixel.util.FlxDestroyUtil;
 import flixel.util.FlxDestroyUtil.IFlxDestroyable;
@@ -25,12 +24,8 @@ class ScriptGroup implements IFlxDestroyable
 		@:privateAccess
 		for (i in members)
 		{
-			final interp:InterpEx = cast i.interp;
-			if (interp.parent != parent)
-			{
-				interp.parent = parent;
-				interp.sharedFields = scriptShareables;
-			}
+			i.parent = value;
+			i.sharables = scriptShareables;
 		}
 		
 		return parent;
@@ -59,16 +54,13 @@ class ScriptGroup implements IFlxDestroyable
 	public function addScript(script:Null<FunkinScript>, allowDupeNames:Bool = false):Bool
 	{
 		if (script == null || (!allowDupeNames && exists(script.name))) return false;
-		
 		@:privateAccess
-		final interp:InterpEx = cast script.interp;
-		if (interp.parent != parent) interp.parent = parent;
-		interp.sharedFields = scriptShareables;
+		if (script.parent != this.parent) script.parent = this.parent;
+		script.sharables = scriptShareables;
 		members.push(script);
 		return true;
 	}
 	
-	@:inheritDoc(funkin.scripts.FunkinScript.set)
 	public function set(varName:String, arg:Dynamic)
 	{
 		for (i in members)
@@ -77,19 +69,19 @@ class ScriptGroup implements IFlxDestroyable
 		}
 	}
 	
-	@:inheritDoc(funkin.scripts.FunkinScript.call)
 	public function call(event:String, ?args:Array<Dynamic>, ignoreStops:Bool = false, ?exclusions:Array<String>):Dynamic
 	{
 		exclusions ??= [];
 		var returnVal:Dynamic = ScriptConstants.CONTINUE_FUNC;
 		for (i in members)
 		{
+			// trace('calling $event for ${i.name}');
 			if (i == null || !i.exists(event) || exclusions.contains(i.name))
 			{
 				continue;
 			}
 			
-			var ret:Dynamic = i.call(event, args)?.returnValue;
+			var ret:Dynamic = i.call(event, args);
 			if (ret != null)
 			{
 				if (ret == ScriptConstants.HALT_FUNC)

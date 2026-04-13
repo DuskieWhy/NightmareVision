@@ -72,8 +72,8 @@
     <haxelib name="flixel"/>
     <haxelib name="flixel-addons"/>
     <haxelib name="flixel-ui" version="2.6.4"/>
-
-    <haxelib name="hscript-iris" version="git"/>
+    
+    <haxelib name="hscript-insanity" version="git"/>
 
     <haxelib name="flixel-animate"/>
     <haxelib name="moonchart"/>

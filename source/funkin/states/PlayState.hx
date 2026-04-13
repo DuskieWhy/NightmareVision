@@ -2982,7 +2982,7 @@ class PlayState extends MusicBeatState
 	{
 		if (!script.exists(event)) return ScriptConstants.CONTINUE_FUNC;
 		
-		var ret:Dynamic = script.call(event, args)?.returnValue;
+		var ret:Dynamic = script.call(event, args) ?? null;
 		
 		return ret ?? ScriptConstants.CONTINUE_FUNC;
 	}
