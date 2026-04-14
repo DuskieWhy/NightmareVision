@@ -87,9 +87,9 @@ class HealthIcon extends FlxSprite implements IUiSprite
 	/**
 	 * Attempts to load a new icon by file name
 	 */
-	public function changeIcon(char:String, forced:Bool = false):Void
+	public function changeIcon(char:String, forced:Bool = false):HealthIcon
 	{
-		if (this.characterName == char && !forced) return;
+		if (this.characterName == char && !forced) return this;
 		
 		this.characterName = char;
 		
@@ -113,6 +113,8 @@ class HealthIcon extends FlxSprite implements IUiSprite
 		animation.play(char); // i do plan on adding more functionality to icons at a later date
 		
 		antialiasing = char.endsWith('-pixel') ? false : ClientPrefs.globalAntialiasing;
+		
+		return this;
 	}
 	
 	override function updateHitbox()

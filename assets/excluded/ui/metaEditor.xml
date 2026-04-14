@@ -1,0 +1,60 @@
+<dialog title="Metadata Editor" width="430" height="300" closable="true">
+
+    <tabview id="characterTabs" width="100%" height="100%" styleName="full-width-buttons">
+
+        <box text="Meta">
+
+            <grid columns="2">
+
+                <vbox>
+                    <label text="Song Display Name" verticalAlign="center" />
+                    <textfield placeholder="Bopeebo" width="300" id="displayNameField"/>
+
+                    <label text="Icon" verticalAlign="center" />
+                    <textfield placeholder="dad" width="300" id="iconField"/>
+
+                    <label text="Difficulties" verticalAlign="center" />
+                    <textfield placeholder="Easy, Normal, Hard" width="300" id="difficultyField"/>
+                </vbox>
+
+                <vbox>
+                    <button id="iconDisplay" width="80px" height="80px" verticalAlign="center" horizontalAlign="center"/>
+                    <button allowFocus="false" id="iconColourButton" text="Get Colour" horizontalAlign="center"/>
+
+                    <color-picker-popup id="colourPicker" verticalAlign="center" horizontalAlign="center" />
+                </vbox>
+
+                <vbox>
+                    <spacer height="1"/>
+                    <rule />
+                    <spacer height="1"/>
+
+                    <hbox verticalAlign="bottom">
+                        <button text="Save" id="saveButton" style="background-color: #156015;" />
+                        <button text="Load" id="loadButton" style="background-color: #575213;"/>
+                        <button text="Clear" id="clearButton"/>
+                    </hbox>
+                </vbox>
+
+            </grid>
+
+        </box>
+
+        <box text="Credits">
+            <vbox>
+                <label text="Artists" verticalAlign="center" />
+                <textfield placeholder="" width="385" id="artistField"/>
+
+                <label text="Composers" verticalAlign="center" />
+                <textfield placeholder="" width="385" id="composerField"/>
+
+                <label text="Charters" verticalAlign="center" />
+                <textfield placeholder="" width="385" id="charterfield"/>
+
+                <label text="Coders" verticalAlign="center" />
+                <textfield placeholder="" width="385" id="coderField"/>
+            </vbox>
+        </box>
+
+    </tabview>
+</dialog>

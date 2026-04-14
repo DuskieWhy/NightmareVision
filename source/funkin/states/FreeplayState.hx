@@ -30,7 +30,7 @@ class FreeplayState extends MusicBeatState
 	public var debugBG:FlxSprite;
 	public var debugTxt:FlxText;
 	
-	public var songs:Array<SongMetadata> = [];
+	public var songs:Array<FreeplaySong> = [];
 	
 	public var freeplayTabs:Array<FreeplayTab> = [];
 	
@@ -55,9 +55,8 @@ class FreeplayState extends MusicBeatState
 	public var intendedRating:Float = 0;
 	
 	public var grpSongs:FlxTypedGroup<Alphabet>;
+	public var grpIcons:FlxTypedGroup<HealthIcon>;
 	public var curPlaying:Bool = false;
-	
-	public var iconArray:Array<HealthIcon> = [];
 	
 	public var bg:FlxSprite;
 	public var intendedColor:Int;
@@ -86,7 +85,8 @@ class FreeplayState extends MusicBeatState
 		
 		initStateScript();
 		
-		scriptGroup.set('SongMetadata', SongMetadata);
+		scriptGroup.set('SongMetadata', FreeplaySong); // backwards compat bs ig
+		scriptGroup.set('FreeplaySong', FreeplaySong);
 		scriptGroup.set('WeekData', WeekData);
 		
 		bg = new FlxSprite().loadGraphic(Paths.image('menus/menuDesat'));
@@ -95,6 +95,9 @@ class FreeplayState extends MusicBeatState
 		
 		grpSongs = new FlxTypedGroup<Alphabet>();
 		add(grpSongs);
+		
+		grpIcons = new FlxTypedGroup<HealthIcon>();
+		add(grpIcons);
 		
 		scoreText = new FlxText(0, 5, FlxG.width - 6, "", 32);
 		scoreText.setFormat(Paths.DEFAULT_FONT, 32, FlxColor.WHITE, RIGHT);
@@ -197,9 +200,7 @@ class FreeplayState extends MusicBeatState
 			var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
 			icon.sprTracker = songText;
 			
-			// using a FlxGroup is too much fuss!
-			iconArray.push(icon);
-			add(icon);
+			grpIcons.add(icon);
 		}
 		
 		changeSelection();
@@ -226,7 +227,7 @@ class FreeplayState extends MusicBeatState
 			if (meta.freeplayColor != null) color = meta.freeplayColor;
 		}
 		
-		songs.push(new SongMetadata(songName, displayName, weekName, icon, FlxColor.fromString(color)));
+		songs.push(new FreeplaySong(songName, displayName, weekName, icon, FlxColor.fromString(color)));
 	}
 	
 	function weekIsLocked(name:String):Bool
@@ -328,6 +329,13 @@ class FreeplayState extends MusicBeatState
 			}
 			
 			super.update(elapsed);
+			return;
+		}
+		
+		if (FlxG.keys.justPressed.SEVEN)
+		{
+			persistentUpdate = false;
+			openSubState(new funkin.states.editors.SongMetaEditor(songs[curSelected].songName));
 			return;
 		}
 		
@@ -555,12 +563,8 @@ class FreeplayState extends MusicBeatState
 			FlxTween.color(bg, 1, bg.color, intendedColor);
 		}
 		
-		for (i in 0...iconArray.length)
-		{
-			iconArray[i].alpha = 0.6;
-		}
-		
-		iconArray[curSelected].alpha = 1;
+		grpIcons.forEach((icon) -> icon.alpha = 0.6);
+		grpIcons.members[curSelected].alpha = 1;
 		
 		for (idx => item in grpSongs.members)
 		{
@@ -637,9 +641,12 @@ class FreeplayState extends MusicBeatState
 			grpSongs.clear();
 		}
 		
-		iconArray = FlxDestroyUtil.destroyArray(iconArray);
-		
-		iconArray = [];
+		if (grpIcons != null)
+		{
+			grpIcons.forEach(icon -> icon?.destroy());
+			
+			grpIcons.clear();
+		}
 	}
 	
 	private function positionHighscore()
@@ -655,7 +662,7 @@ class FreeplayState extends MusicBeatState
 	}
 }
 
-class SongMetadata
+class FreeplaySong
 {
 	public var displayName:String = "";
 	public var songName:String = "";

@@ -26,9 +26,7 @@ class SongMeta
 	{
 		final formattedSong = Paths.sanitize(PlayState.SONG.song);
 		
-		var path = Paths.json('$formattedSong/data/meta');
-		
-		if (!FunkinAssets.exists(path)) path = Paths.json('$formattedSong/meta');
+		var path = Paths.json('$formattedSong/meta');
 		
 		if (FunkinAssets.exists(path)) return FunkinAssets.parseJson5(FunkinAssets.getContent(path));
 		

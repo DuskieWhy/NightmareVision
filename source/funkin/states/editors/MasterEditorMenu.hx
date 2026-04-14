@@ -18,6 +18,7 @@ class MasterEditorMenu extends MusicBeatState
 		'Character Editor',
 		'Note Skin Editor',
 		'Chart Converter',
+		"Metadata Editor",
 		'Mods Manager',
 		'Week Editor',
 		'Menu Character Editor',
@@ -113,6 +114,8 @@ class MasterEditorMenu extends MusicBeatState
 					FlxG.switchState(() -> new CharacterEditorState(Character.DEFAULT_CHARACTER, false));
 				case 'Week Editor':
 					FlxG.switchState(() -> new WeekEditorState());
+				case 'Metadata Editor':
+					openSubState(new SongMetaEditor());
 				case 'Menu Character Editor':
 					FlxG.switchState(() -> new MenuCharacterEditorState());
 				case 'Chart Editor': // felt it would be cool maybe

@@ -178,6 +178,21 @@ class ToolKitUtils
 		});
 	}
 	
+	public static function playSfx(sfx:EditorSfx, volume:Float = 1)
+	{
+		final snd = switch (sfx)
+		{
+			default: 'ui/mouseClick';
+			case WHEEL_CLICK: 'ui/mouseMiddleClick';
+			case CONFIRM: 'ui/success';
+			case WARN: 'ui/warn';
+			case ERROR: 'ui/error';
+			case POPUP: 'ui/openPopup';
+		}
+		
+		return FlxG.sound.play(Paths.sound(snd), volume);
+	}
+	
 	static var _hitTest:Null<flixel.math.FlxPoint> = null;
 	
 	/**
@@ -280,4 +295,14 @@ typedef DropDownItem =
 {
 	id:String,
 	text:String
+}
+
+enum abstract EditorSfx(Int)
+{
+	var CLICK;
+	var WHEEL_CLICK;
+	var CONFIRM;
+	var WARN;
+	var ERROR;
+	var POPUP;
 }
