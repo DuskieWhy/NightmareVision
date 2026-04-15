@@ -190,6 +190,7 @@ class FunkinScript extends Script implements IFlxDestroyable
 		{
 			onProgramError(e);
 			failed = true;
+			__garbage = true; // this is here entirely for compat reasons. this may also fix a thing or two?
 		}
 		
 		return null;
