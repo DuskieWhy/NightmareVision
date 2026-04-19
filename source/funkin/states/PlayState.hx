@@ -179,6 +179,11 @@ class PlayState extends MusicBeatState
 	 */
 	public var isCameraOnForcedPos:Bool = false;
 	
+	/**
+	 * Disables camera moving on section change
+	 */
+	public var ignoreSection:Bool = false;
+	
 	public var cameraLerping:Bool = true;
 	
 	/**
@@ -213,7 +218,7 @@ class PlayState extends MusicBeatState
 	public var gf:Character;
 	
 	/**
-		Reference to the current girlfriend
+		Reference to the current boyfriend
 	**/
 	public var boyfriend:Character;
 	
@@ -603,6 +608,7 @@ class PlayState extends MusicBeatState
 		
 		skipCountdown = false;
 		countdownSounds = true;
+		ignoreSection = false;
 		
 		instance = this;
 		
@@ -815,7 +821,7 @@ class PlayState extends MusicBeatState
 		FlxG.watch.addFunction('curStep: ', () -> curStep);
 		#end
 		
-		moveCameraSection();
+		updateCamDisplacement(updateCamTarget());
 		
 		noteTypeMap?.clear();
 		noteTypeMap = null;
@@ -1568,6 +1574,7 @@ class PlayState extends MusicBeatState
 				Paths.getAtlasFrames(skin.sustainSplashTexture);
 				
 				skin = FlxDestroyUtil.destroy(skin);
+				
 			case 'Change Character':
 				var charType:Int = 0;
 				switch (event.value1.toLowerCase())
@@ -1723,7 +1730,7 @@ class PlayState extends MusicBeatState
 			FlxG.camera.followLerp = lerpRate;
 		}
 		
-		if (generatedMusic && !endingSong && !isCameraOnForcedPos) moveCameraSection();
+		if (generatedMusic && !endingSong && !isCameraOnForcedPos) updateCamDisplacement(camCurTarget);
 		
 		scripts.call('onUpdate', [elapsed]);
 		
@@ -2407,41 +2414,23 @@ class PlayState extends MusicBeatState
 				{
 					Logger.log('Event [Set Property] failed Exception: ${e.toString()}', ERROR);
 				}
+			case 'Move Camera':
+				if (value2.toLowerCase() == 'true') ignoreSection = true;
+				else ignoreSection = false;
+				switch (value1.toLowerCase())
+				{
+					case 'dad' | 'opponent' | '0':
+						moveCamera(dad);
+					case 'gf' | 'girlfriend' | '1':
+						moveCamera(gf);
+					default:
+						moveCamera(boyfriend);
+				}
 		}
 		
 		scripts.call('onEvent', [eventName, value1, value2]);
 		
 		callEventScript(eventName, 'onTrigger', [value1, value2]);
-	}
-	
-	function moveCameraSection():Void
-	{
-		if (SONG.notes[curSection] == null) return;
-		
-		if (gf != null && SONG.notes[curSection].gfSection)
-		{
-			camFollow.setPosition(gf.getMidpoint().x, gf.getMidpoint().y);
-			camFollow.x += gf.cameraPosition[0] + girlfriendCameraOffset[0];
-			camFollow.y += gf.cameraPosition[1] + girlfriendCameraOffset[1];
-			
-			if (ClientPrefs.camFollowsCharacters)
-			{
-				final displacement = gf.getSingDisplacement();
-				
-				camFollow.x += displacement.x;
-				camFollow.y += displacement.y;
-				
-				displacement.putWeak();
-			}
-			
-			scripts.call('onMoveCamera', ['gf']);
-			scripts.set('whosTurn', 'gf');
-			return;
-		}
-		
-		var isDad = !SONG.notes[curSection].mustHitSection;
-		moveCamera(isDad);
-		scripts.call('onMoveCamera', [isDad ? 'dad' : 'boyfriend']);
 	}
 	
 	public function getCharacterCameraPos(char:Null<Character>):FlxPoint
@@ -2468,24 +2457,41 @@ class PlayState extends MusicBeatState
 		return desiredPos;
 	}
 	
-	public function moveCamera(isDad:Bool):Void
+	function updateCamTarget():Character
+	{
+		var isDad = !SONG.notes[curSection].mustHitSection;
+		var char = isDad ? dad : boyfriend;
+		return char;
+	}
+	
+	public function moveCamera(char:Character):Void
 	{
 		var desiredPos:Null<FlxPoint> = null;
 		var curCharacter:Null<Character> = null;
 		
-		if (opponentStrums != null && playerStrums != null) curCharacter = isDad ? opponentStrums.owner : playerStrums.owner;
-		else curCharacter = isDad ? dad : boyfriend;
+		if (char != null)
+		{
+			curCharacter = char;
+			camCurTarget = curCharacter;
+		}
 		
-		if (camCurTarget != null) curCharacter = camCurTarget;
-		
-		desiredPos = getCharacterCameraPos(curCharacter);
+		scripts.call('onMoveCamera', [char]);
+		scripts.set('whosTurn', char);
+		// updateCamDisplacement(char);
+	}
+	
+	function updateCamDisplacement(char:Character)
+	{
+		if (char == null) return;
+		var desiredPos:Null<FlxPoint> = null;
+		desiredPos = getCharacterCameraPos(char);
 		
 		camFollow.x = desiredPos.x;
 		camFollow.y = desiredPos.y;
 		
 		if (ClientPrefs.camFollowsCharacters)
 		{
-			final displacement = curCharacter.getSingDisplacement();
+			final displacement = char.getSingDisplacement();
 			
 			camFollow.x += displacement.x;
 			camFollow.y += displacement.y;
@@ -2494,8 +2500,6 @@ class PlayState extends MusicBeatState
 		}
 		
 		desiredPos.put();
-		
-		scripts.set('whosTurn', isDad ? 'dad' : 'boyfriend');
 	}
 	
 	/**
@@ -2932,6 +2936,11 @@ class PlayState extends MusicBeatState
 	{
 		if (SONG.notes[curSection] != null)
 		{
+			if (!ignoreSection)
+			{
+				moveCamera(updateCamTarget());
+			}
+			
 			if (SONG.notes[curSection].changeBPM)
 			{
 				Conductor.bpm = SONG.notes[curSection].bpm;
