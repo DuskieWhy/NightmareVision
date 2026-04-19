@@ -2417,13 +2417,18 @@ class PlayState extends MusicBeatState
 			case 'Move Camera':
 				if (value2.toLowerCase() == 'true') ignoreSection = true;
 				else ignoreSection = false;
+				
 				switch (value1.toLowerCase())
 				{
 					case 'dad' | 'opponent' | '0':
 						moveCamera(dad);
 					case 'gf' | 'girlfriend' | '1':
 						moveCamera(gf);
+					case 'bf' | 'boyfriend' | '2':
+						moveCamera(boyfriend);
 					default:
+						// gonna add support for other chars too
+						// idk how atm
 						moveCamera(boyfriend);
 				}
 		}
