@@ -2418,7 +2418,11 @@ class PlayState extends MusicBeatState
 				if (value2.toLowerCase() == 'true') ignoreSection = true;
 				else ignoreSection = false;
 				
-				switch (value1.toLowerCase())
+				var charToFocus:Character = null;
+				var charName = value1.toLowerCase();
+				
+				// some quick shortcuts
+				switch (charName)
 				{
 					case 'dad' | 'opponent' | '0':
 						moveCamera(dad);
@@ -2427,9 +2431,12 @@ class PlayState extends MusicBeatState
 					case 'bf' | 'boyfriend' | '2':
 						moveCamera(boyfriend);
 					default:
-						// gonna add support for other chars too
-						// idk how atm
-						moveCamera(boyfriend);
+						// not too proud of this
+						charToFocus = dadGroup.map.get(charName);
+						if (charToFocus == null) charToFocus = boyfriendGroup.map.get(charName);
+						if (charToFocus == null) charToFocus = gfGroup.map.get(charName);
+						charToFocus = dadGroup.addToList(charName);
+						moveCamera(charToFocus);
 				}
 		}
 		
