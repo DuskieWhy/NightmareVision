@@ -132,7 +132,7 @@
 	"gameover_confirm_sound": null,
 	"healthicon": "dad",
 	"gameover_character": null,
-	"vslice_sustains": true,
+	"vslice_sustains": false,
 	"flip_x": false,
 	"healthbar_colour": -5282098,
 	"camera_position": [

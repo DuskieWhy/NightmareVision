@@ -178,7 +178,7 @@
 	"gameover_confirm_sound": null,
 	"healthicon": "bf",
 	"gameover_character": null,
-	"vslice_sustains": true,
+	"vslice_sustains": false,
 	"flip_x": true,
 	"healthbar_colour": -13520687,
 	"camera_position": [
