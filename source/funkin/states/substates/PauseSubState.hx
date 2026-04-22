@@ -1,5 +1,7 @@
 package funkin.states.substates;
 
+import funkin.data.SongMetaData;
+
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
@@ -119,13 +121,13 @@ class PauseSubState extends MusicBeatSubstate
 		add(levelDifficulty);
 		
 		// temp just wanted to see this
-		var meta:Metadata = PlayState.meta;
+		var meta:SongMetaData = PlayState.meta;
 		if (meta != null)
 		{
-			if (meta.composers != null) createCornerText("Composers: " + meta.composers, true);
-			if (meta.charters != null) createCornerText("Charters: " + meta.charters, true);
-			if (meta.artists != null) createCornerText("Artists: " + meta.artists, true);
-			if (meta.coders != null) createCornerText("Coders: " + meta.coders, true);
+			if (meta.composers != null) createCornerText("Composers: " + meta.composers.join(', '), true);
+			if (meta.charters != null) createCornerText("Charters: " + meta.charters.join(', '), true);
+			if (meta.artists != null) createCornerText("Artists: " + meta.artists.join(', '), true);
+			if (meta.coders != null) createCornerText("Coders: " + meta.coders.join(', '), true);
 		}
 		
 		var blueballedTxt = createCornerText("Blueballed: " + PlayState.deathCounter);

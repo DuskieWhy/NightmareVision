@@ -5,7 +5,7 @@ import lime.app.Application;
 import openfl.Lib;
 
 /**
- * Utility class to make messing with window properties a bit easier
+ * Utility class to make accessing window properties a bit easier
  */
 @:nullSafety
 class WindowUtil

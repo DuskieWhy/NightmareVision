@@ -1,5 +1,8 @@
 package funkin.objects.stageobjects;
 
+import extensions.funkinvis.LimeAudioClipEx;
+import extensions.funkinvis.SpectralAnalyzerEx;
+
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
@@ -13,9 +16,11 @@ using Lambda;
 class ABotVis extends FlxTypedSpriteGroup<FlxSprite>
 {
 	// public var vis:VisShit;
-	var analyzer:Null<SpectralAnalyzer> = null;
+	public var analyzer:Null<SpectralAnalyzer> = null;
 	
 	var volumes:Array<Float> = [];
+	
+	public var startedAnalyzing:Bool = false;
 	
 	public var snd:Null<FlxSound> = null;
 	
@@ -64,7 +69,10 @@ class ABotVis extends FlxTypedSpriteGroup<FlxSprite>
 		if (snd == null) return;
 		
 		@:privateAccess
-		analyzer = new SpectralAnalyzer(snd._channel.__audioSource, BAR_COUNT, 0.1, 40);
+		{
+			analyzer = new SpectralAnalyzerEx(snd._channel.__audioSource, BAR_COUNT, 0.1, 40);
+			(cast analyzer.audioClip : LimeAudioClipEx).trackedSource = snd;
+		}
 		// A-Bot tuning...
 		analyzer.minDb = -65;
 		analyzer.maxDb = -25;
@@ -77,6 +85,8 @@ class ABotVis extends FlxTypedSpriteGroup<FlxSprite>
 		// So we want to manually change it!
 		analyzer.fftN = 256;
 		#end
+		
+		startedAnalyzing = true;
 		
 		// analyzer.maxDb = -35;
 		// analyzer.fftN = 2048;
@@ -104,7 +114,7 @@ class ABotVis extends FlxTypedSpriteGroup<FlxSprite>
 	override function draw()
 	{
 		super.draw();
-		drawFFT();
+		if (startedAnalyzing) drawFFT();
 	}
 	
 	/**

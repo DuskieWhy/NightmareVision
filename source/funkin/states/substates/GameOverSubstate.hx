@@ -49,12 +49,12 @@ class GameOverSubstate extends MusicBeatSubstate
 	/**
 	 * The object the camera will follow. Placed on the midpoint of `boyfriend`.
 	 */
-	var camFollow:FlxObject;
+	public var camFollow:FlxObject;
 	
 	/**
 	 * Flag that is true when the intro of `boyfriend`'s death animation is finished.
 	 */
-	var startedDeath:Bool = false;
+	public var startedDeath:Bool = false;
 	
 	/**
 	 * Resets gameover character values

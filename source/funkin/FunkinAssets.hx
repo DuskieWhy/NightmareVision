@@ -179,7 +179,7 @@ class FunkinAssets
 	 */
 	public static function getGraphic(key:String, useCache:Bool = true, allowGPU:Bool = true):FlxGraphic
 	{
-		final graphic:Null<FlxGraphic> = getGraphicUnsafe(key, useCache);
+		final graphic:Null<FlxGraphic> = getGraphicUnsafe(key, useCache, allowGPU);
 		
 		if (graphic != null)
 		{

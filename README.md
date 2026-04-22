@@ -47,7 +47,6 @@ In a cmd within the project directory, in order run...
 
 ```sh
 haxelib git hxpkg https://github.com/ADA-Funni/hxpkg add-hmm-compatibility
-haxelib run hxpkg setup
 haxelib run hxpkg install
 ```
 
@@ -59,7 +58,6 @@ In a cmd within the project directory, in order run...
 
 ```sh
 haxelib git hxpkg https://github.com/ADA-Funni/hxpkg add-hmm-compatibility
-haxelib run hxpkg setup
 haxelib run hxpkg to-hmm
 
 cargo install --git https://github.com/ninjamuffin99/hmm-rs hmm-rs

@@ -68,7 +68,7 @@ class Rating
 		{
 			case 'epic':
 				ratingMod = 1;
-				score = 350;
+				score = 500;
 				noteSplash = true;
 			case 'sick':
 				ratingMod = 1;

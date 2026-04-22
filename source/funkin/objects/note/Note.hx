@@ -231,7 +231,6 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 		}
 		this.inEditor = inEditor;
 		
-		x += (ClientPrefs.middleScroll ? PlayState.STRUM_X_MIDDLESCROLL : PlayState.STRUM_X) + 50;
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
 		y -= 2000;
 		this.strumTime = strumTime;

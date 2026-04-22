@@ -2694,7 +2694,7 @@ class ChartEditorState extends haxe.ui.backend.flixel.UIState
 		try
 		{
 			final songName = Paths.sanitize(song);
-			PlayState.SONG = Chart.fromPath(Paths.json('$songName/data/${Difficulty.getDifficultyFilePath()}'));
+			PlayState.SONG = Chart.fromPath(Paths.json('$songName/charts/${Difficulty.getDifficultyFilePath()}'));
 		}
 		catch (e)
 		{

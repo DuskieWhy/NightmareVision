@@ -277,7 +277,7 @@ class WeekEditorState extends MusicBeatState
 		weekBeforeInputText.text = weekFile.weekBefore;
 		
 		difficultiesInputText.text = '';
-		if (weekFile.difficulties != null) difficultiesInputText.text = weekFile.difficulties;
+		if (weekFile.difficulties != null) difficultiesInputText.text = weekFile.difficulties.join(',');
 		
 		lockedCheckbox.checked = !weekFile.startUnlocked;
 		lock.visible = lockedCheckbox.checked;
@@ -434,7 +434,26 @@ class WeekEditorState extends MusicBeatState
 			}
 			else if (sender == difficultiesInputText)
 			{
-				weekFile.difficulties = difficultiesInputText.text.trim();
+				var rawDiffString:String = difficultiesInputText.text.trim();
+				if (rawDiffString != null && rawDiffString.length > 0)
+				{
+					var diffs:Array<String> = rawDiffString.split(',');
+					var i:Int = diffs.length - 1;
+					while (i > 0)
+					{
+						if (diffs[i] != null)
+						{
+							diffs[i] = diffs[i].trim();
+							if (diffs[i].length < 1) diffs.remove(diffs[i]);
+						}
+						--i;
+					}
+					
+					if (diffs.length > 0 && diffs[0].length > 0)
+					{
+						weekFile.difficulties = diffs;
+					}
+				}
 			}
 		}
 	}

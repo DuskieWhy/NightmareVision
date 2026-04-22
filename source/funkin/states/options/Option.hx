@@ -2,6 +2,17 @@ package funkin.states.options;
 
 import funkin.objects.*;
 
+enum abstract OptionType(String) to String from String
+{
+	var BOOL = 'bool';
+	var STRING = 'string';
+	var PERCENT = 'percent';
+	var INT = 'int';
+	var FLOAT = 'float';
+	var BUTTON = 'button';
+	var LABEL = 'label';
+}
+
 class Option
 {
 	private var child:Alphabet;
@@ -33,7 +44,7 @@ class Option
 	
 	public var callback:Void->Void = null; // Pressed enter (on button type)
 	
-	public function new(name:String, description:String = '', variable:String, type:String = 'bool', defaultValue:Dynamic = 'null variable value', ?options:Array<String> = null)
+	public function new(name:String, description:String = '', variable:String, type:OptionType = 'bool', defaultValue:Dynamic = 'null variable value', ?options:Array<String> = null)
 	{
 		this.name = name;
 		this.description = description;
@@ -84,6 +95,7 @@ class Option
 				maxValue = 1;
 				scrollSpeed = 0.5;
 				decimals = 2;
+			default:
 		}
 	}
 	
@@ -134,18 +146,16 @@ class Option
 		var newValue:String = 'bool';
 		switch (type.toLowerCase().trim())
 		{
-			case 'int' | 'float' | 'percent' | 'string':
+			case 'int' | 'float' | 'percent' | 'string' | 'label':
 				newValue = type;
 			case 'integer':
-				newValue = 'int';
+				newValue = INT;
 			case 'str':
-				newValue = 'string';
+				newValue = STRING;
 			case 'fl':
-				newValue = 'float';
+				newValue = FLOAT;
 			case 'button':
-				newValue = 'button';
-			case 'label':
-				'label';
+				newValue = BUTTON;
 		}
 		type = newValue;
 		return type;

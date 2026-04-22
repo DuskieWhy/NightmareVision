@@ -3,6 +3,8 @@ package funkin.game.huds;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.FlxObject;
 import flixel.util.FlxStringUtil;
+import flixel.text.FlxText.FlxTextFormatMarkerPair;
+import flixel.text.FlxText.FlxTextFormat;
 
 import funkin.objects.Bar;
 import funkin.objects.HealthIcon;
@@ -18,6 +20,16 @@ class PsychHUD extends BaseHUD
 	var iconP1:HealthIcon;
 	var iconP2:HealthIcon;
 	var scoreTxt:FlxText;
+	
+	var markupEnabled:Bool = true;
+	var rankColors:Map<String, FlxColor> = [
+		"KFC" => 0xFF54ff7c,
+		"SFC" => 0xffffee56,
+		"GFC" => 0xffffc156,
+		"FC" => 0xfff16439,
+		"SDCB" => 0xffff5959,
+		"Clear" => 0xFFabfff4,
+	];
 	
 	var timeTxt:FlxText;
 	var timeBar:Bar;
@@ -140,7 +152,7 @@ class PsychHUD extends BaseHUD
 		var str:String = 'N/A';
 		if (parent.totalPlayed != 0)
 		{
-			str = '${accuracy}% - ${parent.ratingFC}';
+			str = '${accuracy}% [${parent.ratingFC}]';
 		}
 		
 		final tempScore:String = 'Score: ${FlxStringUtil.formatMoney(score, false)}'
@@ -150,6 +162,36 @@ class PsychHUD extends BaseHUD
 		if (!missed && !parent.cpuControlled) doScoreBop();
 		
 		scoreTxt.text = '${tempScore}\n';
+		
+		if (markupEnabled) applyScoreMarkup();
+	}
+	
+	var scoreTxtFormat:Null<FlxTextFormat> = null;
+	
+	inline function applyScoreMarkup()
+	{
+		@:privateAccess
+		{
+			if (scoreTxt._formatRanges[0] == null)
+			{
+				scoreTxtFormat ??= new FlxTextFormat();
+				
+				scoreTxt.addFormat(scoreTxtFormat);
+			}
+			
+			scoreTxtFormat.format.color = rankColors.get(parent.ratingFC) ?? FlxColor.WHITE;
+			
+			final text = scoreTxt.text;
+			
+			scoreTxt._formatRanges[0].range.start = text.indexOf(parent.ratingFC);
+			scoreTxt._formatRanges[0].range.end = text.length - 2;
+		}
+		
+		// var formats = [
+		// 	new FlxTextFormatMarkerPair(new FlxTextFormat(rankColors.get(parent.ratingFC)), "<r>")
+		// ];
+		
+		// scoreTxt.applyMarkup(scoreTxt.text, formats);
 	}
 	
 	var scoreTextTwn:Null<FlxTween> = null;

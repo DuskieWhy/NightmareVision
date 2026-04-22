@@ -6,10 +6,12 @@ import flixel.FlxSprite;
 class TankmenBG extends FlxSprite
 {
 	private var tankSpeed:Float;
-	private var endingOffset:Float;
 	private var goingRight:Bool;
 	
 	public var strumTime:Float;
+	
+	public var endingOffset:Float;
+	public var endAnimOffset = [300, 200];
 	
 	public function new(x:Float, y:Float, facingRight:Bool)
 	{
@@ -22,7 +24,8 @@ class TankmenBG extends FlxSprite
 		frames = Paths.getSparrowAtlas('backgrounds/tank/tankmanKilled1');
 		animation.addByPrefix('run', 'tankman running', 24, true);
 		animation.addByPrefix('shot', 'John Shot ' + FlxG.random.int(1, 2), 24, false);
-		animation.play('run');
+		
+		animation.play('run', true);
 		animation.curAnim.curFrame = FlxG.random.int(0, animation.curAnim.frames.length - 1);
 		
 		updateHitbox();
@@ -44,7 +47,7 @@ class TankmenBG extends FlxSprite
 	{
 		super.update(elapsed);
 		
-		visible = (x > -0.5 * FlxG.width && x < 1.2 * FlxG.width);
+		// visible = (x > -0.5 * FlxG.width && x < 1.2 * FlxG.width);
 		
 		if (animation.curAnim.name == "run")
 		{
@@ -60,11 +63,8 @@ class TankmenBG extends FlxSprite
 		if (Conductor.songPosition > strumTime)
 		{
 			animation.play('shot');
-			if (goingRight)
-			{
-				offset.x = 300;
-				offset.y = 200;
-			}
+			offset.x = endAnimOffset[0];
+			offset.y = endAnimOffset[1];
 		}
 	}
 }

@@ -215,8 +215,7 @@ class ChartEditorUI extends flixel.group.FlxSpriteContainer
 			
 			if (changed) charter.updateGrid();
 		}
-		songDialog.strumTimeStepper.onChange = function(event)
-		{
+		songDialog.strumTimeStepper.onChange = function(event) {
 			if (_notesTabReady) changeStrumTime(event.previousValue, event.value);
 			FlxTimer.wait(0, function() _notesTabReady = true);
 		}
