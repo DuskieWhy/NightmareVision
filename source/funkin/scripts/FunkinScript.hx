@@ -313,7 +313,7 @@ class FunkinScript extends Script implements IFlxDestroyable
 		set("FlxAnimateFrames", animate.FlxAnimateFrames);
 		set("FlxSpriteElement", animate.internal.elements.FlxSpriteElement);
 		
-		set('Controls', funkin.backend.Controls);
+		set('Controls', funkin.input.Controls);
 		
 		// abstracts
 		set("FlxTextAlign", funkin.utils.MacroUtil.buildAbstract(flixel.text.FlxText.FlxTextAlign));

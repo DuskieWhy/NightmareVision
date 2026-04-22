@@ -10,13 +10,13 @@ class NoteSettingsSubState extends BaseOptionsMenu
 		rpcTitle = 'Note Settings Menu'; // for Discord Rich Presence
 		
 		var option:Option = new Option('Quants Enabled', // Name
-			'Colors notes in-game based on their step value. Helpful for timing your note hits.', 'quants', 'bool', false);
+			'Colors notes in-game based on their step value. Helpful for timing your note hits.', 'quants', BOOL, false);
 		addOption(option);
 		
-		var option:Option = new Option('Note Splashes', "If unchecked, hitting \"Sick!\" or \"Kutty!\" notes won't show particles.", 'noteSplashes', 'bool', true);
+		var option:Option = new Option('Note Splashes', "If unchecked, hitting \"Sick!\" or \"Kutty!\" notes won't show particles.", 'noteSplashes', BOOL, true);
 		addOption(option);
 		
-		var option:Option = new Option('Opponent Notes', 'If unchecked, opponent notes get hidden.', 'opponentStrums', 'bool', true);
+		var option:Option = new Option('Opponent Notes', 'If unchecked, opponent notes get hidden.', 'opponentStrums', BOOL, true);
 		addOption(option);
 		
 		// temporarily disabled

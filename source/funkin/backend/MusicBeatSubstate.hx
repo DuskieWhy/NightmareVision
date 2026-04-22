@@ -4,6 +4,7 @@ import flixel.FlxSubState;
 import flixel.util.FlxDestroyUtil;
 import flixel.group.FlxGroup.FlxTypedGroup;
 
+import funkin.input.Controls;
 import funkin.data.*;
 import funkin.scripts.*;
 

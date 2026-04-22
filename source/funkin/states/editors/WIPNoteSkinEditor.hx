@@ -749,7 +749,7 @@ class WIPNoteSkinEditor extends UIState
 		var eventKey:FlxKey = event.keyCode;
 		var key:Int = getKeyFromEvent(eventKey);
 		// if (cpuControlled || paused || !startedCountdown) return;
-		if (key > -1 && (FlxG.keys.checkStatus(eventKey, JUST_PRESSED) || ClientPrefs.controllerMode))
+		if (key > -1 && FlxG.keys.checkStatus(eventKey, JUST_PRESSED))
 		{
 			// this keeps crashing idk why
 			try

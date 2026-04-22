@@ -1,7 +1,7 @@
 package funkin.video;
 
 // sigh rework coming again soon
-import funkin.backend.Controls;
+import funkin.input.Controls;
 
 #if VIDEOS_ALLOWED
 import hxvlc.flixel.FlxVideoSprite;

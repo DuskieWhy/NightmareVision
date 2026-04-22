@@ -99,7 +99,7 @@ class Vector3 implements IFlxPooled
 	**/
 	public inline function add(a:Vector3, result:Vector3 = null):Vector3
 	{
-		if (result == null) result = Vector3.get();
+	    result ??= Vector3.get();
 		result.setTo(this.x + a.x, this.y + a.y, this.z + a.z);
 		return result;
 	}
@@ -154,13 +154,14 @@ class Vector3 implements IFlxPooled
 	
 	/**
 		Performs vector multiplication between this vector and another `Vector3` instance
-		@param	a	A `Vector3` instance to multiply by
-		@param	result	(Optional) A `Vector3` to use for the result
+		@param	A `Vector3` instance to multiply by
+		@param	result(Optional) A `Vector3` to use for the result
 		@return	A `Vector3` instance with the result
+		@see https://en.wikipedia.org/wiki/Cross_product
 	**/
 	public inline function crossProduct(a:Vector3, result:Vector3 = null):Vector3
 	{
-		if (result == null) result = Vector3.get();
+	    result ??= Vector3.get();
 		result.setTo(y * a.z - z * a.y, z * a.x - x * a.z, x * a.y - y * a.x);
 		return result;
 	}
@@ -211,6 +212,7 @@ class Vector3 implements IFlxPooled
 		Calculates the dot product of the current vector with another `Vector3` instance
 		@param	a	A `Vector3` instance to use in the dot product
 		@return	The calculated dot product value
+		@see https://en.wikipedia.org/wiki/Dot_product
 	**/
 	public inline function dotProduct(a:Vector3):Float
 	{
@@ -280,7 +282,48 @@ class Vector3 implements IFlxPooled
 		
 		return l;
 	}
-	
+
+	/**
+	    Projects this vector onto another `Vector3` instance
+	    @param onto A `Vector3` instance to project onto
+	    @param result (Optional) A `Vector3` instance to store the result
+	    @return A `Vector3` instance containing the projected vector
+		@see https://en.wikipedia.org/wiki/Vector_projection
+	**/
+	public inline function project(onto:Vector3, result:Vector3 = null):Vector3
+	{
+	    result ??= Vector3.get();
+	    var scalar = dotProduct(onto) / onto.lengthSquared;
+	    result.setTo(onto.x * scalar, onto.y * scalar, onto.z * scalar);
+	    return result;
+	}	
+
+	/**
+		Projects this vector onto a plane defined by a normal `Vector3`
+		@param normal A `Vector3` instance representing the plane's normal (should be normalized)
+		@param result (Optional) A `Vector3` instance to store the result
+		@return A `Vector3` instance containing the projected vector
+		@see https://en.wikipedia.org/wiki/Vector_projection
+	**/
+	public inline function projectOntoPlane(normal:Vector3, result:Vector3 = null):Vector3
+	{
+	    result ??= Vector3.get();
+	    var projected = project(normal, Vector3.get());
+	    result.setTo(x - projected.x, y - projected.y, z - projected.z);
+	    projected.put();
+	    return result;
+	}
+	/**
+		Puts this vector's values on an Absolute Value.
+		@param result (Optional) A `Vector3` instance to store the result
+		@return A `Vector` instance containing the value in absolute.
+	**/
+	public inline function abs(result:Vector3 = null):Vector3
+	{
+		result ??= Vector3.get();
+		result.setTo(Math.abs(x), Math.abs(y), Math.abs(z));
+		return result;
+	}
 	/**
 		Scales the x, y and z component values by a scale value
 		@param	s	The amount of scale to apply
@@ -308,7 +351,6 @@ class Vector3 implements IFlxPooled
 		
 		return this;
 	}
-	
 	/**
 		Subtracts the values of a second `Vector3` instance
 		from the current one
@@ -318,10 +360,52 @@ class Vector3 implements IFlxPooled
 	**/
 	public inline function subtract(a:Vector3, result:Vector3 = null):Vector3
 	{
-		if (result == null) result = Vector3.get();
+	    result ??= Vector3.get();
 		result.setTo(x - a.x, y - a.y, z - a.z);
 		return result;
 	}
+	
+	/**
+	    Creates a `Vector3` from spherical coordinates
+	    @param theta The polar angle in radians (from the z axis)
+	    @param phi The azimuthal angle in radians (from the x axis)
+	    @return A normalized `Vector3` instance
+		@see https://en.wikipedia.org/wiki/Spherical_coordinate_system
+	**/
+	public static inline function fromAngle(theta:Float, phi:Float):Vector3
+	{
+	    var sinTheta = Math.sin(theta);
+	    return Vector3.get(sinTheta * Math.cos(phi), sinTheta * Math.sin(phi), Math.cos(theta));
+	}
+	
+	/**
+	    Returns a component-wise minimum of two `Vector3` instances
+	    @param a A `Vector3` instance
+	    @param b A second `Vector3` instance
+	    @param result (Optional) A `Vector3` instance to store the result
+	    @return A `Vector3` instance with the minimum values
+	**/
+	public static inline function min(a:Vector3, b:Vector3, result:Vector3 = null):Vector3
+	{
+	    result ??= Vector3.get();
+	    result.setTo(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.min(a.z, b.z));
+	    return result;
+	}
+	
+	/**
+	    Returns a component-wise maximum of two `Vector3` instances
+	    @param a A `Vector3` instance
+	    @param b A second `Vector3` instance
+	    @param result (Optional) A `Vector3` instance to store the result
+	    @return A `Vector3` instance with the maximum values
+	**/
+	public static inline function max(a:Vector3, b:Vector3, result:Vector3 = null):Vector3
+	{
+	    result ??= Vector3.get();
+	    result.setTo(Math.max(a.x, b.x), Math.max(a.y, b.y), Math.max(a.z, b.z));
+	    return result;
+	}
+	
 	
 	@:dox(hide) public inline function toString():String
 	{

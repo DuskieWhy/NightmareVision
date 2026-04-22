@@ -13,6 +13,7 @@ import funkin.backend.BaseTransitionState;
 import funkin.states.transitions.SwipeTransition;
 import funkin.data.*;
 import funkin.scripts.*;
+import funkin.input.Controls;
 
 class MusicBeatState extends FlxUIState
 {
