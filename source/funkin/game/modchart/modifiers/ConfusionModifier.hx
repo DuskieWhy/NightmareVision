@@ -10,11 +10,13 @@ class ConfusionModifier extends NoteModifier
 	
 	override function updateNote(beat:Float, note:Note, pos:Vector3, player:Int)
 	{
-		if (!note.isSustainNote) note.angle = (getValue(player) + getSubmodValue('confusion${note.noteData}', player) + getSubmodValue('note${note.noteData}Angle', player));
+		if (!note.isSustainNote) note.angle = (getValue(player) + getSubmodValue('confusion${note.noteData}', player) + getSubmodValue("noteAngle", player)
+			+ getSubmodValue('note${note.noteData}Angle', player));
 	}
 	
 	override function updateReceptor(beat:Float, receptor:StrumNote, pos:Vector3,
-			player:Int) receptor.angle = (getValue(player) + getSubmodValue('confusion${receptor.noteData}', player) + getSubmodValue('receptor${receptor.noteData}Angle', player));
+			player:Int) receptor.angle = (getValue(player) + getSubmodValue('confusion${receptor.noteData}', player) + getSubmodValue("receptorAngle", player)
+			+ getSubmodValue('receptor${receptor.noteData}Angle', player));
 			
 	override function getSubmods()
 	{

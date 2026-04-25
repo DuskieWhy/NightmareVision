@@ -54,8 +54,19 @@ class FunkinScript extends IrisEx implements IFlxDestroyable
 	 */
 	public static function init()
 	{
+		inline function formatFileLoc(fileName:String, lineNumber:Int, x:String)
+		{
+			var tempName = '[$fileName:$lineNumber]';
+			
+			if (fileName.contains(Mods.currentModDirectory)) tempName = tempName.replace('content/${Mods.currentModDirectory}/', '');
+			
+			tempName += ' - $x';
+			
+			return tempName;
+		}
+		
 		Iris.warn = (x, ?pos) -> {
-			final output:String = '[${pos.fileName}:${pos.lineNumber}]: $x';
+			final output:String = formatFileLoc(pos.fileName, pos.lineNumber, x);
 			
 			DebugTextPlugin.addText(Std.string(output), Logger.getHexColourFromSeverity(WARN));
 			
@@ -63,7 +74,7 @@ class FunkinScript extends IrisEx implements IFlxDestroyable
 		}
 		
 		Iris.error = (x, ?pos) -> {
-			final output:String = '[${pos.fileName}:${pos.lineNumber}]: $x';
+			final output:String = formatFileLoc(pos.fileName, pos.lineNumber, x);
 			
 			DebugTextPlugin.addText(Std.string(output), Logger.getHexColourFromSeverity(ERROR));
 			
@@ -71,7 +82,7 @@ class FunkinScript extends IrisEx implements IFlxDestroyable
 		}
 		
 		Iris.print = (x, ?pos) -> {
-			final output:String = '[${pos.fileName}:${pos.lineNumber}]: $x';
+			final output:String = formatFileLoc(pos.fileName, pos.lineNumber, x);
 			
 			DebugTextPlugin.addText(Std.string(output), Logger.getHexColourFromSeverity(PRINT));
 			
@@ -261,7 +272,7 @@ class FunkinScript extends IrisEx implements IFlxDestroyable
 		set("FlxAnimateFrames", animate.FlxAnimateFrames);
 		set("FlxSpriteElement", animate.internal.elements.FlxSpriteElement);
 		
-		set('Controls', funkin.backend.Controls);
+		set('Controls', funkin.input.Controls);
 		
 		// abstracts
 		set("FlxTextAlign", funkin.utils.MacroUtil.buildAbstract(flixel.text.FlxText.FlxTextAlign));

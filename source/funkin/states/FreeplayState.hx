@@ -383,7 +383,9 @@ class FreeplayState extends MusicBeatState
 		{
 			persistentUpdate = false;
 			
-			final songRet = PlayState.prepareForSong(songs[curSelected].songName, curDifficulty, false);
+			final songName = Paths.sanitize(songs[curSelected].songName.toLowerCase());
+			
+			final songRet = PlayState.prepareForSong(songName, curDifficulty, false);
 			
 			if (songRet != null)
 			{
@@ -471,13 +473,16 @@ class FreeplayState extends MusicBeatState
 				tabs.push(
 					{
 						title: i.folder,
+						directory: i.folder,
 						fromWeeks: fromWeeks,
-						songs: []
+						songs: [],
 					});
 			}
 			
-			for (tab in tabs)
+			for (tab in tabs){
+				tab.directory = i.folder;
 				freeplayTabs.push(tab);
+			}
 		}
 	}
 	
@@ -524,7 +529,8 @@ class FreeplayState extends MusicBeatState
 					addSong(name, [name, icon, color]);
 				}
 			}
-		}
+		} else 
+			Mods.currentModDirectory = tab.directory; 
 		for (song in tab.songs)
 			addSong(song);
 	}
@@ -620,7 +626,10 @@ class FreeplayState extends MusicBeatState
 	{
 		if (diff != 0) FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 		
-		currentTab = FlxMath.wrap(currentTab + diff, 0, freeplayTabs.length - 1);
+		var len = freeplayTabs.length - 1;
+		if (len < 0) len = 0;
+		
+		currentTab = FlxMath.wrap(currentTab + diff, 0, len);
 		tabText.text = "[ " + (freeplayTabs[currentTab].title ?? 'Unknown') + " ]";
 		
 		clearSongs();
@@ -691,6 +700,11 @@ typedef FreeplayData =
 typedef FreeplayTab =
 {
 	var title:String;
+	
+	// if you load a mod freshly without any week jsons the currentModDirectory isn't set
+	// you dont have to define this in the mod folder but like you can i guess
+	var directory:String;
+	
 	var ?fromWeeks:Array<String>;
 	var ?songs:Array<String>;
 }

@@ -2797,72 +2797,75 @@ class OLDChartEditorState extends MusicBeatState
 		var st:Float = sectionStartTime();
 		var et:Float = st + (Conductor.stepCrotchet * steps);
 		
-		if (FlxG.save.data.chart_waveformInst)
+		try
 		{
-			var sound:FlxSound = FlxG.sound.music;
-			if (sound._sound != null && sound._sound.__buffer != null)
+			if (FlxG.save.data.chart_waveformInst)
 			{
-				var bytes:Bytes = sound._sound.__buffer.data.toBytes();
-				
-				wavData = waveformData(sound._sound.__buffer, bytes, st, et, 1, wavData, Std.int(gridBG.height));
+				var sound:FlxSound = FlxG.sound.music;
+				if (sound._sound != null && sound._sound.__buffer != null)
+				{
+					var bytes:Bytes = sound._sound.__buffer.data.toBytes();
+					
+					wavData = waveformData(sound._sound.__buffer, bytes, st, et, 1, wavData, Std.int(gridBG.height));
+				}
 			}
-		}
-		
-		if (FlxG.save.data.chart_waveformVoices)
-		{
-			var sound:FlxSound = vocals;
-			if (sound._sound != null && sound._sound.__buffer != null)
+			
+			if (FlxG.save.data.chart_waveformVoices)
 			{
-				var bytes:Bytes = sound._sound.__buffer.data.toBytes();
-				
-				wavData = waveformData(sound._sound.__buffer, bytes, st, et, 1, wavData, Std.int(gridBG.height));
+				var sound:FlxSound = vocals;
+				if (sound._sound != null && sound._sound.__buffer != null)
+				{
+					var bytes:Bytes = sound._sound.__buffer.data.toBytes();
+					
+					wavData = waveformData(sound._sound.__buffer, bytes, st, et, 1, wavData, Std.int(gridBG.height));
+				}
 			}
-		}
-		
-		if (FlxG.save.data.chart_waveformOpponentVoices)
-		{
-			var sound:FlxSound = opponentVocals;
-			if (sound._sound != null && sound._sound.__buffer != null)
+			
+			if (FlxG.save.data.chart_waveformOpponentVoices)
 			{
-				var bytes:Bytes = sound._sound.__buffer.data.toBytes();
-				
-				wavData = waveformData(sound._sound.__buffer, bytes, st, et, 1, wavData, Std.int(gridBG.height));
+				var sound:FlxSound = opponentVocals;
+				if (sound._sound != null && sound._sound.__buffer != null)
+				{
+					var bytes:Bytes = sound._sound.__buffer.data.toBytes();
+					
+					wavData = waveformData(sound._sound.__buffer, bytes, st, et, 1, wavData, Std.int(gridBG.height));
+				}
 			}
+			
+			// Draws
+			var gSize:Int = Std.int(GRID_SIZE * 8);
+			var hSize:Int = Std.int(gSize / 2);
+			
+			var lmin:Float = 0;
+			var lmax:Float = 0;
+			
+			var rmin:Float = 0;
+			var rmax:Float = 0;
+			
+			var size:Float = 1;
+			
+			var leftLength:Int = (wavData[0][0].length > wavData[0][1].length ? wavData[0][0].length : wavData[0][1].length);
+			
+			var rightLength:Int = (wavData[1][0].length > wavData[1][1].length ? wavData[1][0].length : wavData[1][1].length);
+			
+			var length:Int = leftLength > rightLength ? leftLength : rightLength;
+			
+			var index:Int;
+			for (i in 0...length)
+			{
+				index = i;
+				
+				lmin = FlxMath.bound(((index < wavData[0][0].length && index >= 0) ? wavData[0][0][index] : 0) * (gSize / 1.12), -hSize, hSize) / 2;
+				lmax = FlxMath.bound(((index < wavData[0][1].length && index >= 0) ? wavData[0][1][index] : 0) * (gSize / 1.12), -hSize, hSize) / 2;
+				
+				rmin = FlxMath.bound(((index < wavData[1][0].length && index >= 0) ? wavData[1][0][index] : 0) * (gSize / 1.12), -hSize, hSize) / 2;
+				rmax = FlxMath.bound(((index < wavData[1][1].length && index >= 0) ? wavData[1][1][index] : 0) * (gSize / 1.12), -hSize, hSize) / 2;
+				
+				waveformSprite.pixels.fillRect(new Rectangle(hSize - (lmin + rmin), i * size, (lmin + rmin) + (lmax + rmax), size), FlxColor.BLUE);
+			}
+			
+			waveformPrinted = true;
 		}
-		
-		// Draws
-		var gSize:Int = Std.int(GRID_SIZE * 8);
-		var hSize:Int = Std.int(gSize / 2);
-		
-		var lmin:Float = 0;
-		var lmax:Float = 0;
-		
-		var rmin:Float = 0;
-		var rmax:Float = 0;
-		
-		var size:Float = 1;
-		
-		var leftLength:Int = (wavData[0][0].length > wavData[0][1].length ? wavData[0][0].length : wavData[0][1].length);
-		
-		var rightLength:Int = (wavData[1][0].length > wavData[1][1].length ? wavData[1][0].length : wavData[1][1].length);
-		
-		var length:Int = leftLength > rightLength ? leftLength : rightLength;
-		
-		var index:Int;
-		for (i in 0...length)
-		{
-			index = i;
-			
-			lmin = FlxMath.bound(((index < wavData[0][0].length && index >= 0) ? wavData[0][0][index] : 0) * (gSize / 1.12), -hSize, hSize) / 2;
-			lmax = FlxMath.bound(((index < wavData[0][1].length && index >= 0) ? wavData[0][1][index] : 0) * (gSize / 1.12), -hSize, hSize) / 2;
-			
-			rmin = FlxMath.bound(((index < wavData[1][0].length && index >= 0) ? wavData[1][0][index] : 0) * (gSize / 1.12), -hSize, hSize) / 2;
-			rmax = FlxMath.bound(((index < wavData[1][1].length && index >= 0) ? wavData[1][1][index] : 0) * (gSize / 1.12), -hSize, hSize) / 2;
-			
-			waveformSprite.pixels.fillRect(new Rectangle(hSize - (lmin + rmin), i * size, (lmin + rmin) + (lmax + rmax), size), FlxColor.BLUE);
-		}
-		
-		waveformPrinted = true;
 		#end
 	}
 	

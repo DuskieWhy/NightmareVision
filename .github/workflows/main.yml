@@ -4,11 +4,9 @@ name: Binaries
 on: # Workflow triggers on both when a commit is pushed, or when a pull request is made.
     push:
         branches: 
-            - main 
             - dev
     pull_request:
         branches:
-            - main
             - dev
     
     workflow_dispatch: # Run workflow manually from the actions tab.
@@ -25,6 +23,8 @@ jobs: # FUCK MY LIFE BROOOOO
 
         steps:
             - uses: actions/checkout@v6.0.2
+              with:
+                submodules: true
             - uses: krdlab/setup-haxe@master
 
               with: 
@@ -36,11 +36,9 @@ jobs: # FUCK MY LIFE BROOOOO
                 haxelib install hxcpp > nul --quiet
                 haxelib install hxpkg --quiet
                 haxelib run hxpkg install
-            - name: Installing a newer lime branch
-              run: |
-                haxelib remove lime
-                haxelib git lime https://github.com/FunkinCrew/lime ee20b5ab4eb01a5e6037c72aa8c840f5c32825cb
-                haxelib run lime rebuild cpp 
+                haxelib run lime rebuild hxcpp windows -clean
+                haxelib run lime rebuild lime windows -clean
+                haxelib run lime rebuild cpp
             - name: Compile build
               run: haxelib run lime build windows -D ${{inputs.buildFlags}}
             - name: Publish artifact
@@ -54,6 +52,8 @@ jobs: # FUCK MY LIFE BROOOOO
 
         steps:
             - uses: actions/checkout@v6.0.2
+              with:
+                submodules: true
             - uses: krdlab/setup-haxe@master
 
               with:

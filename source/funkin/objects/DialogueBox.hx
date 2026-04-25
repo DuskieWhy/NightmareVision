@@ -1,6 +1,6 @@
 package funkin.objects;
 
-import funkin.backend.Controls;
+import funkin.input.Controls;
 
 import flixel.FlxG;
 import flixel.FlxSprite;

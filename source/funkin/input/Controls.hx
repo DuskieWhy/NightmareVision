@@ -1,4 +1,4 @@
-package funkin.backend;
+package funkin.input;
 
 import flixel.FlxG;
 import flixel.input.FlxInput;
@@ -6,6 +6,7 @@ import flixel.input.actions.FlxAction;
 import flixel.input.actions.FlxActionInput;
 import flixel.input.actions.FlxActionManager;
 import flixel.input.actions.FlxActionSet;
+import flixel.input.gamepad.FlxGamepad;
 import flixel.input.gamepad.FlxGamepadInputID;
 import flixel.input.keyboard.FlxKey;
 
@@ -94,7 +95,22 @@ class Controls extends FlxActionSet
 	public static function init()
 	{
 		instance = new Controls('player', Solo);
-		if (FlxG.gamepads.getByID(0) != null) instance.addDefaultGamepad(0);
+		for (id in 0...FlxG.gamepads.numActiveGamepads)
+		{
+			if (FlxG.gamepads.getByID(id) != null) instance.addDefaultGamepad(id);
+		}
+		FlxG.gamepads.deviceConnected.add(gamepadConnected);
+		FlxG.gamepads.deviceDisconnected.add(gamepadDisconnected);
+	}
+	
+	static function gamepadConnected(gamepad:FlxGamepad)
+	{
+		instance.addDefaultGamepad(gamepad.id);
+	}
+	
+	static function gamepadDisconnected(gamepad:FlxGamepad)
+	{
+		instance.removeGamepad(gamepad.id);
 	}
 	
 	var _ui_up = new FlxActionDigital(Action.UI_UP);
@@ -131,7 +147,7 @@ class Controls extends FlxActionSet
 	var _pause = new FlxActionDigital(Action.PAUSE);
 	var _reset = new FlxActionDigital(Action.RESET);
 	
-	var byName:Map<String, FlxActionDigital> = [];
+	public var actions:Map<Action, FlxActionDigital> = new Map<Action, FlxActionDigital>();
 	
 	public var gamepadsAdded:Array<Int> = [];
 	public var keyboardScheme = KeyboardScheme.None;
@@ -294,7 +310,7 @@ class Controls extends FlxActionSet
 		add(_reset);
 		
 		for (action in digitalActions)
-			byName[action.name] = action;
+			actions[action.name] = action;
 			
 		setKeyboardScheme(scheme, false);
 	}
@@ -373,11 +389,11 @@ class Controls extends FlxActionSet
 	
 	public function copyFrom(controls:Controls, ?device:Device)
 	{
-		for (name => action in controls.byName)
+		for (name => action in controls.actions)
 		{
 			for (input in action.inputs)
 			{
-				if (device == null || isDevice(input, device)) byName[name].add(cast input);
+				if (device == null || isDevice(input, device)) actions[name].add(cast input);
 			}
 		}
 		
@@ -557,17 +573,18 @@ class Controls extends FlxActionSet
 	
 	public function addDefaultGamepad(id):Void
 	{
+		var binds = ClientPrefs.gamepadBinds;
 		addGamepadLiteral(id, [
-			Control.ACCEPT => [A],
-			Control.BACK => [B],
+			Control.ACCEPT => [FlxGamepadInputID.ACCEPT],
+			Control.BACK => [CANCEL],
 			Control.UI_UP => [DPAD_UP, LEFT_STICK_DIGITAL_UP],
 			Control.UI_DOWN => [DPAD_DOWN, LEFT_STICK_DIGITAL_DOWN],
 			Control.UI_LEFT => [DPAD_LEFT, LEFT_STICK_DIGITAL_LEFT],
 			Control.UI_RIGHT => [DPAD_RIGHT, LEFT_STICK_DIGITAL_RIGHT],
-			Control.NOTE_UP => [DPAD_UP, LEFT_STICK_DIGITAL_UP, RIGHT_STICK_DIGITAL_UP, Y],
-			Control.NOTE_DOWN => [DPAD_DOWN, LEFT_STICK_DIGITAL_DOWN, RIGHT_STICK_DIGITAL_DOWN, A],
-			Control.NOTE_LEFT => [DPAD_LEFT, LEFT_STICK_DIGITAL_LEFT, RIGHT_STICK_DIGITAL_LEFT, X],
-			Control.NOTE_RIGHT => [DPAD_RIGHT, LEFT_STICK_DIGITAL_RIGHT, RIGHT_STICK_DIGITAL_RIGHT, B],
+			Control.NOTE_UP => binds.get(Action.NOTE_UP),
+			Control.NOTE_DOWN => binds.get(Action.NOTE_DOWN),
+			Control.NOTE_LEFT => binds.get(Action.NOTE_LEFT),
+			Control.NOTE_RIGHT => binds.get(Action.NOTE_RIGHT),
 			Control.PAUSE => [START],
 			Control.RESET => [8]
 		]);

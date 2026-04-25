@@ -19,7 +19,7 @@ class Init extends FlxState
 	override public function create():Void
 	{
 		// load settings/save
-		funkin.backend.Controls.init();
+		funkin.input.Controls.init();
 		
 		ClientPrefs.load();
 		
