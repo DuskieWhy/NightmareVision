@@ -1,7 +1,6 @@
-# FUCK MY LIFE BROOOOOOOOO.
 name: Binaries
 
-on: # Workflow triggers on both when a commit is pushed, or when a pull request is made.
+on:
     push:
         branches: 
             - dev
@@ -17,7 +16,7 @@ on: # Workflow triggers on both when a commit is pushed, or when a pull request 
                 type: string
 
 
-jobs: # FUCK MY LIFE BROOOOO
+jobs:
     Windows:
         runs-on: windows-latest
 
@@ -26,51 +25,185 @@ jobs: # FUCK MY LIFE BROOOOO
               with:
                 submodules: true
             - uses: krdlab/setup-haxe@master
-
               with: 
                 haxe-version: 4.3.7
 
-            - name: Install libs
+            - name: Prepare Windows Lime rebuild
               run: |
-                haxelib setup C:/haxelib
-                haxelib install hxcpp > nul --quiet
-                haxelib install hxpkg --quiet
-                haxelib run hxpkg install
-                haxelib run lime rebuild hxcpp windows -clean
-                haxelib run lime rebuild lime windows -clean
-                haxelib run lime rebuild cpp
-            - name: Compile build
+                function Run {
+                  $exe = $args[0]
+                  $cmdArgs = @()
+                  if ($args.Length -gt 1) {
+                    $cmdArgs = $args[1..($args.Length - 1)]
+                  }
+
+                  Write-Host ">>> $exe $($cmdArgs -join ' ')"
+                  & $exe @cmdArgs
+
+                  if ($LASTEXITCODE -ne 0) {
+                    Write-Error "Command failed with exit code ${LASTEXITCODE}: $exe $($cmdArgs -join ' ')"
+                    exit $LASTEXITCODE
+                  }
+                }
+                Run haxelib setup C:/haxelib
+                Run haxelib install hxcpp --quiet
+                Run haxelib install hxpkg --quiet
+                Run haxelib run hxpkg install
+                if (Test-Path .haxelib/lime) {
+                  Remove-Item -Recurse -Force -LiteralPath .haxelib/lime
+                }
+                Run git clone https://github.com/FunkinCrew/lime .haxelib/lime/git
+                Run git -C .haxelib/lime/git fetch --all --tags --prune
+                Run git -C .haxelib/lime/git checkout 6421de16b9dfa4fb55c19f12db65d392a57585c8
+                Run git -C .haxelib/lime/git submodule sync --recursive
+                Run git -C .haxelib/lime/git submodule update --init --recursive --force
+                Run haxelib dev lime .haxelib/lime/git
+                if (Test-Path .haxelib/lime/git/project/obj) {
+                  Remove-Item -Recurse -Force -LiteralPath .haxelib/lime/git/project/obj
+                }
+                if (Test-Path .haxelib/lime/git/ndll) {
+                  Remove-Item -Recurse -Force -LiteralPath .haxelib/lime/git/ndll
+                }
+                Run haxelib path lime
+                Run haxelib run lime rebuild cpp -release
+            - name: Build Windows
               run: haxelib run lime build windows -D ${{inputs.buildFlags}}
-            - name: Publish artifact
+            - name: Upload Windows artifact
               uses: actions/upload-artifact@v7.0.0
               with:
                 name: NightmareVision (Windows)
                 path: export/release/windows/bin
-    #
+
     Linux:
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-24.04
 
         steps:
             - uses: actions/checkout@v6.0.2
               with:
                 submodules: true
             - uses: krdlab/setup-haxe@master
-
               with:
                 haxe-version: 4.3.7
-            
-            - name: Install LibVLC
+
+            - name: Install Linux system deps
               run: |
-                sudo apt-get install vlc libvlc-dev libvlccore-dev vlc-bin
-            - name: Install libs
+                sudo apt-get update
+                sudo apt-get install -y \
+                  build-essential \
+                  gcc-13 \
+                  g++-13 \
+                  vlc \
+                  libvlc-dev \
+                  libvlccore-dev \
+                  vlc-bin \
+                  libwayland-dev \
+                  libwayland-bin \
+                  wayland-protocols \
+                  libasound2-dev \
+                  libpulse-dev \
+                  libjack-jackd2-dev \
+                  libpipewire-0.3-dev \
+                  libgl1-mesa-dev \
+                  libegl1-mesa-dev \
+                  libglu1-mesa-dev \
+                  libdbus-1-dev \
+                  libudev-dev \
+                  libxkbcommon-dev \
+                  libx11-dev \
+                  libxext-dev \
+                  libx11-xcb-dev \
+                  libxfixes-dev \
+                  libxss-dev \
+                  libxrender-dev \
+                  libxrandr-dev \
+                  libxcursor-dev \
+                  libxi-dev \
+                  libxinerama-dev \
+                  libxxf86vm-dev \
+                  libgbm-dev \
+                  libdrm-dev \
+                  libdecor-0-dev \
+                  libvulkan-dev \
+                  pkg-config
+
+            - name: Prepare Linux Lime rebuild
+              env:
+                CC: gcc-13
+                CXX: g++-13
+                CPATH: /usr/include/wayland
+                CPLUS_INCLUDE_PATH: /usr/include/wayland
               run: |
+                set -euo pipefail
+                export CC=gcc-13
+                export CXX=g++-13
+                export CPATH=/usr/include/wayland
+                export CPLUS_INCLUDE_PATH=/usr/include/wayland
+                gcc --version
+                g++ --version
+                $CC --version
+                $CXX --version
                 haxelib setup ~/haxelib
                 haxelib install hxcpp > /dev/null --quiet
                 haxelib install hxpkg --quiet
                 haxelib run hxpkg install
-            - name: Compile build
-              run: haxelib run lime build Project.xml linux -D ${{inputs.buildFlags}}
-            - name: Publish artifact
+                rm -rf .haxelib/lime
+                git clone https://github.com/FunkinCrew/lime .haxelib/lime/git
+                git -C .haxelib/lime/git fetch --all --tags --prune
+                git -C .haxelib/lime/git checkout 6421de16b9dfa4fb55c19f12db65d392a57585c8
+                git -C .haxelib/lime/git submodule sync --recursive
+                git -C .haxelib/lime/git submodule update --init --recursive --force
+                haxelib dev lime .haxelib/lime/git
+                rm -rf .haxelib/lime/git/project/obj
+                rm -rf .haxelib/lime/git/ndll
+
+            - name: Rebuild Linux Lime ndll
+              env:
+                CC: gcc-13
+                CXX: g++-13
+                CPATH: /usr/include/wayland
+                CPLUS_INCLUDE_PATH: /usr/include/wayland
+              run: |
+                set -euo pipefail
+                export CC=gcc-13
+                export CXX=g++-13
+                export CPATH=/usr/include/wayland
+                export CPLUS_INCLUDE_PATH=/usr/include/wayland
+                gcc --version
+                g++ --version
+                $CC --version
+                $CXX --version
+                git -C .haxelib/lime/git rev-parse HEAD
+                git -C .haxelib/lime/git submodule status --recursive
+                haxelib path lime
+                ls -la .haxelib/lime/git/ndll || true
+                ls -la .haxelib/lime/git/ndll/Linux64 || true
+                haxelib run lime rebuild cpp -release
+                ls -la .haxelib/lime/git/ndll
+                ls -la .haxelib/lime/git/ndll/Linux64
+                if [ ! -f .haxelib/lime/git/ndll/Linux64/lime.ndll ]; then
+                  echo "ERROR: Missing Lime ndll at .haxelib/lime/git/ndll/Linux64/lime.ndll after rebuild."
+                  exit 1
+                fi
+
+            - name: Build Linux
+              env:
+                CC: gcc-13
+                CXX: g++-13
+                CPATH: /usr/include/wayland
+                CPLUS_INCLUDE_PATH: /usr/include/wayland
+              run: |
+                set -euo pipefail
+                export CC=gcc-13
+                export CXX=g++-13
+                export CPATH=/usr/include/wayland
+                export CPLUS_INCLUDE_PATH=/usr/include/wayland
+                gcc --version
+                g++ --version
+                $CC --version
+                $CXX --version
+                haxelib run lime build Project.xml linux -D ${{inputs.buildFlags}}
+
+            - name: Upload Linux artifact
               uses: actions/upload-artifact@v7.0.0
               with:
                 name: NightmareVision (Linux)
