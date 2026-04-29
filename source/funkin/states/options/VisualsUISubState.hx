@@ -25,6 +25,17 @@ class VisualsUISubState extends BaseOptionsMenu
 		option.decimals = 1;
 		addOption(option);
 		
+		var option:Option = new Option('Underlay Type:', "What should the lane underlay do?", 'underlayType', STRING, 'Lane Underlay', UnderlayType.toArray());
+		addOption(option);
+		
+		var option:Option = new Option('Underlay Transparency', 'How much transparent should the health bar and icons be.', 'underlayOpacity', PERCENT, 0);
+		option.scrollSpeed = 1.6;
+		option.minValue = 0.0;
+		option.maxValue = 1;
+		option.changeValue = 0.1;
+		option.decimals = 1;
+		addOption(option);
+		
 		var option:Option = new Option('Time Bar:', "What should the Time Bar display?", 'timeBarType', STRING, 'Time Left', ['Time Left', 'Time Elapsed', 'Song Name', 'Disabled']);
 		addOption(option);
 		

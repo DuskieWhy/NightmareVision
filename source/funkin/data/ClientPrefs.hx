@@ -10,6 +10,19 @@ import flixel.util.FlxSave;
 import funkin.input.Controls.KeyboardScheme;
 import funkin.input.Controls;
 
+enum abstract UnderlayType(String) to String from String
+{
+	public var FIELD = 'Lane Underlay';
+	public var SCREEN = 'Screen Dim';
+	
+	// @:to
+	public static function toArray():Array<String> // dont want to jump to options states to update
+	{
+		// granted its a bit overkill to even do this for 2 options but i dunno remove it if u dont want it //or maybe i will another time
+		return [FIELD, SCREEN];
+	}
+}
+
 /**
  * to add new save options, make a static var with the `@saveVar` meta and itll be handled on its own
  * 
@@ -64,6 +77,10 @@ class ClientPrefs
 	@saveVar public static var pauseMusic:String = 'Tea Time';
 	
 	@saveVar public static var camFollowsCharacters:Bool = true;
+	
+	@saveVar public static var underlayType:String = 'Lane Underlay';
+	
+	@saveVar public static var underlayOpacity:Float = 0.0;
 	
 	// gameplay ------------------------------------------------------------------------//
 	@saveVar public static var mechanics:Bool = true;
