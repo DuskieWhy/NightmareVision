@@ -116,6 +116,7 @@ class MasterEditorMenu extends MusicBeatState
 					FlxG.switchState(() -> new WeekEditorState());
 				case 'Metadata Editor':
 					openSubState(new SongMetaEditor());
+					persistentUpdate = false;
 				case 'Menu Character Editor':
 					FlxG.switchState(() -> new MenuCharacterEditorState());
 				case 'Chart Editor': // felt it would be cool maybe
