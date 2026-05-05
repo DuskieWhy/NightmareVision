@@ -3,6 +3,7 @@ package funkin.data;
 import flixel.input.gamepad.FlxGamepadInputID;
 
 import funkin.backend.DebugDisplay;
+import funkin.utils.WindowUtil;
 
 import flixel.input.keyboard.FlxKey;
 import flixel.util.FlxSave;
@@ -54,6 +55,8 @@ class ClientPrefs
 	@saveVar public static var unlockedFramerate:Bool = false;
 	
 	@saveVar public static var framerate:Int = 60;
+
+	@saveVar public static var vSyncMode:String = 'Off';
 	
 	// visuals ------------------------------------------------------------------------//
 	@saveVar public static var jumpGhosts:Bool = false;
@@ -318,6 +321,8 @@ class ClientPrefs
 		if (FlxG.save.data.framerate == null) framerate = Std.int(FlxMath.bound(FlxG.stage.application.window.displayMode.refreshRate, 60, 400));
 		
 		changeFps(framerate);
+
+		WindowUtil.setVSyncMode(vSyncMode);
 		
 		var save:FlxSave = new FlxSave();
 		save.bind('controls_v2');

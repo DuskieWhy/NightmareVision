@@ -5,6 +5,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 
 import funkin.backend.DebugDisplay;
+import funkin.utils.WindowUtil;
 
 class GraphicsSettingsSubState extends BaseOptionsMenu
 {
@@ -38,6 +39,13 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 			'Handles what type of information to display in the top left of your screen.\nSimple displays FPS & Memory, and advanced displays the same alongside debug information.\nDisabled disables the counter entirely.',
 			'fpsDisplayType', STRING, 'Simple', ['Simple', 'Advanced', 'Disabled']);
 		addOption(option);
+
+		var option:Option = new Option('VSync Mode: ',
+			"When enabled, the game attempts to match the framerate with your monitor's refresh rate.",
+			'vSyncMode', STRING, 'Off', ['Off', 'On']);
+		addOption(option);
+
+		option.onChange = onChangeVSyncMode;
 		
 		var option:Option = new Option('Framerate', "Pretty self explanatory, isn't it?", 'framerate', INT, 60);
 		addOption(option);
@@ -71,5 +79,10 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 	function onChangeFramerate()
 	{
 		ClientPrefs.changeFps(ClientPrefs.framerate);
+	}
+
+	function onChangeVSyncMode()
+	{
+		WindowUtil.setVSyncMode(ClientPrefs.vSyncMode);
 	}
 }
