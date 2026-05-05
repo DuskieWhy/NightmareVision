@@ -28,3 +28,4 @@ dump/*
 !.vscode/launch.json
 !.vscode/extensions.json
 /content
+desktop.ini

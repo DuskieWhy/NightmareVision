@@ -42,6 +42,9 @@ class ClientPrefs
 	@saveVar public static var streamedMusic:Bool = false;
 	
 	@saveVar public static var autoPause:Bool = true;
+
+	@saveVar public static var fancyPreview:Bool = true;
+	@saveVar public static var previewOnSave:Bool = true;
 	
 	// graphics ------------------------------------------------------------------------//
 	@saveVar public static var gpuCaching:Bool = true;
