@@ -142,6 +142,11 @@ class Character extends Bopper
 	 *	If enabled, the character's singing animation will stop at the last frame while holding a sustain note
 	 */
 	public var vSliceSustains = false;
+
+	/**
+	 *	Decides how many frames the icon hase
+	 */
+	public var iconFrames:Int = 2;
 	
 	public function new(x:Float = 0, y:Float = 0, character:String = 'bf', isPlayer:Bool = false)
 	{
@@ -181,6 +186,7 @@ class Character extends Bopper
 		
 		this.healthIcon = json.healthicon;
 		this.vSliceSustains = json.vslice_sustains;
+		this.ghostsEnabled = json.ghosts_enabled;
 		this.singDuration = json.sing_duration;
 		this.noAntialiasing = json.no_antialiasing;
 		
@@ -191,6 +197,8 @@ class Character extends Bopper
 		this.antialiasing = !noAntialiasing && ClientPrefs.globalAntialiasing;
 		
 		this.danceEveryNumBeats = json.dance_every ?? 2;
+
+		this.iconFrames = json.icon_count ?? 2;
 		
 		this.gameoverCharacter = json.gameover_character;
 		this.gameoverConfirmDeathSound = json.gameover_confirm_sound;
