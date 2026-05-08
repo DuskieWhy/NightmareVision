@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<dialog id="_SongTab" title="Song" width="360" modal="false" style="padding: 5px;" closable="false">
+<dialog id="_SongTab" title="Song" width="360" modal="false" style="padding: 5px;">
 	<tabview id="tv1" width="100%" styleName="full-width-buttons">
 		<vbox text="Metadata" width="100%" style="padding: 5px;">
 			<grid width="100%" columns="2">
