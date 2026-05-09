@@ -140,6 +140,38 @@ class FlxMacro
 				pos: Context.currentPos(),
 			});
 			
+		fields.push(
+			{
+				name: "shake",
+				access: [haxe.macro.Expr.Access.APublic],
+				kind: FFun(
+					{
+						args: [
+							{name: 'ShakeValue', type: (macro :Float), value: macro $v{0.05}},
+							{name: 'AngleValue', type: (macro :Int), value: macro $v{0}},
+							{name: 'Timer', type: (macro :Float), value: macro $v{1}}
+						],
+						expr: macro
+						{
+							var stop:Bool = false;
+							
+							if (!stop)
+							{
+								if (AngleValue > 360) AngleValue = 360;
+								
+								offset.x = FlxG.random.float(-ShakeValue, ShakeValue);
+								offset.y = FlxG.random.float(-ShakeValue, ShakeValue);
+								angle = FlxG.random.int(-AngleValue, AngleValue);
+							}
+							
+							new flixel.util.FlxTimer().start(Timer, timer -> stop = true);
+							
+							return this;
+						}
+					}),
+				pos: Context.currentPos(),
+			});
+			
 		return fields;
 	}
 	

@@ -73,12 +73,14 @@ class PsychHUD extends BaseHUD
 		iconP1.y = healthBar.y - 75;
 		iconP1.visible = !ClientPrefs.hideHud;
 		iconP1.alphaMultipler = ClientPrefs.healthBarAlpha;
+		iconP1.frameCount = parent.boyfriend.iconFrames;
 		add(iconP1);
 		
 		iconP2 = new HealthIcon(parent.dad.healthIcon, false);
 		iconP2.y = healthBar.y - 75;
 		iconP2.visible = !ClientPrefs.hideHud;
 		iconP2.alphaMultipler = ClientPrefs.healthBarAlpha;
+		iconP2.frameCount = parent.dad.iconFrames;
 		add(iconP2);
 		
 		scoreTxt = new FlxText(0, healthBar.y + 40, FlxG.width, "", 20);

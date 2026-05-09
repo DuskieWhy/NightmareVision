@@ -410,6 +410,12 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			character.danceEveryNumBeats = ui.value.toInt();
 		}
 		
+		uiElements.characterDialogBox.iconFrameStepper.onChange = (ui) -> {
+			character.iconFrames = ui.value.toInt();
+			healthIcon.frameCount = ui.value.toInt();
+			updateHealthIcon();
+		}
+		
 		uiElements.characterDialogBox.flipXCheckbox.onChange = (ui) -> {
 			if (character.originalFlipX == ui.value.toBool()) return;
 			character.originalFlipX = !character.originalFlipX;
@@ -418,6 +424,10 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		
 		uiElements.characterDialogBox.vSliceSusCheckbox.onChange = (ui) -> {
 			character.vSliceSustains = ui.value.toBool();
+		}
+		
+		uiElements.characterDialogBox.ghostEnabledCheckbox.onChange = (ui) -> {
+			character.ghostsEnabled = ui.value.toBool();
 		}
 		
 		uiElements.characterDialogBox.antialiasingCheckbox.onChange = (ui) -> {
@@ -429,7 +439,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			character.scalableOffsets = ui.value.toBool();
 		}
 		
-		for (i in [uiElements.characterDialogBox.flipXCheckbox, uiElements.characterDialogBox.vSliceSusCheckbox, uiElements.characterDialogBox.antialiasingCheckbox, uiElements.characterDialogBox.scaledOffsetsCheckbox, uiElements.characterDialogBox.flipXAnimCheckbox, uiElements.characterDialogBox.flipYAnimCheckbox, uiElements.characterDialogBox.animationLoopCheckbox])
+		for (i in [uiElements.characterDialogBox.flipXCheckbox, uiElements.characterDialogBox.vSliceSusCheckbox, uiElements.characterDialogBox.ghostEnabledCheckbox, uiElements.characterDialogBox.antialiasingCheckbox, uiElements.characterDialogBox.scaledOffsetsCheckbox, uiElements.characterDialogBox.flipXAnimCheckbox, uiElements.characterDialogBox.flipYAnimCheckbox, uiElements.characterDialogBox.animationLoopCheckbox])
 		{
 			i.onClick = (ui) -> {
 				addUndoAction(CHANGED_CHECKBOX, i, !i.value);
@@ -1141,6 +1151,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		
 		uiElements.characterDialogBox.flipXCheckbox.selected = character.originalFlipX;
 		uiElements.characterDialogBox.vSliceSusCheckbox.selected = character.vSliceSustains;
+		uiElements.characterDialogBox.ghostEnabledCheckbox.selected = character.ghostsEnabled;
 		uiElements.characterDialogBox.antialiasingCheckbox.value = !character.noAntialiasing;
 		uiElements.characterDialogBox.scaledOffsetsCheckbox.value = character.scalableOffsets;
 		
@@ -1158,6 +1169,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 		uiElements.characterDialogBox.healthIconTextField.value = character.healthIcon;
 		
 		uiElements.characterDialogBox.danceEveryStepper.value = character.danceEveryNumBeats;
+		uiElements.characterDialogBox.iconFrameStepper.value = character.iconFrames;
 		
 		updateHealthIcon();
 		
@@ -1443,10 +1455,12 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 				"camera_position": character.cameraPosition,
 				"flip_x": character.originalFlipX,
 				"vslice_sustains": character.vSliceSustains,
+				"ghosts_enabled": character.ghostsEnabled,
 				"no_antialiasing": character.noAntialiasing,
 				"healthbar_colour": character.healthColour,
 				"scalableOffsets": character.scalableOffsets,
 				"dance_every": character.danceEveryNumBeats,
+				"icon_count": character.iconFrames,
 				"_editor_isPlayer": character.isPlayer,
 				
 				"gameover_character": character.gameoverCharacter,
@@ -1549,6 +1563,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			healthicon: "face",
 			flip_x: false,
 			vslice_sustains: false,
+			ghosts_enabled: true,
 			healthbar_colour: FlxColor.GRAY,
 			camera_position: [
 				0,
@@ -1557,6 +1572,7 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 			sing_duration: 6.1,
 			scale: 1,
 			dance_every: 2,
+			icon_count: 2,
 			scalableOffsets: true
 		};
 }
