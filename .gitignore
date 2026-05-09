@@ -27,4 +27,5 @@ dump/*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+/content
 desktop.ini
