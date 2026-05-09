@@ -8,7 +8,7 @@
                         <label text="Note Splash Texture" verticalAlign="center" />
                         <textfield placeholder="noteSplashes" width="225" id="splashTexture" tooltip="Texture used for Note Splashes"/>
 
-                        <label text="NOte Texture" verticalAlign="center" />
+                        <label text="Note Texture" verticalAlign="center" />
                         <textfield placeholder="NOTE_assets" width="225" id="noteTexture" tooltip="Texture used on note field."/>    
 
                         <label text="Opponent Texture" verticalAlign="center" />
