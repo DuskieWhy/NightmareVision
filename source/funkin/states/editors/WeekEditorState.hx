@@ -326,9 +326,9 @@ class WeekEditorState extends MusicBeatState
 		var isMissing:Bool = true;
 		if (assetName != null && assetName.length > 0)
 		{
-			if (FunkinAssets.exists(Paths.getPath('images/menubackgrounds/menu_$assetName.png', null, true)))
+			if (FunkinAssets.exists(Paths.getPath('images/menus/story/bgs/menu_$assetName.png', null, true)))
 			{
-				bgSprite.loadGraphic(Paths.image('menubackgrounds/menu_$assetName'));
+				bgSprite.loadGraphic(Paths.image('menus/story/bgs/menu_$assetName'));
 				isMissing = false;
 			}
 		}
@@ -348,9 +348,9 @@ class WeekEditorState extends MusicBeatState
 		var isMissing:Bool = true;
 		if (assetName != null && assetName.length > 0)
 		{
-			if (FunkinAssets.exists(Paths.getPath('images/menus/story/$assetName.png', null, true)))
+			if (FunkinAssets.exists(Paths.getPath('images/menus/story/weeks/$assetName.png', null, true)))
 			{
-				weekThing.loadGraphic(Paths.image('menus/story/$assetName'));
+				weekThing.loadGraphic(Paths.image('menus/story/weeks/$assetName'));
 				isMissing = false;
 			}
 		}
@@ -359,7 +359,7 @@ class WeekEditorState extends MusicBeatState
 		{
 			weekThing.visible = false;
 			missingFileText.visible = true;
-			missingFileText.text = 'MISSING FILE: images/menus/story/' + assetName + '.png';
+			missingFileText.text = 'MISSING FILE: images/menus/story/weeks/' + assetName + '.png';
 		}
 		recalculateStuffPosition();
 		
