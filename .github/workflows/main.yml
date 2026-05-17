@@ -68,6 +68,8 @@ jobs: # FUCK MY LIFE BROOOOO
                 haxelib install hxcpp > /dev/null --quiet
                 haxelib install hxpkg --quiet
                 haxelib run hxpkg install
+                haxelib run lime rebuild hxcpp cpp -clean
+                haxelib run lime rebuild cpp -clean
             - name: Compile build
               run: haxelib run lime build Project.xml linux -D ${{inputs.buildFlags}}
             - name: Publish artifact

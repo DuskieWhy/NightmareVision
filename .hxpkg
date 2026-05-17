@@ -80,7 +80,8 @@
             {
                 "name": "grig.audio",
                 "link": "https://github.com/FunkinCrew/grig.audio",
-                "branch": "8567c4dad34cfeaf2ff23fe12c3796f5db80685e"
+                "branch": "8567c4dad34cfeaf2ff23fe12c3796f5db80685e",
+                "dir": "src"
             },
             {
                 "name": "json5hx",

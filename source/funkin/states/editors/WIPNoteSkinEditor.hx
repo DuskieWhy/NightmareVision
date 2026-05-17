@@ -398,7 +398,7 @@ class WIPNoteSkinEditor extends UIState
 		
 		for (strumnote in field.members)
 		{
-			if (strumnote.animation.curAnim.name != 'static') strumnote.rgbShader.setColors(NoteUtil.colorToArray(skin.data.arrowRGB[strumnote.noteData]));
+			if (strumnote.animation.curAnim.name != 'static') strumnote.rgbGraphics.setColors(NoteUtil.colorToArray(skin.data.arrowRGB[strumnote.noteData]));
 		}
 	}
 	
@@ -451,7 +451,7 @@ class WIPNoteSkinEditor extends UIState
 			{
 				i.texture = field._skin.noteTexture;
 				i.useRGBShader = field._skin.inEngineColoring;
-				i.rgbShader.enabled = i.useRGBShader;
+				i.rgbGraphics.enabled = i.useRGBShader;
 				i.reloadNote();
 			}
 			// not necessary rn will do later
@@ -459,14 +459,14 @@ class WIPNoteSkinEditor extends UIState
 			// 	note.skin = noteskin2;
 			// 	note.texture = field._skin.noteTexture;
 			// 	note.rgbEnabled = field._skin.inEngineColoring;
-			// 	note.rgbShader.enabled = note.rgbEnabled;
+			// 	note.rgbGraphics.enabled = note.rgbEnabled;
 			// 	note.loadNoteAnims();
 			// });
 			field.grpNoteSplashes.forEachAlive((splash) -> {
-				splash.rgbShader.enabled = field._skin.inEngineColoring;
+				splash.rgbGraphics.enabled = field._skin.inEngineColoring;
 			});
 			field.grpSusSplashes.forEachAlive((splash) -> {
-				splash.rgbShader.enabled = field._skin.inEngineColoring;
+				splash.rgbGraphics.enabled = field._skin.inEngineColoring;
 			});
 			
 			field.generateReceptors();

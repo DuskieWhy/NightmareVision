@@ -259,6 +259,9 @@ class InputSystem extends EventDispatcher implements flixel.util.IFlxDestroyable
 		switch device
 		{
 			case Keys:
+				#if debug
+				@:privateAccess if (!FlxG.keys._keyListMap.exists(inputID)) return;
+				#end
 				// with lime, it counts repeated key inputs when you hold down the key.
 				if (!FlxG.keys.checkStatus(inputID, inputState)) return;
 			case _:

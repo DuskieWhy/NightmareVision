@@ -1359,28 +1359,64 @@ class PlayState extends MusicBeatState
 		
 		for (section in noteData)
 		{
+			for (songNotes in section.sectionNotes)
+			{
+				var playfield:Int = Std.int(songNotes[1] / SONG.keys);
+				
+				if (playfield < 0)
+				{
+					events.push(
+						{
+							strumTime: songNotes[0] + ClientPrefs.noteOffset,
+							event: songNotes[2],
+							value1: songNotes[3],
+							value2: songNotes[4]
+						});
+				}
+			}
+		}
+		
+		events.sort(SortUtil.sortByTime);
+		
+		for (event in events)
+		{
+			final eventName = event.event;
+			
+			if (!eventsPushed.contains(eventName))
+			{
+				var baseScriptFile:String = 'data/events/$eventName';
+				if (!FunkinAssets.exists(FunkinScript.getPath(baseScriptFile), TEXT)) baseScriptFile = 'events/$eventName';
+				
+				final scriptFile = FunkinScript.getPath(baseScriptFile);
+				
+				if (FunkinAssets.exists(scriptFile, TEXT)) eventScripts.addScript(initFunkinScript(scriptFile, eventName));
+				
+				firstEventPush(event);
+				
+				eventsPushed.push(eventName);
+			}
+			
+			event.strumTime -= eventNoteEarlyTrigger(event);
+			eventNotes.push(event);
+			eventPushed(event);
+		}
+		
+		// No need to sort if there's a single one or none at all
+		if (eventNotes.length > 1) eventNotes.sort(SortUtil.sortByTime);
+		
+		speedChanges.sort(SortUtil.svSort);
+		
+		for (section in noteData)
+		{
 			if (section.changeBPM) holdCrotchet = (15000 / section.bpm / holdSubdivisions);
 			
 			for (songNotes in section.sectionNotes)
 			{
 				var daStrumTime:Float = songNotes[0];
 				var daNoteData:Int = Std.int(songNotes[1] % SONG.keys);
-				var playfield:Int = 0;
+				var playfield:Int = Std.int(songNotes[1] / SONG.keys);
 				
-				playfield = Std.int(songNotes[1] / SONG.keys);
-				
-				if (playfield < 0) // legacy event notes
-				{
-					events.push(
-						{
-							strumTime: daStrumTime + ClientPrefs.noteOffset,
-							event: songNotes[2],
-							value1: songNotes[3],
-							value2: songNotes[4]
-						});
-						
-					continue;
-				}
+				if (playfield < 0) continue; // Skip legacy events as they were handled in Pass 1
 				
 				if (playfield >= SONG.lanes) continue;
 				
@@ -1456,34 +1492,6 @@ class PlayState extends MusicBeatState
 				}
 			}
 		}
-		
-		for (event in events)
-		{
-			final eventName = event.event;
-			
-			if (!eventsPushed.contains(eventName))
-			{
-				var baseScriptFile:String = 'data/events/$eventName';
-				if (!FunkinAssets.exists(FunkinScript.getPath(baseScriptFile), TEXT)) baseScriptFile = 'events/$eventName';
-				
-				final scriptFile = FunkinScript.getPath(baseScriptFile);
-				
-				if (FunkinAssets.exists(scriptFile, TEXT)) eventScripts.addScript(initFunkinScript(scriptFile, eventName));
-				
-				firstEventPush(event);
-				
-				eventsPushed.push(eventName);
-			}
-			
-			event.strumTime -= eventNoteEarlyTrigger(event);
-			eventNotes.push(event);
-			eventPushed(event);
-		}
-		
-		// No need to sort if there's a single one or none at all
-		if (eventNotes.length > 1) eventNotes.sort(SortUtil.sortByTime);
-		
-		speedChanges.sort(SortUtil.svSort);
 		
 		#if debug
 		trace('loading chart took: ' + (Sys.time() - cpuTime));
