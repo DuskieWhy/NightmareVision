@@ -1,13 +1,18 @@
 package funkin.states.editors.ui;
 
-import haxe.ui.containers.dialogs.Dialog;
+import haxe.ui.containers.dialogs.CollapsibleDialog;
 
 import funkin.data.CharacterData;
+import funkin.data.Chart;
+
+import funkin.states.substates.Prompt;
+import funkin.backend.Difficulty;
+import flixel.addons.transition.FlxTransitionableState;
 
 using funkin.states.editors.ui.ToolKitUtils;
 
 @:build(haxe.ui.ComponentBuilder.build("assets/excluded/ui/chartEditor/SongDialog.xml"))
-class SongDialog extends Dialog {}
+class SongDialog extends CollapsibleDialog {}
 
 @:access(funkin.states.editors.ChartEditorState)
 class ChartEditorUI extends flixel.group.FlxSpriteContainer
@@ -27,8 +32,8 @@ class ChartEditorUI extends flixel.group.FlxSpriteContainer
 		songDialog = new SongDialog();
 		add(songDialog);
 		
-		songDialog.x = 15;
-		songDialog.y = 50;
+		songDialog.x = 10;
+		songDialog.y = 10;
 		
 		songDialog.destroyOnClose = false;
 		songDialog.bindDialogToView(0); // cahrt editor wont have a toolbar so we can set the min y to be 0
@@ -101,13 +106,53 @@ class ChartEditorUI extends flixel.group.FlxSpriteContainer
 			charter.updateHeads();
 		}
 		
-		// rewrite this later cuz its an array now
-		// songDialog.noteSkinDropdown.onChange = function(event) {
-		// 	if (!event.data.isDropDownItem()) return;
-		
-		// 	song.arrowSkins = event.data.id;
-		// 	// todo
-		// }
+		songDialog.p1NoteSkinDropdown.onChange = function(event) {
+			if (!event.data.isDropDownItem()) return;
+
+			song.arrowSkins[0] = event.data.id;
+		}
+
+		songDialog.p2NoteSkinDropdown.onChange = function(event) {
+			if (!event.data.isDropDownItem()) return;
+
+			song.arrowSkins[1] = event.data.id;
+		}
+
+		songDialog.p3NoteSkinDropdown.onChange = function(event) {
+			if (!event.data.isDropDownItem()) return;
+
+			song.arrowSkins[2] = event.data.id;
+		}
+
+		songDialog.p4NoteSkinDropdown.onChange = function(event) {
+			if (!event.data.isDropDownItem()) return;
+
+			song.arrowSkins[3] = event.data.id;
+		}
+
+		songDialog.p5NoteSkinDropdown.onChange = function(event) {
+			if (!event.data.isDropDownItem()) return;
+
+			song.arrowSkins[4] = event.data.id;
+		}
+
+		songDialog.p6NoteSkinDropdown.onChange = function(event) {
+			if (!event.data.isDropDownItem()) return;
+
+			song.arrowSkins[5] = event.data.id;
+		}
+
+		songDialog.p7NoteSkinDropdown.onChange = function(event) {
+			if (!event.data.isDropDownItem()) return;
+
+			song.arrowSkins[6] = event.data.id;
+		}
+
+		songDialog.p8NoteSkinDropdown.onChange = function(event) {
+			if (!event.data.isDropDownItem()) return;
+
+			song.arrowSkins[7] = event.data.id;
+		}
 		
 		// CHARTING
 		
@@ -257,6 +302,13 @@ class ChartEditorUI extends flixel.group.FlxSpriteContainer
 			
 			charter.updateGrid();
 		}
+
+		songDialog.clearNotesButton.onClick = function(event) {
+			charter.openSubState(new Prompt('This action will clear current progress.\n\nProceed?', 0, function() {
+				for (sec in 0...song.notes.length) song.notes[sec].sectionNotes = [];
+				charter.updateGrid();
+			}, null, charter.ignoreWarnings));
+		}
 		
 		// EVENTS
 		
@@ -339,6 +391,62 @@ class ChartEditorUI extends flixel.group.FlxSpriteContainer
 			selectedEvents[0][1][charter.curEventSelected][2] = songDialog.value2Field.value;
 			charter.updateGrid();
 		}
+
+		songDialog.clearEventsButton.onClick = function(event) {
+			charter.openSubState(new Prompt('This action will clear current progress.\n\nProceed?', 0, function() { 
+				charter.clearEvents();
+			}, null, charter.ignoreWarnings));
+		}
+
+		// CONTROLS
+
+		songDialog.reloadAudioButton.onClick = function(event) {
+			charter.currentSongName = Paths.sanitize(songDialog.songNameField.value);
+			charter.loadSong();
+			charter.updateWaveform();
+		}
+
+		songDialog.reloadJsonButton.onClick = function(event) {
+			charter.openSubState(new Prompt('This action will clear current progress.\n\nProceed?', 0, function() {
+				charter.reloadGridLayer();
+				try
+				{
+					final songName = Paths.sanitize(songDialog.songNameField.value);
+					
+					ChartEditorState.song = Chart.fromPath(Paths.json('$songName/charts/${Difficulty.getDifficultyFilePath()}'));
+				}
+				catch (e)
+				{
+					Logger.log('error loading chart\nException: ${e.toString()}', ERROR, true);
+					return;
+				}
+				
+				FlxTransitionableState.skipNextTransIn = true;
+				FlxTransitionableState.skipNextTransOut = true;
+				FlxG.resetState();
+			}, null, charter.ignoreWarnings));
+		}
+
+		songDialog.loadEventsButton.onClick = function(event) {
+			var songName:String = Paths.sanitize(ChartEditorState.song.song);
+			var file:String = Paths.json(songName + '/charts/events');
+			
+			if (FunkinAssets.exists(file, TEXT))
+			{
+				charter.clearEvents();
+				
+				final _events = Chart.fromPath(file);
+				ChartEditorState.song.events = _events.events;
+				charter.changeSection(ChartEditorState.curSec);
+			}
+			else
+			{
+				Logger.log('events at ($file) could not be found', WARN, true);
+			}	
+		}
+		
+		songDialog.saveSongButton.onClick = function(event) charter.saveLevel();
+		songDialog.saveEventsButton.onClick = function(event) charter.saveEvents();
 	}
 	
 	public function updateEventUI():Void
@@ -513,14 +621,20 @@ class ChartEditorUI extends flixel.group.FlxSpriteContainer
 			}
 		}
 		
-		for (dropdown in [songDialog.noteSkinDropdown])
+		for (dropdown in [songDialog.p1NoteSkinDropdown, songDialog.p2NoteSkinDropdown, songDialog.p3NoteSkinDropdown, songDialog.p4NoteSkinDropdown, songDialog.p5NoteSkinDropdown, songDialog.p6NoteSkinDropdown, songDialog.p7NoteSkinDropdown, songDialog.p8NoteSkinDropdown])
 		{
 			dropdown.populateList([for (skin in noteskins) ToolKitUtils.makeSimpleDropDownItem(skin)]);
 			dropdown.dataSource.sort(null, ASCENDING);
 		}
 		
-		// songDialog.noteSkinDropdown.selectedItem = song.arrowSkin;
-		// songDialog.splashSkinDropdown.selectedItem = song.splashSkin;
+		songDialog.p1NoteSkinDropdown.selectedItem = song.arrowSkins[0];
+		songDialog.p2NoteSkinDropdown.selectedItem = song.arrowSkins[1];
+		songDialog.p3NoteSkinDropdown.selectedItem = song.arrowSkins[2];
+		songDialog.p4NoteSkinDropdown.selectedItem = song.arrowSkins[3];
+		songDialog.p5NoteSkinDropdown.selectedItem = song.arrowSkins[4];
+		songDialog.p6NoteSkinDropdown.selectedItem = song.arrowSkins[5];
+		songDialog.p7NoteSkinDropdown.selectedItem = song.arrowSkins[6];
+		songDialog.p8NoteSkinDropdown.selectedItem = song.arrowSkins[7];
 	}
 	
 	final snapLeniency:Float = 1.25;

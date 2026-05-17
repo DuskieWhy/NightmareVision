@@ -1,7 +1,232 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<dialog id="_SongTab" title="Song" width="360" modal="false" style="padding: 5px;" closable="false">
-	<tabview id="tv1" width="100%" styleName="full-width-buttons">
-		<vbox text="Metadata" width="100%" style="padding: 5px;">
+<collapsible-dialog id="_SongTab" title="Chart Editor" width="410" height="498" style="padding: 5px;" closable="false" draggable="false">
+	<tabview id="tv1" width="100%" height="100%" styleName="full-width-buttons">
+		<vbox text="Charting" width="100%" style="padding: 5px;">
+			
+			<hbox style="spacing: 15px;" width="100%">
+				<vbox>
+					<label text="Playback Rate"/>
+					<slider id="playbackRateSlider" pos="1" min="0.5" max="3" precision="1" center="1" majorTicks="0.5"/>
+				</vbox>
+				<vbox style="spacing: 15px;">
+					<checkbox id="vortexCheckbox" text="Vortex Mode" tooltip="Enables keyboard controls similarly to ArrowVortex."/>
+					<checkbox id="mouseWheelQuantCheckbox" text="Mouse Wheel Quant" tooltip="If enabled, scrolling with the mouse wheel will snap to the nearest quant measure."/>
+				</vbox>
+			</hbox>
+			
+			<spacer height="5"/>
+			<rule/>
+			<spacer height="5"/>
+			
+			
+			<hbox width="100%">
+				<label text="Waveforms:" verticalAlign="center"/>
+				<checkbox id="playerWaveCheckbox" text="Player" tooltip="If enabled, The player's vocals waveform will be shown on the grid"/>
+				<checkbox id="opponentWaveCheckbox" text="Opponent" tooltip="If enabled, The opponent's vocals waveform will be shown on the grid"/>
+				<checkbox id="instrumentalWaveCheckbox" text="Inst" tooltip="If enabled, The instrumental's waveform will be shown on the grid"/>
+			</hbox>
+			
+			
+			<spacer height="5"/>
+			<rule/>
+			<spacer height="5"/>
+			
+			
+			<label text="Volume Control:"/>
+			<spacer height="4"/>
+			
+			<grid columns="4" style="spacing: 8px;" width="100%">
+				<label text="Player:" verticalAlign="center"/>
+				<number-stepper id="playerVolumeStepper" pos="1" width="90%" step="0.1" min="0" max="1"/>
+				<checkbox id="playerMuteCheckbox" text="Mute?" verticalAlign="center"/>
+				<checkbox id="playerHitsoundCheckbox" text="Hitsound?" verticalAlign="center"/>
+				
+				<label text="Opponent:" verticalAlign="center"/>
+				<number-stepper id="opponentVolumeStepper" pos="1" width="90%" step="0.1" min="0" max="1"/>
+				<checkbox id="opponentMuteCheckbox" text="Mute?" verticalAlign="center"/>
+				<checkbox id="opponentHitsoundCheckbox" text="Hitsound?" verticalAlign="center"/>
+				
+				<label text="Inst:" verticalAlign="center"/>
+				<number-stepper id="instrumentalVolumeStepper" pos="0.6" width="90%" step="0.1" min="0" max="1"/>
+				<checkbox id="instrumentalMuteCheckbox" text="Mute?" verticalAlign="center"/>
+				<spacer/>
+
+				<label text="Metronome:" verticalAlign="center"/>
+				<number-stepper id="metronomeVolumeStepper" pos="1" width="90%" step="0.1" min="0" max="1"/>
+				<checkbox id="metronomeMuteCheckbox" text="Mute?" verticalAlign="center"/>
+			</grid>
+			
+			<spacer height="5"/>
+			<rule/>
+			<spacer height="5"/>
+
+			<hbox width="100%">
+				<label id="zoomTxt" text="Zoom 1 / 1" horizontalAlign="left"/>
+			</hbox>
+
+			<hbox width="100%">
+				<label id="bpmTxt" text="hi" horizontalAlign="left"/>
+			</hbox>
+			
+		</vbox>
+
+		<vbox text="Events" width="100%" style="padding: 5px;">
+			<grid width="100%" columns="2">
+				<label text="Event:" width="45" verticalAlign="center"/>
+				<dropdown searchable="true" width="100%" searchPrompt="" id="eventDropdown">
+					<data>
+						<item text="Empty"/>
+						<item text="Hey!"/>
+					</data>
+				</dropdown>
+			</grid>
+			
+			<spacer height="3"/>
+			
+			<hbox width="100%">
+				<option-stepper width="150" id="selectedEventStepper" horizontalAlign="center">
+					<data>
+						<item text="Event 1"/>
+						<item text="Event 2"/>
+						<item text="Event 3"/>
+					</data>
+				</option-stepper>
+				
+				<spacer width="10"/>
+
+				<label text="1 / 1" id="eventSelected" horizontalAlign="center" verticalAlign="center"/>
+				
+				<spacer width="10"/>
+				
+				<hbox horizontalAlign="right">
+					<button text="-" width="36" id="removeEventButton" style="background-color: #a01926;" horizontalAlign="right"/>
+					<button text="+" width="36" id="pushEventButton" style="background-color: #156015;" horizontalAlign="right"/>
+				</hbox>
+			</hbox>
+			
+			<spacer height="5"/>
+			<rule/>
+			<spacer height="5"/>
+			
+			<vbox width="100%" style="padding: 5px;">
+				<box id="eventForm" width="100%">
+					<grid width="100%" columns="2">
+						<label text="Value 1:" width="55" verticalAlign="center"/>
+						<textfield width="100%" id="value1Field" horizontalAlign="right" text=""/>
+						
+						<label text="Value 2:" width="55" verticalAlign="center"/>
+						<textfield width="100%" id="value2Field" horizontalAlign="right" text=""/>
+					</grid>
+				</box>
+				
+				<spacer height="5"/>
+				<rule/>
+				<spacer height="5"/>
+				
+				<label id="eventName" text="Event Name" horizontalAlign="center" style="font-size: 12px;"/>
+				<label id="eventDescription" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."/>
+			</vbox>
+			
+			<spacer height="5"/>
+			<rule/>
+			<spacer height="5"/>
+			
+			<button text="Clear all Events" id="clearEventsButton" horizontalAlign="center" style="background-color: #a01926;"/>
+		</vbox>
+
+		<vbox text="Note" width="100%" style="padding: 5px;">
+			<grid width="100%" columns="2">
+				<label text="Note Type:" width="80" verticalAlign="center"/>
+				<dropdown searchable="true" width="100%" searchPrompt="" id="noteTypeDropdown">
+					<data>
+						<item text="Default"/>
+						<item text="GF Sing"/>
+						<item text="Alt Animation"/>
+					</data>
+				</dropdown>
+
+				<label text="Time:" width="80" verticalAlign="center"/>
+				<number-stepper width="100%" pos="0" step="0" id="strumTimeStepper" horizontalAlign="right" min="0"/>
+				
+				<label text="Length:" width="80" verticalAlign="center"/>
+				<number-stepper width="100%" pos="0" step="0" id="sustainLengthStepper" horizontalAlign="right" min="0"/>
+			</grid>
+			
+			<spacer height="1"/>
+			<rule/>
+			<spacer height="1"/>
+			
+			<hbox width="100%" style="spacing: 10px;">
+				<button text="Mirror Horizontal" id="mirrorHorizontalButton" width="125"/>
+				<spacer width="100%"/>
+				<button text="Mirror Vertical" id="mirrorVerticalButton" width="125"/>
+			</hbox>
+
+			<spacer/>
+
+			<hbox width="100%" style="spacing: 10px;">
+				<button text="Choir" id="choirNotesButton" width="100%" tooltip="Copies selected notes to all strumlines."/>
+				<button text="Shift" id="shiftNotesButton" width="100%" tooltip="Shifts all selected notes to the next strumline."/>
+				<button text="Swap" id="swapNotesButton" width="100%" tooltip="Swaps all selected notes to the opposite side, without mirroring their direction."/>
+			</hbox>
+			
+			<spacer height="5"/>
+			<rule/>
+			<spacer height="5"/>
+
+			<button text="Clear all Notes" id="clearNotesButton" horizontalAlign="center" style="background-color: #a01926;"/>
+		</vbox>
+
+		<vbox text="Section" width="100%" style="padding: 5px;">
+			<checkbox text="Camera focused on opponent?" id="mustHitCheckbox" verticalAlign="center" tooltip="If enabled, the camera will be focused on the opponent instead of the player."/>
+			<checkbox text="Girlfriend sings?" id="gfSectionCheckbox" verticalAlign="center" tooltip="If enabled, Girlfriend will sing instead of the currently focused character."/>
+			
+			<spacer height="5"/>
+			<rule/>
+			<spacer height="5"/>
+
+			<hbox width="100%">
+				<label text="Beats per section:" width="100%" verticalAlign="center"/>
+				<number-stepper pos="4" step="1" width="100" id="sectionBeatsStepper" horizontalAlign="right" min="1" max="16" precision="0" tooltip="How many beats should this section last?"/>
+			</hbox>
+			
+			<hbox width="100%">
+				<checkbox text="Change BPM?" width="100%" id="bpmCheckbox" verticalAlign="center" tooltip="If enabled, the song's BPM will change on this section."/>
+				<number-stepper pos="120" step="1" width="100" id="bpmStepper" horizontalAlign="right" min="1" max="999" tooltip="The new BPM for this section." disabled="${!bpmCheckbox.selected}"/>
+			</hbox>
+			
+			<spacer height="5"/>
+			<rule/>
+			<spacer height="5"/>
+
+			<grid width="100%" columns="3" style="spacing: 10px;">
+				<button text="Copy Section" id="copySectionButton" width="125"/>
+				<spacer width="100%"/>
+				<button text="Paste Section" id="pasteSectionButton" width="125"/>
+				
+				<button text="Clone Last" id="copyLastSectionButton" width="125"/>
+				<spacer width="100%"/>
+				<number-stepper pos="1" step="1" id="copyLastSectionStepper" horizontalAlign="right" precision="0" width="125" tooltip="Behind how many sections to clone."/>
+			</grid>
+			
+			<spacer height="5"/>
+			<hbox width="100%">
+				<label text="Section Inclusions:" verticalAlign="center" width="100%"/>
+
+				<vbox width="125" style="spacing: 10px;">
+					<checkbox text="Notes" selected="true" id="sectionNotesCheckbox" tooltip="Includes / copies notes when performing section operations."/>
+					<checkbox text="Events" selected="true" id="sectionEventsCheckbox" tooltip="Includes / copies events when performing section operations."/>
+				</vbox>
+			</hbox>
+			
+			<spacer height="5"/>
+			<rule/>
+			<spacer height="5"/>
+
+			<button text="Clear Section" id="clearSectionButton" horizontalAlign="center" style="background-color: #a01926;" tooltip="Clears all notes and events in the current section, if their respective checkboxes in Inclusions are checked."/>
+		</vbox>
+
+		<vbox text="Song" width="100%" style="padding: 5px;">
 			<grid width="100%" columns="2">
 				<label text="Song Title:" width="80" verticalAlign="center"/>
 				<textfield width="100%" id="songNameField" horizontalAlign="right" text="Bopeebo"/>
@@ -69,238 +294,82 @@
 						<data> <item text="stage"/> </data>
 					</dropdown>
 				</vbox>
+			</hbox>
+
+			<spacer height="5"/>
+			<rule/>
+			<spacer height="5"/>
+
+			<hbox width="100%" style="spacing: 10px;">
+				<button text="Reload Audio" id="reloadAudioButton" width="125"/>
+				<spacer width="100%"/>
+				<button text="Reload JSON" id="reloadJsonButton" width="125"/>
+			</hbox>
+
+			<spacer height="1"/>
+			<rule/>
+			<spacer height="1"/>
+			
+			<hbox width="100%" style="spacing: 10px;">
+				<button text="Load Events" id="loadEventsButton" width="125"/>
+			</hbox>
+
+			<spacer height="5"/>
+			<rule/>
+			<spacer height="5"/>
+			
+			<hbox width="100%" style="spacing: 10px;">
+				<button text="Save Song" id="saveSongButton" width="125"/>
+				<button text="Save Events" id="saveEventsButton" width="125"/>
+			</hbox>
+		</vbox>
+
+		<vbox text="Skins" width="100%" style="padding: 5px;">
+			<hbox width="100%" style="spacing: 10px;">
 				<vbox width="100%">
-					<label text="Note Skin:" horizontalAlign="center"/>
-					<dropdown width="100%" searchable="true" searchPrompt="default" id="noteSkinDropdown">
+					<label text="P1 Note Skin:" horizontalAlign="center"/>
+					<dropdown width="100%" searchable="true" searchPrompt="default" id="p1NoteSkinDropdown">
+						<data> <item text="default"/> </data>
+					</dropdown>
+
+					<label text="P3 Note Skin:" horizontalAlign="center"/>
+					<dropdown width="100%" searchable="true" searchPrompt="default" id="p3NoteSkinDropdown">
+						<data> <item text="default"/> </data>
+					</dropdown>
+
+					<label text="P5 Note Skin:" horizontalAlign="center"/>
+					<dropdown width="100%" searchable="true" searchPrompt="default" id="p5NoteSkinDropdown">
+						<data> <item text="default"/> </data>
+					</dropdown>
+
+					<label text="P7 Note Skin:" horizontalAlign="center"/>
+					<dropdown width="100%" searchable="true" searchPrompt="default" id="p7NoteSkinDropdown">
 						<data> <item text="default"/> </data>
 					</dropdown>
 				</vbox>
-				<!--vbox width="100%">
-					<label text="Splash Skin:" horizontalAlign="center"/>
-					<dropdown width="100%" searchable="true" searchPrompt="default" id="splashSkinDropdown">
+
+				<vbox width="100%">
+					<label text="P2 Note Skin:" horizontalAlign="center"/>
+					<dropdown width="100%" searchable="true" searchPrompt="default" id="p2NoteSkinDropdown">
 						<data> <item text="default"/> </data>
 					</dropdown>
-				</vbox-->
-			</hbox>
-		</vbox>
-		
-		<vbox text="Charting" width="100%" style="padding: 5px;">
-			
-			<!-- <label text="General:"/> -->
-			<!-- <spacer height="4"/> -->
-			
-			<hbox style="spacing: 15px;" width="100%">
-				<vbox>
-					<label text="Playback Rate"/>
-					<!-- <number-stepper pos="1" step="0.1" min="0.5" max="3"/> -->
-					<slider id="playbackRateSlider" pos="1" min="0.5" max="3" precision="1" center="1" majorTicks="0.5"/>
-				</vbox>
-				<vbox style="spacing: 15px;">
-					<checkbox id="vortexCheckbox" text="Vortex Mode" tooltip="Enables keyboard controls similarly to ArrowVortex."/>
-					<checkbox id="mouseWheelQuantCheckbox" text="Mouse Wheel Quant" tooltip="If enabled, scrolling with the mouse wheel will snap to the nearest quant measure."/>
+
+					<label text="P4 Note Skin:" horizontalAlign="center"/>
+					<dropdown width="100%" searchable="true" searchPrompt="default" id="p4NoteSkinDropdown">
+						<data> <item text="default"/> </data>
+					</dropdown>
+
+					<label text="P6 Note Skin:" horizontalAlign="center"/>
+					<dropdown width="100%" searchable="true" searchPrompt="default" id="p6NoteSkinDropdown">
+						<data> <item text="default"/> </data>
+					</dropdown>
+
+					<label text="P8 Note Skin:" horizontalAlign="center"/>
+					<dropdown width="100%" searchable="true" searchPrompt="default" id="p8NoteSkinDropdown">
+						<data> <item text="default"/> </data>
+					</dropdown>
 				</vbox>
 			</hbox>
-			
-			<spacer height="5"/>
-			<rule/>
-			<spacer height="5"/>
-			
-			
-			<hbox width="100%">
-				<label text="Waveforms:" verticalAlign="center"/>
-				<checkbox id="playerWaveCheckbox" text="Player" tooltip="If enabled, The player's vocals waveform will be shown on the grid"/>
-				<checkbox id="opponentWaveCheckbox" text="Opponent" tooltip="If enabled, The opponent's vocals waveform will be shown on the grid"/>
-				<checkbox id="instrumentalWaveCheckbox" text="Inst" tooltip="If enabled, The instrumental's waveform will be shown on the grid"/>
-			</hbox>
-			
-			
-			<spacer height="5"/>
-			<rule/>
-			<spacer height="5"/>
-			
-			
-			<label text="Volume Control:"/>
-			<spacer height="4"/>
-			
-			<grid columns="4" style="spacing: 8px;" width="100%">
-				<label text="Player:" verticalAlign="center"/>
-				<number-stepper id="playerVolumeStepper" pos="1" width="90%" step="0.1" min="0" max="1"/>
-				<checkbox id="playerMuteCheckbox" text="Mute?" verticalAlign="center"/>
-				<checkbox id="playerHitsoundCheckbox" text="Hitsound?" verticalAlign="center"/>
-				
-				<label text="Opponent:" verticalAlign="center"/>
-				<number-stepper id="opponentVolumeStepper" pos="1" width="90%" step="0.1" min="0" max="1"/>
-				<checkbox id="opponentMuteCheckbox" text="Mute?" verticalAlign="center"/>
-				<checkbox id="opponentHitsoundCheckbox" text="Hitsound?" verticalAlign="center"/>
-				
-				<label text="Inst:" verticalAlign="center"/>
-				<number-stepper id="instrumentalVolumeStepper" pos="0.6" width="90%" step="0.1" min="0" max="1"/>
-				<checkbox id="instrumentalMuteCheckbox" text="Mute?" verticalAlign="center"/>
-				<spacer/>
-
-				<label text="Metronome:" verticalAlign="center"/>
-				<number-stepper id="metronomeVolumeStepper" pos="1" width="90%" step="0.1" min="0" max="1"/>
-				<checkbox id="metronomeMuteCheckbox" text="Mute?" verticalAlign="center"/>
-			</grid>
-			
-			<spacer height="5"/>
-			<rule/>
-			<spacer height="5"/>
-			
-		</vbox>
-
-		<vbox text="Section" width="100%" style="padding: 5px;">
-			<checkbox text="Camera focused on opponent?" id="mustHitCheckbox" verticalAlign="center" tooltip="If enabled, the camera will be focused on the opponent instead of the player."/>
-			<checkbox text="Girlfriend sings?" id="gfSectionCheckbox" verticalAlign="center" tooltip="If enabled, Girlfriend will sing instead of the currently focused character."/>
-			
-			<spacer height="5"/>
-			<rule/>
-			<spacer height="5"/>
-
-			<hbox width="100%">
-				<label text="Beats per section:" width="100%" verticalAlign="center"/>
-				<number-stepper pos="4" step="1" width="100" id="sectionBeatsStepper" horizontalAlign="right" min="1" max="16" precision="0" tooltip="How many beats should this section last?"/>
-			</hbox>
-			
-			<hbox width="100%">
-				<checkbox text="Change BPM?" width="100%" id="bpmCheckbox" verticalAlign="center" tooltip="If enabled, the song's BPM will change on this section."/>
-				<number-stepper pos="120" step="1" width="100" id="bpmStepper" horizontalAlign="right" min="1" max="999" tooltip="The new BPM for this section." disabled="${!bpmCheckbox.selected}"/>
-			</hbox>
-			
-			<spacer height="5"/>
-			<rule/>
-			<spacer height="5"/>
-
-			<grid width="100%" columns="3" style="spacing: 10px;">
-				<button text="Copy Section" id="copySectionButton" width="125"/>
-				<spacer width="100%"/>
-				<button text="Paste Section" id="pasteSectionButton" width="125"/>
-				
-				<button text="Clone Last" id="copyLastSectionButton" width="125"/>
-				<spacer width="100%"/>
-				<number-stepper pos="1" step="1" id="copyLastSectionStepper" horizontalAlign="right" precision="0" width="125" tooltip="Behind how many sections to clone."/>
-			</grid>
-			
-			<spacer height="5"/>
-			<hbox width="100%">
-				<label text="Section Inclusions:" verticalAlign="center" width="100%"/>
-
-				<vbox width="125" style="spacing: 10px;">
-					<checkbox text="Notes" selected="true" id="sectionNotesCheckbox" tooltip="Includes / copies notes when performing section operations."/>
-					<checkbox text="Events" selected="true" id="sectionEventsCheckbox" tooltip="Includes / copies events when performing section operations."/>
-				</vbox>
-			</hbox>
-			
-			<spacer height="5"/>
-			<rule/>
-			<spacer height="5"/>
-
-			<button text="Clear Section" id="clearSectionButton" horizontalAlign="center" style="background-color: #a01926;" tooltip="Clears all notes and events in the current section, if their respective checkboxes in Inclusions are checked."/>
-		</vbox>
-		<vbox text="Notes" width="100%" style="padding: 5px;">
-			<grid width="100%" columns="2">
-				<label text="Note Type:" width="80" verticalAlign="center"/>
-				<dropdown searchable="true" width="100%" searchPrompt="" id="noteTypeDropdown">
-					<data>
-						<item text="Default"/>
-						<item text="GF Sing"/>
-						<item text="Alt Animation"/>
-					</data>
-				</dropdown>
-
-				<label text="Time:" width="80" verticalAlign="center"/>
-				<number-stepper width="100%" pos="0" step="0" id="strumTimeStepper" horizontalAlign="right" min="0"/>
-				
-				<label text="Length:" width="80" verticalAlign="center"/>
-				<number-stepper width="100%" pos="0" step="0" id="sustainLengthStepper" horizontalAlign="right" min="0"/>
-			</grid>
-			
-			<spacer height="1"/>
-			<rule/>
-			<spacer height="1"/>
-			
-			<hbox width="100%" style="spacing: 10px;">
-				<button text="Mirror Horizontal" id="mirrorHorizontalButton" width="125"/>
-				<spacer width="100%"/>
-				<button text="Mirror Vertical" id="mirrorVerticalButton" width="125"/>
-			</hbox>
-
-			<spacer/>
-
-			<hbox width="100%" style="spacing: 10px;">
-				<button text="Choir" id="choirNotesButton" width="100%" tooltip="Copies selected notes to all strumlines."/>
-				<button text="Shift" id="shiftNotesButton" width="100%" tooltip="Shifts all selected notes to the next strumline."/>
-				<button text="Swap" id="swapNotesButton" width="100%" tooltip="Swaps all selected notes to the opposite side, without mirroring their direction."/>
-			</hbox>
-			
-			<spacer height="5"/>
-			<rule/>
-			<spacer height="5"/>
-
-			<button text="Clear all Notes" id="clearNotesButton" horizontalAlign="center" style="background-color: #a01926;"/>
-		</vbox>
-		<vbox text="Events" width="100%" style="padding: 5px;">
-			<grid width="100%" columns="2">
-				<label text="Event:" width="45" verticalAlign="center"/>
-				<dropdown searchable="true" width="100%" searchPrompt="" id="eventDropdown">
-					<data>
-						<item text="Empty"/>
-						<item text="Hey!"/>
-					</data>
-				</dropdown>
-			</grid>
-			
-			<spacer height="3"/>
-			
-			<hbox width="100%">
-				<option-stepper width="150" id="selectedEventStepper" horizontalAlign="center">
-					<data>
-						<item text="Event 1"/>
-						<item text="Event 2"/>
-						<item text="Event 3"/>
-					</data>
-				</option-stepper>
-				
-				<spacer width="10"/>
-
-				<label text="1 / 1" id="eventSelected" horizontalAlign="center" verticalAlign="center"/>
-				
-				<spacer width="10"/>
-				
-				<hbox horizontalAlign="right">
-					<button text="-" width="36" id="removeEventButton" style="background-color: #a01926;" horizontalAlign="right"/>
-					<button text="+" width="36" id="pushEventButton" style="background-color: #156015;" horizontalAlign="right"/>
-				</hbox>
-			</hbox>
-			
-			<spacer height="5"/>
-			<rule/>
-			<spacer height="5"/>
-			
-			<vbox width="100%" style="padding: 5px;">
-				<box id="eventForm" width="100%">
-					<grid width="100%" columns="2">
-						<label text="Value 1:" width="55" verticalAlign="center"/>
-						<textfield width="100%" id="value1Field" horizontalAlign="right" text=""/>
-						
-						<label text="Value 2:" width="55" verticalAlign="center"/>
-						<textfield width="100%" id="value2Field" horizontalAlign="right" text=""/>
-					</grid>
-				</box>
-				
-				<spacer height="5"/>
-				<rule/>
-				<spacer height="5"/>
-				
-				<label id="eventName" text="Event Name" horizontalAlign="center" style="font-size: 12px;"/>
-				<label id="eventDescription" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."/>
-			</vbox>
-			
-			<spacer height="5"/>
-			<rule/>
-			<spacer height="5"/>
-			
-			<button text="Clear all Events" id="clearEventsButton" horizontalAlign="center" style="background-color: #a01926;"/>
 		</vbox>
 	</tabview>
-</dialog>
+</collapsible-dialog>

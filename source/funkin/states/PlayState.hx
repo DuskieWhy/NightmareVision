@@ -1325,7 +1325,7 @@ class PlayState extends MusicBeatState
 			for (songNotes in section.sectionNotes)
 			{
 				var type:Dynamic = songNotes[3];
-				if (!Std.isOfType(type, String)) type = OLDChartEditorState.noteTypeList[type];
+				if (!Std.isOfType(type, String)) type = ChartEditorState.noteTypeList[type];
 				
 				if (!noteTypeMap.exists(type)) noteTypeMap.set(type, true);
 			}
@@ -1427,7 +1427,7 @@ class PlayState extends MusicBeatState
 				var oldNote:Note = null;
 				
 				var type:Dynamic = songNotes[3];
-				if (!Std.isOfType(type, String)) type = OLDChartEditorState.noteTypeList[type];
+				if (!Std.isOfType(type, String)) type = ChartEditorState.noteTypeList[type];
 				
 				// TODO: maybe make a checkNoteType n shit but idfk im lazy
 				// or maybe make a "Transform Notes" event which'll make notes which don't change texture change into the specified one
@@ -1780,8 +1780,10 @@ class PlayState extends MusicBeatState
 		
 		if (camZooming)
 		{
-			FlxG.camera.zoom = MathUtil.decayLerp(FlxG.camera.zoom, defaultCamZoom + defaultCamZoomAdd, 6.25 * camZoomingDecay, elapsed);
-			camHUD.zoom = MathUtil.decayLerp(camHUD.zoom, defaultHudZoom, 6.25 * camZoomingDecay, elapsed);
+			@:privateAccess if (!FlxTween.globalManager.containsTweensOf(FlxG.camera, ['zoom']))
+				FlxG.camera.zoom = MathUtil.decayLerp(FlxG.camera.zoom, defaultCamZoom + defaultCamZoomAdd, 6.25 * camZoomingDecay, elapsed);
+			@:privateAccess if (!FlxTween.globalManager.containsTweensOf(camHUD, ['zoom']))
+				camHUD.zoom = MathUtil.decayLerp(camHUD.zoom, defaultHudZoom, 6.25 * camZoomingDecay, elapsed);
 		}
 		
 		if (!ClientPrefs.noReset && controls.RESET && canReset && !inCutscene && startedCountdown && !endingSong) health = 0;
@@ -2015,7 +2017,7 @@ class PlayState extends MusicBeatState
 		CoolUtil.cancelMusicFadeTween();
 		
 		ChartEditorState.song = SONG;
-		FlxG.switchState(FlxG.keys.pressed.SHIFT ? ChartEditorState.new : OLDChartEditorState.new);
+		FlxG.switchState(ChartEditorState.new);
 		chartingMode = true;
 		
 		if (automatedDiscord) DiscordClient.changePresence('Chart Editor');
@@ -2932,8 +2934,10 @@ class PlayState extends MusicBeatState
 		
 		if (camZooming && ClientPrefs.camZooms && curBeat % beatsPerZoom == 0)
 		{
-			FlxG.camera.zoom += 0.015 * camZoomingMult;
-			camHUD.zoom += 0.03 * camZoomingMult;
+			@:privateAccess if (!FlxTween.globalManager.containsTweensOf(FlxG.camera, ['zoom'])) //makes it so tweening the camera zoom won't glitch out when it bops every section
+				FlxG.camera.zoom += 0.015 * camZoomingMult;
+			@:privateAccess if (!FlxTween.globalManager.containsTweensOf(camHUD, ['zoom'])) // just in case
+				camHUD.zoom += 0.03 * camZoomingMult;
 		}
 		
 		lastBeatHit = curBeat;
