@@ -317,7 +317,7 @@ class PlayField extends FlxTypedContainer<StrumNote>
 		note.skin = _skin;
 		note.texture = _skin.noteTexture;
 		note.rgbEnabled = _skin.inEngineColoring;
-		note.rgbGraphics.enabled = note.rgbEnabled;
+		note.rgbShader.enabled = note.rgbEnabled;
 		
 		if (hasChangedSkin) note.updateColors();
 		
@@ -564,7 +564,7 @@ class PlayField extends FlxTypedContainer<StrumNote>
 			{
 				final data = note.noteData;
 				final skin:String = _skin.splashTexture;
-				final colors = note.rgbGraphics;
+				final colors = note.reColor;
 				
 				var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
 				splash.setupNoteSplash(strum, note, skin, colors, this);
@@ -587,7 +587,7 @@ class PlayField extends FlxTypedContainer<StrumNote>
 			if (strum != null)
 			{
 				final data = note.noteData;
-				final colors = note.rgbGraphics;
+				final colors = note.reColor;
 				
 				// sustain length + step length (all in ms) to time the ending of the sustain covering
 				final time = ((note.sustainLength + (Conductor.stepCrotchet * 1.25)) / 1000);
@@ -638,7 +638,7 @@ class PlayField extends FlxTypedContainer<StrumNote>
 			strum.skin = _skin;
 			strum.texture = _skin.noteTexture;
 			strum.useRGBShader = _skin.inEngineColoring;
-			strum.rgbGraphics.enabled = strum.useRGBShader;
+			strum.rgbShader.enabled = strum.useRGBShader;
 			strum.reloadNote();
 			
 			strum.playAnim('static');
@@ -649,7 +649,7 @@ class PlayField extends FlxTypedContainer<StrumNote>
 			note.skin = _skin;
 			note.texture = _skin.noteTexture;
 			note.rgbEnabled = _skin.inEngineColoring;
-			note.rgbGraphics.enabled = note.rgbEnabled;
+			note.rgbShader.enabled = note.rgbEnabled;
 			note.loadNoteAnims();
 			
 			note.reloadNote('', note.texture, '');
@@ -657,20 +657,21 @@ class PlayField extends FlxTypedContainer<StrumNote>
 			note.scale.set(_skin.noteScale, _skin.noteScale);
 			note.baseScale.copyFrom(note.scale);
 			
-			note.rgbGraphics = NoteUtil.getCurColors(note.noteData, note.quant, note.player);
+			note.reColor = NoteUtil.getCurColors(note.noteData, note.quant, note.player);
+			note.rgbShader.setColors(note.reColor);
 		});
 		
 		grpNoteSplashes.forEachAlive((splash) -> {
 			splash.scale.set(_skin.splashScale, _skin.splashScale);
 			splash.baseScale.copyFrom(splash.scale);
 			
-			splash.rgbGraphics.enabled = _skin.inEngineColoring;
+			splash.rgbShader.enabled = _skin.inEngineColoring;
 		});
 		grpSusSplashes.forEachAlive((splash) -> {
 			splash.scale.set(_skin.susSplashScale, _skin.susSplashScale);
 			splash.baseScale.copyFrom(splash.scale);
 			
-			splash.rgbGraphics.enabled = _skin.inEngineColoring;
+			splash.rgbShader.enabled = _skin.inEngineColoring;
 		});
 	}
 	

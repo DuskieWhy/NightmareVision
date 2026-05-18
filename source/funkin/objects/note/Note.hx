@@ -8,7 +8,7 @@ import flixel.math.FlxRect;
 
 import funkin.data.*;
 import funkin.game.shaders.*;
-import funkin.game.shaders.RGBShader;
+import funkin.game.shaders.RGBPalette.RGBShaderReference;
 import funkin.objects.Character;
 import funkin.scripts.*;
 import funkin.states.*;
@@ -88,9 +88,12 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 	public var eventVal1:String = '';
 	public var eventVal2:String = '';
 	
-	public var rgbGraphics:RGBGraphics;
+	public var rgbShader:RGBShaderReference;
 	public var rgbEnabled:Bool = true;
 	public var reAssignable:Bool = true;
+	public var reColor:Array<FlxColor>;
+	
+	public static var globalRgbShaders:Array<RGBPalette> = [];
 	
 	public var inEditor:Bool = false;
 	public var skipScale:Bool = false;
@@ -188,9 +191,9 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 					ignoreNote = mustPress;
 					missHealth = isSustainNote ? 0.1 : 0.3;
 					hitCausesMiss = true;
-					rgbGraphics.r = 0xFF101010;
-					rgbGraphics.g = 0xFFFF0000;
-					rgbGraphics.b = 0xFF990022;
+					rgbShader.r = 0xFF101010;
+					rgbShader.g = 0xFFFF0000;
+					rgbShader.b = 0xFF990022;
 					
 				case 'No Animation':
 					noAnimation = true;
@@ -244,8 +247,10 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 		
 		if (noteData > -1)
 		{
-			rgbGraphics = NoteUtil.getCurColors(noteData, quant, player);
+			rgbShader = NoteUtil.initRGBShader(this, noteData, quant, player);
 			rgbEnabled = NoteUtil.getSkinFromID(player)?.inEngineColoring ?? false;
+			
+			reColor = NoteUtil.getCurColors(noteData, quant, player);
 			
 			texture = '';
 			
@@ -300,6 +305,8 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 		if (noteScript != null) if (noteScript.executeFunc("onReloadNote", [this, _prefix, _texture, _suffix], this) == ScriptConstants.STOP_FUNC) return;
 		
 		skin ??= NoteUtil.getSkinFromID(player);
+		
+		rgbShader.setColors(reColor);
 		
 		var _skin:String = _texture;
 		if (_skin.length < 1)
@@ -379,7 +386,8 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 	{
 		if (!reAssignable) return;
 		
-		rgbGraphics = NoteUtil.getCurColors(noteData, quant, player);
+		reColor = NoteUtil.getCurColors(noteData, quant, player);
+		rgbShader.setColors(reColor);
 	}
 	
 	// SPECIFICALLY for note types, only use if u 100% do not want to have ur note re-colored
@@ -387,12 +395,13 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 	{
 		var fallback = NoteUtil.getCurColors(noteData, quant, player);
 		
-		rgbGraphics = fallback;
+		reColor = fallback;
 		if (color != null || color.length == skin?.keys ?? 4)
 		{
 			reAssignable = false;
-			rgbGraphics.setColors(color);
+			reColor = color;
 		}
+		rgbShader.setColors(reColor);
 	}
 	
 	public function clip(strum:StrumNote)
@@ -435,11 +444,11 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 			}
 		}
 		
-		if (rgbGraphics != null)
+		if (rgbShader != null)
 		{
-			rgbGraphics.enabled = rgbEnabled;
+			rgbShader.enabled = rgbEnabled;
 			
-			rgbGraphics.alpha = (alphaMod * alphaMod2) * (playField?.baseAlpha ?? 1.0);
+			rgbShader.alphaMult = (alphaMod * alphaMod2) * (playField?.baseAlpha ?? 1.0);
 		}
 		
 		var actualHitbox:Float = hitbox * earlyHitMult;
@@ -457,18 +466,6 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 		{
 			if (alpha > 0.3) alpha = 0.3;
 		}
-	}
-	
-	override function drawSimple(camera:FlxCamera)
-	{
-		super.drawSimple(camera);
-		rgbGraphics.pushQuad(camera);
-	}
-	
-	override function drawComplex(camera:FlxCamera)
-	{
-		super.drawComplex(camera);
-		rgbGraphics.pushQuad(camera);
 	}
 	
 	override public function destroy()
