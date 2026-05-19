@@ -6,7 +6,7 @@ import funkin.data.NoteSkin;
 import funkin.data.NoteSkin.Animation;
 import funkin.data.NoteSkin.ColorList;
 import funkin.game.shaders.*;
-import funkin.game.shaders.RGBPalette.RGBShaderReference;
+import funkin.game.shaders.RGBShader;
 
 // should be rewritten ngl
 // i agree its so ugly please
@@ -435,43 +435,16 @@ class NoteUtil
 		{r: 0xFF3A3A6C, g: 0xFFFFFF, b: 0xFF17202B} // 192nd
 	];
 	
-	/**
-		* Basic setup for a note object's RGB palette. Sets the colors according to the current colors from `getCurColors()`
-
-		* @param id Note Object's ID (or noteData)
-		 
-		* @param quant If the note style is Quantized, it uses the quant variable to set the palette accordingly.
-	 */
-	public static function initRGBPalete(id:Int = 0, quant:Int = 4, player:Int = 0)
-	{
-		// custom noteskin colors soon i promise
-		var newRGB = new RGBPalette();
-		var arr = getCurColors(id, quant, player);
-		
-		if (arr != null) newRGB.setColors(arr);
-		else newRGB.setColors([0xFFFF0000, 0xFF00FF00, 0xFF0000FF]);
-		
-		return newRGB;
-	}
-	
-	public static function initRGBShader(object:FlxSprite, id:Int = 0, ?quant:Int = 0, ?player:Int = 0)
-	{
-		var rgbShader = new RGBShaderReference(object, initRGBPalete(id, quant, player));
-		object.shader = rgbShader.shader;
-		
-		return rgbShader;
-	}
-	
 	public static function getCurColors(id:Int = 0, quant:Int = 0, player:Int = 0)
 	{
 		final skin = getSkinFromID(player);
 		
 		final idx = id > skin.keys ? 0 : id;
 		
-		var arr = skin.colors[idx];
-		if (ClientPrefs.quants && quant != 0) arr = quantDefaultColors[quants.indexOf(quant)];
+		var colors = skin.colors[idx];
+		if (ClientPrefs.quants && quant != 0) colors = quantDefaultColors[quants.indexOf(quant)];
 		
-		return colorToArray(arr);
+		return new RGBGraphics(colors.r, colors.g, colors.b);
 	}
 	
 	public static function colorToArray(color:ColorList):Array<FlxColor>
