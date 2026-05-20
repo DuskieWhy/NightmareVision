@@ -2,7 +2,6 @@ package funkin.objects;
 
 import funkin.objects.note.*;
 
-@:nullSafety
 class Underlay extends FlxSprite
 {
 	public var parentField:Null<PlayField>;
@@ -57,6 +56,21 @@ class Underlay extends FlxSprite
 				scale.y = FlxG.height / (camera.zoom);
 				screenCenter(Y);
 				updateHitbox();
+			}
+			
+			if (PlayState.instance.modManager != null)
+			{
+				final mgr = PlayState.instance.modManager;
+				
+				inline function getMgrVal(mod:String)
+				{
+					var val = mgr.getValue(mod, parentField.player);
+					
+					val = 1 - val;
+					return val;
+				}
+				
+				alpha = ClientPrefs.underlayOpacity * getMgrVal("alpha") * getMgrVal("dark");
 			}
 		}
 	}
