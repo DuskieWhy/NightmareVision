@@ -14,6 +14,8 @@ typedef NoteSignal = FlxTypedSignal<(Note, PlayField) -> Void>;
 
 class PlayField extends FlxTypedContainer<StrumNote>
 {
+	public static final UNDERLAY_PADDING:Float = 15;
+	
 	public var _skin:NoteSkin;
 	
 	public var owner(default, set):Character;
@@ -59,8 +61,6 @@ class PlayField extends FlxTypedContainer<StrumNote>
 	public var playerControls:Bool = false;
 	public var inControl(default, set):Bool = true; // incase you want to lock up the playfield
 	
-	public var underlay:Underlay;
-
 	public var trackNoteSplashes:Bool = true;
 	public var trackSustainSplashes:Bool = true; // splash angle follows sustain angle
 	
@@ -82,6 +82,8 @@ class PlayField extends FlxTypedContainer<StrumNote>
 	public var offsetReceptors:Bool = false;
 	public var player:Int = 0;
 	public var alpha(default, set):Float = 1;
+	
+	public var underlaySpr:FlxSprite;
 	
 	public function set_alpha(value:Float)
 	{
@@ -163,12 +165,77 @@ class PlayField extends FlxTypedContainer<StrumNote>
 		grpSusSplashes.add(sus);
 		sus.alpha = 0.0;
 		
+		underlaySpr = new FlxSprite().makeGraphic(1, 1, FlxColor.WHITE);
+		underlaySpr.color = FlxColor.BLACK;
+		underlaySpr.alpha = 0;
+		underlaySpr.scrollFactor.set();
+		
 		splashLayer.add(grpSusSplashes);
 		splashLayer.add(grpNoteSplashes);
 		
 		this.onNoteHit.add(noteHit);
 		this.onNoteMiss.add(noteMiss);
 		this.onMissPress.add(noteMissPress);
+	}
+	
+	override function draw()
+	{
+		if (underlaySpr.exists && ClientPrefs.underlayOpacity > 0 && ClientPrefs.underlayType == FIELD)
+		{
+			var minX:Float = Math.POSITIVE_INFINITY;
+			var maxX:Float = Math.NEGATIVE_INFINITY;
+			
+			for (strum in members)
+			{
+				if (strum != null && strum.exists && strum.visible)
+				{
+					minX = Math.min(minX, strum.x);
+					maxX = Math.max(maxX, strum.x + strum.width);
+				}
+			}
+			
+			forEachAliveNote((daNote:Note) -> {
+				if (daNote.isOnScreen())
+				{
+					minX = Math.min(minX, daNote.x);
+					maxX = Math.max(maxX, daNote.x + daNote.width);
+				}
+			});
+			
+			final targetX = minX - UNDERLAY_PADDING;
+			final targetW = (maxX - minX) + (UNDERLAY_PADDING * 2);
+			
+			// Instant update
+			underlaySpr.x = targetX;
+			
+			underlaySpr.scale.x = targetW;
+			underlaySpr.scale.y = camera.viewHeight;
+			underlaySpr.screenCenter(Y);
+			underlaySpr.updateHitbox();
+			
+			underlaySpr.camera = getDefaultCamera();
+			
+			underlaySpr.alpha = ClientPrefs.underlayOpacity;
+			
+			if (PlayState.instance.modManager != null) // temp
+			{
+				final mgr = PlayState.instance.modManager;
+				
+				inline function getMgrVal(mod:String)
+				{
+					var val = mgr.getValue(mod, player);
+					
+					val = 1 - val;
+					return val;
+				}
+				
+				underlaySpr.alpha *= getMgrVal("alpha") * getMgrVal("dark");
+			}
+			
+			underlaySpr.draw();
+		}
+		
+		super.draw();
 	}
 	
 	public function clearReceptors()
@@ -259,7 +326,7 @@ class PlayField extends FlxTypedContainer<StrumNote>
 		if (note.playField != this || note.playField == null) note.playField = this;
 	}
 	
-	public function forEachAliveNote(func:Note->Void)
+	public inline function forEachAliveNote(func:Note->Void)
 	{
 		for (note in notes)
 			if (note != null && note.exists && note.alive) func(note);
@@ -553,6 +620,8 @@ class PlayField extends FlxTypedContainer<StrumNote>
 		
 		onMissPress.removeAll();
 		onMissPress.destroy();
+		
+		underlaySpr.destroy();
 		
 		super.destroy();
 	}

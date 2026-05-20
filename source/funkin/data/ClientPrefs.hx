@@ -11,6 +11,19 @@ import flixel.util.FlxSave;
 import funkin.input.Controls.KeyboardScheme;
 import funkin.input.Controls;
 
+enum abstract UnderlayType(String) to String from String
+{
+	public var FIELD = 'Lane Underlay';
+	public var SCREEN = 'Screen Dim';
+	
+	// @:to
+	public static function toArray():Array<String> // dont want to jump to options states to update
+	{
+		// granted its a bit overkill to even do this for 2 options but i dunno remove it if u dont want it //or maybe i will another time
+		return [FIELD, SCREEN];
+	}
+}
+
 /**
  * to add new save options, make a static var with the `@saveVar` meta and itll be handled on its own
  * 
