@@ -6,7 +6,8 @@ import flixel.FlxSprite;
 import flixel.math.FlxPoint;
 
 import funkin.objects.*;
-import funkin.game.shaders.RGBShader;
+import funkin.game.shaders.RGBPalette;
+import funkin.game.shaders.RGBPalette.RGBShaderReference;
 import funkin.states.*;
 import funkin.data.*;
 
@@ -53,7 +54,7 @@ class StrumNote extends FunkinSprite implements funkin.game.modchart.IModNote
 		return value;
 	}
 	
-	public var rgbGraphics:RGBGraphics = new RGBGraphics();
+	public var rgbShader:RGBShaderReference;
 	public var useRGBShader:Bool = true;
 	
 	public var skin:NoteSkin;
@@ -74,13 +75,14 @@ class StrumNote extends FunkinSprite implements funkin.game.modchart.IModNote
 		
 		useRGBShader = skin.inEngineColoring;
 		
+		rgbShader = NoteUtil.initRGBShader(this, noteData, 0, player);
+		rgbShader.enabled = useRGBShader;
 		isQuant = parent?.quants ?? ClientPrefs.quants;
 		
 		handleColors();
 	}
 	
 	public var lastNote:Null<Note> = null;
-	
 	public function handleColors(anim:String = '', ?note:Note)
 	{
 		if (!useRGBShader) return;
@@ -88,19 +90,19 @@ class StrumNote extends FunkinSprite implements funkin.game.modchart.IModNote
 		note ??= lastNote;
 		lastNote = note;
 		
-		final fallback = skin.colors != null ? NoteUtil.colorToArray(skin.colors[noteData]) : NoteUtil.getCurColors(noteData, (isQuant && note != null) ? note.quant : 4, player)
-			.getColors();
-			
-		var arr:Array<FlxColor> = note?.rgbGraphics?.getColors();
-		if (arr == null) arr = fallback;
+		final fallback = skin.colors != null ? NoteUtil.colorToArray(skin.colors[noteData]) : NoteUtil.getCurColors(noteData, (isQuant && note != null) ? note.quant : 4, player);
+		
+		var arr:Array<FlxColor> = note?.rgbShader?.colorArray ?? [];
+		if (arr == null || arr.length <= 0) arr = fallback;
+		// if (arr == null || arr.length <= 0) arr = NoteUtil.getCurColors(noteData, (isQuant && note != null) ? note.quant : 4, player);
 		
 		if (isQuant && anim == 'pressed') arr = ClientPrefs.arrowRGBquant[0];
 		
-		if (rgbGraphics != null)
+		if (rgbShader != null)
 		{
-			rgbGraphics.setColors(arr);
+			rgbShader.setColors(arr);
 			
-			rgbGraphics.enabled = (anim != 'static');
+			rgbShader.enabled = (anim != 'static');
 		}
 	}
 	
@@ -180,17 +182,5 @@ class StrumNote extends FunkinSprite implements funkin.game.modchart.IModNote
 		centerOrigin();
 		
 		handleColors(anim);
-	}
-	
-	override function drawSimple(camera:FlxCamera)
-	{
-		super.drawSimple(camera);
-		rgbGraphics.pushQuad(camera);
-	}
-	
-	override function drawComplex(camera:FlxCamera)
-	{
-		super.drawComplex(camera);
-		rgbGraphics.pushQuad(camera);
 	}
 }
