@@ -59,8 +59,6 @@ class PlayField extends FlxTypedContainer<StrumNote>
 	public var playerControls:Bool = false;
 	public var inControl(default, set):Bool = true; // incase you want to lock up the playfield
 	
-	public var underlay:Underlay;
-
 	public var trackNoteSplashes:Bool = true;
 	public var trackSustainSplashes:Bool = true; // splash angle follows sustain angle
 	
