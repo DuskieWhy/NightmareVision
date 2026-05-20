@@ -71,10 +71,6 @@ class ClientPrefs
 	
 	@saveVar public static var camFollowsCharacters:Bool = true;
 	
-	@saveVar public static var underlayType:String = 'Lane Underlay';
-	
-	@saveVar public static var underlayOpacity:Float = 0.0;
-	
 	// gameplay ------------------------------------------------------------------------//
 	@saveVar public static var mechanics:Bool = true;
 	
