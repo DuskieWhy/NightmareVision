@@ -442,7 +442,13 @@ class NoteUtil
 		final idx = id > skin.keys ? 0 : id;
 		
 		var colors = skin.colors[idx];
-		if (ClientPrefs.quants && quant != 0) colors = quantDefaultColors[quants.indexOf(quant)];
+		if (ClientPrefs.quants && quant != 0)
+		{
+			if (skin.quantColors != null)
+				colors = skin.quantColors[quants.indexOf(quant)];
+			else
+				colors = quantDefaultColors[quants.indexOf(quant)];
+		}
 		
 		return new RGBGraphics(colors.r, colors.g, colors.b);
 	}
