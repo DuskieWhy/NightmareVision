@@ -248,4 +248,123 @@ class FlxMacro
 			
 		return fields;
 	}
+	
+	/**
+	 * Adds an rgbShader field to `FlxGraphic`
+	 * Pretty cheap trick but its ok :)
+	 * @return Array<haxe.macro.Expr.Field>
+	 */
+	public static macro function buildFlxGraphic():Array<haxe.macro.Expr.Field>
+	{
+		var fields:Array<haxe.macro.Expr.Field> = Context.getBuildFields();
+		
+		fields.push(
+			{
+				name: "rgbShader",
+				access: [haxe.macro.Expr.Access.APublic],
+				kind: FVar(macro :Null<funkin.game.shaders.RGBShader>),
+				pos: Context.currentPos()
+			});
+			
+		return fields;
+	}
+	
+	/**
+	 * Related to above function, adds arrays to store draw info for rgb shaders and an rgbShader field
+	 * Also edits the `reset` function to reset said arrays
+	 * @return Array<haxe.macro.Expr.Field>
+	 */
+	public static macro function buildFlxDrawBaseItem():Array<haxe.macro.Expr.Field>
+	{
+		var fields:Array<haxe.macro.Expr.Field> = Context.getBuildFields();
+		
+		final shaderParams:Array<String> = ["rgbR", "rgbG", "rgbB", "rgbMult", "rgbAlpha", "rgbFlash"];
+		for (f in shaderParams)
+		{
+			fields.push(
+				{
+					name: f,
+					access: [haxe.macro.Expr.Access.APublic],
+					kind: FVar(macro :Array<Float>, macro []),
+					pos: Context.currentPos()
+				});
+		}
+		
+		fields.push(
+			{
+				name: "rgbShader",
+				access: [haxe.macro.Expr.Access.APublic],
+				kind: FVar(macro :Null<funkin.game.shaders.RGBShader>),
+				pos: Context.currentPos()
+			});
+			
+		for (field in fields)
+		{
+			switch (field.name)
+			{
+				case "reset":
+					switch field.kind
+					{
+						case FFun(f):
+							final expr = f.expr;
+							f.expr = macro
+								{
+									$expr;
+									rgbShader = null;
+									// looks confusing im just making "ArrayTools.clear(rgbR)", "ArrayTools.clear(rgbG)", etc..
+									$b{[for (i in shaderParams) macro funkin.utils.tools.ArrayTools.clear(this.$i)]}
+								}
+						default:
+							throw "Invalid field";
+					}
+			}
+		}
+		
+		return fields;
+	}
+	
+	/**
+	 * A general function for both `FlxDrawQuadsItem` and `FlxDrawTrianglesItem`
+	 * It adjusts the `render` function to update rgb shader fields if it can
+	 * @return Array<haxe.maro.Expr>
+	 */
+	public static macro function buildFlxDrawItem():Array<haxe.macro.Expr.Field>
+	{
+		var cls:haxe.macro.Type.ClassType = Context.getLocalClass().get();
+		var fields:Array<haxe.macro.Expr.Field> = Context.getBuildFields();
+		
+		for (field in fields)
+		{
+			switch (field.name)
+			{
+				case "render":
+					switch (field.kind)
+					{
+						case FFun(f):
+							final expr = f.expr;
+							f.expr = macro
+								{
+									#if !flash
+									if (rgbShader != null)
+									{
+										rgbShader.r.value = rgbR;
+										rgbShader.g.value = rgbG;
+										rgbShader.b.value = rgbB;
+										rgbShader.mult.value = rgbMult;
+										
+										rgbShader.a_alpha.value = rgbAlpha;
+										rgbShader.a_flash.value = rgbFlash;
+										shader ??= rgbShader;
+									}
+									#end
+									$expr;
+								}
+						default:
+							throw "Invalid field";
+					}
+			}
+		}
+		
+		return fields;
+	}
 }
