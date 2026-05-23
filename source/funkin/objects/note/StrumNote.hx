@@ -74,6 +74,7 @@ class StrumNote extends FunkinSprite implements funkin.game.modchart.IModNote
 		scrollFactor.set();
 		
 		useRGBShader = skin.inEngineColoring;
+		rgbGraphics.enabled = useRGBShader;
 		
 		rgbShader = NoteUtil.initRGBShader(this, noteData, 0, player);
 		rgbShader.enabled = useRGBShader;
