@@ -26,6 +26,7 @@ class VisualsUISubState extends BaseOptionsMenu
 		addOption(option);
 
 		var option:Option = new Option('Underlay Type:', "What should the lane underlay do?", 'underlayType', STRING, 'Lane Underlay', UnderlayType.toArray());
+		addOption(option);
 		
 		var option:Option = new Option('Underlay Transparency', 'How much transparent should the health bar and icons be.', 'underlayOpacity', PERCENT, 0);
 		option.scrollSpeed = 1.6;
