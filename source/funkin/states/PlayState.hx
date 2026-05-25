@@ -739,20 +739,13 @@ class PlayState extends MusicBeatState
 		Conductor.songPosition = -5000;
 		
 		playFields = new FlxTypedGroup<PlayField>();
+		add(playFields);
 		
 		notes = new FlxTypedGroup<Note>();
-		
-		if (ClientPrefs.underlayType == 'Screen Dim')
-		{
-			screenDim = new FlxSprite().makeGraphic(1, 1, FlxColor.BLACK);
-			screenDim.alpha = ClientPrefs.underlayOpacity;
-			screenDim.scrollFactor.set();
-			screenDim.camera = camHUD;
-			add(screenDim);
-		}
+		add(notes);
 		
 		playHUD = new funkin.game.huds.PsychHUD(this);
-		add(playHUD);
+		insert(members.indexOf(playFields), playHUD); // Data told me to do this
 		playHUD.cameras = [camHUD];
 		
 		meta = SongMeta.getFromSong();
@@ -914,8 +907,6 @@ class PlayState extends MusicBeatState
 	public var skipArrowStartTween:Bool = false;
 	
 	var splashLayering:Array<Dynamic> = [];
-
-	public var screenDim:Null<FlxSprite>; // this doesnt need to be apart of playstate
 
 	public function generatePlayfields()
 	{
@@ -1289,9 +1280,7 @@ class PlayState extends MusicBeatState
 		scripts.set('vocals', audio);
 		scripts.set('inst', audio.inst);
 		
-		add(playFields);
-		add(notes);
-
+		// layering for notesplash stuff
 		for (i in splashLayering)
 			add(i);
 			
@@ -1934,13 +1923,6 @@ class PlayState extends MusicBeatState
 				cpuControlled = !cpuControlled;
 				botplayTxt.visible = !botplayTxt.visible;
 			}
-		}
-		
-		if (ClientPrefs.underlayType == 'Screen Dim' && screenDim != null)
-		{
-			screenDim.scale.set(FlxG.width * camHUD.zoom, FlxG.height * camHUD.zoom);
-			screenDim.updateHitbox();
-			screenDim.screenCenter();
 		}
 		
 		scripts.call('onUpdatePost', [elapsed]);
