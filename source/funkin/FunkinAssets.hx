@@ -262,7 +262,7 @@ class FunkinAssets
 		return Sound.fromAudioBuffer(buffer);
 		#end
 	}
-
+	
 	public static function getCpuCount():Int
 	{
 		#if sys

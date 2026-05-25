@@ -31,6 +31,7 @@ import funkin.backend.Difficulty;
 import funkin.game.RatingInfo;
 import funkin.objects.note.*;
 import funkin.objects.note.Note;
+import funkin.objects.note.Note;
 import funkin.game.huds.BaseHUD;
 import funkin.scripts.*;
 import funkin.data.Song;
@@ -1348,7 +1349,7 @@ class PlayState extends MusicBeatState
 					songNotes.push(i);
 					allNotes.push(songNotes);
 				}
-
+				
 				section.sectionNotes.resize(0);
 			}
 			
@@ -1390,7 +1391,7 @@ class PlayState extends MusicBeatState
 		}
 		
 		var holdCrotchet:Float = Math.max(Conductor.stepCrotchet / holdSubdivisions, 10);
-
+		
 		for (section in noteData)
 		{
 			if (section.changeBPM) holdCrotchet = (15000 / section.bpm / holdSubdivisions);
@@ -1425,9 +1426,8 @@ class PlayState extends MusicBeatState
 				
 				var susLength:Float = songNotes[2];
 				var swagNote = new QueueNote(daStrumTime, susLength, daNoteData, type, false, playfield);
-
-				if (section.gfSection && playfield == (section.mustHitSection ? 0 : 1)) swagNote.gfNote = true;
 				
+				if (section.gfSection && playfield == (section.mustHitSection ? 0 : 1)) swagNote.gfNote = true;
 				if ((section?.altAnim ?? false) && (type == '' || type == null)) swagNote.noteType = 'Alt Animation';
 				
 				queueNotes.push(swagNote);
@@ -1442,6 +1442,7 @@ class PlayState extends MusicBeatState
 					var sustainNote = new QueueNote(daStrumTime + (holdCrotchet * susNote), holdCrotchet, daNoteData, swagNote.noteType, true, playfield);
 					sustainNote.isSustainEnd = (susNote == flooredSusLength);
 					sustainNote.gfNote = swagNote.gfNote;
+					
 					sustainNote;
 				}];
 			}
@@ -1464,12 +1465,12 @@ class PlayState extends MusicBeatState
 				
 				eventsPushed.push(eventName);
 			}
-
+			
 			event.strumTime -= eventNoteEarlyTrigger(event);
 			eventNotes.push(event);
 			eventPushed(event);
 		}
-
+		
 		eventNotes.sort(function(a:EventNote, b:EventNote) return (a.strumTime > b.strumTime ? 1 : -1));
 		queueNotes.sort(function(a:QueueNote, b:QueueNote) return (a.strumTime > b.strumTime ? 1 : -1));
 		
@@ -1819,7 +1820,7 @@ class PlayState extends MusicBeatState
 			while (--i >= 0)
 			{
 				var daNote = notes.members[i];
-
+				
 				if (!daNote.alive) continue;
 				
 				final field = daNote.playField;
@@ -1873,7 +1874,7 @@ class PlayState extends MusicBeatState
 					
 					daNote.spriteOffset.x += skin.sustainOffsets[daNote.noteData].x;
 					daNote.spriteOffset.y += skin.sustainOffsets[daNote.noteData].y;
-
+					
 					if (daNote.isSustainEnd)
 					{
 						daNote.spriteOffset.x += skin.susEndOffsets[daNote.noteData].x;
@@ -1934,10 +1935,17 @@ class PlayState extends MusicBeatState
 				botplayTxt.visible = !botplayTxt.visible;
 			}
 		}
-
+		
+		if (ClientPrefs.underlayType == 'Screen Dim' && screenDim != null)
+		{
+			screenDim.scale.set(FlxG.width * camHUD.zoom, FlxG.height * camHUD.zoom);
+			screenDim.updateHitbox();
+			screenDim.screenCenter();
+		}
+		
 		scripts.call('onUpdatePost', [elapsed]);
 	}
-
+	
 	public function recycleNote(queueNote:QueueNote, ?parent:Note, ?prevNote:Note):Note
 	{
 		var note:Note = notes.recycle(Note, () -> new Note());
@@ -2741,7 +2749,7 @@ class PlayState extends MusicBeatState
 			notes.forEachAlive(function(daNote:Note) {
 				if (daNote.strumTime < songLength - Conductor.safeZoneOffset) health -= 0.05 * healthLoss;
 			});
-						
+			
 			for (daNote in queueNotes)
 				if (daNote.strumTime < songLength - Conductor.safeZoneOffset) health -= 0.05 * healthLoss;
 				

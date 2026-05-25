@@ -188,7 +188,6 @@ class BackendRGB extends FlxShader
 	}
 }
 
-
 // user friendly version woohoo!
 // same shader, just able to be easily used in modding
 

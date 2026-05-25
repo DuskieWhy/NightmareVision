@@ -337,6 +337,17 @@ class Character extends Bopper
 		return holding = isIt;
 	}
 	
+	function set_holding(isIt:Bool):Bool
+	{
+		if (!isIt && holding && holdTimer >= Conductor.stepCrotchet * 0.001 * singDuration)
+		{
+			dance(forceDance);
+			holdTimer = 0;
+		}
+		
+		return holding = isIt;
+	}
+	
 	/**
 	 * Plays the characters idle animation
 	 */

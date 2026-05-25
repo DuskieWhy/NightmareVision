@@ -22,7 +22,6 @@ typedef EventNote =
 	value2:String
 }
 
-
 abstract QueueNote(Array<Dynamic>) to Array<Dynamic>
 {
 	public function new(strumTime:Float, sustainLength:Float, noteData:Int, noteType:Null<String>, isSustainNote:Bool = false, playField:Int = 0)
@@ -109,7 +108,7 @@ abstract NoteSharedTailState(Array<Dynamic>) to Array<Dynamic>
 class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 {
 	public static var defaultNotes = ['No Animation', 'GF Sing', ''];
-
+	
 	var queueNote:Null<QueueNote> = null;
 	
 	public var row:Int = 0;
@@ -149,7 +148,7 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 	public var nextNote:Note;
 	
 	public var spawned:Bool = false;
-
+	
 	// shared between a note and its tail to prevent some issues
 	// its kind of  fuking stupid theres probably some other way to fix it but i cant think rn
 	public var tailState:NoteSharedTailState;
@@ -286,6 +285,7 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 			default:
 				if (!inEditor) noteScript = PlayState.instance.noteTypeScripts.getScript(value);
 		}
+		
 		if (hitCausesMiss) canMiss = true;
 		
 		return noteType = value;
@@ -318,7 +318,7 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 		hitHealth = .023;
 		missHealth = .0475;
 		coyoteProgress = 0;
-
+		
 		noAnimation = noMissAnimation = ratingDisabled = hitCausesMiss = false;
 		
 		ignoreNote = canBeHit = tooLate = wasGoodHit = noteWasHit = hitByOpponent = false;
@@ -554,7 +554,7 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 			clipRect = swagRect;
 		}
 	}
-
+	
 	var _cacheRect:Null<FlxRect> = null; // jsut for pooling
 	
 	inline function getRect()
@@ -602,7 +602,7 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 		{
 			if (parent.coyoteProgress >= 1 && !wasGoodHit) tooLate = true;
 		}
-			
+		
 		if (tooLate && !inEditor && alpha > 0.3) alpha = 0.3;
 	}
 	
