@@ -198,6 +198,7 @@ class FreeplayState extends MusicBeatState
 			
 			Mods.currentModDirectory = songs[i].folder;
 			var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
+			icon.frameCount = songs[i].iconFrames;
 			icon.sprTracker = songText;
 			
 			grpIcons.add(icon);
@@ -211,6 +212,7 @@ class FreeplayState extends MusicBeatState
 		var displayName:String = songName;
 		var icon:String = "face";
 		var color:String = "#8DA399";
+		var iconFrames:Int = 2;
 		
 		final meta = getSongMeta(songName);
 		
@@ -224,10 +226,11 @@ class FreeplayState extends MusicBeatState
 		{
 			if (meta.displayName != null) displayName = meta.displayName;
 			if (meta.freeplayIcon != null) icon = meta.freeplayIcon;
+			if (meta.freeplayIconFrames != null) iconFrames = meta.freeplayIconFrames;
 			if (meta.freeplayColor != null) color = meta.freeplayColor;
 		}
 		
-		songs.push(new FreeplaySong(songName, displayName, weekName, icon, FlxColor.fromString(color)));
+		songs.push(new FreeplaySong(songName, displayName, weekName, icon, iconFrames, FlxColor.fromString(color)));
 	}
 	
 	function weekIsLocked(name:String):Bool
@@ -677,15 +680,17 @@ class FreeplaySong
 	public var songName:String = "";
 	public var week:String = "";
 	public var songCharacter:String = "";
+	public var iconFrames:Int = 2;
 	public var color:Int = -7179779;
 	public var folder:String = "";
 	
-	public function new(song:String, displayName:String, week:String, songCharacter:String, color:Int)
+	public function new(song:String, displayName:String, week:String, songCharacter:String, iconFrames:Int, color:Int)
 	{
 		this.songName = song;
 		this.displayName = displayName;
 		this.week = week;
 		this.songCharacter = songCharacter;
+		this.iconFrames = iconFrames;
 		this.color = color;
 		this.folder = Mods.currentModDirectory;
 		if (this.folder == null) this.folder = '';

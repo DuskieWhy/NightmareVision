@@ -294,8 +294,12 @@ class PsychHUD extends BaseHUD
 	override function onCharacterChange()
 	{
 		reloadHealthBarColors();
+
 		iconP1.changeIcon(parent.boyfriend.healthIcon);
+		iconP1.frameCount = parent.boyfriend.iconFrames;
+
 		iconP2.changeIcon(parent.dad.healthIcon);
+		iconP2.frameCount = parent.dad.iconFrames;
 	}
 	
 	override function onHealthChange(health:Float)

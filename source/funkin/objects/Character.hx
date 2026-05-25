@@ -38,6 +38,7 @@ class Character extends Bopper
 	
 	public var animTimer:Float = 0;
 	public var specialAnim:Bool = false;
+	public var holding(default, set):Bool = false;
 	public var stunned:Bool = false;
 	
 	/**
@@ -274,7 +275,7 @@ class Character extends Bopper
 			return;
 		}
 		
-		if (animTimer > 0 && !getAnimName().endsWith('-end'))
+		if (animTimer > 0)
 		{
 			animTimer -= elapsed;
 			if (animTimer <= 0)
@@ -284,38 +285,22 @@ class Character extends Bopper
 			}
 		}
 		
-		if (specialAnim && isAnimFinished())
+		if (specialAnim && isAnimFinished() && !holding)
 		{
 			specialAnim = false;
 			dance(forceDance);
 		}
-		else if (getAnimName().endsWith('miss') && isAnimFinished())
+		else if (getAnimName().endsWith('miss') && isAnimFinished() && holdTimer >= Conductor.stepCrotchet * 0.002 * singDuration)
 		{
 			dance(forceDance);
 			finishAnim();
 		}
-		else if (getAnimName().endsWith('-end') && isAnimFinished())
+		
+		if (getAnimName().startsWith('sing') || holding) holdTimer += elapsed;
+		
+		if (!holding && holdTimer >= Conductor.stepCrotchet * 0.001 * singDuration)
 		{
 			dance(forceDance);
-		}
-		
-		if (getAnimName().startsWith('sing'))
-		{
-			holdTimer += elapsed;
-		}
-		else if (isPlayer) holdTimer = 0;
-		
-		if (holdTimer >= Conductor.stepCrotchet * 0.0011 * singDuration)
-		{
-			if (hasAnim(getAnimName() + '-end'))
-			{
-				playAnim(getAnimName() + '-end', true);
-			}
-			else
-			{
-				dance(forceDance);
-			}
-			
 			holdTimer = 0;
 		}
 		
@@ -326,7 +311,6 @@ class Character extends Bopper
 			for (ghost in doubleGhosts)
 				ghost.update(elapsed);
 		}
-		
 		super.update(elapsed);
 	}
 	
@@ -340,6 +324,17 @@ class Character extends Bopper
 			}
 		}
 		super.draw();
+	}
+
+	function set_holding(isIt:Bool):Bool
+	{
+		if (!isIt && holding && holdTimer >= Conductor.stepCrotchet * 0.001 * singDuration)
+		{
+			dance(forceDance);
+			holdTimer = 0;
+		}
+		
+		return holding = isIt;
 	}
 	
 	/**
@@ -361,7 +356,7 @@ class Character extends Bopper
 	
 	override function onBeatHit(beat:Int)
 	{
-		if (stunned || getAnimName().startsWith('sing')) return;
+		if (stunned || getAnimName().startsWith('sing') || holding) return;
 		super.onBeatHit(beat);
 	}
 	

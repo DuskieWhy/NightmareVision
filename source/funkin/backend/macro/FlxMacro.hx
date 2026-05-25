@@ -262,7 +262,7 @@ class FlxMacro
 			{
 				name: "rgbShader",
 				access: [haxe.macro.Expr.Access.APublic],
-				kind: FVar(macro :Null<funkin.game.shaders.RGBShader>),
+				kind: FVar(macro :Null<funkin.game.shaders.RGBShader.BackendRGB>),
 				pos: Context.currentPos()
 			});
 			
@@ -294,7 +294,7 @@ class FlxMacro
 			{
 				name: "rgbShader",
 				access: [haxe.macro.Expr.Access.APublic],
-				kind: FVar(macro :Null<funkin.game.shaders.RGBShader>),
+				kind: FVar(macro :Null<funkin.game.shaders.RGBShader.BackendRGB>),
 				pos: Context.currentPos()
 			});
 			

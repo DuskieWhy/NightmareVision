@@ -14,7 +14,8 @@ typedef NoteSignal = FlxTypedSignal<(Note, PlayField) -> Void>;
 
 class PlayField extends FlxTypedContainer<StrumNote>
 {
-	
+	public static final UNDERLAY_PADDING:Float = 15;
+
 	public var _skin:NoteSkin;
 	
 	public var owner(default, set):Character;
@@ -81,6 +82,8 @@ class PlayField extends FlxTypedContainer<StrumNote>
 	public var offsetReceptors:Bool = false;
 	public var player:Int = 0;
 	public var alpha(default, set):Float = 1;
+
+	public var underlaySpr:FlxSprite;
 	
 	public function set_alpha(value:Float)
 	{
@@ -162,12 +165,77 @@ class PlayField extends FlxTypedContainer<StrumNote>
 		grpSusSplashes.add(sus);
 		sus.alpha = 0.0;
 
+		underlaySpr = new FlxSprite().makeGraphic(1, 1, FlxColor.WHITE);
+		underlaySpr.color = FlxColor.BLACK;
+		underlaySpr.alpha = 0;
+		underlaySpr.scrollFactor.set();
+
 		splashLayer.add(grpSusSplashes);
 		splashLayer.add(grpNoteSplashes);
 		
 		this.onNoteHit.add(noteHit);
 		this.onNoteMiss.add(noteMiss);
 		this.onMissPress.add(noteMissPress);
+	}
+
+	override function draw()
+	{
+		if (underlaySpr.exists && ClientPrefs.underlayOpacity > 0 && ClientPrefs.underlayType == FIELD)
+		{
+			var minX:Float = Math.POSITIVE_INFINITY;
+			var maxX:Float = Math.NEGATIVE_INFINITY;
+			
+			for (strum in members)
+			{
+				if (strum != null && strum.exists && strum.visible)
+				{
+					minX = Math.min(minX, strum.x);
+					maxX = Math.max(maxX, strum.x + strum.width);
+				}
+			}
+			
+			forEachAliveNote((daNote:Note) -> {
+				if (daNote.isOnScreen())
+				{
+					minX = Math.min(minX, daNote.x);
+					maxX = Math.max(maxX, daNote.x + daNote.width);
+				}
+			});
+			
+			final targetX = minX - UNDERLAY_PADDING;
+			final targetW = (maxX - minX) + (UNDERLAY_PADDING * 2);
+			
+			// Instant update
+			underlaySpr.x = targetX;
+			
+			underlaySpr.scale.x = targetW;
+			underlaySpr.scale.y = camera.viewHeight;
+			underlaySpr.screenCenter(Y);
+			underlaySpr.updateHitbox();
+			
+			underlaySpr.camera = getDefaultCamera();
+			
+			underlaySpr.alpha = ClientPrefs.underlayOpacity;
+			
+			if (PlayState.instance.modManager != null) // temp
+			{
+				final mgr = PlayState.instance.modManager;
+				
+				inline function getMgrVal(mod:String)
+				{
+					var val = mgr.getValue(mod, player);
+					
+					val = 1 - val;
+					return val;
+				}
+				
+				underlaySpr.alpha *= getMgrVal("alpha") * getMgrVal("dark");
+			}
+			
+			underlaySpr.draw();
+		}
+		
+		super.draw();
 	}
 
 	public function clearReceptors()
@@ -264,12 +332,11 @@ class PlayField extends FlxTypedContainer<StrumNote>
 			if (note != null && note.exists && note.alive) func(note);
 	}
 	
-	inline function disposeNote(note:Note):Void
+	public inline function disposeNote(note:Note):Void
 	{
-		removeNote(note);
-		
 		note.kill();
-		note.destroy();
+		
+		removeNote(note);
 	}
 	
 	public function noteHit(note:Note, field:PlayField):Void
@@ -343,6 +410,7 @@ class PlayField extends FlxTypedContainer<StrumNote>
 				final animToPlay = _skin.singAnimations[Std.int(Math.abs(note.noteData))] + daAlt;
 				
 				char.holdTimer = 0;
+				if (field.playerControls) char.holding = true;
 				
 				// ghost stuff
 				final chord = noteRows[field.ID][note.row];
@@ -395,10 +463,16 @@ class PlayField extends FlxTypedContainer<StrumNote>
 		
 		note.wasGoodHit = true;
 		
-		var ratingThing:funkin.game.Rating = funkin.game.Rating.judgeNote(note, Math.abs(note.strumTime - Conductor.songPosition + ClientPrefs.ratingOffset) / PlayState.instance?.playbackRate);
-		final splashCheck = (playerControls ? ratingThing.name == 'sick' || ratingThing.name == 'epic' : true);
+		var shouldSplash:Bool = true;
+		if (field.playerControls)
+		{
+			var ratingThing:funkin.game.Rating = funkin.game.Rating.judgeNote(note, Math.abs(note.strumTime - Conductor.songPosition + ClientPrefs.ratingOffset) / PlayState.instance?.playbackRate);
+			
+			shouldSplash = (ratingThing.name == 'sick' || ratingThing.name == 'epic');
+		}
 		
-		if (splashCheck) spawnSplash(note);
+		if (field.noteSplashes && shouldSplash) field.spawnSplash(note);
+		
 		spawnSusSplash(note, field.playerControls);
 		
 		final globalScript = PlayState.instance.callNoteTypeScript(note.noteType, 'hit', scriptArgs);
@@ -429,6 +503,7 @@ class PlayField extends FlxTypedContainer<StrumNote>
 					
 					var animToPlay:String = _skin.singAnimations[Std.int(Math.abs(note.noteData))] + 'miss' + daAlt;
 					char.playAnim(animToPlay, true);
+					char.holdTimer = 0;
 				}
 			}
 		}
@@ -552,6 +627,8 @@ class PlayField extends FlxTypedContainer<StrumNote>
 		
 		onMissPress.removeAll();
 		onMissPress.destroy();
+
+		underlaySpr.destroy();
 		
 		super.destroy();
 	}

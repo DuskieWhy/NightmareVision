@@ -15,6 +15,7 @@ typedef SongMetaData =
 	
 	var ?freeplayColor:String;
 	var ?freeplayIcon:String;
+	var ?freeplayIconFrames:Int;
 }
 
 class SongMeta

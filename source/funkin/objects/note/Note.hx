@@ -22,9 +22,95 @@ typedef EventNote =
 	value2:String
 }
 
+
+abstract QueueNote(Array<Dynamic>) to Array<Dynamic>
+{
+	public function new(strumTime:Float, sustainLength:Float, noteData:Int, noteType:Null<String>, isSustainNote:Bool = false, playField:Int = 0)
+	{
+		this = [strumTime, sustainLength, noteData, noteType, isSustainNote, false, playField, false, null];
+	}
+	
+	public var strumTime(get, set):Float;
+	public var sustainLength(get, set):Float;
+	public var noteData(get, set):Int;
+	public var noteType(get, set):Null<String>;
+	public var isSustainNote(get, set):Bool;
+	public var isSustainEnd(get, set):Bool;
+	public var playField(get, set):Int;
+	public var gfNote(get, set):Bool;
+	public var tail(get, set):Null<Array<QueueNote>>;
+	
+	function get_strumTime():Float return this[0];
+	
+	function get_sustainLength():Float return this[1];
+	
+	function get_noteData():Int return this[2];
+	
+	function get_noteType():Null<String> return this[3];
+	
+	function get_isSustainNote():Bool return this[4];
+	
+	function get_isSustainEnd():Bool return this[5];
+	
+	function get_playField():Int return this[6];
+	
+	function get_gfNote():Bool return this[7];
+	
+	function get_tail():Null<Array<QueueNote>> return this[8];
+	
+	function set_strumTime(v:Float):Float return this[0] = v;
+	
+	function set_sustainLength(v:Float):Float return this[1] = v;
+	
+	function set_noteData(v:Int):Int return this[2] = v;
+	
+	function set_noteType(v:Null<String>):Null<String> return this[3] = v;
+	
+	function set_isSustainNote(v:Bool):Bool return this[4] = v;
+	
+	function set_isSustainEnd(v:Bool):Bool return this[5] = v;
+	
+	function set_playField(v:Int):Int return this[6] = v;
+	
+	function set_gfNote(v:Bool):Bool return this[7] = v;
+	
+	function set_tail(v:Null<Array<QueueNote>>):Null<Array<QueueNote>> return this[8] = v;
+}
+
+abstract NoteSharedTailState(Array<Dynamic>) to Array<Dynamic>
+{
+	public function new(parent:Note)
+	{
+		this = [parent, [], null, false];
+	}
+	
+	public var parent(get, set):Note;
+	public var tail(get, set):Array<Note>;
+	public var splash(get, set):Null<SustainSplash>;
+	public var missed(get, set):Bool;
+	
+	function get_parent():Note return this[0];
+	
+	function get_tail():Array<Note> return this[1];
+	
+	function get_splash():Null<SustainSplash> return this[2];
+	
+	function get_missed():Bool return this[3];
+	
+	function set_parent(v:Note):Note return this[0] = v;
+	
+	function set_tail(v:Array<Note>):Array<Note> return this[1] = v; // well this one is useless
+	
+	function set_splash(v:Null<SustainSplash>):Null<SustainSplash> return this[2] = v;
+	
+	function set_missed(v:Bool):Bool return this[3] = v;
+}
+
 class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 {
 	public static var defaultNotes = ['No Animation', 'GF Sing', ''];
+
+	var queueNote:Null<QueueNote> = null;
 	
 	public var row:Int = 0;
 	public var lane:Int = 0;
@@ -63,9 +149,13 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 	public var nextNote:Note;
 	
 	public var spawned:Bool = false;
+
+	// shared between a note and its tail to prevent some issues
+	// its kind of  fuking stupid theres probably some other way to fix it but i cant think rn
+	public var tailState:NoteSharedTailState;
 	
 	public var tail:Array<Note> = []; // for sustains
-	public var parent:Note;
+	public var parent:Null<Note> = null;
 	
 	// 0 to 1, 1 = missed
 	public var coyoteProgress:Float = 0;
@@ -83,11 +173,6 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 	
 	public var alreadyShifted:Bool = false;
 	
-	public var eventName:String = '';
-	public var eventLength:Int = 0;
-	public var eventVal1:String = '';
-	public var eventVal2:String = '';
-	
 	public var rgbGraphics:RGBGraphics;
 	public var rgbEnabled:Bool = true;
 	public var reAssignable:Bool = true;
@@ -96,15 +181,12 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 	public var skipScale:Bool = false;
 	public var gfNote:Bool = false;
 	
-	private var earlyHitMult:Float = 0.5;
+	public var earlyHitMult:Float = 1;
 	
 	@:isVar
 	public var daWidth(get, never):Float;
 	
-	public function get_daWidth()
-	{
-		return playField == null ? Note.swagWidth : playField.swagWidth;
-	}
+	inline function get_daWidth():Float return (playField == null ? Note.swagWidth : playField.swagWidth);
 	
 	public static var swagWidth:Float = 160 * 0.7;
 	
@@ -145,6 +227,7 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 	public var player:Int = 0;
 	
 	public var owner:Character = null;
+	public var singers:Array<Character> = null;
 	public var playField(default, set):PlayField;
 	public var sustainSplash:SustainSplash = null;
 	public var noteSplash:NoteSplash = null;
@@ -177,108 +260,170 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 	{
 		noteScript = null;
 		
-		if (noteData > -1 && noteType != value)
+		switch (value)
 		{
-			switch (value)
-			{
-				case 'Alt Animation':
-					animSuffix = '-alt';
-				case 'Hurt Note':
-					hitPriority = 0;
-					ignoreNote = mustPress;
-					missHealth = isSustainNote ? 0.1 : 0.3;
-					hitCausesMiss = true;
-					rgbGraphics.r = 0xFF101010;
-					rgbGraphics.g = 0xFFFF0000;
-					rgbGraphics.b = 0xFF990022;
-					
-				case 'No Animation':
-					noAnimation = true;
-					noMissAnimation = true;
-				case 'GF Sing':
-					gfNote = true;
-				case 'Ghost Note':
-					alpha = 0.8;
-					color = 0xffa19f9f;
-				default:
-					if (!inEditor) noteScript = PlayState.instance.noteTypeScripts.getScript(value);
-					// else noteScript = ChartEditorState.instance.notetypeScripts.get(value);
-					
-					if (noteScript != null) noteScript.executeFunc("setupNote", [this], this);
-			}
-			noteType = value;
+			case 'Alt Animation':
+				animSuffix = '-alt';
+				
+			case 'Hurt Note':
+				hitPriority = 0;
+				ignoreNote = mustPress;
+				missHealth = isSustainNote ? 0.1 : 0.3;
+				hitCausesMiss = true;
+				setCustomColor([0xFF101010, 0xFFFF0000, 0xFF990022]);
+				
+			case 'No Animation':
+				noAnimation = true;
+				noMissAnimation = true;
+				
+			case 'GF Sing':
+				gfNote = true;
+				
+			case 'Ghost Note':
+				alpha = 0.8;
+				color = 0xffa19f9f;
+				
+			default:
+				if (!inEditor) noteScript = PlayState.instance.noteTypeScripts.getScript(value);
 		}
 		if (hitCausesMiss) canMiss = true;
 		
-		return value;
+		return noteType = value;
 	}
 	
-	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?inEditor:Bool = false, ?player:Int = 0)
+	public function new(strumTime:Float = 0, noteData:Int = 0, ?prevNote:Note, sustainNote:Bool = false, inEditor:Bool = false, player:Int = 0)
 	{
 		super();
 		
-		if (prevNote == null) prevNote = this;
-		
-		this.prevNote = prevNote;
 		this.player = player;
-		isSustainNote = sustainNote;
-		
-		if (ClientPrefs.quants && canQuant)
-		{
-			var beat = Conductor.getBeat(strumTime);
-			if (prevNote != null && isSustainNote) quant = prevNote.quant;
-			else quant = NoteUtil.getQuant(beat);
-		}
+		this.prevNote = prevNote;
+		this.isSustainNote = sustainNote;
+		this.strumTime = strumTime;
+		this.noteData = noteData;
 		this.inEditor = inEditor;
 		
-		// MAKE SURE ITS DEFINITELY OFF SCREEN?
-		y -= 2000;
-		this.strumTime = strumTime;
-		if (!inEditor)
-		{
-			this.strumTime += ClientPrefs.noteOffset;
-			visualTime = PlayState.instance.getNoteInitialTime(this.strumTime);
-		}
+		rgbEnabled = (NoteUtil.getSkinFromID(player)?.inEngineColoring ?? false);
 		
-		this.noteData = noteData;
+		_resetTexture();
+	}
+	
+	public inline function _reset():Void
+	{
+		exists = true;
+		alive = true;
+		garbage = spawned = false;
+		reAssignable = true;
 		
-		if (noteData > -1)
-		{
-			rgbGraphics = NoteUtil.getCurColors(noteData, quant, player);
-			rgbEnabled = NoteUtil.getSkinFromID(player)?.inEngineColoring ?? false;
-			
-			texture = '';
-			
-			if (!isSustainNote) playAnim(animation.exists('scroll') ? 'scroll' : 'scroll$noteData');
-		}
+		hitPriority = 1;
+		hitHealth = .023;
+		missHealth = .0475;
+		coyoteProgress = 0;
+
+		noAnimation = noMissAnimation = ratingDisabled = hitCausesMiss = false;
 		
-		if (prevNote != null) prevNote.nextNote = this;
+		ignoreNote = canBeHit = tooLate = wasGoodHit = noteWasHit = hitByOpponent = false;
 		
-		if (isSustainNote && prevNote != null)
-		{
-			hitsoundDisabled = true;
-			
-			copyAngle = false;
-			
-			playAnim(animation.exists('holdend') ? 'holdend' : 'holdend$noteData');
-			isSustainEnd = true;
-			updateHitbox();
-			
-			animSuffix = prevNote.animSuffix;
-			
-			missHealth = 0.0475;
-			
-			if (prevNote.isSustainNote)
-			{
-				prevNote.playAnim(animation.exists('hold') ? 'hold' : 'hold$noteData');
-				prevNote.isSustainEnd = false;
-				
-				prevNote.updateHitbox();
-			}
-		}
-		else if (!isSustainNote) earlyHitMult = 1;
+		owner = null;
+		singers?.resize(0);
+		
+		tail.resize(0);
+		sustainSplash = null;
+		noteSplash = null;
+		nextNote = null;
+		clipRect = null;
+		alpha = 1;
+	}
+	
+	inline function get_tail():Array<Note> return tailState.tail;
+	
+	inline function _resetTexture():Void
+	{
+		if (ClientPrefs.quants && canQuant) quant = (prevNote?.quant ?? NoteUtil.getQuant(Conductor.getBeat(strumTime)));
+		
+		rgbGraphics = NoteUtil.getCurColors(noteData, quant, player);
+		rgbEnabled = NoteUtil.getSkinFromID(player)?.inEngineColoring ?? false;
+		
+		updateColors();
+		
+		prefix = suffix = animSuffix = texture = '';
+		
+		playAnim(getDefaultAnim(), true);
+		updateHitbox();
 		
 		baseScale.copyFrom(scale);
+	}
+	
+	public function preRecycle(?queueNote:QueueNote, ?parent:Note, ?prevNote:Note):Void
+	{
+		_reset();
+		
+		this.parent = parent;
+		
+		if (parent != null)
+		{
+			tailState = parent.tailState;
+			parent.coyoteProgress = 0;
+		}
+		else if (tailState == null || tailState.tail.length > 0)
+		{
+			tailState = new NoteSharedTailState(this);
+		}
+		else
+		{
+			tailState.missed = false;
+			tailState.splash = null;
+		}
+		
+		if (prevNote != null)
+		{
+			this.prevNote = prevNote;
+			prevNote.nextNote = this;
+		}
+		
+		if (queueNote != null)
+		{
+			this.queueNote = queueNote;
+			
+			gfNote = queueNote.gfNote;
+			noteData = queueNote.noteData;
+			isSustainEnd = queueNote.isSustainEnd;
+			isSustainNote = queueNote.isSustainNote;
+			player = lane = queueNote.playField;
+			
+			strumTime = queueNote.strumTime;
+			sustainLength = queueNote.sustainLength;
+		}
+		
+		mustPress = (player == 0);
+		blockHit = isSustainNote;
+		
+		hitsoundDisabled = isSustainNote;
+		
+		_resetTexture();
+		
+		if (queueNote != null) noteType = queueNote.noteType;
+		
+		if (!inEditor) strumTime += ClientPrefs.noteOffset;
+		
+		updateVisualTime();
+	}
+	
+	public function postRecycle():Void
+	{
+		noteScript?.executeFunc('setupNote', [this], this);
+	}
+	
+	public inline function updateVisualTime():Void
+	{
+		visualTime = PlayState.instance.getNoteInitialTime(strumTime);
+		visualLength = (PlayState.instance.getNoteInitialTime(strumTime + sustainLength) - visualTime);
+	}
+	
+	public inline function getDefaultAnim():String
+	{
+		var anim:String = (isSustainNote ? (isSustainEnd ? 'holdend' : 'hold') : 'scroll');
+		
+		return (animation.exists('$anim$noteData') ? '$anim$noteData' : anim);
 	}
 	
 	var lastNoteOffsetXForPixelAutoAdjusting:Float = 0;
@@ -308,8 +453,7 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 			if (_skin == null || _skin.length < 1) _skin = 'NOTE_assets';
 		}
 		
-		var animName:String = null;
-		if (animation.curAnim != null) animName = animation.curAnim.name;
+		var animName:String = (animation.name ?? getDefaultAnim());
 		
 		var arraySkin:Array<String> = _skin.split('/');
 		var lastIndex:Int = arraySkin.length - 1;
@@ -410,10 +554,12 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 			clipRect = swagRect;
 		}
 	}
+
+	var _cacheRect:Null<FlxRect> = null; // jsut for pooling
 	
 	inline function getRect()
 	{
-		final rect = (clipRect ?? new FlxRect());
+		final rect = (clipRect ?? _cacheRect ?? (_cacheRect = FlxRect.get()));
 		
 		rect.x = 0;
 		rect.y = 0;
@@ -429,10 +575,7 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 		
 		if (!inEditor)
 		{
-			if (noteScript != null)
-			{
-				noteScript.executeFunc("update", [this, elapsed], this);
-			}
+			noteScript?.executeFunc("update", [this, elapsed], this);
 		}
 		
 		if (rgbGraphics != null)
@@ -449,14 +592,23 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 		var absDiff = Math.abs(diff);
 		canBeHit = absDiff <= actualHitbox;
 		
-		if (!isSustainNote) if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset && !wasGoodHit) tooLate = true;
-		else if (parent != null) // coyote timer
-			if (parent.coyoteProgress >= 1 && !wasGoodHit) tooLate = true;
-			
-		if (tooLate && !inEditor)
+		// file auto-formatting completely broke the coyote timer LOL
+		// so unfortunately you will have to deal with this really ugly formatting
+		if (!isSustainNote)
 		{
-			if (alpha > 0.3) alpha = 0.3;
+			if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset && !wasGoodHit) tooLate = true;
 		}
+		else if (parent != null) // coyote timer
+		{
+			if (parent.coyoteProgress >= 1 && !wasGoodHit) tooLate = true;
+		}
+			
+		if (tooLate && !inEditor && alpha > 0.3) alpha = 0.3;
+	}
+	
+	public inline function isLate():Bool
+	{
+		return (strumTime < Conductor.songPosition - Conductor.safeZoneOffset && !wasGoodHit);
 	}
 	
 	override function drawSimple(camera:FlxCamera)
@@ -473,8 +625,12 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 	
 	override public function destroy()
 	{
-		if (playField != null) playField.removeNote(this);
-		prevNote = null;
+		playField?.removeNote(this);
+		
+		prevNote = nextNote = parent = null;
+		tailState = null;
+		
+		_cacheRect?.put();
 		super.destroy();
 	}
 	

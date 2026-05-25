@@ -1,4 +1,4 @@
-<dialog title="Metadata Editor" width="430" height="300" closable="true">
+<dialog title="Metadata Editor" width="430" height="310" closable="true">
 
     <tabview id="characterTabs" width="100%" height="100%" styleName="full-width-buttons">
 
@@ -22,13 +22,12 @@
                     <button allowFocus="false" id="iconColourButton" text="Get Colour" horizontalAlign="center"/>
 
                     <color-picker-popup id="colourPicker" verticalAlign="center" horizontalAlign="center" />
+
+                    <label text="Icon Frames:" verticalAlign="center" horizontalAlign="center"/>
+                    <number-stepper pos="2" step="1" id="iconFrameStepper" min="1" max="3" precision="0" tooltip='How many frames your icon has.'/>
                 </vbox>
 
                 <vbox>
-                    <spacer height="1"/>
-                    <rule />
-                    <spacer height="1"/>
-
                     <hbox verticalAlign="bottom">
                         <button text="Save" id="saveButton" style="background-color: #156015;" />
                         <button text="Load" id="loadButton" style="background-color: #575213;"/>

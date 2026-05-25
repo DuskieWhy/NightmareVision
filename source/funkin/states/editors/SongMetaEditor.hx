@@ -59,6 +59,11 @@ class SongMetaEditor extends UISubState
 		dialog.iconColourButton.onClick = (ev) -> {
 			updateColour(CoolUtil.dominantColor(iconDummy), true);
 		}
+
+		dialog.iconFrameStepper.onChange = (ev) -> {
+			iconDummy.frameCount = ev.value.toInt();
+			setIcon(iconDummy.frame);
+		}
 		
 		dialog.colourPicker.onChange = (ev) -> {
 			final col = FlxColor.fromString(ev.value.toString());
@@ -133,6 +138,7 @@ class SongMetaEditor extends UISubState
 				
 				freeplayColor: '0x' + colour.hex(),
 				freeplayIcon: dialog.iconField.value,
+				freeplayIconFrames: dialog.iconFrameStepper.value,
 				
 				composers: valToStringArray(dialog.composerField.value),
 				charters: valToStringArray(dialog.charterfield.value),
@@ -166,6 +172,8 @@ class SongMetaEditor extends UISubState
 		iconDummy.changeIcon(icon);
 		
 		final colour = FlxColor.fromString(meta.freeplayColor ?? '');
+
+		dialog.iconFrameStepper.value = meta.freeplayIconFrames ?? 2;
 		
 		setIcon(iconDummy.frame, colour);
 		
