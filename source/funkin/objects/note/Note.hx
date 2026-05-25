@@ -592,15 +592,10 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 		var absDiff = Math.abs(diff);
 		canBeHit = absDiff <= actualHitbox;
 		
-		// file auto-formatting completely broke the coyote timer LOL
-		// so unfortunately you will have to deal with this really ugly formatting
-		if (!isSustainNote)
+		if (isSustainNote && parent != null)
 		{
-			if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset && !wasGoodHit) tooLate = true;
-		}
-		else if (parent != null) // coyote timer
-		{
-			if (parent.coyoteProgress >= 1 && !wasGoodHit) tooLate = true;
+			if (parent.coyoteProgress >= 1 && !wasGoodHit) 
+				tooLate = true;
 		}
 		
 		if (tooLate && !inEditor && alpha > 0.3) alpha = 0.3;
