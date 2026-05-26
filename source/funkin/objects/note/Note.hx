@@ -594,15 +594,15 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 		
 		if (isSustainNote && parent != null)
 		{
-			if (parent.coyoteProgress >= 1 && !wasGoodHit) 
-				tooLate = true;
+			if (parent.coyoteProgress >= 1 && !wasGoodHit) tooLate = true;
 		}
+		
 		if (tooLate && !inEditor && alpha > 0.3) alpha = 0.3;
 	}
 	
 	public inline function isLate():Bool
 	{
-		return (strumTime < Conductor.songPosition - Conductor.safeZoneOffset && !wasGoodHit && parent.coyoteProgress >= 1);
+		return (strumTime < Conductor.songPosition - Conductor.safeZoneOffset && !wasGoodHit && (parent?.coyoteProgress ?? 1) >= 1);
 	}
 	
 	override function drawSimple(camera:FlxCamera)
