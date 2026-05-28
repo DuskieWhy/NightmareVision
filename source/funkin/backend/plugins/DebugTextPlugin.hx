@@ -35,14 +35,16 @@ class DebugTextPlugin extends FlxTypedGroup<DebugText>
 	
 	static function grabText(message:String, colour:FlxColor):DebugText
 	{
-		if (!DebugText.map.exists(message) && instance != null)
+		final sanitized = message.substring(0, message.indexOf(']') + 1);
+		
+		if (!DebugText.map.exists(sanitized) && instance != null)
 		{
 			final ret = instance.recycle(DebugText, () -> new DebugText(message, colour));
 			return ret;
 		}
 		else
 		{
-			var ret = DebugText.map.get(message);
+			var ret = DebugText.map.get(sanitized);
 			ret?.resetValues();
 			
 			return ret ?? new DebugText(message, colour);
@@ -88,14 +90,17 @@ class DebugText extends FlxText
 	{
 		super(10, 10, FlxG.width, text, 16);
 		
-		setFormat(Paths.DEFAULT_FONT, 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		// embedded font because fuuck you
+		setFormat(('assets/fonts/consolas.ttf'), 18, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scrollFactor.set();
-		borderSize = 1;
+		borderSize = 1.25;
 		this.color = color;
 		
 		this._trace = text;
 		
-		if (!map.exists(text)) map.set(text, this);
+		final sanitized = text.substring(0, text.indexOf(']') + 1);
+		
+		if (!map.exists(sanitized)) map.set(sanitized, this);
 	}
 	
 	public function setText(input:String)

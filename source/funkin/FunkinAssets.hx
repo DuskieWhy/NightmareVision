@@ -262,18 +262,4 @@ class FunkinAssets
 		return Sound.fromAudioBuffer(buffer);
 		#end
 	}
-	
-	public static function getCpuCount():Int
-	{
-		#if sys
-		var env:Null<String> = Sys.getEnv("NUMBER_OF_PROCESSORS");
-		if (env != null)
-		{
-			var count:Null<Int> = Std.parseInt(env);
-			if (count != null) return count;
-		}
-		#end
-		
-		return 1; // Fallback
-	}
 }

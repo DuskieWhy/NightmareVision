@@ -411,8 +411,6 @@ class FreeplayState extends MusicBeatState
 				return;
 			}
 			
-			trace('CURRENT WEEK: ' + WeekData.getWeekFileName());
-			
 			FlxTween.cancelTweensOf(bg, ['color']);
 			
 			if (FlxG.keys.pressed.SHIFT)
@@ -482,7 +480,8 @@ class FreeplayState extends MusicBeatState
 					});
 			}
 			
-			for (tab in tabs){
+			for (tab in tabs)
+			{
 				tab.directory = i.folder;
 				freeplayTabs.push(tab);
 			}
@@ -532,8 +531,8 @@ class FreeplayState extends MusicBeatState
 					addSong(name, [name, icon, color]);
 				}
 			}
-		} else 
-			Mods.currentModDirectory = tab.directory; 
+		}
+		else Mods.currentModDirectory = tab.directory;
 		for (song in tab.songs)
 			addSong(song);
 	}
