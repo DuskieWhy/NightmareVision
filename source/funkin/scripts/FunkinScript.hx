@@ -343,6 +343,7 @@ class FunkinScript extends IrisEx implements IFlxDestroyable
 		set("BGSprite", BGSprite);
 		set("StrumNote", StrumNote);
 		set("Alphabet", Alphabet);
+		set("FlxTextAlphabet", FlxTextAlphabet);
 		set("AttachedSprite", AttachedSprite);
 		set("AttachedAlphabet", AttachedAlphabet);
 		
