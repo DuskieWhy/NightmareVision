@@ -26,9 +26,12 @@ class DebugTextPlugin extends FlxTypedGroup<DebugText>
 	{
 		if (instance == null) return;
 		
+		var startY:Float = 25;
+		if (ClientPrefs.fpsDisplayType != 'Disabled' && DebugDisplay.instance != null) startY += DebugDisplay.instance.textUnderlay.height + 5;
+		
 		var count = 0;
 		instance.forEachAlive((temp:DebugText) -> {
-			temp.y = 25 + (temp.height * count);
+			temp.y = startY + (temp.height * count);
 			count++;
 		});
 	}
@@ -37,7 +40,9 @@ class DebugTextPlugin extends FlxTypedGroup<DebugText>
 	{
 		final sanitized = message.substring(0, message.indexOf(']') + 1);
 		
-		if (!DebugText.map.exists(sanitized) && instance != null)
+		final exists = DebugText.map.exists(sanitized);
+		
+		if (!exists && instance != null && DebugText.map.get(sanitized) == null)
 		{
 			final ret = instance.recycle(DebugText, () -> new DebugText(message, colour));
 			return ret;
@@ -45,7 +50,7 @@ class DebugTextPlugin extends FlxTypedGroup<DebugText>
 		else
 		{
 			var ret = DebugText.map.get(sanitized);
-			ret?.resetValues();
+			ret?._reset();
 			
 			return ret ?? new DebugText(message, colour);
 		}
@@ -80,11 +85,14 @@ class DebugText extends FlxText
 {
 	public static var map:Map<String, DebugText> = new Map<String, DebugText>();
 	
+	private final UNDERLAY_PADDING = 5;
+	
 	public var disableTime:Float = 4;
 	public var traceCount:Int = 1;
 	public var markupColor:FlxColor;
 	
 	private var _trace = 'No trace exists';
+	private var _underlay:FlxSprite;
 	
 	public function new(text:String, color:FlxColor = FlxColor.WHITE)
 	{
@@ -98,6 +106,11 @@ class DebugText extends FlxText
 		
 		this._trace = text;
 		
+		_underlay = new FlxSprite().makeGraphic(1, 1, FlxColor.WHITE);
+		_underlay.color = FlxColor.BLACK;
+		_underlay.alpha = 0;
+		_underlay.scrollFactor.set();
+		
 		final sanitized = text.substring(0, text.indexOf(']') + 1);
 		
 		if (!map.exists(sanitized)) map.set(sanitized, this);
@@ -108,8 +121,13 @@ class DebugText extends FlxText
 		this._trace = input;
 	}
 	
-	public function resetValues()
+	public function _reset()
 	{
+		this.revive();
+		
+		this.exists = true;
+		this.alive = true;
+		
 		this.traceCount += 1;
 		this.disableTime = 4;
 		this.alpha = 1;
@@ -133,6 +151,29 @@ class DebugText extends FlxText
 			kill();
 		}
 		else if (disableTime < 1) alpha = disableTime;
+	}
+	
+	override function draw()
+	{
+		if (_underlay.exists)
+		{
+			_underlay.scale.set(this.textField.textWidth + (UNDERLAY_PADDING * 2), height);
+			_underlay.updateHitbox();
+			
+			_underlay.setPosition(x - (UNDERLAY_PADDING / 2), y);
+			_underlay.camera = this.camera;
+			_underlay.alpha = this.alpha * 0.4;
+			
+			_underlay.draw();
+		}
+		
+		super.draw();
+	}
+	
+	override function destroy()
+	{
+		_underlay.destroy();
+		super.destroy();
 	}
 	
 	public static function clearMap()
