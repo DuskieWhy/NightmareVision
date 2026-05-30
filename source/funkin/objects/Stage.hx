@@ -133,6 +133,8 @@ class Stage extends FlxTypedContainer<FlxBasic>
 					final scrollFactor = CoolUtil.correctArray(info.scrollFactor, [1, 1]);
 					obj.scrollFactor.set(scrollFactor[0], scrollFactor[1]);
 				}
+
+				if (info.zoomFactor != null) obj.zoomFactor = info.zoomFactor;
 				
 				if (info.position != null)
 				{
