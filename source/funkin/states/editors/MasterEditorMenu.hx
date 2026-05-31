@@ -108,23 +108,23 @@ class MasterEditorMenu extends MusicBeatState
 		{
 			switch (options[curSelected])
 			{
-				case 'Mods Manager':
-					FlxG.switchState(() -> new ModsState());
+				case 'Chart Editor': // felt it would be cool maybe
+					FlxG.switchState(ChartEditorState.new);
 				case 'Character Editor':
 					FlxG.switchState(() -> new CharacterEditorState(Character.DEFAULT_CHARACTER, false));
-				case 'Week Editor':
-					FlxG.switchState(() -> new WeekEditorState());
+				// case 'Note Skin Editor':
+					// 	FlxG.switchState(() -> new NoteSkinEditor('default'));
+				case 'Chart Converter':
+					FlxG.switchState(() -> new ChartConverterState());
 				case 'Metadata Editor':
 					openSubState(new SongMetaEditor());
 					persistentUpdate = false; // makes it so you can't scroll through the options while in this substate
+				case 'Mods Manager':
+					FlxG.switchState(() -> new ModsState());
+				case 'Week Editor':
+					FlxG.switchState(() -> new WeekEditorState());
 				case 'Menu Character Editor':
 					FlxG.switchState(() -> new MenuCharacterEditorState());
-				case 'Chart Editor': // felt it would be cool maybe
-					FlxG.switchState(ChartEditorState.new);
-				// case 'Note Skin Editor':
-				// 	FlxG.switchState(() -> new NoteSkinEditor('default'));
-				case 'Chart Converter':
-					FlxG.switchState(() -> new ChartConverterState());
 			}
 			if (FlxG.sound.music != null) FlxG.sound.music.volume = 0;
 			FreeplayState.destroyFreeplayVocals();

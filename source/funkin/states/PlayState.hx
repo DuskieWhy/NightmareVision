@@ -2491,10 +2491,19 @@ class PlayState extends MusicBeatState
 		{
 			case 'bf', 'boyfriend', 'player':
 				positionData = getCharacterCameraPos(boyfriend);
+
+				positionData.x += X;
+				positionData.y += Y;
 			case 'dad', 'opponent':
 				positionData = getCharacterCameraPos(dad);
+
+				positionData.x += X;
+				positionData.y += Y;
 			case 'girlfriend', 'gf':
 				positionData = getGFCameraPos();
+
+				positionData.x += X;
+				positionData.y += Y;
 			case 'position':
 				positionData.x = X;
 				positionData.y = Y;
