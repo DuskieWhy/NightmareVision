@@ -2579,7 +2579,7 @@ class PlayState extends MusicBeatState
 		if (camTwn[0] != null)
 			camTwn[0].cancel();
 
-		var targetZoom = zoom * (zoomType.toLowerCase() == "absolute" ? FlxCamera.defaultZoom : stage.stageData.defaultZoom);
+		var targetZoom = zoom * ((zoomType.toLowerCase() == "absolute" || zoomType.toLowerCase() == "direct") ? FlxCamera.defaultZoom : stage.stageData.defaultZoom);
 
 		if (ease.toLowerCase() == 'instant')
 		{
