@@ -34,7 +34,7 @@
 
     <!--ENGINE CUSTOMIZATION-->
     <define name="MODS_ALLOWED" if="desktop" />
-    <define name="VIDEOS_ALLOWED" if="cpp" />
+    <define name="VIDEOS_ALLOWED" if="desktop || mobile" />
     <define name="DISCORD_ALLOWED" if="desktop"/>
 
     <!-- _____________________________ Path Settings ____________________________ -->
