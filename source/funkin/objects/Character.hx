@@ -113,9 +113,11 @@ class Character extends Bopper
 	public var ghostAlpha:Float = 0.6;
 	
 	/**
-	 * Last hit row index
+	 * The hit time of the last note in milliseconds.
+	 * 
+	 * Only used for double note ghosts.
 	 */
-	public var mostRecentRow:Int = 0; // for ghost anims n shit
+	public var lastHitTime:Float = -1000;
 	
 	// Used on Character Editor
 	public var isPlayerInEditor:Null<Bool> = null;

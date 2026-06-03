@@ -37,7 +37,7 @@ class DiscordClient
 	 * 
 	 * use `changePresence` to change the displayed presence
 	 */
-	public static final discordPresence:DiscordRichPresence = DiscordRichPresence.create();
+	public static final discordPresence:DiscordRichPresence = new DiscordRichPresence();
 	
 	/**
 	 * The string value of the currently connected discord user.
@@ -50,13 +50,13 @@ class DiscordClient
 	 */
 	public static function init()
 	{
-		final discordEventHandlers = DiscordEventHandlers.create();
+		final discordEventHandlers = new DiscordEventHandlers();
 		
 		discordEventHandlers.ready = cpp.Function.fromStaticFunction(onReady);
 		discordEventHandlers.errored = cpp.Function.fromStaticFunction(onError);
 		discordEventHandlers.disconnected = cpp.Function.fromStaticFunction(onDisconnect);
 		
-		Discord.Initialize(rpcId, cpp.RawPointer.addressOf(discordEventHandlers), 1, null);
+		Discord.Initialize(rpcId, cpp.RawPointer.addressOf(discordEventHandlers), true, null);
 		
 		if (thread == null)
 		{

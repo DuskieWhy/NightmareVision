@@ -327,71 +327,9 @@ class PlayField extends FlxTypedContainer<StrumNote>
 		var chars:Array<Null<Character>> = note.gfNote ? [PlayState.instance.gf] : field.singers;
 		if (note.owner != null) chars = [note.owner];
 		
-		final noteRows = PlayState.instance.noteRows;
-		
 		for (char in chars)
-		{
-			if (note.noAnimation || char == null) continue;
+			if (char != null) characterSing(char, note, field.playerControls);
 			
-			if (!note.hitCausesMiss)
-			{
-				var daAlt = '';
-				if (note.noteType == 'Alt Animation') daAlt = '-alt';
-				
-				final animToPlay = _skin.singAnimations[Std.int(Math.abs(note.noteData))] + daAlt;
-				
-				char.holdTimer = 0;
-				if (field.playerControls) char.holding = true;
-				
-				// ghost stuff
-				final chord = noteRows[field.ID][note.row];
-				
-				if (!(char.vSliceSustains && note.isSustainNote))
-				{
-					if (ClientPrefs.jumpGhosts && char.ghostsEnabled && chord != null && chord.length > 1 && note.noteType != "Ghost Note")
-					{
-						final animNote = chord[0];
-						daAlt = animNote.noteType == 'Alt Animation' ? '-alt' : '';
-						final realAnim = _skin.singAnimations[Std.int(Math.abs(animNote.noteData))] + daAlt;
-						
-						if (char.mostRecentRow != note.row) char.playAnim(realAnim, true);
-						
-						if (note.nextNote != null && note.prevNote != null)
-						{
-							if (note != animNote && !note.nextNote.isSustainNote) char.playGhostAnim(chord.indexOf(note), animToPlay, true);
-							else if (note.nextNote.isSustainNote)
-							{
-								char.playAnim(realAnim, true);
-								char.playGhostAnim(chord.indexOf(note), animToPlay, true);
-							}
-						}
-						char.mostRecentRow = note.row;
-					}
-					else
-					{
-						if (note.noteType != "Ghost Note") char.playAnim(animToPlay, true);
-						else char.playGhostAnim(note.noteData, animToPlay, true);
-					}
-				}
-				
-				switch (note.noteType)
-				{
-					case 'Hey!' if (char.animation.exists('hey')):
-						char.playAnimForDuration('hey', 0.6);
-						char.specialAnim = true;
-				}
-			}
-			else
-			{
-				switch (note.noteType)
-				{
-					case 'Hurt Note' if (char.animation.exists('hurt')):
-						char.playAnim('hurt', true);
-						char.specialAnim = true;
-				}
-			}
-		}
-		
 		note.wasGoodHit = true;
 		
 		var shouldSplash:Bool = true;
@@ -484,6 +422,55 @@ class PlayField extends FlxTypedContainer<StrumNote>
 			FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
 			
 			if (char.animTimer <= 0) char.playAnim(_skin.singAnimations[Std.int(Math.abs(key))] + 'miss', true);
+		}
+	}
+	
+	@:access(funkin.states.PlayState)
+	public static function characterSing(char:Character, note:Note, hold:Bool = false)
+	{
+		if (note.noAnimation) return;
+		
+		final animToPlay = note.skin.singAnimations[Std.int(Math.abs(note.noteData))] + note.animSuffix;
+		
+		char.holdTimer = 0;
+		
+		if (hold && !note.playField?.autoPlayed)
+		{
+			PlayState.instance?.holders.push(char);
+			
+			char.holding = true;
+		}
+		
+		switch (note.noteType)
+		{
+			case 'Hey!' if (char.animation.exists('hey')):
+				char.playAnimForDuration('hey', 0.6);
+				char.specialAnim = true;
+				return;
+		}
+		
+		// ghost stuff
+		
+		if (!char.vSliceSustains || !note.isSustainNote)
+		{
+			if (note.noteType == "Ghost Note")
+			{
+				char.playGhostAnim(note.noteData, animToPlay, true);
+			}
+			else
+			{
+				final ghostAnim:String = char.getAnimName();
+				
+				if (!note.isSustainNote && Math.abs(char.lastHitTime - note.strumTime) < 3 && ClientPrefs.jumpGhosts
+					&& PlayState.instance?.scripts.call('onGhostAnim', [ghostAnim, note]) != ScriptConstants.STOP_FUNC)
+				{
+					char.playGhostAnim(note.noteData, ghostAnim, true);
+				}
+				
+				char.playAnim(animToPlay, true);
+				
+				if (!note.isSustainNote || note.prevNote?.isSustainNote) char.lastHitTime = note.strumTime;
+			}
 		}
 	}
 	

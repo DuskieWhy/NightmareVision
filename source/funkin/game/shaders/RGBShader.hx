@@ -112,13 +112,13 @@ class BackendRGB extends FlxShader
 		attribute float a_alpha;
 		attribute float a_flash;
 	
-		out vec3 _r;
-		out vec3 _g;
-		out vec3 _b;
-        out float _mult;
+		varying vec3 _r;
+		varying vec3 _g;
+		varying vec3 _b;
+        varying float _mult;
 
-        out float _a_alpha;
-        out float _a_flash;
+        varying float _a_alpha;
+        varying float _a_flash;
 
 		void main()
 		{
@@ -134,13 +134,13 @@ class BackendRGB extends FlxShader
 	@:glFragmentHeader('
 		#pragma header
 
-        in vec3 _r;
-		in vec3 _g;
-		in vec3 _b;
-        in float _mult;
+        varying vec3 _r;
+		varying vec3 _g;
+		varying vec3 _b;
+        varying float _mult;
 
-        in float _a_alpha;
-        in float _a_flash;
+        varying float _a_alpha;
+        varying float _a_flash;
 
 		vec4 flixel_texture2DCustom(sampler2D bitmap, vec2 coord) 
 		{
@@ -193,99 +193,99 @@ class BackendRGB extends FlxShader
 
 class RGBShader
 {
-    public var shader:UserRGB;
-    
-    public var r(default, set):FlxColor;
-    public var g(default, set):FlxColor;
-    public var b(default, set):FlxColor;
-    public var mult(default, set):Float;
-    public var alpha(default, set):Float;
-    public var flash(default, set):Float;
-    public var enabled(default, set):Bool;
-    
-    public function new(r:FlxColor = 0xFFFF0000, g:FlxColor = 0xFF00FF00, b:FlxColor = 0xFF0000FF, mult:Float = 1.0, alpha:Float = 1.0, flash:Float = 0.0)
-    {
-        shader = new UserRGB();
-        
-        // Initialize the uniform values explicitly so OpenFL creates the arrays
-        shader.data.r.value = [0.0, 0.0, 0.0];
-        shader.data.g.value = [0.0, 0.0, 0.0];
-        shader.data.b.value = [0.0, 0.0, 0.0];
-        shader.data.mult.value = [1.0];
-        shader.data.u_alpha.value = [1.0];
-        shader.data.u_flash.value = [0.0];
-        shader.data.u_enabled.value = [true];
-
-        this.r = r;
-        this.g = g;
-        this.b = b;
-        this.mult = mult;
-        this.alpha = alpha;
-        this.flash = flash;
-        this.enabled = true;
-    }
-    
-    public function getColors():Array<FlxColor>
-    {
-        return [r, g, b];
-    }
-    
-    public function setColors(colors:Array<FlxColor>)
-    {
-        r = colors[0];
-        g = colors[1];
-        b = colors[2];
-    }
-    
-    private function set_r(value:FlxColor):FlxColor
-    {
-        r = value;
-        // Extract components and normalize to 0.0 - 1.0 range
-        shader.data.r.value = [value.redFloat, value.greenFloat, value.blueFloat];
-        return value;
-    }
-    
-    private function set_g(value:FlxColor):FlxColor
-    {
-        g = value;
-        shader.data.g.value = [value.redFloat, value.greenFloat, value.blueFloat];
-        return value;
-    }
-    
-    private function set_b(value:FlxColor):FlxColor
-    {
-        b = value;
-        shader.data.b.value = [value.redFloat, value.greenFloat, value.blueFloat];
-        return value;
-    }
-    
-    private function set_mult(value:Float):Float
-    {
-        mult = value;
-        shader.data.mult.value = [mult];
-        return value;
-    }
-    
-    private function set_alpha(value:Float):Float
-    {
-        alpha = value;
-        shader.data.u_alpha.value = [alpha];
-        return value;
-    }
-    
-    private function set_flash(value:Float):Float
-    {
-        flash = value;
-        shader.data.u_flash.value = [flash];
-        return value;
-    }
-
-    private function set_enabled(value:Bool):Bool
-    {
-        enabled = value;
-        shader.data.u_enabled.value = [enabled];
-        return value;
-    }
+	public var shader:UserRGB;
+	
+	public var r(default, set):FlxColor;
+	public var g(default, set):FlxColor;
+	public var b(default, set):FlxColor;
+	public var mult(default, set):Float;
+	public var alpha(default, set):Float;
+	public var flash(default, set):Float;
+	public var enabled(default, set):Bool;
+	
+	public function new(r:FlxColor = 0xFFFF0000, g:FlxColor = 0xFF00FF00, b:FlxColor = 0xFF0000FF, mult:Float = 1.0, alpha:Float = 1.0, flash:Float = 0.0)
+	{
+		shader = new UserRGB();
+		
+		// Initialize the uniform values explicitly so OpenFL creates the arrays
+		shader.data.r.value = [0.0, 0.0, 0.0];
+		shader.data.g.value = [0.0, 0.0, 0.0];
+		shader.data.b.value = [0.0, 0.0, 0.0];
+		shader.data.mult.value = [1.0];
+		shader.data.u_alpha.value = [1.0];
+		shader.data.u_flash.value = [0.0];
+		shader.data.u_enabled.value = [true];
+		
+		this.r = r;
+		this.g = g;
+		this.b = b;
+		this.mult = mult;
+		this.alpha = alpha;
+		this.flash = flash;
+		this.enabled = true;
+	}
+	
+	public function getColors():Array<FlxColor>
+	{
+		return [r, g, b];
+	}
+	
+	public function setColors(colors:Array<FlxColor>)
+	{
+		r = colors[0];
+		g = colors[1];
+		b = colors[2];
+	}
+	
+	private function set_r(value:FlxColor):FlxColor
+	{
+		r = value;
+		// Extract components and normalize to 0.0 - 1.0 range
+		shader.data.r.value = [value.redFloat, value.greenFloat, value.blueFloat];
+		return value;
+	}
+	
+	private function set_g(value:FlxColor):FlxColor
+	{
+		g = value;
+		shader.data.g.value = [value.redFloat, value.greenFloat, value.blueFloat];
+		return value;
+	}
+	
+	private function set_b(value:FlxColor):FlxColor
+	{
+		b = value;
+		shader.data.b.value = [value.redFloat, value.greenFloat, value.blueFloat];
+		return value;
+	}
+	
+	private function set_mult(value:Float):Float
+	{
+		mult = value;
+		shader.data.mult.value = [mult];
+		return value;
+	}
+	
+	private function set_alpha(value:Float):Float
+	{
+		alpha = value;
+		shader.data.u_alpha.value = [alpha];
+		return value;
+	}
+	
+	private function set_flash(value:Float):Float
+	{
+		flash = value;
+		shader.data.u_flash.value = [flash];
+		return value;
+	}
+	
+	private function set_enabled(value:Bool):Bool
+	{
+		enabled = value;
+		shader.data.u_enabled.value = [enabled];
+		return value;
+	}
 }
 
 class UserRGB extends FlxShader
