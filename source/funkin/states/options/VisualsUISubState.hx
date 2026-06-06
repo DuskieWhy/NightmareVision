@@ -37,7 +37,7 @@ class VisualsUISubState extends BaseOptionsMenu
 		var option:Option = new Option('Flashing Lights', "Uncheck this if you're sensitive to flashing lights!", 'flashing', BOOL, true);
 		addOption(option);
 		
-		var option:Option = new Option('Jump Ghosts', "If unchecked, disables characters playing a 'ghost' animation on jumps.", 'jumpGhosts', BOOL, false);
+		var option:Option = new Option('Double Note Ghosts', "If unchecked, disables characters playing a 'ghost' animation on doubles.", 'jumpGhosts', BOOL, false);
 		addOption(option);
 		
 		var option:Option = new Option('Camera Note Follow', "If unchecked, hitting notes will no longer have the camera follow in its direction.", 'camFollowsCharacters', BOOL, true);

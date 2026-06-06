@@ -40,7 +40,9 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 			'fpsDisplayType', STRING, 'Simple', ['Simple', 'Advanced', 'Disabled']);
 		addOption(option);
 		
-		var option:Option = new Option('VSync Mode: ', "When enabled, the game attempts to match the framerate with your monitor's refresh rate.", 'vSyncMode', STRING, 'Off', ['Off', 'On']);
+		var option:Option = new Option('VSync Mode: ',
+			"When enabled, the game attempts to match the framerate with your monitor's refresh rate.",
+			'vSyncMode', STRING, 'Off', ['Off', 'On', 'Adaptive']);
 		addOption(option);
 		
 		option.onChange = onChangeVSyncMode;
