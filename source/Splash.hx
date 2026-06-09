@@ -7,6 +7,9 @@ import funkin.states.TitleState;
 #if VIDEOS_ALLOWED
 import funkin.video.FunkinVideoSprite;
 #end
+#if MODS_ALLOWED
+import funkin.Mods;
+#end
 
 using StringTools;
 
@@ -14,6 +17,9 @@ using StringTools;
 class Splash extends FlxState
 {
 	var _cachedAutoPause:Bool;
+	#if MODS_ALLOWED
+	var noMods:Bool = false;
+	#end
 	
 	var spriteEvents:FlxTimer;
 	var logo:FlxSprite;
@@ -72,6 +78,29 @@ class Splash extends FlxState
 	function logoFunc()
 	{
 		var folder:Array<String> = [];
+		#if MODS_ALLOWED
+		if (Mods.currentModDirectory != null && Mods.currentModDirectory.length > 0 || !noMods)
+		{
+			if (!FileSystem.isDirectory('content/${Mods.currentModDirectory}/images/branding/watermarks') || (folder = FileSystem.readDirectory('content/${Mods.currentModDirectory}/images/branding/watermarks'))
+				.length == 0)
+			{
+				noMods = true;
+			}
+		}
+		if (Mods.currentModDirectory == null && Mods.currentModDirectory.length == 0 || noMods)
+		{
+			if (!FileSystem.isDirectory('assets/images/branding/watermarks') || (folder = FileSystem.readDirectory('assets/images/branding/watermarks')).length == 0)
+			{
+				finish();
+				return;
+			}
+		}
+		
+		if (Mods.currentModDirectory != null && Mods.currentModDirectory.length > 0) folder = folder.filter(str ->
+			!FileSystem.isDirectory('content/${Mods.currentModDirectory}/images/branding/watermarks/$str'));
+			
+		if (Mods.currentModDirectory == null && Mods.currentModDirectory.length == 0) folder = folder.filter(str -> !FileSystem.isDirectory('assets/images/branding/watermarks/$str'));
+		#else
 		if (!FileSystem.isDirectory('assets/images/branding/watermarks') || (folder = FileSystem.readDirectory('assets/images/branding/watermarks')).length == 0)
 		{
 			finish();
@@ -79,6 +108,7 @@ class Splash extends FlxState
 		}
 		
 		folder = folder.filter(str -> !FileSystem.isDirectory('assets/images/branding/watermarks/$str'));
+		#end
 		
 		var img = FlxG.random.getObject(folder);
 		trace(folder);
