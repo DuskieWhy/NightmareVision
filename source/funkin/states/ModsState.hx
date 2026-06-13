@@ -99,9 +99,11 @@ class ModsState extends MusicBeatState
 		changeDir(0);
 
 		FlxG.mouse.visible = true;
+
+		super.create();
 	}
 	
-	override public function update(elapsed)
+	override public function update(elapsed:Float)
 	{
 		if (controls.UI_UP_P)
 		{
@@ -133,6 +135,13 @@ class ModsState extends MusicBeatState
 			}
 			else FlxG.switchState(() -> {
 				new MainMenuState();
+			});
+		}
+
+		if (FlxG.mouse.overlaps(editButton) && FlxG.mouse.justPressed)
+		{
+			FlxG.switchState(() -> {
+				new funkin.states.editors.ModMetaEditorState(modList[curDir].folder);
 			});
 		}
 

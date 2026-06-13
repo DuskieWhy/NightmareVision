@@ -1,0 +1,22 @@
+<collapsible-dialog title="Metadata Editor" width="300" height="300" closable="false">
+
+    <tabview id="modMetaTabs" width="100%" height="100%" styleName="full-width-buttons">
+
+        <box text="Mod Meta">
+            <grid columns="2">
+                <vbox>
+                    <label text="Mod Name" verticalAlign="left" />
+                    <textfield placeholder="Template Mod" width="150" id="modNameTextField"/>
+
+                    <label text="Description" verticalAlign="center" />
+                    <textfield placeholder="Placeholder Desc" width="150" id="descTextField"/>
+
+                    <label text="Icon File" verticalAlign="center" />
+                    <textfield placeholder="branding/icon/icon64" width="150" id="iconFileTextField"/>
+
+                    <checkbox text="Apply Globally?" id="globalCheckbox" verticalAlign="center" tooltip="If enabled, this mod will apply to every other mod you have enabled."/>
+                </vbox>
+            </grid>
+        </box>
+    </tabview>
+</collapsible-dialog>
