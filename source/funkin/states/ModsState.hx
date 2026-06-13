@@ -25,6 +25,8 @@ class ModsState extends MusicBeatState
 	var modList:Array<ModData> = [];
 	var curDir:Int = 0;
 	var reset:Bool = false;
+
+	var editButton:FlxSprite;
 	
 	public static var topMod:String = '';
 	
@@ -90,8 +92,13 @@ class ModsState extends MusicBeatState
 		
 		add(new FlxSprite().loadGraphic(Paths.image("menus/mods/menuborder1")));
 		add(new FlxSprite(685, 645).loadGraphic(Paths.image("menus/mods/menuborder2")));
+
+		editButton = new FlxSprite(1100, 625).loadGraphic(Paths.image("menus/mods/menuedit"));
+		add(editButton);
 		
 		changeDir(0);
+
+		FlxG.mouse.visible = true;
 	}
 	
 	override public function update(elapsed)
@@ -128,6 +135,8 @@ class ModsState extends MusicBeatState
 				new MainMenuState();
 			});
 		}
+
+		super.update(elapsed);
 	}
 	
 	function changeDir(change:Int = 0)
