@@ -16,64 +16,119 @@ on: # Workflow triggers on both when a commit is pushed, or when a pull request 
                 required: false
                 type: string
 
+env:
+     HAXE_VERSION: 4.3.7
+     HXCPP_COMPILE_CACHE: ${{ github.workspace }}/.hxcpp_cache
+
 
 jobs: # FUCK MY LIFE BROOOOO
     Windows:
         runs-on: windows-latest
 
         steps:
-            - uses: actions/checkout@v6.0.2
+            - uses: actions/checkout@v6.0.3
               with:
                 submodules: true
-            - uses: krdlab/setup-haxe@master
+            - uses: krdlab/setup-haxe@v2.1.0
 
               with: 
-                haxe-version: 4.3.7
+                haxe-version: ${{ env.HAXE_VERSION }}
 
             - name: Install libs
+              shell: pwsh
               run: |
-                haxelib setup C:/haxelib
-                haxelib install hxcpp > nul --quiet
-                haxelib install hxpkg --quiet
-                haxelib run hxpkg install
-                haxelib run lime rebuild hxcpp windows -clean
-                haxelib run lime rebuild lime windows -clean
-                haxelib run lime rebuild cpp
+                function Run {
+                  $exe = $args[0]
+                  $cmdArgs = @()
+                  if ($args.Length -gt 1) {
+                    $cmdArgs = $args[1..($args.Length - 1)]
+                  }
+                  Write-Host ">>> $exe $($cmdArgs -join ' ')"
+                  & $exe @cmdArgs
+                  if ($LASTEXITCODE -ne 0) {
+                    Write-Error "Command failed with exit code ${LASTEXITCODE}: $exe $($cmdArgs -join ' ')"
+                    exit $LASTEXITCODE
+                  }
+                }
+                Run haxelib setup C:/haxelib
+                Run haxelib install hxpkg --quiet
+                Run haxelib run hxpkg install
+                if (Test-Path .haxelib/lime) {
+                  Remove-Item -Recurse -Force -LiteralPath .haxelib/lime
+                }
+                Run git clone https://github.com/FunkinCrew/lime .haxelib/lime/git
+                Run git -C .haxelib/lime/git fetch --all --tags --prune
+                Run git -C .haxelib/lime/git checkout 6421de16b9dfa4fb55c19f12db65d392a57585c8
+                Run git -C .haxelib/lime/git submodule sync --recursive
+                Run git -C .haxelib/lime/git submodule update --init --recursive --force
+                Run haxelib dev lime .haxelib/lime/git
+                if (Test-Path .haxelib/lime/git/project/obj) {
+                  Remove-Item -Recurse -Force -LiteralPath .haxelib/lime/git/project/obj
+                }
+                if (Test-Path .haxelib/lime/git/ndll) {
+                  Remove-Item -Recurse -Force -LiteralPath .haxelib/lime/git/ndll
+                }
+                Run haxelib path lime
+                Run haxelib run lime rebuild cpp -release
+                
             - name: Compile build
               run: haxelib run lime build windows -D ${{inputs.buildFlags}}
             - name: Publish artifact
-              uses: actions/upload-artifact@v7.0.0
+              uses: actions/upload-artifact@v7.0.1
               with:
                 name: NightmareVision (Windows)
                 path: export/release/windows/bin
     #
     Linux:
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-24.04
 
         steps:
-            - uses: actions/checkout@v6.0.2
+            - uses: actions/checkout@v6.0.3
               with:
                 submodules: true
-            - uses: krdlab/setup-haxe@master
+            - uses: krdlab/setup-haxe@v2.1.0
 
               with:
-                haxe-version: 4.3.7
+                haxe-version: ${{ env.HAXE_VERSION }}
             
-            - name: Install LibVLC
+            - name: Install system dependencies
               run: |
-                sudo apt-get install vlc libvlc-dev libvlccore-dev vlc-bin
+                sudo apt-get update
+                sudo apt-get install -y \
+                  build-essential gcc-13 g++-13 vlc libvlc-dev libvlccore-dev vlc-bin \
+                  libwayland-dev libwayland-bin wayland-protocols libasound2-dev \
+                  libpulse-dev libjack-jackd2-dev libpipewire-0.3-dev libgl1-mesa-dev \
+                  libegl1-mesa-dev libglu1-mesa-dev libdbus-1-dev libudev-dev \
+                  libxkbcommon-dev libx11-dev libxext-dev libx11-xcb-dev libxfixes-dev \
+                  libxss-dev libxrender-dev libxrandr-dev libxcursor-dev libxi-dev \
+                  libxinerama-dev libxxf86vm-dev libgbm-dev libdrm-dev libdecor-0-dev \
+                  libvulkan-dev pkg-config
             - name: Install libs
+              env:
+                CC: gcc-13
+                CXX: g++-13
               run: |
+                set -euo pipefail
                 haxelib setup ~/haxelib
-                haxelib install hxcpp > /dev/null --quiet
                 haxelib install hxpkg --quiet
                 haxelib run hxpkg install
-                haxelib run lime rebuild hxcpp cpp -clean
-                haxelib run lime rebuild cpp -clean
+                rm -rf .haxelib/lime
+                git clone https://github.com/FunkinCrew/lime .haxelib/lime/git
+                git -C .haxelib/lime/git checkout 6421de16b9dfa4fb55c19f12db65d392a57585c8
+                git -C .haxelib/lime/git submodule update --init --recursive --force
+                haxelib dev lime .haxelib/lime/git
+                haxelib run lime rebuild cpp -release
+                if [ ! -f .haxelib/lime/git/ndll/Linux64/lime.ndll ]; then
+                  echo "ERROR: Missing Lime ndll"
+                  exit 1
+                fi
             - name: Compile build
+              env:
+                CC: gcc-13
+                CXX: g++-13
               run: haxelib run lime build Project.xml linux -D ${{inputs.buildFlags}}
             - name: Publish artifact
-              uses: actions/upload-artifact@v7.0.0
+              uses: actions/upload-artifact@v7.0.1
               with:
                 name: NightmareVision (Linux)
-                path: 'export/release/linux/bin'
+                path: export/release/linux/bin
