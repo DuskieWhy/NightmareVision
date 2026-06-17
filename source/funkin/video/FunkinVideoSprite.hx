@@ -5,7 +5,7 @@ import funkin.input.Controls;
 
 #if VIDEOS_ALLOWED
 import hxvlc.flixel.FlxVideoSprite;
-import hxvlc.util.Location;
+import hxvlc.openfl.Location;
 
 // with hxvlcs improvements this is less needed but still has its values
 
