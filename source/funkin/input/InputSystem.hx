@@ -47,7 +47,7 @@ class InputSystem extends EventDispatcher implements flixel.util.IFlxDestroyable
 	/**
 	 * The list of actions checked for, in order of their note direction
 	 */
-	public static final ACTION_LIST:Array<Action> = [NOTE_LEFT, NOTE_DOWN, NOTE_UP, NOTE_RIGHT];
+	public static var ACTION_LIST:Array<Action> = [NOTE_LEFT, NOTE_DOWN, NOTE_UP, NOTE_RIGHT];
 	
 	/**
 	 * The current controls instance used for this input system
@@ -99,9 +99,9 @@ class InputSystem extends EventDispatcher implements flixel.util.IFlxDestroyable
 			final justPressed:Action = '$action-press';
 			final justReleased:Action = '$action-release';
 			
-			pressedActions[noteData] = this.controls.actions.get(pressed) ?? throw "Missing Control Bind";
-			justPressedActions[noteData] = this.controls.actions.get(justPressed) ?? throw "Missing Control Bind";
-			justReleasedActions[noteData] = this.controls.actions.get(justReleased) ?? throw "Missing Control Bind";
+			pressedActions[noteData] = this.controls.actions.get(pressed) ?? throw "Missing Control Bind.\n[If your bind is modded-in, Was it named correctly?]";
+			justPressedActions[noteData] = this.controls.actions.get(justPressed) ?? throw "Missing Control Bind.\n[If your bind is modded-in, Was it named correctly?]";
+			justReleasedActions[noteData] = this.controls.actions.get(justReleased) ?? throw "Missing Control Bind.\n[If your bind is modded-in, Was it named correctly?]";
 			
 			justPressedKeyInputs[noteData] = [];
 			justReleasedKeyInputs[noteData] = [];

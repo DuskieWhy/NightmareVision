@@ -206,7 +206,7 @@ class ClientPrefs
 		'note_down' => [S, DOWN],
 		'note_up' => [W, UP],
 		'note_right' => [D, RIGHT],
-		'dodge' => [SPACE, NONE],
+		'note_dodge' => [SPACE, NONE],
 		'ui_left' => [A, LEFT],
 		'ui_down' => [S, DOWN],
 		'ui_up' => [W, UP],
@@ -229,9 +229,33 @@ class ClientPrefs
 		'note_down' => [DPAD_DOWN, A],
 		'note_left' => [DPAD_LEFT, X],
 		'note_right' => [DPAD_RIGHT, B],
+		'note_dodge' => [GUIDE]
 	];
 	
+	// using a separate map for custom binds to ensure the engine doesnt get confused on what binds are real and temporary
+	@saveVar(false, false) public static var customKeys:Map<Action, Array<FlxKey>> = [];
+	@saveVar(false, false) public static var customPad:Map<Action, Array<FlxGamepadInputID>> = [];
+	
 	public static var defaultGamepadBinds:Map<Action, Array<FlxGamepadInputID>> = null;
+	
+	public static function addCustomKey(name:String, keys:Array<FlxKey>)
+	{
+		if (name.length >= 1 && keys != null)
+		{
+			var tempKeys = keys;
+			while (tempKeys.length < 2)
+				tempKeys.push(NONE);
+				
+			customKeys.set(name, tempKeys);
+		}
+		
+		for (key in customKeys.keys())
+		{
+			final binds = customKeys.get(key);
+			
+			if (binds != null && binds.length >= 2 && !keyBinds.exists(key)) keyBinds.set(key, binds);
+		}
+	}
 	
 	public static function loadDefaultKeys()
 	{
