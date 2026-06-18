@@ -61,8 +61,6 @@ class Init extends FlxState
 		
 		funkin.backend.plugins.FullScreenPlugin.init();
 		
-		funkin.backend.plugins.ScreenshotPlugin.initialize();
-		
 		funkin.scripts.FunkinScript.init();
 		
 		#if VIDEOS_ALLOWED
