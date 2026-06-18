@@ -132,9 +132,9 @@ class TitleState extends MusicBeatState
 		
 		final pressedEnter:Bool = FlxG.gamepads.lastActive?.justPressed.START || FlxG.keys.justPressed.ENTER || controls.ACCEPT;
 		
-		if (!transitioning && skippedIntro)
+		if (skippedIntro)
 		{
-			if (pressedEnter && scriptGroup.call('onEnter', []) != ScriptConstants.STOP_FUNC)
+			if (pressedEnter && scriptGroup.call('onEnter', []) != ScriptConstants.STOP_FUNC && !transitioning)
 			{
 				FlxG.camera.flash(ClientPrefs.flashing ? FlxColor.WHITE : 0x4CFFFFFF, 1);
 				transitioning = true;
@@ -150,6 +150,12 @@ class TitleState extends MusicBeatState
 					FlxG.switchState(MainMenuState.new);
 					closedState = true;
 				});
+			}
+			else if (pressedEnter && transitioning) 
+			{
+				CoolUtil.setTransSkip(true, false);
+				FlxG.switchState(MainMenuState.new);
+				closedState = true;
 			}
 		}
 		

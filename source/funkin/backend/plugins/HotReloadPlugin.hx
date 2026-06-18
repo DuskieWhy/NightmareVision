@@ -33,6 +33,12 @@ class HotReloadPlugin extends FlxBasic
 		#if !debug
 		if (!ClientPrefs.inDevMode) return;
 		#end
+
+		if (FlxG.keys.justPressed.F3)
+		{
+			final fpsTypeArray:Array<String> = ['Simple', 'Advanced', 'Disabled'];
+			ClientPrefs.fpsDisplayType = fpsTypeArray[FlxMath.wrap(fpsTypeArray.indexOf(ClientPrefs.fpsDisplayType) + 1, 0, fpsTypeArray.length - 1)];
+		}
 		
 		if (FlxG.keys.justPressed.F5)
 		{

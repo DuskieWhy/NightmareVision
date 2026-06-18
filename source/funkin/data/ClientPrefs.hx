@@ -37,6 +37,8 @@ class ClientPrefs
 	// debug ------------------------------------------------------------------------//
 	@saveVar public static var inDevMode:Bool = false;
 	
+	@saveVar public static var discordEnabled:Bool = true;
+	
 	@saveVar public static var fpsDisplayType:String = 'Simple';
 	
 	@saveVar public static var streamedMusic:Bool = false;
@@ -44,6 +46,7 @@ class ClientPrefs
 	@saveVar public static var autoPause:Bool = true;
 	
 	@saveVar public static var fancyPreview:Bool = true;
+
 	@saveVar public static var previewOnSave:Bool = true;
 	
 	// graphics ------------------------------------------------------------------------//
