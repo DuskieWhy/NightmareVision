@@ -175,24 +175,6 @@ class FlxMacro
 		return fields;
 	}
 	
-	/**
-	 * Adds zIndex to `FlxBasic`'
-	 */
-	public static macro function buildFlxBasic():Array<haxe.macro.Expr.Field>
-	{
-		var fields:Array<haxe.macro.Expr.Field> = Context.getBuildFields();
-		
-		fields.push(
-			{
-				name: "zIndex",
-				access: [haxe.macro.Expr.Access.APublic],
-				kind: FVar(macro :Int, macro $v{0}),
-				pos: Context.currentPos(),
-			});
-			
-		return fields;
-	}
-	
 	public static macro function buildFlxCamera():Array<haxe.macro.Expr.Field>
 	{
 		var fields:Array<haxe.macro.Expr.Field> = Context.getBuildFields();
@@ -312,7 +294,7 @@ class FlxMacro
 									$expr;
 									rgbShader = null;
 									// looks confusing im just making "ArrayTools.clear(rgbR)", "ArrayTools.clear(rgbG)", etc..
-									$b{[for (i in shaderParams) macro funkin.utils.tools.ArrayTools.clear(this.$i)]}
+									$b{[for (i in shaderParams) macro funkin.utils.ArrayUtil.clear(this.$i)]}
 								}
 						default:
 							throw "Invalid field";

@@ -51,44 +51,43 @@ class Splash extends FlxState
 		{
 			logo.updateHitbox();
 			logo.screenCenter();
-			
-			if (FlxG.keys.justPressed.SPACE || FlxG.keys.justPressed.ENTER)
-			{
-				finish();
-			}
 		}
-		#if VIDEOS_ALLOWED
-		if (video != null)
+		
+		if (FlxG.keys.justPressed.SPACE || FlxG.keys.justPressed.ENTER)
 		{
-			if (FlxG.keys.justPressed.SPACE || FlxG.keys.justPressed.ENTER)
-			{
-				finish();
-			}
+			finish();
 		}
-		#end
 		super.update(elapsed);
 	}
 	
 	function logoFunc()
 	{
-		var folder:Array<String> = [];
-		if (!FileSystem.isDirectory('assets/images/branding/watermarks') || (folder = FileSystem.readDirectory('assets/images/branding/watermarks')).length == 0)
+		var files = Paths.listAllFilesInDirectory('images/branding/watermarks');
+		
+		if (files.length == 0)
 		{
 			finish();
 			return;
 		}
 		
-		folder = folder.filter(str -> !FileSystem.isDirectory('assets/images/branding/watermarks/$str'));
+		files = files.filter(str -> !FileSystem.isDirectory('assets/images/branding/watermarks/$str'));
 		
-		var img = FlxG.random.getObject(folder);
-		trace(folder);
+		final imgPath:String = Path.withoutDirectory(Path.withoutExtension(FlxG.random.getObject(files)));
 		
-		logo = new FlxSprite().loadGraphic(Paths.image('branding/watermarks/${Path.withoutExtension(img)}'));
+		trace(files);
+		
+		logo = new FlxSprite().loadGraphic(Paths.image('branding/watermarks/$imgPath'));
 		logo.screenCenter();
 		logo.visible = false;
 		add(logo);
 		
-		spriteEvents = new FlxTimer().start(1, (stupidFuckingTimer:FlxTimer) -> {
+		final logoScale:Float = Math.min(FlxG.width / logo.width, FlxG.height / logo.height) * 0.8;
+		
+		logo.scale.set(logoScale, logoScale);
+		
+		logo.antialiasing = !imgPath.endsWith('-pixel');
+		
+		spriteEvents = new FlxTimer().start(1, (tmr:FlxTimer) -> {
 			var step = 0;
 			new FlxTimer().start(0.25, (t:FlxTimer) -> {
 				switch (step++)
@@ -97,17 +96,17 @@ class Splash extends FlxState
 						FlxG.sound.volume = 1;
 						FlxG.sound.play(Paths.sound('intro'));
 						logo.visible = true;
-						logo.scale.set(0.2, 1.25);
+						logo.scale.set(0.2 * logoScale, 1.25 * logoScale);
 						t.reset(0.06125);
 					case 1:
-						logo.scale.set(1.25, 0.5);
+						logo.scale.set(1.25 * logoScale, 0.5 * logoScale);
 						t.reset(0.06125);
 					case 2:
-						logo.scale.set(1.125, 1.125);
-						FlxTween.tween(logo.scale, {x: 1, y: 1}, 0.25, {ease: FlxEase.elasticOut});
+						logo.scale.set(1.125 * logoScale, 1.125 * logoScale);
+						FlxTween.tween(logo.scale, {x: 1 * logoScale, y: 1 * logoScale}, 0.25, {ease: FlxEase.elasticOut});
 						t.reset(1.25);
 					case 3:
-						FlxTween.tween(logo.scale, {x: 0.2, y: 0.2}, 1.5, {ease: FlxEase.quadIn});
+						FlxTween.tween(logo.scale, {x: 0.2 * logoScale, y: 0.2 * logoScale}, 1.5, {ease: FlxEase.quadIn});
 						FlxTween.tween(logo, {alpha: 0}, 1.5,
 							{
 								ease: FlxEase.quadIn,

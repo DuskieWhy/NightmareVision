@@ -7,7 +7,7 @@ import flixel.graphics.tile.FlxDrawBaseItem;
 
 import funkin.objects.note.Note;
 
-using funkin.utils.tools.ArrayTools;
+using funkin.utils.ArrayUtil;
 
 @:access(flixel.FlxCamera._currentDrawItem)
 class RGBGraphics

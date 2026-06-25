@@ -507,7 +507,7 @@ class Controls extends FlxActionSet
 		var copyKeys:Array<FlxKey> = keys.copy();
 		for (i in copyKeys)
 		{
-			if (i == NONE) copyKeys.remove(i);
+			if (i == -1) copyKeys.remove(i);
 		}
 		
 		for (_act in [name, '$name-press', '$name-release'])
@@ -528,7 +528,7 @@ class Controls extends FlxActionSet
 		var copyKeys:Array<FlxKey> = keys.copy();
 		for (i in copyKeys)
 		{
-			if (i == NONE) copyKeys.remove(i);
+			if (i == -1) copyKeys.remove(i);
 		}
 		
 		inline forEachBound(control, (action, state) -> addKeys(action, copyKeys, state));
@@ -543,7 +543,7 @@ class Controls extends FlxActionSet
 		var copyKeys:Array<FlxKey> = keys.copy();
 		for (i in copyKeys)
 		{
-			if (i == NONE) copyKeys.remove(i);
+			if (i == -1) copyKeys.remove(i);
 		}
 		
 		inline forEachBound(control, (action, _) -> removeKeys(action, copyKeys));
@@ -552,7 +552,7 @@ class Controls extends FlxActionSet
 	inline static function addKeys(action:FlxActionDigital, keys:Array<FlxKey>, state:FlxInputState)
 	{
 		for (key in keys)
-			if (key != NONE) action.addKey(key, state);
+			if (key != -1) action.addKey(key, state);
 	}
 	
 	static function removeKeys(action:FlxActionDigital, keys:Array<FlxKey>)
@@ -590,12 +590,10 @@ class Controls extends FlxActionSet
 				inline bindKeys(Control.PAUSE, keysMap.get('pause'));
 				inline bindKeys(Control.RESET, keysMap.get('reset'));
 				
-				trace('checking custom binds now [${customActions.keys()}]');
 				for (i in customActions.keys())
 				{
 					if (i.endsWith('-release') || i.endsWith('-press')) continue;
 					
-					trace(keysMap.get(i));
 					customBind(i, keysMap.get(i));
 				}
 				

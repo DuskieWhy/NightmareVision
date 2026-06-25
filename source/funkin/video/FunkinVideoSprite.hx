@@ -5,7 +5,11 @@ import funkin.input.Controls;
 
 #if VIDEOS_ALLOWED
 import hxvlc.flixel.FlxVideoSprite;
+#if (hxvlc > "2.2.6")
+import hxvlc.openfl.Location;
+#else
 import hxvlc.util.Location;
+#end
 
 // with hxvlcs improvements this is less needed but still has its values
 
