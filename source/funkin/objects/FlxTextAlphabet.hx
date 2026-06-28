@@ -9,8 +9,6 @@ class FlxTextAlphabet extends FlxText
     public var forceX:Float = Math.NEGATIVE_INFINITY;
 	public var targetY:Float = 0;
     public var isMenuItem:Bool = false;
-    public var changeX:Bool = true;
-    public var changeY:Bool = true;
 
     public var changeAxis:FlxAxes = XY;
 

@@ -992,12 +992,6 @@ class PlayState extends MusicBeatState
 			final splashGrp = strums.splashLayer;
 			splashGrp.camera = camHUD;
 			splashLayering.push(splashGrp);
-
-			if (lane == 1)
-			{
-				if (!ClientPrefs.opponentStrums) strums.baseAlpha = 0;
-				else if (ClientPrefs.middleScroll) strums.baseAlpha = 0.35;
-			}
 		}
 		
 		// this broke a lot so im adding it back sorry data

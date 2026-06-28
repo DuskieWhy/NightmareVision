@@ -109,13 +109,6 @@ typedef StageObject =
 	var ?scrollFactor:Array<Float>;
 
 	/**
-	 * The objects scroll Factor on the z
-	 * 
-	 * Default is 1
-	 */
-	var ?zoomFactor:Float;
-	
-	/**
 	 * Scale of the object as [x, y]
 	 * 
 	 * Default is [1, 1]

@@ -1,9 +1,9 @@
 package funkin.objects;
 
-import flixel.FlxSprite;
+import funkin.objects.FunkinSprite;
 
 @:nullSafety
-class BGSprite extends FlxSprite
+class BGSprite extends FunkinSprite //so you can use the zoomFactor variable on this object also
 {
 	var idleAnim:Null<String> = null;
 	
