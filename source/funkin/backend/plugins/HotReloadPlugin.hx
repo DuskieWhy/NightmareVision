@@ -2,6 +2,8 @@ package funkin.backend.plugins;
 
 import flixel.addons.transition.FlxTransitionableState;
 
+import funkin.input.Controls;
+
 /**
  * Plugin that allows easy state reloading
  * 
@@ -34,7 +36,7 @@ class HotReloadPlugin extends FlxBasic
 		if (!ClientPrefs.inDevMode) return;
 		#end
 
-		if (FlxG.keys.justPressed.F3)
+		if (Controls.instance.DISPLAY)
 		{
 			final fpsTypeArray:Array<String> = ['Simple', 'Advanced', 'Disabled'];
 			ClientPrefs.fpsDisplayType = fpsTypeArray[FlxMath.wrap(fpsTypeArray.indexOf(ClientPrefs.fpsDisplayType) + 1, 0, fpsTypeArray.length - 1)];

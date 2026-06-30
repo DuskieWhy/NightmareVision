@@ -40,6 +40,7 @@ class ControlsSubState extends MusicBeatSubstate
 	// separated the typedef groups into public static vars so that theyre easily moddable if u have custom keybinds
 	public static var NOTES_GROUP = [];
 	public static var UI_GROUP = [];
+	public static var WINDOW_GROUP = [];
 	public static var VOLUME_GROUP = [];
 	public static var DEBUG_GROUP = [];
 	
@@ -66,6 +67,12 @@ class ControlsSubState extends MusicBeatSubstate
 			{label: "Pause", action: PAUSE},
 			null,
 		];
+
+		WINDOW_GROUP = [
+			{label: "Screenshot", action: SCREENSHOT},
+			{label: "Fullscreen", action: FULLSCREEN},
+			null,
+		];
 		
 		VOLUME_GROUP = [
 			{label: "Mute", action: "volume_mute"},
@@ -75,8 +82,9 @@ class ControlsSubState extends MusicBeatSubstate
 		];
 		
 		DEBUG_GROUP = [
-			{label: "Key 1", action: "debug_1"},
-			{label: "Key 2", action: "debug_2"},
+			{label: "Chart", action: "debug_1"},
+			{label: "Char", action: "debug_2"},
+			{label: "Display", action: DISPLAY},
 			null,
 		];
 	}
@@ -120,6 +128,9 @@ class ControlsSubState extends MusicBeatSubstate
 		add(resetGamepadLabel);
 		
 		final group = new ControlsGroup("UI", UI_GROUP, group.groupLastIndex);
+		controlsGroup.add(group);
+
+		final group = new ControlsGroup("WINDOW", WINDOW_GROUP, group.groupLastIndex);
 		controlsGroup.add(group);
 		
 		final group = new ControlsGroup("VOLUME", VOLUME_GROUP, group.groupLastIndex);
@@ -420,7 +431,7 @@ class ControlsGroup extends FlxContainer
 		
 		for (option in options)
 		{
-			if (option != null) this.options.add(new ControlsOption(200, (80 * groupIndex), option.label, option.action));
+			if (option != null) this.options.add(new ControlsOption(100, (80 * groupIndex), option.label, option.action));
 			groupIndex++;
 		}
 		add(this.options);
@@ -445,7 +456,7 @@ class ControlsOption extends FlxSpriteContainer
 		this.label = new Alphabet(0, 0, label, true);
 		add(this.label);
 		
-		binds = new FlxTypedSpriteContainer<Alphabet>(400, -55);
+		binds = new FlxTypedSpriteContainer<Alphabet>(500, -55);
 		add(binds);
 		
 		this.action = action;

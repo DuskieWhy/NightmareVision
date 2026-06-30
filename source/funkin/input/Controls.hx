@@ -48,6 +48,11 @@ enum abstract Action(String) to String from String
 	var BACK = "back";
 	var PAUSE = "pause";
 	var RESET = "reset";
+
+	var SCREENSHOT = "screenshot";
+	var FULLSCREEN = "fullscreen";
+
+	var DISPLAY = "display";
 }
 
 enum Device
@@ -76,6 +81,9 @@ enum Control
 	ACCEPT;
 	BACK;
 	PAUSE;
+	SCREENSHOT;
+	FULLSCREEN;
+	DISPLAY;
 }
 
 enum KeyboardScheme
@@ -151,6 +159,10 @@ class Controls extends FlxActionSet
 	var _back = new FlxActionDigital(Action.BACK);
 	var _pause = new FlxActionDigital(Action.PAUSE);
 	var _reset = new FlxActionDigital(Action.RESET);
+
+	var _fullscreen = new FlxActionDigital(Action.FULLSCREEN);
+	var _screenshot = new FlxActionDigital(Action.SCREENSHOT);
+	var _display = new FlxActionDigital(Action.DISPLAY);
 	
 	public var actions:Map<Action, FlxActionDigital> = new Map<Action, FlxActionDigital>();
 	public var customActions:Map<Action, FlxActionDigital> = new Map<Action, FlxActionDigital>();
@@ -281,6 +293,18 @@ class Controls extends FlxActionSet
 	public var NOTE_DODGE_R(get, never):Bool;
 	
 	inline function get_NOTE_DODGE_R() return _note_dodgeR.check();
+
+	public var FULLSCREEN(get, never):Bool;
+	
+	inline function get_FULLSCREEN() return _fullscreen.check();
+
+	public var SCREENSHOT(get, never):Bool;
+	
+	inline function get_SCREENSHOT() return _screenshot.check();
+
+	public var DISPLAY(get, never):Bool;
+	
+	inline function get_DISPLAY() return _display.check();
 	
 	public function new(name, scheme = None)
 	{
@@ -317,6 +341,9 @@ class Controls extends FlxActionSet
 		add(_back);
 		add(_pause);
 		add(_reset);
+		add(_fullscreen);
+		add(_screenshot);
+		add(_display);
 		
 		for (action in digitalActions)
 			actions[action.name] = action;
@@ -341,6 +368,9 @@ class Controls extends FlxActionSet
 			case BACK: _back;
 			case PAUSE: _pause;
 			case RESET: _reset;
+			case FULLSCREEN: _fullscreen;
+			case SCREENSHOT: _screenshot;
+			case DISPLAY: _display;
 		}
 	}
 	
@@ -398,6 +428,12 @@ class Controls extends FlxActionSet
 				func(_pause, JUST_PRESSED);
 			case RESET:
 				func(_reset, JUST_PRESSED);
+			case FULLSCREEN:
+				func(_fullscreen, JUST_PRESSED);
+			case SCREENSHOT:
+				func(_screenshot, JUST_PRESSED);
+			case DISPLAY:
+				func(_display, JUST_PRESSED);
 		}
 	}
 	
@@ -589,6 +625,10 @@ class Controls extends FlxActionSet
 				inline bindKeys(Control.BACK, keysMap.get('back'));
 				inline bindKeys(Control.PAUSE, keysMap.get('pause'));
 				inline bindKeys(Control.RESET, keysMap.get('reset'));
+
+				inline bindKeys(Control.FULLSCREEN, keysMap.get('fullscreen'));
+				inline bindKeys(Control.SCREENSHOT, keysMap.get('screenshot'));
+				inline bindKeys(Control.DISPLAY, keysMap.get('display'));
 				
 				for (i in customActions.keys())
 				{
