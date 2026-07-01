@@ -425,7 +425,7 @@ class ControlsGroup extends FlxContainer
 	{
 		super();
 		
-		this.label = new Alphabet(0, (80 * groupIndex++) - 55, label);
+		this.label = new Alphabet(0, (80 * groupIndex++) - 55, label, true);
 		this.label.screenCenter(X);
 		add(this.label);
 		
@@ -456,7 +456,7 @@ class ControlsOption extends FlxSpriteContainer
 		this.label = new Alphabet(0, 0, label, true);
 		add(this.label);
 		
-		binds = new FlxTypedSpriteContainer<Alphabet>(500, -55);
+		binds = new FlxTypedSpriteContainer<Alphabet>(700, -55);
 		add(binds);
 		
 		this.action = action;

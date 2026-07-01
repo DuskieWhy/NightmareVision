@@ -17,7 +17,7 @@ class VisualsUISubState extends BaseOptionsMenu
 		var option:Option = new Option('Show Ratings', 'If checked, rating graphics will appear on your HUD.', 'showRatings', BOOL, true);
 		addOption(option);
 		
-		var option:Option = new Option('Health Bar Transparency', 'How much transparent should the health bar and icons be.', 'healthBarAlpha', PERCENT, 1);
+		var option:Option = new Option('Health Bar Transparency:', 'How much transparent should the health bar and icons be.', 'healthBarAlpha', PERCENT, 1);
 		option.scrollSpeed = 1.6;
 		option.minValue = 0.0;
 		option.maxValue = 1;
@@ -28,7 +28,7 @@ class VisualsUISubState extends BaseOptionsMenu
 		var option:Option = new Option('Underlay Type:', "What should the lane underlay do?", 'underlayType', STRING, 'Lane Underlay', UnderlayType.toArray());
 		addOption(option);
 		
-		var option:Option = new Option('Underlay Transparency', 'How much transparent should the health bar and icons be.', 'underlayOpacity', PERCENT, 0);
+		var option:Option = new Option('Underlay Transparency:', 'How much transparent should the health bar and icons be.', 'underlayOpacity', PERCENT, 0);
 		option.scrollSpeed = 1.6;
 		option.minValue = 0.0;
 		option.maxValue = 1;

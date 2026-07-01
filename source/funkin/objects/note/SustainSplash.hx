@@ -99,7 +99,7 @@ class SustainSplash extends FunkinSprite implements funkin.game.modchart.IModNot
 		_position();
 		
 		FlxTimer.wait(time, () -> {
-			if (isPlayer && ClientPrefs.noteSplashes) playAnim('end$data', true);
+			if (isPlayer && (ClientPrefs.noteSplashType == "Both" || ClientPrefs.noteSplashType == "Hold Covers")) playAnim('end$data', true);
 			else kill();
 		});
 	}

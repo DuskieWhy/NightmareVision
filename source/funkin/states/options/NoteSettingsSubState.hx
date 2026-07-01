@@ -13,7 +13,7 @@ class NoteSettingsSubState extends BaseOptionsMenu
 			'Colors notes in-game based on their step value. Helpful for timing your note hits.', 'quants', BOOL, false);
 		addOption(option);
 		
-		var option:Option = new Option('Note Splashes', "If unchecked, hitting \"Sick!\" or \"Kutty!\" notes won't show particles.", 'noteSplashes', BOOL, true);
+		var option:Option = new Option('Note Effects Type:', "Change your preferred splash type when hitting/holding a note.", 'noteSplashType', STRING, 'Both', ['Both', 'Note Splashes', 'Hold Covers', 'Disabled']);
 		addOption(option);
 		
 		var option:Option = new Option('Opponent Notes', 'If unchecked, opponent notes get hidden.', 'opponentStrums', BOOL, true);

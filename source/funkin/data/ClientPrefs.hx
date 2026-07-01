@@ -67,7 +67,7 @@ class ClientPrefs
 	// visuals ------------------------------------------------------------------------//
 	@saveVar public static var jumpGhosts:Bool = false;
 	
-	@saveVar public static var noteSplashes:Bool = true;
+	@saveVar public static var noteSplashType:String = 'Both';
 	
 	@saveVar public static var hideHud:Bool = false;
 	
@@ -225,7 +225,9 @@ class ClientPrefs
 		'volume_down' => [NUMPADMINUS, MINUS],
 		'debug_1' => [SEVEN, NONE],
 		'debug_2' => [EIGHT, NONE],
-		'display' => [F6, NONE]
+		'softreload' => [F5, NONE],
+		'hardreload' => [F6, NONE],
+		'display' => [F3, NONE]
 	];
 	
 	public static var defaultKeys:Map<Action, Array<FlxKey>> = null;

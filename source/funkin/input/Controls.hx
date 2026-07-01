@@ -53,6 +53,9 @@ enum abstract Action(String) to String from String
 	var FULLSCREEN = "fullscreen";
 
 	var DISPLAY = "display";
+
+	var SOFTRELOAD = "softreload";
+	var HARDRELOAD = "hardreload";
 }
 
 enum Device
@@ -84,6 +87,8 @@ enum Control
 	SCREENSHOT;
 	FULLSCREEN;
 	DISPLAY;
+	SOFTRELOAD;
+	HARDRELOAD;
 }
 
 enum KeyboardScheme
@@ -163,6 +168,9 @@ class Controls extends FlxActionSet
 	var _fullscreen = new FlxActionDigital(Action.FULLSCREEN);
 	var _screenshot = new FlxActionDigital(Action.SCREENSHOT);
 	var _display = new FlxActionDigital(Action.DISPLAY);
+
+	var _softreload = new FlxActionDigital(Action.SOFTRELOAD);
+	var _hardreload = new FlxActionDigital(Action.HARDRELOAD);
 	
 	public var actions:Map<Action, FlxActionDigital> = new Map<Action, FlxActionDigital>();
 	public var customActions:Map<Action, FlxActionDigital> = new Map<Action, FlxActionDigital>();
@@ -305,6 +313,14 @@ class Controls extends FlxActionSet
 	public var DISPLAY(get, never):Bool;
 	
 	inline function get_DISPLAY() return _display.check();
+
+	public var SOFTRELOAD(get, never):Bool;
+	
+	inline function get_SOFTRELOAD() return _softreload.check();
+
+	public var HARDRELOAD(get, never):Bool;
+	
+	inline function get_HARDRELOAD() return _hardreload.check();
 	
 	public function new(name, scheme = None)
 	{
@@ -344,6 +360,8 @@ class Controls extends FlxActionSet
 		add(_fullscreen);
 		add(_screenshot);
 		add(_display);
+		add(_softreload);
+		add(_hardreload);
 		
 		for (action in digitalActions)
 			actions[action.name] = action;
@@ -371,6 +389,8 @@ class Controls extends FlxActionSet
 			case FULLSCREEN: _fullscreen;
 			case SCREENSHOT: _screenshot;
 			case DISPLAY: _display;
+			case SOFTRELOAD: _softreload;
+			case HARDRELOAD: _hardreload;
 		}
 	}
 	
@@ -434,6 +454,10 @@ class Controls extends FlxActionSet
 				func(_screenshot, JUST_PRESSED);
 			case DISPLAY:
 				func(_display, JUST_PRESSED);
+			case SOFTRELOAD:
+				func(_softreload, JUST_PRESSED);
+			case HARDRELOAD:
+				func(_hardreload, JUST_PRESSED);
 		}
 	}
 	
@@ -629,6 +653,9 @@ class Controls extends FlxActionSet
 				inline bindKeys(Control.FULLSCREEN, keysMap.get('fullscreen'));
 				inline bindKeys(Control.SCREENSHOT, keysMap.get('screenshot'));
 				inline bindKeys(Control.DISPLAY, keysMap.get('display'));
+
+				inline bindKeys(Control.SOFTRELOAD, keysMap.get('softreload'));
+				inline bindKeys(Control.HARDRELOAD, keysMap.get('hardreload'));
 				
 				for (i in customActions.keys())
 				{

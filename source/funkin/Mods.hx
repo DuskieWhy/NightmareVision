@@ -269,6 +269,8 @@ class Mods
 	public static function getListAsArray(?top:String = ''):Array<{folder:String, enabled:Bool}>
 	{
 		var list:Array<{folder:String, enabled:Bool}> = [];
+
+		#if MODS_ALLOWED
 		var added:Array<String> = [];
 		if (top == null || top == '') top = currentModDirectory;
 		
@@ -306,6 +308,7 @@ class Mods
 				list.push({folder: folder, enabled: true});
 			}
 		}
+		#end
 		
 		return list;
 	}

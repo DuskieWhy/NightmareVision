@@ -36,7 +36,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		var option:Option = new Option('Disable Reset Button', "If checked, pressing Reset won't do anything.", 'noReset', BOOL, false);
 		addOption(option);
 		
-		var option:Option = new Option('Hitsound Volume', 'Funny notes does \"Tick!\" when you hit them."', 'hitsoundVolume', PERCENT, 0);
+		var option:Option = new Option('Hitsound Volume:', 'Funny notes does \"Tick!\" when you hit them."', 'hitsoundVolume', PERCENT, 0);
 		addOption(option);
 		option.scrollSpeed = 1.6;
 		option.minValue = 0.0;
@@ -45,7 +45,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		option.decimals = 1;
 		option.onChange = onChangeHitsoundVolume;
 		
-		var option:Option = new Option('Rating Offset', 'Changes how late/early you have to hit for a "Sick!"\nHigher values mean you have to hit later.', 'ratingOffset', INT, 0);
+		var option:Option = new Option('Rating Offset:', 'Changes how late/early you have to hit for a "Sick!"\nHigher values mean you have to hit later.', 'ratingOffset', INT, 0);
 		option.displayFormat = '%vms';
 		option.scrollSpeed = 20;
 		option.minValue = -30;
@@ -67,7 +67,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		
 		// this is usually 166.67 - AKA: Shit Window
 		// i won't change this to be an actual Shit window because it'd break too much to be worth it
-		var option:Option = new Option('Safe Frames', 'Changes how many frames you have for\nhitting a note earlier or late.', 'safeFrames', FLOAT, 10);
+		var option:Option = new Option('Safe Frames:', 'Changes how many frames you have for\nhitting a note earlier or late.', 'safeFrames', FLOAT, 10);
 		option.scrollSpeed = 5;
 		option.minValue = 2.0;
 		option.maxValue = 10.0;
@@ -84,7 +84,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 	
 	function addHitWindowOption(dName:String, prefID:String, min:Float = 15.0, max:Float = 200.0, scrollSpeed:Float = 15)
 	{
-		var option:Option = new Option('$dName Hit Window', 'Changes the amount of time you have\nfor hitting a "$dName" in milliseconds.', prefID, FLOAT, max);
+		var option:Option = new Option('$dName Hit Window:', 'Changes the amount of time you have\nfor hitting a "$dName" in milliseconds.', prefID, FLOAT, max);
 		option.displayFormat = '%vms';
 		option.scrollSpeed = scrollSpeed;
 		option.minValue = min;

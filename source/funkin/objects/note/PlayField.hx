@@ -544,7 +544,7 @@ class PlayField extends FlxTypedContainer<StrumNote>
 	
 	public function spawnSplash(note:Note):NoteSplash
 	{
-		if (ClientPrefs.noteSplashes
+		if ((ClientPrefs.noteSplashType == "Both" || ClientPrefs.noteSplashType == "Note Splashes")
 			&& note != null
 			&& !note.hitCausesMiss
 			&& !note.isSustainNote
@@ -574,7 +574,9 @@ class PlayField extends FlxTypedContainer<StrumNote>
 	
 	public function spawnSusSplash(note:Note, isPlayer:Bool = false):SustainSplash
 	{
-		if (_skin?.sustainSplashes && note.tail.length > 0)
+		if ((ClientPrefs.noteSplashType == "Both" || ClientPrefs.noteSplashType == "Hold Covers")
+			&& _skin?.sustainSplashes 
+			&& note.tail.length > 0)
 		{
 			final strum:Null<StrumNote> = note.playField.members[note.noteData];
 			if (strum != null)
