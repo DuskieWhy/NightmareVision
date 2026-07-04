@@ -17,8 +17,9 @@ on: # Workflow triggers on both when a commit is pushed, or when a pull request 
                 type: string
 
 env:
-     HAXE_VERSION: 4.3.7
-     HXCPP_COMPILE_CACHE: ${{ github.workspace }}/.hxcpp_cache
+    HAXE_VERSION: 4.3.7
+    HXCPP_COMPILE_CACHE: ${{ github.workspace }}/.hxcpp_cache
+    LIME_HASH: 6421de16b9dfa4fb55c19f12db65d392a57585c8
 
 
 jobs: # FUCK MY LIFE BROOOOO
@@ -26,7 +27,7 @@ jobs: # FUCK MY LIFE BROOOOO
         runs-on: windows-latest
 
         steps:
-            - uses: actions/checkout@v6.0.3
+            - uses: actions/checkout@v7
               with:
                 submodules: true
             - uses: krdlab/setup-haxe@v2.1.0
@@ -58,7 +59,7 @@ jobs: # FUCK MY LIFE BROOOOO
                 }
                 Run git clone https://github.com/FunkinCrew/lime .haxelib/lime/git
                 Run git -C .haxelib/lime/git fetch --all --tags --prune
-                Run git -C .haxelib/lime/git checkout 6421de16b9dfa4fb55c19f12db65d392a57585c8
+                Run git -C .haxelib/lime/git checkout ${{ env.LIME_HASH }}
                 Run git -C .haxelib/lime/git submodule sync --recursive
                 Run git -C .haxelib/lime/git submodule update --init --recursive --force
                 Run haxelib dev lime .haxelib/lime/git
@@ -81,9 +82,12 @@ jobs: # FUCK MY LIFE BROOOOO
     #
     Linux:
         runs-on: ubuntu-24.04
+        env:
+          CC: gcc-13
+          CXX: g++-13
 
         steps:
-            - uses: actions/checkout@v6.0.3
+            - uses: actions/checkout@v7
               with:
                 submodules: true
             - uses: krdlab/setup-haxe@v2.1.0
@@ -104,9 +108,6 @@ jobs: # FUCK MY LIFE BROOOOO
                   libxinerama-dev libxxf86vm-dev libgbm-dev libdrm-dev libdecor-0-dev \
                   libvulkan-dev pkg-config
             - name: Install libs
-              env:
-                CC: gcc-13
-                CXX: g++-13
               run: |
                 set -euo pipefail
                 haxelib setup ~/haxelib
@@ -114,21 +115,94 @@ jobs: # FUCK MY LIFE BROOOOO
                 haxelib run hxpkg install
                 rm -rf .haxelib/lime
                 git clone https://github.com/FunkinCrew/lime .haxelib/lime/git
-                git -C .haxelib/lime/git checkout 6421de16b9dfa4fb55c19f12db65d392a57585c8
+                git -C .haxelib/lime/git checkout ${{ env.LIME_HASH }}
                 git -C .haxelib/lime/git submodule update --init --recursive --force
                 haxelib dev lime .haxelib/lime/git
-                haxelib run lime rebuild cpp -release
-                if [ ! -f .haxelib/lime/git/ndll/Linux64/lime.ndll ]; then
-                  echo "ERROR: Missing Lime ndll"
-                  exit 1
-                fi
+            - name: Rebuild Lime (Linux)
+              run: |
+               haxelib run lime rebuild cpp -release
+               if [ ! -f .haxelib/lime/git/ndll/Linux64/lime.ndll ]; then
+                 echo "ERROR: Missing Lime ndll"
+                 exit 1
+               fi
             - name: Compile build
-              env:
-                CC: gcc-13
-                CXX: g++-13
               run: haxelib run lime build Project.xml linux -D ${{inputs.buildFlags}}
             - name: Publish artifact
               uses: actions/upload-artifact@v7.0.1
               with:
                 name: NightmareVision (Linux)
                 path: export/release/linux/bin
+    #
+    Mac-Intel:
+        runs-on: macos-26
+
+        steps:
+            - uses: actions/checkout@v7
+              with:
+                submodules: true
+            - uses: krdlab/setup-haxe@v2.1.0
+
+              with:
+                haxe-version: ${{ env.HAXE_VERSION }}
+            
+            - name: Install libs
+              run: |
+                haxelib setup ~/haxelib
+                haxelib install hxpkg --quiet
+                haxelib run hxpkg install
+                rm -rf .haxelib/lime
+                git clone https://github.com/FunkinCrew/lime .haxelib/lime/git
+                git -C .haxelib/lime/git checkout ${{ env.LIME_HASH }}
+                git -C .haxelib/lime/git submodule update --init --recursive --force
+                haxelib dev lime .haxelib/lime/git
+            - name: Rebuild Lime (Mac Intel)
+              run: |
+               haxelib run lime rebuild cpp -64 -release
+               if [ ! -f .haxelib/lime/git/ndll/Mac64/lime.ndll ]; then
+                 echo "ERROR: Missing Lime ndll"
+                 exit 1
+               fi
+            - name: Compile build
+              run: arch -x86_64 haxelib run lime build Project.xml mac -D ${{inputs.buildFlags}}
+            - name: Publish artifact
+              uses: actions/upload-artifact@v7.0.1
+              with:
+                name: NightmareVision (Mac Intel)
+                path: export/release/macos/bin
+    #
+    Mac-ARM:
+        runs-on: macos-26
+
+        steps:
+            - uses: actions/checkout@v7
+              with:
+                submodules: true
+            - uses: krdlab/setup-haxe@v2.1.0
+
+              with:
+                haxe-version: ${{ env.HAXE_VERSION }}
+            
+            - name: Install libs
+              run: |
+                haxelib setup ~/haxelib
+                haxelib install hxpkg --quiet
+                haxelib run hxpkg install
+                rm -rf .haxelib/lime
+                git clone https://github.com/FunkinCrew/lime .haxelib/lime/git
+                git -C .haxelib/lime/git checkout ${{ env.LIME_HASH }}
+                git -C .haxelib/lime/git submodule update --init --recursive --force
+                haxelib dev lime .haxelib/lime/git
+            - name: Rebuild Lime (Mac ARM)
+              run: |
+               haxelib run lime rebuild cpp -release
+               if [ ! -f .haxelib/lime/git/ndll/MacArm64/lime.ndll ]; then
+                 echo "ERROR: Missing Lime ndll"
+                 exit 1
+               fi
+            - name: Compile build
+              run: haxelib run lime build Project.xml mac -D ${{inputs.buildFlags}}
+            - name: Publish artifact
+              uses: actions/upload-artifact@v7.0.1
+              with:
+                name: NightmareVision (Mac ARM)
+                path: export/release/macos/bin
