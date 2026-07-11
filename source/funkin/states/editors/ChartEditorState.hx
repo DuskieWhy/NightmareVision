@@ -1319,7 +1319,7 @@ class ChartEditorState extends haxe.ui.backend.flixel.UIState
 					else if (FlxG.keys.pressed.ALT)
 					{
 						selectNote(note);
-						note.chartData[3] = noteTypeIntMap.get(currentType);
+						if (note.chartData != null) note.chartData[3] = noteTypeIntMap.get(currentType);
 						updateGrid();
 					}
 					else
