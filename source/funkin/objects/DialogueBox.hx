@@ -12,6 +12,12 @@ import flixel.util.FlxTimer;
 
 import funkin.states.*;
 
+/**
+	-- TODO --
+	* Make this scriptable/read through json files
+	* Restore the dialog editors, and make them more customizable
+**/
+
 // rewrite this later
 class DialogueBox extends FlxSpriteGroup
 {
@@ -46,10 +52,10 @@ class DialogueBox extends FlxSpriteGroup
 		switch (PlayState.SONG.song.toLowerCase())
 		{
 			case 'senpai':
-				FunkinSound.playMusic(Paths.music('Lunchbox'), 0);
+				FunkinSound.playMusic(Paths.music('week6/Lunchbox'), 0);
 				FlxG.sound.music.fadeIn(1, 0, 0.8);
 			case 'thorns':
-				FunkinSound.playMusic(Paths.music('LunchboxScary'), 0);
+				FunkinSound.playMusic(Paths.music('week6/LunchboxScary'), 0);
 				FlxG.sound.music.fadeIn(1, 0, 0.8);
 		}
 		

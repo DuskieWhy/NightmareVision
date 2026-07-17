@@ -35,6 +35,16 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		
 		var option:Option = new Option('Disable Reset Button', "If checked, pressing Reset won't do anything.", 'noReset', BOOL, false);
 		addOption(option);
+
+		var option:Option = new Option('Hitsound type:', 
+			"Change your hitsound type.",
+			'hitsoundType',
+			STRING,
+			'NMV',
+			['NMV', 'Psych']
+		);
+		addOption(option);
+		option.onChange = onChangeHitsound;
 		
 		var option:Option = new Option('Hitsound Volume:', 'Funny notes does \"Tick!\" when you hit them."', 'hitsoundVolume', PERCENT, 0);
 		addOption(option);
@@ -43,7 +53,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		option.maxValue = 1;
 		option.changeValue = 0.1;
 		option.decimals = 1;
-		option.onChange = onChangeHitsoundVolume;
+		option.onChange = onChangeHitsound;
 		
 		var option:Option = new Option('Rating Offset:', 'Changes how late/early you have to hit for a "Sick!"\nHigher values mean you have to hit later.', 'ratingOffset', INT, 0);
 		option.displayFormat = '%vms';
@@ -77,9 +87,9 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		super();
 	}
 	
-	function onChangeHitsoundVolume()
+	function onChangeHitsound()
 	{
-		FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.hitsoundVolume);
+		FlxG.sound.play(Paths.sound('hitsound-${ClientPrefs.hitsoundType}'), ClientPrefs.hitsoundVolume);
 	}
 	
 	function addHitWindowOption(dName:String, prefID:String, min:Float = 15.0, max:Float = 200.0, scrollSpeed:Float = 15)

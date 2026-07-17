@@ -85,6 +85,8 @@ class ControlsSubState extends MusicBeatSubstate
 			{label: "Chart", action: "debug_1"},
 			{label: "Char", action: "debug_2"},
 			{label: "Display", action: DISPLAY},
+			{label: "Softreload", action: SOFTRELOAD},
+			{label: "Hardreload", action: HARDRELOAD},
 			null,
 		];
 	}

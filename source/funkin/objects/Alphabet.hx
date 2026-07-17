@@ -318,33 +318,15 @@ class Alphabet extends FlxSpriteGroup
 				letter.row = curRow;
 				if (isBold)
 				{
-					if (isNumber)
-					{
-						letter.createBoldNumber(splitWords[loopNum]);
-					}
-					else if (isSymbol)
-					{
-						letter.createBoldSymbol(splitWords[loopNum]);
-					}
-					else
-					{
-						letter.createBoldLetter(splitWords[loopNum]);
-					}
+					if (isNumber) letter.createBoldNumber(splitWords[loopNum]);
+					else if (isSymbol) letter.createBoldSymbol(splitWords[loopNum]);
+					else letter.createBoldLetter(splitWords[loopNum]);
 				}
 				else
 				{
-					if (isNumber)
-					{
-						letter.createNumber(splitWords[loopNum]);
-					}
-					else if (isSymbol)
-					{
-						letter.createSymbol(splitWords[loopNum]);
-					}
-					else
-					{
-						letter.createLetter(splitWords[loopNum]);
-					}
+					if (isNumber) letter.createNumber(splitWords[loopNum]);
+					else if (isSymbol) letter.createSymbol(splitWords[loopNum]);
+					else letter.createLetter(splitWords[loopNum]);
 				}
 				letter.x += 90;
 				

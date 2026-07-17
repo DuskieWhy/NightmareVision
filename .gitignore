@@ -12,6 +12,7 @@ hmm.json
 
 ### VS Code
 vscode-project.hxml
+.vs/
 export/*
 .vscode/*
 *.code-workspace

@@ -5,6 +5,7 @@ import funkin.data.Chart;
 import haxe.ds.IntMap;
 import haxe.Json;
 import haxe.io.Bytes;
+import haxe.io.Path;
 
 import lime.media.AudioBuffer;
 
@@ -418,7 +419,9 @@ class ChartEditorState extends haxe.ui.backend.flixel.UIState
 		
 		// var eventIcon:FlxSprite = new FlxSprite(-GRID_SIZE - 5, -90).loadGraphic(Paths.image('eventArrow'));
 		leftIcon = new HealthIcon(bfIcon);
+		leftIcon.frameCount = CharacterParser.fetchInfo(song.player1).icon_count;
 		rightIcon = new HealthIcon(dadIcon);
+		rightIcon.frameCount = CharacterParser.fetchInfo(song.player2).icon_count;
 		cameraIcon = new FlxSprite().loadGraphic(Paths.image('editors/camera'));
 		
 		// eventIcon.setGraphicSize(30, 30);
@@ -792,10 +795,8 @@ class ChartEditorState extends haxe.ui.backend.flixel.UIState
 	function prepareEventsUI():Void
 	{
 		#if MODS_ALLOWED
-		var eventPushedMap:Map<String, Bool> = new Map<String, Bool>();
 		var directories:Array<String> = [];
 		
-		#if MODS_ALLOWED
 		directories.push(Paths.mods('data/events/'));
 		directories.push(Paths.mods(Mods.currentModDirectory + '/data/events/'));
 		for (mod in Mods.globalMods)
@@ -805,49 +806,38 @@ class ChartEditorState extends haxe.ui.backend.flixel.UIState
 		directories.push(Paths.mods(Mods.currentModDirectory + '/events/'));
 		for (mod in Mods.globalMods)
 			directories.push(Paths.mods(mod + '/events/'));
-		#end
 		
-		var eventexts = ['.txt', '.hx', '.hxs', '.hscript'];
-		var removeShit = [4, 3, 4, 8];
+		var eventexts = FunkinScript.H_EXTS.concat(["txt"]);
+
+		var pushedEvents:Array<String> = [];
+		for (event in eventStuff) pushedEvents.push(event[0]);
 		
 		for (i in 0...directories.length)
 		{
 			var directory:String = directories[i];
-			if (!FunkinAssets.exists(directory)) continue;
-			
-			for (file in FunkinAssets.readDirectory(directory))
+			if (FunkinAssets.exists(directory))
 			{
-				var path = haxe.io.Path.join([directory, file]);
-				for (ext in 0...eventexts.length)
+				var files = FunkinAssets.readDirectory(directory);
+				files.sort((a, b) -> return Path.extension(a) == "txt" ? 1 : 0);
+
+				for (file in files)
 				{
-					if (FunkinAssets.isDirectory(path) || file == 'readme.txt' || !file.endsWith(eventexts[ext])) continue;
-					
-					var fileToCheck:String = file.substr(0, file.length - removeShit[ext]);
-					
-					if (eventPushedMap.exists(fileToCheck)) break;
-					
-					eventPushedMap.set(fileToCheck, true);
-					
-					for (x in ['.hx', '.hxs', '.hscript'])
+					var path = Path.join([directory, file]);
+					if (!FunkinAssets.isDirectory(path) && file != 'readme.txt' && eventexts.contains(Path.extension(file)))
 					{
-						if (file.endsWith(x))
+						var fileToCheck:String = Path.withoutExtension(file);
+						if (!pushedEvents.contains(fileToCheck))
 						{
-							eventStuff.push([fileToCheck, 'scripted description']);
-							break;
+							if (FunkinScript.H_EXTS.contains(Path.extension(file)))
+								eventStuff.push([fileToCheck, 'scripted description']);
+							else
+								eventStuff.push([fileToCheck, File.getContent(path)]);
 						}
-						else
-						{
-							eventStuff.push([fileToCheck, File.getContent(path)]);
-							break;
-						}
+						pushedEvents.push(fileToCheck);
 					}
-					
-					break;
 				}
 			}
 		}
-		eventPushedMap.clear();
-		eventPushedMap = null;
 		#end
 		
 		ui.songDialog.eventDropdown.populateList([for (ev in eventStuff) {id: ev[0], text: (ev[0].length == 0 ? 'None' : ev[0])}]);
@@ -1107,7 +1097,7 @@ class ChartEditorState extends haxe.ui.backend.flixel.UIState
 					
 					if (!playedSound[note.lane] && ((bfHitsound && note.mustPress) || (dadHitsound && !note.mustPress)))
 					{
-						var soundToPlay = 'hitsound';
+						var soundToPlay = 'hitsound-${ClientPrefs.hitsoundType}';
 						if (song.player1 == 'gf') soundToPlay = ('GF_' + Std.string(note.noteData + 1)); // Easter egg
 						
 						FlxG.sound.play(Paths.sound(soundToPlay)).pan = (note.noteData < (song.keys * .5) ? -0.3 : 0.3); // would be coolio
@@ -1967,6 +1957,9 @@ class ChartEditorState extends haxe.ui.backend.flixel.UIState
 		
 		leftIcon.y = (-leftIcon.height);
 		rightIcon.y = (-rightIcon.height);
+
+		leftIcon.frameCount = CharacterParser.fetchInfo(song.player1).icon_count;
+		rightIcon.frameCount = CharacterParser.fetchInfo(song.player2).icon_count;
 		
 		var focusedIcon:HealthIcon = (mustHit ? leftIcon : rightIcon);
 		

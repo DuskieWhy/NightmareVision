@@ -90,6 +90,8 @@ class ClientPrefs
 	@saveVar public static var underlayType:String = 'Lane Underlay';
 	
 	@saveVar public static var underlayOpacity:Float = 0.0;
+
+	@saveVar public static var comboStacking:Bool = true;
 	
 	// gameplay ------------------------------------------------------------------------//
 	@saveVar public static var mechanics:Bool = true;
@@ -107,6 +109,8 @@ class ClientPrefs
 	@saveVar public static var noReset:Bool = false;
 	
 	@saveVar public static var hitsoundVolume:Float = 0;
+
+	@saveVar public static var hitsoundType:String = "NMV";
 	
 	@saveVar public static var ratingOffset:Int = 0;
 	

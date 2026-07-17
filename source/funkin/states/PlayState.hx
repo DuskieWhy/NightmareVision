@@ -839,7 +839,7 @@ class PlayState extends MusicBeatState
 		RecalculateRating();
 		updateScoreBar();
 		
-		if (ClientPrefs.hitsoundVolume > 0) Paths.sound('hitsound');
+		if (ClientPrefs.hitsoundVolume > 0) Paths.sound('hitsound-${ClientPrefs.hitsoundType}');
 		Paths.sound('missnote1');
 		Paths.sound('missnote2');
 		Paths.sound('missnote3');

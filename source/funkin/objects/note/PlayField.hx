@@ -352,7 +352,7 @@ class PlayField extends FlxTypedContainer<StrumNote>
 		if (strum != null)
 		{
 			strum.lastNote = note;
-			strum.playAnim('confirm', true);
+			if (field.playAnims) strum.playAnim('confirm', true);
 			
 			if (field.autoPlayed)
 			{
@@ -374,7 +374,7 @@ class PlayField extends FlxTypedContainer<StrumNote>
 		{
 			if (note.wasGoodHit || field.autoPlayed && (note.ignoreNote || note.hitCausesMiss || note.canMiss)) return;
 			
-			if (ClientPrefs.hitsoundVolume > 0 && !note.hitsoundDisabled) FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.hitsoundVolume);
+			if (ClientPrefs.hitsoundVolume > 0 && !note.hitsoundDisabled) FlxG.sound.play(Paths.sound('hitsound-${ClientPrefs.hitsoundType}'), ClientPrefs.hitsoundVolume);
 			
 			if (note.hitCausesMiss)
 			{
