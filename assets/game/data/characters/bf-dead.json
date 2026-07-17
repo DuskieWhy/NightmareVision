@@ -2,8 +2,8 @@
 	"animations": [
 		{
 			"offsets": [
-				37,
-				11
+				49,
+				12
 			],
 			"loop": false,
 			"fps": 24,
@@ -13,7 +13,7 @@
 		},
 		{
 			"offsets": [
-				37,
+				40,
 				5
 			],
 			"loop": true,
@@ -24,8 +24,8 @@
 		},
 		{
 			"offsets": [
-				37,
-				69
+				38,
+				92
 			],
 			"loop": false,
 			"fps": 24,
@@ -35,22 +35,26 @@
 		}
 	],
 	"no_antialiasing": false,
-	"image": "characters/BOYFRIEND_DEAD",
+	"image": "characters/bf-death",
 	"position": [
 		0,
 		350
 	],
+	"dance_every": 2,
+	"gameover_intial_sound": null,
+	"scalableOffsets": false,
+	"gameover_confirm_sound": null,
 	"healthicon": "bf",
+	"gameover_character": null,
+	"vslice_sustains": false,
 	"flip_x": true,
-	"healthbar_colors": [
-		49,
-		176,
-		209
-	],
+	"healthbar_colour": -13520687,
 	"camera_position": [
 		0,
 		0
 	],
+	"gameover_loop_sound": null,
 	"sing_duration": 4,
-	"scale": 1
+	"scale": 1,
+	"_editor_isPlayer": true
 }

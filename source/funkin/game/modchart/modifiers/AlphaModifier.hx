@@ -103,7 +103,7 @@ class AlphaModifier extends NoteModifier
 		var speed = PlayState.instance.songSpeed * note.multSpeed;
 		var yPos:Float = modMgr.getVisPos(Conductor.songPosition, note.strumTime, speed) + 50;
 		
-		note.rgbShader.flash = 0;
+		note.rgbGraphics.flash = 0;
 		var alphaMod = (1 - getSubmodValue("alpha",
 			player)) * (1 - getSubmodValue('alpha${note.noteData}', player)) * (1 - getSubmodValue("noteAlpha", player)) * (1 - getSubmodValue('noteAlpha${note.noteData}', player));
 		var alpha = getVisibility(yPos, player, note);
@@ -111,7 +111,7 @@ class AlphaModifier extends NoteModifier
 		if (getSubmodValue("dontUseStealthGlow", player) == 0)
 		{
 			note.alphaMod = getAlpha(alpha);
-			note.rgbShader.flash = getGlow(alpha);
+			note.rgbGraphics.flash = getGlow(alpha);
 		}
 		else note.alphaMod = alpha;
 		
@@ -126,7 +126,7 @@ class AlphaModifier extends NoteModifier
 			alpha = alpha * (1 - getSubmodValue("dark", player)) * (1 - getSubmodValue('dark${receptor.noteData}', player));
 		}
 		// @:privateAccess
-		receptor.rgbShader.alphaMult = alpha;
+		receptor.rgbGraphics.alpha = alpha;
 	}
 	
 	override function updateNoteSplash(beat:Float, splash:NoteSplash, pos:Vector3, player:Int)
@@ -134,7 +134,7 @@ class AlphaModifier extends NoteModifier
 		var alpha = (1 - getSubmodValue('alpha', player)) * (1 - getSubmodValue('alpha${splash.noteData}', player));
 		alpha *= (1 - getSubmodValue('noteSplashAlpha', player)) * (1 - getSubmodValue('noteSplash${splash.noteData}Alpha', player));
 		
-		splash.rgbShader.alphaMult = alpha;
+		splash.rgbGraphics.alpha = alpha;
 	}
 	
 	override function updateSustainSplash(beat:Float, splash:SustainSplash, pos:Vector3, player:Int)
@@ -142,7 +142,7 @@ class AlphaModifier extends NoteModifier
 		var alpha = (1 - getSubmodValue('alpha', player)) * (1 - getSubmodValue('alpha${splash.noteData}', player));
 		alpha *= (1 - getSubmodValue('sustainSplashAlpha', player)) * (1 - getSubmodValue('sustainSplash${splash.noteData}Alpha', player));
 		
-		splash.rgbShader.alphaMult = alpha;
+		splash.rgbGraphics.alpha = alpha;
 	}
 	
 	override function getSubmods()

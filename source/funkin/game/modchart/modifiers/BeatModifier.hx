@@ -13,7 +13,7 @@ class BeatModifier extends NoteModifier
 		var totalTime:Float = 0.7;
 		@:privateAccess
 		var beat = PlayState.instance.curDecBeat + accelTime;
-		var evenBeat = beat % 2 != 0;
+		var evenBeat = Std.int(beat) % 2 != 0;
 		
 		if (beat < 0) return pos;
 		

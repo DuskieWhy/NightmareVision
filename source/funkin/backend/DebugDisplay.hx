@@ -85,7 +85,7 @@ class DebugDisplay extends Sprite
 	/**
 	 * The bg for the text
 	 */
-	final textUnderlay:Bitmap;
+	public final textUnderlay:Bitmap;
 	
 	/**
 	 * If disabled, the fps counter will no longer update visually

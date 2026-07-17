@@ -2,11 +2,11 @@ package funkin.objects.note;
 
 import funkin.data.*;
 import funkin.objects.Bopper;
-import funkin.game.shaders.RGBPalette.RGBShaderReference;
+import funkin.game.shaders.RGBShader;
 
 class SustainSplash extends FunkinSprite implements funkin.game.modchart.IModNote
 {
-	public var rgbShader:RGBShaderReference;
+	public var rgbGraphics:RGBGraphics = new RGBGraphics();
 	
 	public var data(get, set):Int;
 	public var noteData:Int = 0;
@@ -24,8 +24,6 @@ class SustainSplash extends FunkinSprite implements funkin.game.modchart.IModNot
 	public function new(x:Float = 0, y:Float = 0, noteData:Int = 0, player:Int = 0)
 	{
 		super(x, y);
-		
-		rgbShader = NoteUtil.initRGBShader(this, noteData, 0, player);
 		
 		addAnims(NoteUtil.getSkinFromID(player));
 	}
@@ -69,11 +67,11 @@ class SustainSplash extends FunkinSprite implements funkin.game.modchart.IModNot
 		
 		final sanitzedColourArray = colors ?? NoteUtil.colorToArray(skin.colors[data]);
 		
-		rgbShader.enabled = skin.inEngineColoring;
-		rgbShader.setColors(sanitzedColourArray);
+		rgbGraphics.enabled = skin.inEngineColoring;
+		rgbGraphics.setColors(sanitzedColourArray);
 	}
 	
-	public function setupSplash(strum:StrumNote, ?note:Note, ?time:Float = 0.5, ?isPlayer:Bool = false, ?colourInput:Array<FlxColor>, ?field:PlayField)
+	public function setupSplash(strum:StrumNote, ?note:Note, ?time:Float = 0.5, ?isPlayer:Bool = false, ?graphicsInput:RGBGraphics, ?field:PlayField)
 	{
 		this._note = note;
 		this._strum = strum;
@@ -97,7 +95,7 @@ class SustainSplash extends FunkinSprite implements funkin.game.modchart.IModNot
 		updateHitbox();
 		
 		playAnim('start$data', true);
-		setColors(colourInput);
+		setColors(graphicsInput?.getColors());
 		_position();
 		
 		FlxTimer.wait(time, () -> {
@@ -122,4 +120,16 @@ class SustainSplash extends FunkinSprite implements funkin.game.modchart.IModNot
 	inline function get_data():Int return noteData;
 	
 	inline function set_data(v:Int):Int return noteData = v;
+	
+	override function drawSimple(camera:FlxCamera)
+	{
+		super.drawSimple(camera);
+		rgbGraphics.pushQuad(camera);
+	}
+	
+	override function drawComplex(camera:FlxCamera)
+	{
+		super.drawComplex(camera);
+		rgbGraphics.pushQuad(camera);
+	}
 }

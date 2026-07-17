@@ -59,32 +59,40 @@ class FunkinScript extends Script implements IFlxDestroyable
 	 */
 	public static function init()
 	{
-		/*
-			Iris.warn = (x, ?pos) -> {
-				final output:String = '[${pos.fileName}:${pos.lineNumber}]: $x';
-				
-				DebugTextPlugin.addText(Std.string(output), Logger.getHexColourFromSeverity(WARN));
-				
-				Iris.logLevel(ERROR, x, pos);
-			}
-
-			Iris.error = (x, ?pos) -> {
-				final output:String = '[${pos.fileName}:${pos.lineNumber}]: $x';
-				
-				DebugTextPlugin.addText(Std.string(output), Logger.getHexColourFromSeverity(ERROR));
-				
-				Iris.logLevel(NONE, x, pos);
-			}
-
-			Iris.print = (x, ?pos) -> {
-				final output:String = '[${pos.fileName}:${pos.lineNumber}]: $x';
-				
-				DebugTextPlugin.addText(Std.string(output), Logger.getHexColourFromSeverity(PRINT));
-				
-				Iris.logLevel(NONE, x, pos);
-			}
-		 */
+		// inline function formatFileLoc(fileName:String, lineNumber:Int, x:String)
+		// {
+		// 	var tempName = '[$fileName:$lineNumber]';
 		
+		// 	if (fileName.contains(Mods.currentModDirectory)) tempName = tempName.replace('content/${Mods.currentModDirectory}/', '');
+		
+		// 	tempName += ' - $x';
+		
+		// 	return tempName;
+		// }
+		
+		// Iris.warn = (x, ?pos) -> {
+		// 	final output:String = formatFileLoc(pos.fileName, pos.lineNumber, x);
+		
+		// 	DebugTextPlugin.addText(Std.string(output), Logger.getHexColourFromSeverity(WARN));
+		
+		// 	Iris.logLevel(ERROR, x, pos);
+		// }
+		
+		// Iris.error = (x, ?pos) -> {
+		// 	final output:String = formatFileLoc(pos.fileName, pos.lineNumber, x);
+		
+		// 	DebugTextPlugin.addText(Std.string(output), Logger.getHexColourFromSeverity(ERROR));
+		
+		// 	Iris.logLevel(NONE, x, pos);
+		// }
+		
+		// Iris.print = (x, ?pos) -> {
+		// 	final output:String = formatFileLoc(pos.fileName, pos.lineNumber, x);
+		
+		// 	DebugTextPlugin.addText(Std.string(output), Logger.getHexColourFromSeverity(PRINT));
+		
+		// 	Iris.logLevel(NONE, x, pos);
+		// }
 		Config.interpClass = InsanityInterpEx;
 		Config.preprocessorValues; // idea: maybe implement some nmv specific preprocessors? ex: version, deprecation fields, etc.
 	}

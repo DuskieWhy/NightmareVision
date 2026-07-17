@@ -2,8 +2,8 @@
 	"animations": [
 		{
 			"offsets": [
-				3,
-				0
+				1,
+				-23
 			],
 			"loop": false,
 			"anim": "cheer",
@@ -13,8 +13,8 @@
 		},
 		{
 			"offsets": [
-				0,
-				-19
+				1,
+				-10
 			],
 			"loop": false,
 			"anim": "singLEFT",
@@ -24,8 +24,8 @@
 		},
 		{
 			"offsets": [
-				0,
-				-20
+				1,
+				-40
 			],
 			"loop": false,
 			"anim": "singDOWN",
@@ -35,8 +35,8 @@
 		},
 		{
 			"offsets": [
-				0,
-				4
+				1,
+				-19
 			],
 			"loop": false,
 			"anim": "singUP",
@@ -46,8 +46,8 @@
 		},
 		{
 			"offsets": [
-				0,
-				-20
+				1,
+				-14
 			],
 			"loop": false,
 			"anim": "singRIGHT",
@@ -58,7 +58,7 @@
 		{
 			"offsets": [
 				-2,
-				-21
+				-25
 			],
 			"loop": false,
 			"anim": "sad",
@@ -137,8 +137,8 @@
 		},
 		{
 			"offsets": [
-				45,
-				-8
+				47,
+				-31
 			],
 			"loop": true,
 			"anim": "hairBlow",
@@ -153,8 +153,8 @@
 		},
 		{
 			"offsets": [
-				0,
-				-9
+				1,
+				-8
 			],
 			"loop": false,
 			"anim": "hairFall",
@@ -176,22 +176,37 @@
 			]
 		},
 		{
-			"offsets": [
-				-2,
-				-17
-			],
 			"loop": true,
+			"flipY": false,
+			"offsets": [
+				-1,
+				-25
+			],
 			"anim": "scared",
 			"fps": 24,
-			"name": "GF FEAR",
-			"indices": []
+			"name": "GF FEAR ",
+			"indices": [],
+			"flipX": false
+		},
+		{
+			"offsets": [
+				1,
+				-23
+			],
+			"indices": [],
+			"fps": 24,
+			"flipX": false,
+			"flipY": false,
+			"anim": "hey",
+			"loop": false,
+			"name": "GF Cheer"
 		}
 	],
 	"no_antialiasing": false,
-	"image": "characters/GF_assets",
+	"image": "characters/gf",
 	"position": [
 		0,
-		0
+		-25
 	],
 	"dance_every": 1,
 	"gameover_intial_sound": null,
@@ -199,11 +214,12 @@
 	"gameover_confirm_sound": null,
 	"healthicon": "gf",
 	"gameover_character": null,
+	"vslice_sustains": false,
 	"flip_x": false,
 	"healthbar_colour": -5963699,
 	"camera_position": [
-		0,
-		0
+		-17,
+		25
 	],
 	"gameover_loop_sound": null,
 	"sing_duration": 4,

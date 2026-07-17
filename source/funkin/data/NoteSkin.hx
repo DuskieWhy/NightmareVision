@@ -97,6 +97,7 @@ class NoteSkin implements IFlxDestroyable
 		splashTexture = data.splashTexture;
 		sustainSplashTexture = data.sustainSplashTexture;
 		
+		singAnimations = data.singAnimations;
 		splashesEnabled = data.splashesEnabled;
 		sustainSplashes = data.susSplashesEnabled;
 		antialiasing = data.antialiasing;

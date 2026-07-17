@@ -134,6 +134,7 @@ class Bar extends FlxSpriteGroup implements IUiSprite
 		
 		barCenter = leftBar.x + leftSize + barOffset.x;
 		
+		// flixel.. is.. well. you know!
 		leftBar.clipRect = leftBar.clipRect;
 		rightBar.clipRect = rightBar.clipRect;
 	}

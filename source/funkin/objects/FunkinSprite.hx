@@ -167,7 +167,12 @@ class FunkinSprite extends FlxAnimate
 		
 		animation.play(correctedAnim, isForced, isReversed, frame);
 		
-		final animationOffsets = animOffsets.get(correctedAnim);
+		setOffsets(correctedAnim);
+	}
+
+	public function setOffsets(anim:String = 'idle')
+	{
+		final animationOffsets = animOffsets.get(anim);
 		
 		if (animationOffsets != null)
 		{

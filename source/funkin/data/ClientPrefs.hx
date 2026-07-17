@@ -10,6 +10,19 @@ import flixel.util.FlxSave;
 import funkin.input.Controls.KeyboardScheme;
 import funkin.input.Controls;
 
+enum abstract UnderlayType(String) to String from String
+{
+	public var FIELD = 'Lane Underlay';
+	public var SCREEN = 'Screen Dim';
+	
+	// @:to
+	public static function toArray():Array<String> // dont want to jump to options states to update
+	{
+		// granted its a bit overkill to even do this for 2 options but i dunno remove it if u dont want it //or maybe i will another time
+		return [FIELD, SCREEN];
+	}
+}
+
 /**
  * to add new save options, make a static var with the `@saveVar` meta and itll be handled on its own
  * 
@@ -65,9 +78,11 @@ class ClientPrefs
 	
 	@saveVar public static var camFollowsCharacters:Bool = true;
 	
-	// gameplay ------------------------------------------------------------------------//
-	@saveVar public static var guitarHeroSustains:Bool = true;
+	@saveVar public static var underlayType:String = 'Lane Underlay';
 	
+	@saveVar public static var underlayOpacity:Float = 0.0;
+	
+	// gameplay ------------------------------------------------------------------------//
 	@saveVar public static var mechanics:Bool = true;
 	
 	@saveVar public static var modcharts:Bool = true;
@@ -185,7 +200,7 @@ class ClientPrefs
 		'note_down' => [S, DOWN],
 		'note_up' => [W, UP],
 		'note_right' => [D, RIGHT],
-		'dodge' => [SPACE, NONE],
+		'note_dodge' => [SPACE, NONE],
 		'ui_left' => [A, LEFT],
 		'ui_down' => [S, DOWN],
 		'ui_up' => [W, UP],
@@ -208,9 +223,33 @@ class ClientPrefs
 		'note_down' => [DPAD_DOWN, A],
 		'note_left' => [DPAD_LEFT, X],
 		'note_right' => [DPAD_RIGHT, B],
+		'note_dodge' => [GUIDE]
 	];
 	
+	// using a separate map for custom binds to ensure the engine doesnt get confused on what binds are real and temporary
+	@saveVar(false, false) public static var customKeys:Map<Action, Array<FlxKey>> = [];
+	@saveVar(false, false) public static var customPad:Map<Action, Array<FlxGamepadInputID>> = [];
+	
 	public static var defaultGamepadBinds:Map<Action, Array<FlxGamepadInputID>> = null;
+	
+	public static function addCustomKey(name:String, keys:Array<FlxKey>)
+	{
+		if (name.length >= 1 && keys != null)
+		{
+			var tempKeys = keys;
+			while (tempKeys.length < 2)
+				tempKeys.push(NONE);
+				
+			customKeys.set(name, tempKeys);
+		}
+		
+		for (key in customKeys.keys())
+		{
+			final binds = customKeys.get(key);
+			
+			if (binds != null && binds.length >= 2 && !keyBinds.exists(key)) keyBinds.set(key, binds);
+		}
+	}
 	
 	public static function loadDefaultKeys()
 	{

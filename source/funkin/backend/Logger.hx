@@ -94,7 +94,7 @@ class Logger
 	{
 		return switch (severity)
 		{
-			case ERROR: FlxColor.RED;
+			case ERROR: 0xffff4040;
 			
 			case WARN: FlxColor.YELLOW;
 			
