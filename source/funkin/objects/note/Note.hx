@@ -194,6 +194,7 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 	public var noteSplashSat:Float = 0;
 	public var noteSplashBrt:Float = 0;
 	
+	public var scaleMod:Float = 1; // modify note scale for note types and whatnot
 	public var offsetX:Float = 0;
 	public var offsetY:Float = 0;
 	public var offsetAngle:Float = 0;
@@ -318,6 +319,7 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 		hitHealth = .023;
 		missHealth = .0475;
 		coyoteProgress = 0;
+		scaleMod = 1;
 		
 		noAnimation = noMissAnimation = ratingDisabled = hitCausesMiss = false;
 		
@@ -514,7 +516,7 @@ class Note extends FunkinSprite implements funkin.game.modchart.IModNote
 			addOffset(anim.anim, anim.offsets[0], anim.offsets[1]);
 		}
 		
-		setGraphicSize(Std.int(width * skin.noteScale));
+		setGraphicSize(Std.int(width * skin.noteScale * scaleMod));
 		
 		baseScale.copyFrom(scale);
 	}
