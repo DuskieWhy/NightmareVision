@@ -39,8 +39,6 @@ class ClientPrefs
 
 	@saveVar public static var discordEnabled:Bool = true;
 	
-	@saveVar public static var discordEnabled:Bool = true;
-	
 	@saveVar public static var fpsDisplayType:String = 'Simple';
 	
 	@saveVar public static var streamedMusic:Bool = false;
