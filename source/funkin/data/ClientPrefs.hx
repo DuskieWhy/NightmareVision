@@ -90,8 +90,6 @@ class ClientPrefs
 	@saveVar public static var underlayType:String = 'Lane Underlay';
 	
 	@saveVar public static var underlayOpacity:Float = 0.0;
-
-	@saveVar public static var comboStacking:Bool = true;
 	
 	// gameplay ------------------------------------------------------------------------//
 	@saveVar public static var mechanics:Bool = true;
