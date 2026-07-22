@@ -171,11 +171,22 @@ class ToolKitUtils
 		}
 	}
 	
+	static var _prompt:Null<Dialog> = null;
+	
 	public static function openPrompt(message:String, title:String = '', type:MessageBoxType = 'info', ?callback:DialogButton->Void)
 	{
-		haxe.ui.containers.dialogs.Dialogs.messageBox(message, title, type, true, (button) -> {
+		if (_prompt != null)
+		{
+			Logger.log('You cannot open more than 1 prompt at a time');
+			return;
+		}
+		_prompt = haxe.ui.containers.dialogs.Dialogs.messageBox(message, title, type, true, (button) -> {
 			if (callback != null) callback(button);
 		});
+		
+		_prompt.onDialogClosed = (ev) -> {
+			_prompt = FlxDestroyUtil.destroy(_prompt);
+		}
 	}
 	
 	public static function playSfx(sfx:EditorSfx, volume:Float = 1)

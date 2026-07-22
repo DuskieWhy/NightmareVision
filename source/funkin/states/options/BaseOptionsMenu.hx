@@ -1,5 +1,6 @@
 package funkin.states.options;
 
+import flixel.FlxObject;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
@@ -17,9 +18,9 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	public var curSelected:Int = 0;
 	public var optionsArray:Array<Option>;
 	
-	public var grpOptions:FlxTypedGroup<Dynamic>; // fix this
+	public var grpOptions:FlxTypedGroup<FlxSprite>; // fix this
 	public var checkboxGroup:FlxTypedGroup<CheckboxThingie>;
-	public var grpTexts:FlxTypedGroup<Dynamic>;
+	public var grpTexts:FlxTypedGroup<FlxSprite>;
 	
 	public var bg:FlxSprite;
 	
@@ -50,10 +51,10 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		add(bg);
 		
 		// avoids lagspikes while scrolling through menus!
-		grpOptions = new FlxTypedGroup<Dynamic>();
+		grpOptions = new FlxTypedGroup<FlxSprite>();
 		add(grpOptions);
 		
-		grpTexts = new FlxTypedGroup<Dynamic>();
+		grpTexts = new FlxTypedGroup<FlxSprite>();
 		add(grpTexts);
 		
 		checkboxGroup = new FlxTypedGroup<CheckboxThingie>();
@@ -97,11 +98,15 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			{
 				optionText.x -= 80;
 				optionText.xAdd -= 80;
-				var valueText:AttachedAlphabet = new AttachedAlphabet('' + optionsArray[i].getValue(), optionText.width + 80);
-				valueText.sprTracker = optionText;
-				valueText.copyAlpha = true;
+				var valueText:Alphabet = new Alphabet(0, 0, Std.string(optionsArray[i].getValue()));
+				
 				valueText.ID = i;
 				grpTexts.add(valueText);
+				
+				var attach = new AttachedModule(valueText, optionText);
+				add(attach);
+				attach.positionOffset.x = optionText.width + 80;
+				
 				optionsArray[i].setChild(valueText);
 			}
 			
@@ -327,15 +332,17 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		
 		for (item in grpOptions.members)
 		{
-			if (item is Alphabet) item.targetY = bullShit - curSelected;
 			bullShit++;
 			
 			if (item is Alphabet)
 			{
-				item.set_alpha(0.6);
-				if (item.targetY == 0)
+				var alphabet:Alphabet = cast item;
+				
+				alphabet.targetY = bullShit - curSelected - 1;
+				alphabet.alpha = 0.6;
+				if (alphabet.targetY == 0)
 				{
-					item.set_alpha(1);
+					alphabet.alpha = 1;
 				}
 			}
 		}

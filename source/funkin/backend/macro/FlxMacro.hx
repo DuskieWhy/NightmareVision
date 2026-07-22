@@ -228,6 +228,31 @@ class FlxMacro
 				pos: Context.currentPos()
 			});
 			
+		for (field in fields)
+		{
+			switch (field.kind)
+			{
+				default:
+				case FFun(fun):
+					if (field.name == '__get__rotated__matrix')
+					{
+						// removes the line that translates the sdcroll to the camera poistion grrrrr
+						
+						fun.expr = macro
+							{
+								__angleMatrix.identity();
+								__angleMatrix.translate(-width * 0.5, -height * 0.5);
+								if (shakeMatrixFix) __angleMatrix.translate(_fxShakeXOffset, _fxShakeYOffset);
+								__angleMatrix.scale(scaleX, scaleY);
+								if (!(_sinScrollAngle == 0 && _sinScrollAngle == 1)) __angleMatrix.rotateWithTrig(_cosScrollAngle, _sinScrollAngle);
+								__angleMatrix.translate(width * 0.5, height * 0.5);
+								__angleMatrix.scale(FlxG.scaleMode.scale.x, FlxG.scaleMode.scale.y);
+								return __angleMatrix;
+							};
+					}
+			}
+		}
+		
 		return fields;
 	}
 	

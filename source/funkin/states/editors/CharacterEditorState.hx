@@ -1493,6 +1493,8 @@ class CharacterEditorState extends UIState // MUST EXTEND UI STATE needed for ac
 	override function destroy()
 	{
 		super.destroy();
+		FunkinAssets.cache.clearStoredMemory();
+		FunkinAssets.cache.clearUnusedMemory();
 	}
 	
 	final templateCharacterFile:CharacterInfo =

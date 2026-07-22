@@ -159,9 +159,9 @@ class MainMenuState extends MusicBeatState
 						switch (optionShit[curSelected])
 						{
 							case 'story_mode':
-								FlxG.switchState(StoryMenuState.new);
+								CoolUtil.switchState(StoryMenuState.new, NONE);
 							case 'freeplay':
-								FlxG.switchState(FreeplayState.new);
+								CoolUtil.switchState(FreeplayState.new, SWIPE);
 							case 'credits':
 								FlxG.switchState(CreditsState.new);
 							case 'options':

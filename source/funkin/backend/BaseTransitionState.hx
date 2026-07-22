@@ -45,6 +45,8 @@ class BaseTransitionState extends MusicBeatSubstate
 				ScriptedTransition.scriptKey = key;
 				
 				ScriptedTransition;
+			case ENGINE_DEFAULT: getTransitionFromState(MusicBeatState.DEFAULT_TRANSITION_STATE);
+			default: SwipeTransition;
 		}
 	}
 }

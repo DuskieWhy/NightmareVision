@@ -106,6 +106,7 @@ class MasterEditorMenu extends MusicBeatState
 		
 		if (controls.ACCEPT)
 		{
+			var muteMusic:Bool = true;
 			switch (options[curSelected])
 			{
 				case 'Chart Editor': // felt it would be cool maybe
@@ -126,8 +127,11 @@ class MasterEditorMenu extends MusicBeatState
 				case 'Menu Character Editor':
 					FlxG.switchState(() -> new MenuCharacterEditorState());
 			}
-			if (FlxG.sound.music != null) FlxG.sound.music.volume = 0;
-			FreeplayState.destroyFreeplayVocals();
+			if (muteMusic)
+			{
+				if (FlxG.sound.music != null) FlxG.sound.music.volume = 0;
+				FreeplayState.destroyFreeplayVocals();
+			}
 		}
 		
 		var bullShit:Int = 0;

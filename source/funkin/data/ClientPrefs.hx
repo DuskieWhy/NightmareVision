@@ -36,7 +36,7 @@ class ClientPrefs
 {
 	// debug ------------------------------------------------------------------------//
 	@saveVar public static var inDevMode:Bool = false;
-
+	
 	@saveVar public static var discordEnabled:Bool = true;
 	
 	@saveVar public static var fpsDisplayType:String = 'Simple';
@@ -82,8 +82,6 @@ class ClientPrefs
 	@saveVar public static var scoreZoom:Bool = true;
 	
 	@saveVar public static var healthBarAlpha:Float = 1;
-	
-	@saveVar public static var pauseMusic:String = 'Tea Time';
 	
 	@saveVar public static var camFollowsCharacters:Bool = true;
 

@@ -1,5 +1,7 @@
 package funkin.states;
 
+import funkin.objects.AttachedModule;
+
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -147,14 +149,16 @@ class CreditsState extends MusicBeatState
 				Mods.currentModDirectory = credits[i].modDirectory;
 			}
 			
-			var icon:AttachedSprite = new AttachedSprite('branding/credits/${credits[i].iconPath}');
+			var icon:FlxSprite = new FlxSprite(Paths.image('branding/credits/${credits[i].iconPath}'));
 			icon.setGraphicSize(130);
 			icon.updateHitbox();
-			icon.xAdd = optionText.width + 10;
-			icon.sprTracker = optionText;
-			icon.copyVisible = false;
 			icon.visible = Paths.fileExists('images/branding/credits/${credits[i].iconPath}.png');
 			add(icon);
+			
+			var iconAttacher = new AttachedModule(icon, optionText);
+			iconAttacher.copyVisibility = false;
+			iconAttacher.positionOffset.x = optionText.width + 10;
+			add(iconAttacher);
 			
 			Mods.currentModDirectory = '';
 			
@@ -165,17 +169,16 @@ class CreditsState extends MusicBeatState
 			}
 		}
 		
-		descBox = new AttachedSprite().makeGraphic(1, 1, FlxColor.BLACK);
-		descBox.xAdd = -10;
-		descBox.yAdd = -10;
-		descBox.alphaMult = 0.6;
+		descBox = cast new AttachedSprite().makeGraphic(1, 1, FlxColor.BLACK);
+		descBox.attachedModule.positionOffset.set(-10, -10);
+		descBox.attachedModule.alphaMultiplier = 0.6;
 		descBox.alpha = 0.6;
 		add(descBox);
 		
 		descText = new FlxText(50, FlxG.height + descYOffset - 25, 1180, "", 32);
 		descText.setFormat(Paths.DEFAULT_FONT, 32, FlxColor.WHITE, CENTER);
 		descText.scrollFactor.set();
-		descBox.sprTracker = descText;
+		descBox.attachedModule.tracked = descText;
 		add(descText);
 		
 		changeSelection();

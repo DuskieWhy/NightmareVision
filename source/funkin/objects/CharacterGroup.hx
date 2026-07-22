@@ -81,7 +81,7 @@ class CharacterGroup extends FlxSpriteGroup
 		
 		if (gfCheck && char.curCharacter.startsWith('gf'))
 		{
-			char.setPosition(PlayState?.instance?.GF_X ?? 0, PlayState?.instance?.GF_Y ?? 0);
+			char.setPosition(PlayState?.instance?.gfPosition.x ?? 0, PlayState?.instance?.gfPosition.y ?? 0);
 			char.scrollFactor.set(0.95, 0.95);
 			char.danceEveryNumBeats = 2;
 		}

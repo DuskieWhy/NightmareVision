@@ -1,6 +1,6 @@
 package funkin.states.substates;
 
-import funkin.objects.AttachedAlphabet;
+import funkin.objects.AttachedModule;
 import funkin.objects.CheckboxThingie;
 import funkin.objects.Alphabet;
 
@@ -17,7 +17,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 	
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private var checkboxGroup:FlxTypedGroup<CheckboxThingie>;
-	private var grpTexts:FlxTypedGroup<AttachedAlphabet>;
+	private var grpTexts:FlxTypedGroup<Alphabet>;
 	
 	function getOptions()
 	{
@@ -96,7 +96,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		grpOptions = new FlxTypedGroup<Alphabet>();
 		add(grpOptions);
 		
-		grpTexts = new FlxTypedGroup<AttachedAlphabet>();
+		grpTexts = new FlxTypedGroup<Alphabet>();
 		add(grpTexts);
 		
 		checkboxGroup = new FlxTypedGroup<CheckboxThingie>();
@@ -126,10 +126,14 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 			}
 			else
 			{
-				var valueText:AttachedAlphabet = new AttachedAlphabet('' + optionsArray[i].getValue(), optionText.width + 80, true, 0.8);
-				valueText.sprTracker = optionText;
-				valueText.copyAlpha = true;
+				var valueText:Alphabet = new Alphabet(0, 0, Std.string(optionsArray[i].getValue()), true, false, 0.05, 0.8);
+				valueText.isMenuItem = false;
 				valueText.ID = i;
+				
+				var attach = new AttachedModule(valueText, optionText);
+				add(attach);
+				attach.positionOffset.x = optionText.width + 80;
+				
 				grpTexts.add(valueText);
 				optionsArray[i].setChild(valueText);
 			}

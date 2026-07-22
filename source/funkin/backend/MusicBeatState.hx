@@ -17,10 +17,20 @@ import funkin.input.Controls;
 
 class MusicBeatState extends FlxUIState
 {
+	/**
+	 * The considered Engine default transition. Any `FunkinTransitionState` defined as `ENGINE_DEFAULT` falls back to this.
+	 */
 	public static final DEFAULT_TRANSITION_STATE:FunkinTransitionState = SWIPE;
 	
-	public static var transitionInState:FunkinTransitionState = SWIPE;
-	public static var transitionOutState:FunkinTransitionState = SWIPE;
+	/**
+	 * The transition type to use whenever exiting the state and entering another.
+	 */
+	public static var transitionInState:FunkinTransitionState = ENGINE_DEFAULT;
+	
+	/**
+	 * The transition type to use whenever entering a new state.
+	 */
+	public static var transitionOutState:FunkinTransitionState = ENGINE_DEFAULT;
 	
 	public function new() super();
 	
@@ -80,7 +90,7 @@ class MusicBeatState extends FlxUIState
 	{
 		super.create();
 		
-		if (!FlxTransitionableState.skipNextTransOut)
+		if (!FlxTransitionableState.skipNextTransOut && transitionOutState != NONE)
 		{
 			openSubState(Type.createInstance(BaseTransitionState.getTransitionFromState(transitionOutState), [TransitionStatus.OUT]));
 		}
@@ -109,16 +119,20 @@ class MusicBeatState extends FlxUIState
 		updateCurStep();
 		updateBeat();
 		
-		if (oldStep != curStep)
+		if (curStep > oldStep)
 		{
-			if (curStep > 0) stepHit();
-			
-			if (PlayState.SONG != null)
+			for (step in oldStep...curStep)
 			{
-				if (oldStep < curStep) updateSection();
-				else rollbackSection();
+				curStep = step + 1;
+				
+				updateBeat();
+				
+				if (curStep >= 0) stepHit();
 			}
+			
+			if (PlayState.SONG != null) updateSection();
 		}
+		else if (PlayState.SONG != null) rollbackSection();
 		
 		final scriptArgs = [elapsed];
 		scriptGroup.call('onUpdate', scriptArgs);
@@ -210,7 +224,7 @@ class MusicBeatState extends FlxUIState
 		@:nullSafety(Off)
 		if (FlxG.sound != null && FlxG.sound.music != null) FlxG.sound.music.onComplete = null;
 		
-		if (!FlxTransitionableState.skipNextTransIn)
+		if (!FlxTransitionableState.skipNextTransIn && transitionInState != NONE)
 		{
 			openSubState(Type.createInstance(BaseTransitionState.getTransitionFromState(transitionInState), [TransitionStatus.IN, onOutroComplete]));
 			return;

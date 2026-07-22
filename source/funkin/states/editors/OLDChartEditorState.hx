@@ -1,5 +1,6 @@
 package funkin.states.editors;
 
+import funkin.objects.AttachedModule;
 import funkin.data.Chart;
 
 import haxe.ds.IntMap;
@@ -394,12 +395,11 @@ class OLDChartEditorState extends MusicBeatState
 		strumLine = new FlxSprite(0, 50).makeGraphic(Std.int(GRID_SIZE * ((_song.keys * _song.lanes) + 1)), 4);
 		add(strumLine);
 		
-		quant = new AttachedSprite('editors/chart_quant', 'chart_quant');
+		quant = cast new AttachedSprite().loadAtlasFrames(Paths.getAtlasFrames('editors/chart_quant'));
 		quant.animation.addByPrefix('q', 'chart_quant', 0, false);
 		quant.animation.play('q', true, false, 0);
-		quant.sprTracker = strumLine;
-		quant.xAdd = -32;
-		quant.yAdd = 8;
+		quant.attachedModule.tracked = strumLine;
+		quant.attachedModule.positionOffset.set(-32, 8);
 		add(quant);
 		
 		strumLineNotes = new FlxTypedGroup<StrumNote>();
@@ -1432,12 +1432,13 @@ class OLDChartEditorState extends MusicBeatState
 		directories.push(Paths.mods(Mods.currentModDirectory + '/events/'));
 		for (mod in Mods.globalMods)
 			directories.push(Paths.mods(mod + '/events/'));
-		
+			
 		var eventexts = FunkinScript.H_EXTS.concat(["txt"]);
-
-		var pushedEvents:Array<String> = [];
-		for (event in eventStuff) pushedEvents.push(event[0]);
 		
+		var pushedEvents:Array<String> = [];
+		for (event in eventStuff)
+			pushedEvents.push(event[0]);
+			
 		for (i in 0...directories.length)
 		{
 			var directory:String = directories[i];
@@ -1445,7 +1446,7 @@ class OLDChartEditorState extends MusicBeatState
 			{
 				var files = FunkinAssets.readDirectory(directory);
 				files.sort((a, b) -> return Path.extension(a) == "txt" ? 1 : 0);
-
+				
 				for (file in files)
 				{
 					var path = Path.join([directory, file]);
@@ -1454,10 +1455,8 @@ class OLDChartEditorState extends MusicBeatState
 						var fileToCheck:String = Path.withoutExtension(file);
 						if (!pushedEvents.contains(fileToCheck))
 						{
-							if (FunkinScript.H_EXTS.contains(Path.extension(file)))
-								eventStuff.push([fileToCheck, 'scripted description']);
-							else
-								eventStuff.push([fileToCheck, File.getContent(path)]);
+							if (FunkinScript.H_EXTS.contains(Path.extension(file))) eventStuff.push([fileToCheck, 'scripted description']);
+							else eventStuff.push([fileToCheck, File.getContent(path)]);
 						}
 						pushedEvents.push(fileToCheck);
 					}
@@ -2813,8 +2812,8 @@ class OLDChartEditorState extends MusicBeatState
 	
 	function updateWaveform()
 	{
-		if(ClientPrefs.streamedMusic) return;
-
+		if (ClientPrefs.streamedMusic) return;
+		
 		#if desktop
 		if (waveformPrinted)
 		{

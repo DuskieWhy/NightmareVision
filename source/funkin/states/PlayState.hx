@@ -1,11 +1,7 @@
 package funkin.states;
 
-import funkin.data.SongMetaData;
-
 import haxe.Timer;
 import haxe.ds.Vector;
-
-import openfl.events.KeyboardEvent;
 
 import flixel.util.FlxDestroyUtil;
 import flixel.FlxBasic;
@@ -17,13 +13,10 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxPoint;
 import flixel.tweens.FlxEase;
 import flixel.util.FlxColor;
-import flixel.util.FlxSort;
 import flixel.util.FlxTimer;
 import flixel.text.FlxText;
-import flixel.group.FlxSpriteGroup;
 import flixel.input.keyboard.FlxKey;
 import flixel.util.helpers.FlxBounds;
-import flixel.group.FlxContainer.FlxTypedContainer;
 import flixel.util.FlxStringUtil;
 
 import funkin.objects.Character;
@@ -44,10 +37,10 @@ import funkin.states.substates.*;
 import funkin.states.editors.*;
 import funkin.game.modchart.*;
 import funkin.game.StoryMeta;
-import funkin.game.Countdown;
 import funkin.input.InputSystem;
 import funkin.input.InputEvent;
 import funkin.audio.SyncedFlxSoundGroup;
+import funkin.data.SongMetaData;
 #if VIDEOS_ALLOWED
 import funkin.video.FunkinVideoSprite;
 #end
@@ -214,34 +207,19 @@ class PlayState extends MusicBeatState
 	public var boyfriend:Character;
 	
 	/**
-		Reference to the player stage X position
+		The players position defined in the stage file
 	**/
-	public var BF_X:Float = 770;
+	public var boyfriendPosition:FlxPoint = new FlxPoint(770, 100);
 	
 	/**
-		Reference to the player stage Y position
+		The opponent position defined in the stage file
 	**/
-	public var BF_Y:Float = 100;
+	public var dadPosition:FlxPoint = new FlxPoint(100, 100);
 	
 	/**
-		Reference to the opponent stage X position
+		The gf position defined in the stage file
 	**/
-	public var DAD_X:Float = 100;
-	
-	/**
-		Reference to the opponent stage Y position
-	**/
-	public var DAD_Y:Float = 100;
-	
-	/**
-		Reference to the girlfriend stage X position
-	**/
-	public var GF_X:Float = 400;
-	
-	/**
-		Reference to the girlfriend stage Y position
-	**/
-	public var GF_Y:Float = 130;
+	public var gfPosition:FlxPoint = new FlxPoint(400, 130);
 	
 	public var gfSpeed(default, set):Int = 1;
 	
@@ -556,16 +534,16 @@ class PlayState extends MusicBeatState
 		defaultCamZoom = file.defaultZoom;
 		FlxG.camera.zoom = file.defaultZoom;
 		
-		BF_X = file.boyfriend[0];
-		BF_Y = file.boyfriend[1];
-		
-		GF_X = file.girlfriend[0];
-		GF_Y = file.girlfriend[1];
-		
-		DAD_X = file.opponent[0];
-		DAD_Y = file.opponent[1];
-		
 		if (file.camera_speed != null) cameraSpeed = file.camera_speed;
+		
+		boyfriendPosition.x = file.boyfriend[0];
+		boyfriendPosition.y = file.boyfriend[1];
+		
+		dadPosition.x = file.opponent[0];
+		dadPosition.y = file.opponent[1];
+		
+		gfPosition.x = file.girlfriend[0];
+		gfPosition.y = file.girlfriend[1];
 		
 		boyfriendCameraOffset = file.camera_boyfriend ?? [0, 0];
 		
@@ -573,9 +551,9 @@ class PlayState extends MusicBeatState
 		
 		girlfriendCameraOffset = file.camera_girlfriend ?? [0, 0];
 		
-		boyfriendGroup ??= new CharacterGroup(BF_X, BF_Y, BF);
-		dadGroup ??= new CharacterGroup(DAD_X, DAD_Y, DAD);
-		gfGroup ??= new CharacterGroup(GF_X, GF_Y, GF);
+		boyfriendGroup ??= new CharacterGroup(boyfriendPosition.x, boyfriendPosition.y, BF);
+		dadGroup ??= new CharacterGroup(dadPosition.x, dadPosition.y, DAD);
+		gfGroup ??= new CharacterGroup(gfPosition.x, gfPosition.y, GF);
 		
 		boyfriendGroup.zIndex = file.bfZIndex ?? 0;
 		dadGroup.zIndex = file.dadZIndex ?? 0;
@@ -583,7 +561,7 @@ class PlayState extends MusicBeatState
 	}
 	
 	// null checking
-	function callHUDFunc(hud:BaseHUD->Void):Void if (playHUD != null) hud(playHUD);
+	inline function callHUDFunc(hud:BaseHUD->Void):Void if (playHUD != null) hud(playHUD);
 	
 	var input:InputSystem;
 	
@@ -684,7 +662,7 @@ class PlayState extends MusicBeatState
 			stage.add(boyfriendGroup);
 		}
 		
-		inline function addSongScripts(directory)
+		inline function initAllScriptsInDirectory(directory:String)
 		{
 			for (file in Paths.listAllFilesInDirectory(directory).filter(path -> FunkinScript.isHxFile(path)))
 			{
@@ -693,7 +671,7 @@ class PlayState extends MusicBeatState
 				initFunkinScript(file);
 			}
 		}
-		addSongScripts('scripts');
+		initAllScriptsInDirectory('scripts');
 		
 		var gfVersion:String = SONG.gfVersion;
 		if (gfVersion == null || gfVersion.length < 1) SONG.gfVersion = gfVersion = 'gf';
@@ -742,7 +720,7 @@ class PlayState extends MusicBeatState
 		
 		if (dad.curCharacter.startsWith('gf'))
 		{
-			dad.setPosition(GF_X, GF_Y);
+			dad.setPosition(gfPosition.x, gfPosition.y);
 			if (gf != null) gf.visible = false;
 		}
 		
@@ -771,8 +749,8 @@ class PlayState extends MusicBeatState
 		
 		modManager = new ModManager(this);
 		
-		camFollow = new FlxObject(0, 0, 1, 1);
-		camFollow.setPosition(camPos.x, camPos.y);
+		camFollow = new FlxObject(camPos.x, camPos.y, 1, 1);
+		add(camFollow);
 		camPos.put();
 
 		camFollowOffset = new FlxPoint();
@@ -782,8 +760,6 @@ class PlayState extends MusicBeatState
 			camFollow = prevCamFollow;
 			prevCamFollow = null;
 		}
-		
-		add(camFollow);
 		
 		FlxG.camera.follow(camFollow, LOCKON, 0);
 		FlxG.camera.zoom = defaultCamZoom;
@@ -803,8 +779,8 @@ class PlayState extends MusicBeatState
 		playFields.cameras = [camHUD];
 		botplayTxt.cameras = [camHUD];
 		
-		addSongScripts('songs/${Paths.sanitize(SONG.song)}/');
-		addSongScripts('songs/${Paths.sanitize(SONG.song)}/scripts/');
+		initAllScriptsInDirectory('songs/${Paths.sanitize(SONG.song)}/');
+		initAllScriptsInDirectory('songs/${Paths.sanitize(SONG.song)}/scripts/');
 		
 		scripts.call('preNoteGeneration', []);
 		
@@ -2739,7 +2715,7 @@ class PlayState extends MusicBeatState
 		if (disableCamOffsets) updateCamOffsets = false;
 	}
 	
-	public function finishSong(?ignoreNoteOffset:Bool = false):Void
+	public function finishSong(ignoreNoteOffset:Bool = false):Void
 	{
 		updateTime = false;
 		
@@ -3003,6 +2979,11 @@ class PlayState extends MusicBeatState
 					spr.playAnim('static');
 					spr.resetAnim = 0;
 				}
+				
+				for (splash in field.grpSusSplashes)
+				{
+					if (splash.alive && splash.noteData == key && !splash.completed) splash.kill();
+				}
 			}
 			scripts.call('onKeyRelease', [key]);
 			scripts.call('onInputRelease', [key]);
@@ -3085,8 +3066,6 @@ class PlayState extends MusicBeatState
 				}
 			}
 		}
-		
-		// TO DO: Find a better way to handle controller inputs, this should work for now
 	}
 	
 	@:inheritDoc
