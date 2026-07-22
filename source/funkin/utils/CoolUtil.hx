@@ -1,5 +1,9 @@
 package funkin.utils;
 
+import funkin.data.FunkinTransitionState;
+
+import flixel.util.typeLimit.NextState;
+
 import openfl.display.BlendMode;
 
 import flixel.addons.transition.FlxTransitionableState;
@@ -256,5 +260,21 @@ class CoolUtil
 			@:nullSafety(Off)
 			FlxG.sound.music.fadeTween = null;
 		}
+	}
+	
+	public static function switchState(next:NextState, transition:FunkinTransitionState = SWIPE)
+	{
+		var _lastIn = MusicBeatState.transitionInState;
+		var _lastOut = MusicBeatState.transitionOutState;
+		
+		MusicBeatState.transitionInState = transition;
+		MusicBeatState.transitionOutState = transition;
+		
+		FlxG.switchState(next);
+		
+		FlxG.signals.postStateSwitch.addOnce(() -> {
+			MusicBeatState.transitionInState = _lastIn;
+			MusicBeatState.transitionOutState = _lastOut;
+		});
 	}
 }

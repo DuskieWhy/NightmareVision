@@ -2916,9 +2916,7 @@ class PlayState extends MusicBeatState
 		var judgeScore:Int = daRating.score;
 		
 		totalNotesHit += daRating.ratingMod;
-		note.ratingMod = daRating.ratingMod;
 		if (!note.ratingDisabled) daRating.increase();
-		note.rating = daRating.name;
 		
 		var field:PlayField = note.playField;
 		

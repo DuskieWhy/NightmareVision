@@ -161,6 +161,12 @@ class DebugDisplay extends Sprite
 		while (times[0] < now - 1000)
 			times.shift();
 			
+		if (FlxG.keys.justPressed.F3)
+		{
+			final fpsTypeArray:Array<String> = ['Simple', 'Advanced', 'Disabled'];
+			ClientPrefs.fpsDisplayType = fpsTypeArray[FlxMath.wrap(fpsTypeArray.indexOf(ClientPrefs.fpsDisplayType) + 1, 0, fpsTypeArray.length - 1)];
+		}
+		
 		// prevents the overlay from updating every frame, why would you need to anyways @crowplexus
 		if (deltaTimeout < 100)
 		{

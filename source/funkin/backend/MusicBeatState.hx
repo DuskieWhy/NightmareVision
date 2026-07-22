@@ -17,11 +17,10 @@ import funkin.input.Controls;
 
 class MusicBeatState extends FlxUIState
 {
-	static final _defaultTransState:Class<BaseTransitionState> = SwipeTransition;
+	public static final DEFAULT_TRANSITION_STATE:FunkinTransitionState = SWIPE;
 	
-	// change these to change the transition
-	public static var transitionInState:Null<Class<BaseTransitionState>> = null;
-	public static var transitionOutState:Null<Class<BaseTransitionState>> = null;
+	public static var transitionInState:FunkinTransitionState = SWIPE;
+	public static var transitionOutState:FunkinTransitionState = SWIPE;
 	
 	public function new() super();
 	
@@ -83,7 +82,7 @@ class MusicBeatState extends FlxUIState
 		
 		if (!FlxTransitionableState.skipNextTransOut)
 		{
-			openSubState(Type.createInstance(transitionOutState ?? _defaultTransState, [TransitionStatus.OUT]));
+			openSubState(Type.createInstance(BaseTransitionState.getTransitionFromState(transitionOutState), [TransitionStatus.OUT]));
 		}
 		
 		FlxTransitionableState.skipNextTransOut = false;
@@ -213,7 +212,7 @@ class MusicBeatState extends FlxUIState
 		
 		if (!FlxTransitionableState.skipNextTransIn)
 		{
-			openSubState(Type.createInstance(transitionInState ?? _defaultTransState, [TransitionStatus.IN, onOutroComplete]));
+			openSubState(Type.createInstance(BaseTransitionState.getTransitionFromState(transitionInState), [TransitionStatus.IN, onOutroComplete]));
 			return;
 		}
 		

@@ -15,13 +15,9 @@ class MiscSubState extends BaseOptionsMenu
 		var option:Option = new Option('Dev Mode', "If checked, traces & developer hotkeys will become available.", 'inDevMode', BOOL, false);
 		addOption(option);
 		
-		var discordOption:Option = new Option('Discord Rich Presence', "If checked, It will show what you are currently playing on your Discord profile. Disable this if you don't want accidental leaks.", 'discordEnabled', BOOL, true);
-		discordOption.onChange = () -> {
-			DiscordClient.close();
-			DiscordClient.init();
-			DiscordClient.changePresence();
-			// i don't know if i need to do all of these but oh well
-		};
+		var discordOption:Option = new Option('Discord Rich Presence',
+			"If checked, It will show what you are currently playing on your Discord profile. Disable this if you don't want accidental leaks.", 'discordEnabled', BOOL, true);
+		discordOption.onChange = DiscordClient.restart;
 		addOption(discordOption);
 		
 		var option:Option = new Option('Streamed Song files',

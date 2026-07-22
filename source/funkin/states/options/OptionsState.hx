@@ -35,8 +35,7 @@ class OptionsState extends MusicBeatState
 			case 'Notes':
 				openSubState(new funkin.states.options.NoteSettingsSubState());
 			case 'Controls':
-				final gamepad = FlxG.gamepads.getFirstActiveGamepad();
-				openSubState(new funkin.states.options.ControlsSubState(gamepad != null ? Gamepad(gamepad.id) : Keys));
+				openSubState(new funkin.states.options.ControlsSubState());
 			case 'Graphics':
 				openSubState(new funkin.states.options.GraphicsSettingsSubState());
 			case 'Visuals and UI':

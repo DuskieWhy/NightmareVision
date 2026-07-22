@@ -1,5 +1,7 @@
 package funkin.game;
 
+import flixel.util.FlxStringUtil;
+
 import funkin.objects.note.*;
 
 class Rating
@@ -90,5 +92,14 @@ class Rating
 				score = 50;
 				noteSplash = false;
 		}
+	}
+	
+	public function toString():String
+	{
+		return FlxStringUtil.getDebugString([
+			LabelValuePair.weak("name", name),
+			LabelValuePair.weak("ratingMod", ratingMod),
+			LabelValuePair.weak("score", score)
+		]);
 	}
 }

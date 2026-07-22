@@ -36,6 +36,8 @@ class ClientPrefs
 {
 	// debug ------------------------------------------------------------------------//
 	@saveVar public static var inDevMode:Bool = false;
+
+	@saveVar public static var discordEnabled:Bool = true;
 	
 	@saveVar public static var discordEnabled:Bool = true;
 	

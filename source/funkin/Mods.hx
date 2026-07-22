@@ -376,19 +376,20 @@ class Mods
 			switch (pack.defaultTransition.toLowerCase())
 			{
 				case 'base', 'swipe':
-					MusicBeatState.transitionInState = SwipeTransition;
-					MusicBeatState.transitionOutState = SwipeTransition;
+					MusicBeatState.transitionInState = SWIPE;
+					MusicBeatState.transitionOutState = SWIPE;
 				case 'fade':
-					MusicBeatState.transitionInState = FadeTransition;
-					MusicBeatState.transitionOutState = FadeTransition;
+					MusicBeatState.transitionInState = FADE;
+					MusicBeatState.transitionOutState = FADE;
 				default:
-					ScriptedTransition.setTransition(pack.defaultTransition);
+					MusicBeatState.transitionInState = SCRIPTED(pack.defaultTransition);
+					MusicBeatState.transitionOutState = SCRIPTED(pack.defaultTransition);
 			}
 		}
 		else
 		{
-			MusicBeatState.transitionInState = SwipeTransition;
-			MusicBeatState.transitionOutState = SwipeTransition;
+			MusicBeatState.transitionInState = MusicBeatState.DEFAULT_TRANSITION_STATE;
+			MusicBeatState.transitionOutState = MusicBeatState.DEFAULT_TRANSITION_STATE;
 		}
 		
 		if (pack.discordClientID != null) funkin.api.DiscordClient.rpcId = pack.discordClientID;
