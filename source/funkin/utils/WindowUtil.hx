@@ -308,31 +308,4 @@ class WindowUtil
 		
 		centerWindow();
 	}
-	
-	public static function setVSyncMode(value:String):Void
-	{
-		var vsyncMode:lime.ui.WindowVSyncMode;
-		
-		switch (value)
-		{
-			case "Off":
-				vsyncMode = lime.ui.WindowVSyncMode.OFF;
-			case "On":
-				vsyncMode = lime.ui.WindowVSyncMode.ON;
-			case "Adaptive":
-				vsyncMode = lime.ui.WindowVSyncMode.ADAPTIVE;
-			default:
-				vsyncMode = lime.ui.WindowVSyncMode.OFF;
-		};
-		
-		var res:Bool = FlxG.stage.application.window.setVSyncMode(vsyncMode);
-		
-		// SDL_GL_SetSwapInterval returns the value we assigned on success, https://wiki.libsdl.org/SDL2/SDL_GL_GetSwapInterval#return-value.
-		// In lime, we can compare this to the original value to get a boolean.
-		if (!res)
-		{
-			trace('Failed to set VSync mode to $value, returning default');
-			FlxG.stage.application.window.setVSyncMode(lime.ui.WindowVSyncMode.OFF);
-		}
-	}
 }

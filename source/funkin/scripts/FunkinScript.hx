@@ -344,6 +344,7 @@ class FunkinScript extends IrisEx implements IFlxDestroyable
 		set("StrumNote", StrumNote);
 		set("Alphabet", Alphabet);
 		set("FlxTextAlphabet", FlxTextAlphabet);
+		set("FunkinSprite", funkin.objects.FunkinSprite);
 		
 		set("CutsceneHandler", funkin.objects.CutsceneHandler);
 		set('DialogueBox', funkin.objects.DialogueBox);

@@ -422,17 +422,17 @@ class NoteUtil
 	];
 	
 	public static var quantDefaultColors:Array<ColorList> = [
-		{r: 0xFFF9393F, g: 0xFFFFFFFF, b: 0xFF651038}, // 4th
-		{r: 0xFF00FFFF, g: 0xFFFFFFFF, b: 0xFF1542B7}, // 8th
-		{r: 0xFFC24B99, g: 0xFFFFFFFF, b: 0xFF3C1F56}, // 12th
-		{r: 0xFFF0E342, g: 0xFFFFFFFF, b: 0xFF554320}, // 16th
-		{r: 0xFFED36AD, g: 0xFFFFFFFF, b: 0xFF5C185A}, // 20th
-		{r: 0xFFE98F16, g: 0xFFFFFFFF, b: 0xFF3F2D12}, // 24th
-		{r: 0xFF4769B8, g: 0xFFFFFFFF, b: 0xFF161B27}, // 32nd
-		{r: 0xFF12FA05, g: 0xFFFFFFFF, b: 0xFF0A4447}, // 48th
-		{r: 0xFF008080, g: 0xFFFFFFFF, b: 0xFF004D4D}, // 64th
-		{r: 0xFF8a8a8a, g: 0xFFFFFFFF, b: 0xff3a3a3a}, // 96th
-		{r: 0xFFbab86c, g: 0xFFFFFFFF, b: 0xff505a1f} // 192nd
+		{r: 0xFFE51919, g: 0xFFFFFF, b: 0xFF5B0A30}, // 4th
+		{r: 0xFF193BE5, g: 0xFFFFFF, b: 0xFF0A3B5B}, // 8th
+		{r: 0xFFA119E5, g: 0xFFFFFF, b: 0xFF1D0A5B}, // 12th
+		{r: 0xFF26D93E, g: 0xFFFFFF, b: 0xFF24560F}, // 16th
+		{r: 0xFF0000B2, g: 0xFFFFFF, b: 0xFF002247}, // 20th
+		{r: 0xFFA119E5, g: 0xFFFFFF, b: 0xFF1D0A5B}, // 24th
+		{r: 0xFFE5C319, g: 0xFFFFFF, b: 0xFF5B2A0A}, // 32nd
+		{r: 0xFFA119E5, g: 0xFFFFFF, b: 0xFF1D0A5B}, // 48th
+		{r: 0xFF13ECA4, g: 0xFFFFFF, b: 0xFF085D18}, // 64th
+		{r: 0xFF3A3A6C, g: 0xFFFFFF, b: 0xFF17202B}, // 96th
+		{r: 0xFF3A3A6C, g: 0xFFFFFF, b: 0xFF17202B} // 192nd
 	];
 	
 	public static function getCurColors(id:Int = 0, quant:Int = 0, player:Int = 0)

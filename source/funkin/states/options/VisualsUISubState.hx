@@ -53,9 +53,6 @@ class VisualsUISubState extends BaseOptionsMenu
 		
 		var option:Option = new Option('Camera Note Follow', "If unchecked, hitting notes will no longer have the camera follow in its direction.", 'camFollowsCharacters', BOOL, true);
 		addOption(option);
-
-		var option:Option = new Option('Combo Stacking', "If unchecked, Ratings and Combo won't stack, saving on System Memory and making them easier to read", 'comboStacking', BOOL, true);
-		addOption(option);
 		
 		super();
 	}
