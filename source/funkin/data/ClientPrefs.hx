@@ -3,7 +3,6 @@ package funkin.data;
 import flixel.input.gamepad.FlxGamepadInputID;
 
 import funkin.backend.DebugDisplay;
-import funkin.utils.WindowUtil;
 
 import flixel.input.keyboard.FlxKey;
 import flixel.util.FlxSave;

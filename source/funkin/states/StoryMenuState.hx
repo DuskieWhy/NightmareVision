@@ -209,7 +209,7 @@ class StoryMenuState extends MusicBeatState
 		lerpScore = Math.floor(FlxMath.lerp(lerpScore, intendedScore, FlxMath.bound(elapsed * 30, 0, 1)));
 		if (Math.abs(intendedScore - lerpScore) < 10) lerpScore = intendedScore;
 		
-		scoreText.text = "LEVEL SCORE:" + FlxStringUtil.formatMoney(lerpScore, false);
+		scoreText.text = "WEEK SCORE:" + FlxStringUtil.formatMoney(lerpScore, false);
 		
 		if (!movedBack && !selectedWeek)
 		{
