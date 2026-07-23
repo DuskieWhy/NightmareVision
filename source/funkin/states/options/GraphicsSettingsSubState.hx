@@ -57,6 +57,10 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 		
 		option.onChange = onChangeFramerate;
 		
+		var option:Option = new Option("VSync Mode", "Syncs the games Fps to your monitors refresh rate to prevent screen tearing", 'vsyncMode', STRING, 'Off', ['Off', 'On', 'Adaptive']);
+		addOption(option);
+		option.onChange = ClientPrefs.refreshVSyncMode;
+		
 		super();
 	}
 	

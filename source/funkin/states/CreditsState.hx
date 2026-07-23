@@ -56,6 +56,7 @@ class CreditsState extends MusicBeatState
 		['NIGHTMARE FEDS'],
 		['DuskieWhy', 'duskie', 'Programmer of Nightmare Vision', 'https://twitter.com/DuskieWhy', '0xA8324A'],
 		['data5', 'data', 'Programmer of Nightmare Vision', 'https://x.com/_data5', '0xF9A250'],
+		['emi3', 'emi3', 'Programmer of Nightmare Vision', 'https://x.com/fnfin3d', '0xFFD2D5'],
 		['NebulaZorua', 'neb', 'Modchart backend\n(Created the initial fork NMV was derived from)', 'https://twitter.com/Nebula_Zorua', '0x9B00B3'],
 		['JoggingScout', 'joggingscout', 'Artist (SUPER KUTTY!!!!)', 'https://twitter.com/JoggingScout', '0x3366CC'],
 		['Iseta', 'iseta', 'Artist (a little less kutty...)', 'https://twitter.com/Isetaaaaa', '0x6ede0b'],

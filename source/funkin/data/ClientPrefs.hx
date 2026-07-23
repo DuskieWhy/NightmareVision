@@ -44,9 +44,9 @@ class ClientPrefs
 	@saveVar public static var streamedMusic:Bool = false;
 	
 	@saveVar public static var autoPause:Bool = true;
-
+	
 	@saveVar public static var fancyPreview:Bool = true;
-
+	
 	@saveVar public static var previewOnSave:Bool = true;
 	
 	// graphics ------------------------------------------------------------------------//
@@ -62,7 +62,7 @@ class ClientPrefs
 	
 	@saveVar public static var framerate:Int = 60;
 	
-	@saveVar public static var vSyncMode:String = 'Off';
+	@saveVar public static var vsyncMode:VsyncMode = OFF;
 	
 	// visuals ------------------------------------------------------------------------//
 	@saveVar public static var jumpGhosts:Bool = false;
@@ -84,7 +84,7 @@ class ClientPrefs
 	@saveVar public static var healthBarAlpha:Float = 1;
 	
 	@saveVar public static var camFollowsCharacters:Bool = true;
-
+	
 	@saveVar public static var underlayType:String = 'Lane Underlay';
 	
 	@saveVar public static var underlayOpacity:Float = 0.0;
@@ -105,7 +105,7 @@ class ClientPrefs
 	@saveVar public static var noReset:Bool = false;
 	
 	@saveVar public static var hitsoundVolume:Float = 0;
-
+	
 	@saveVar public static var hitsoundType:String = "NMV";
 	
 	@saveVar public static var ratingOffset:Int = 0;
@@ -357,7 +357,7 @@ class ClientPrefs
 		
 		changeFps(framerate);
 		
-		WindowUtil.setVSyncMode(vSyncMode);
+		refreshVSyncMode();
 		
 		var save:FlxSave = new FlxSave();
 		save.bind('controls_v2');
@@ -368,6 +368,11 @@ class ClientPrefs
 		save = FlxDestroyUtil.destroy(save);
 	}
 	
+	/**
+	 * Helper function to change the games framerate.
+	 * 
+	 * If `ClientPrefs.unlockedFramerate`, this will do nothing but uncap the framerate (if it hasnt been already).
+	 */
 	public static function changeFps(fps:Int = 60)
 	{
 		fps = unlockedFramerate ? 0 : Std.int(FlxMath.bound(fps, 60, 400));
@@ -382,6 +387,14 @@ class ClientPrefs
 			FlxG.drawFramerate = fps;
 			FlxG.updateFramerate = fps;
 		}
+	}
+	
+	/**
+	 * Updates the windows Vsync mode to match `vsyncMode`
+	 */
+	public static function refreshVSyncMode()
+	{
+		FlxG.stage.window.setVSyncMode(ClientPrefs.vsyncMode);
 	}
 	
 	inline public static function getGameplaySetting(name:String, defaultValue:Dynamic):Dynamic
