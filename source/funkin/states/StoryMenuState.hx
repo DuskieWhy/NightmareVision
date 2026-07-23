@@ -210,6 +210,8 @@ class StoryMenuState extends MusicBeatState
 		if (Math.abs(intendedScore - lerpScore) < 10) lerpScore = intendedScore;
 		
 		scoreText.text = "WEEK SCORE:" + FlxStringUtil.formatMoney(lerpScore, false);
+
+		// FlxG.watch.addQuick('font', scoreText.font);
 		
 		if (!movedBack && !selectedWeek)
 		{

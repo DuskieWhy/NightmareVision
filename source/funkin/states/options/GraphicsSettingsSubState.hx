@@ -5,7 +5,6 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 
 import funkin.backend.DebugDisplay;
-import funkin.utils.WindowUtil;
 
 class GraphicsSettingsSubState extends BaseOptionsMenu
 {

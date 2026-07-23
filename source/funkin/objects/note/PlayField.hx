@@ -616,7 +616,7 @@ class PlayField extends FlxTypedContainer<StrumNote>
 		
 		onMissPress.removeAll();
 		onMissPress.destroy();
-
+		
 		underlaySpr.destroy();
 		
 		super.destroy();

@@ -327,7 +327,7 @@ class Character extends Bopper
 		}
 		super.draw();
 	}
-
+	
 	function set_holding(isIt:Bool):Bool
 	{
 		if (!isIt && holding && holdTimer >= Conductor.stepCrotchet * 0.001 * singDuration)

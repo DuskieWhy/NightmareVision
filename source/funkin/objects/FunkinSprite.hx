@@ -7,7 +7,6 @@ import flixel.math.FlxRect;
 import animate.FlxAnimateFrames;
 import animate.FlxAnimate;
 
-// zoom factor code borrowed from cne https://github.com/CodenameCrew/CodenameEngine/blob/main/source/funkin/backend/FunkinSprite.hx
 class FunkinSprite extends FlxAnimate
 {
 	/**
@@ -64,22 +63,6 @@ class FunkinSprite extends FlxAnimate
 	 * used by `playAnimForDuration`'s `force` arguement.
 	 */
 	public var canPlayAnimations:Bool = true;
-
-	/**
-	 * Changes the sprite's scale depending on the camera's zoom
-	 * 
-	 * The lower to zoom factor, the less the scale will change when the camera zooms in/out
-	 */
-	public var zoomFactor:Float = 1;
-
-	/**
-	 * If `false`, the 	`zoomFactor` variable gets ignored
-	 * 
-	 * The lower to zoom factor, the less the scale will change when the camera zooms in/out
-	 */
-	public var zoomFactorEnabled:Bool = true;
-
-	var _rect2:FlxRect;
 	
 	/**
 	 * Loads frames onto the sprite
@@ -290,11 +273,6 @@ class FunkinSprite extends FlxAnimate
 		return false;
 	}
 
-	override function initVars() {
-		super.initVars();
-		_rect2 = FlxRect.get();
-	}
-	
 	// these funcs primarily exist for compat reasons
 	
 	public inline function getAnimName():String return isAnimNull() ? '' : animation.curAnim.name;
@@ -345,29 +323,6 @@ class FunkinSprite extends FlxAnimate
 		
 		super.destroy();
 
-		_rect2 = FlxDestroyUtil.put(_rect2);
-	}
-
-	// ZOOM FACTOR
-	private inline function __shouldDoZoomFactor()
-		return zoomFactorEnabled && zoomFactor != 1;
-
-	private inline function __prepareZoomFactor(?rect:FlxRect, camera:FlxCamera):FlxRect {
-		#if USE_LEGACY_ZOOM_FACTOR
-			return (rect ?? FlxRect.get()).set(
-				camera.width * 0.5,
-				camera.height * 0.5,
-				(camera.scaleX > 0 ? Math.max : Math.min)(0, FlxMath.lerp(1 / camera.scaleX, 1, zoomFactor)),
-				(camera.scaleY > 0 ? Math.max : Math.min)(0, FlxMath.lerp(1 / camera.scaleY, 1, zoomFactor))
-			);
-		#else
-			return (rect ?? FlxRect.get()).set(
-				camera.width * 0.5 + camera.scroll.x * scrollFactor.x,
-				camera.height * 0.5 + camera.scroll.y * scrollFactor.y,
-				(camera.scaleX > 0 ? Math.max : Math.min)(0, FlxMath.lerp(1 / camera.scaleX, 1, zoomFactor)),
-				(camera.scaleY > 0 ? Math.max : Math.min)(0, FlxMath.lerp(1 / camera.scaleY, 1, zoomFactor))
-			);
-		#end
 	}
 	
 	var _transformedAnimOffset:FlxPoint = FlxPoint.get();
@@ -375,16 +330,6 @@ class FunkinSprite extends FlxAnimate
 	override function prepareDrawMatrix(matrix:flixel.math.FlxMatrix, camera:FlxCamera):Void
 	{
 		super.prepareDrawMatrix(matrix, camera);
-
-		if (__shouldDoZoomFactor()) {
-			__prepareZoomFactor(_rect2, camera);
-			matrix.setTo(
-				matrix.a * _rect2.width, matrix.b * _rect2.height,
-				matrix.c * _rect2.width, matrix.d * _rect2.height,
-				(matrix.tx - _rect2.x) * _rect2.width + _rect2.x,
-				(matrix.ty - _rect2.y) * _rect2.height + _rect2.y,
-			);
-		}
 		
 		transformSpriteOffset(_transformedAnimOffset);
 		if (isPixelPerfectRender(camera)) _transformedAnimOffset.floor();
@@ -419,8 +364,6 @@ class FunkinSprite extends FlxAnimate
 		
 		spr.frames = this.frames;
 		spr.animation.copyFrom(this.animation);
-
-		spr.zoomFactor = this.zoomFactor;
 		
 		for (key in this.animOffsets.keys())
 		{

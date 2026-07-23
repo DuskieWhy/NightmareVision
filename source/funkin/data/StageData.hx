@@ -107,7 +107,7 @@ typedef StageObject =
 	 * Default is [1, 1]
 	 */
 	var ?scrollFactor:Array<Float>;
-
+	
 	/**
 	 * Scale of the object as [x, y]
 	 * 

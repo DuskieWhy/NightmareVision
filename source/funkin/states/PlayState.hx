@@ -24,7 +24,6 @@ import funkin.backend.Difficulty;
 import funkin.game.RatingInfo;
 import funkin.objects.note.*;
 import funkin.objects.note.Note;
-import funkin.objects.note.Note;
 import funkin.game.huds.BaseHUD;
 import funkin.scripts.*;
 import funkin.data.Song;
