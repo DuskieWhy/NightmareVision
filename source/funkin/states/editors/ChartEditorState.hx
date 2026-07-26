@@ -190,19 +190,41 @@ class ChartEditorState extends haxe.ui.backend.flixel.UIState
 			"Value 1: Character to change (Dad, BF, GF)\nValue 2: New character's name"
 		],
 		[
+			'Change Noteskin',
+			'Value 1: name of the noteskin json to change to.\nValue 2: ID of strum to change. (0 -> player, 1 -> opponent, etc)'
+		],
+		[
 			'Change Scroll Speed',
 			"Value 1: Scroll Speed Multiplier (1 is default)\nValue 2: Time it takes to change fully in seconds."
 		],
-		['Set Property', "Value 1: Variable name\nValue 2: New value"],
-		['HUD Fade', "Fades the HUD camera\n\nValue 1: Alpha\nValue 2: Duration"],
-		['Camera Fade', "Fades the game camera\n\nValue 1: Alpha\nValue 2: Duration"],
-		['Camera Flash', "Value 1: Color, Alpha (Optional)\nValue 2: Fade duration"],
+		[
+			'Set Property',
+			"Value 1: Variable name\nValue 2: New value"
+		],
+		[
+			'HUD Fade',
+			"Fades the HUD camera\n\nValue 1: Alpha\nValue 2: Duration"
+		],
+		[
+			'Camera Fade',
+			"Fades the game camera\n\nValue 1: Alpha\nValue 2: Duration"
+		],
+		[
+			'Camera Flash',
+			"Value 1: Color, Alpha (Optional)\nValue 2: Fade duration"
+		],
 		[
 			'Camera Zoom',
 			"Changes the Camera Zoom.\n\nValue 1: Zoom Multiplier (1 is default)\n\nIn case you want a tween, use Value 2 like this:\n\n\"3, elasticOut\"\n(Duration, Ease Type)"
 		],
-		['Set Cam Zoom', "Value 1: Zoom"],
-		['Set Cam Pos', "Value 1: X\nValue 2: Y"],
+		[
+			'Set Cam Zoom',
+			"Value 1: Zoom"
+		],
+		[
+			'Set Cam Pos',
+			"Value 1: X\nValue 2: Y"
+		],
 		[
 			"Mult SV",
 			"Changes the notes' scroll velocity via multiplication.\nValue 1: Multiplier"
@@ -211,6 +233,18 @@ class ChartEditorState extends haxe.ui.backend.flixel.UIState
 			"Constant SV",
 			"Uses scroll velocity to set the speed to a constant number.\nValue 1: Constant"
 		],
+		[
+			"Focus Camera",
+			"Changes the camera target\n\nValue 1: Target (Player, Opponent, Girlfriend, Position)\nValue 2: X, Y, Time, Ease\n\nX, and Y Values will act an offset if the target isn't 'Position'\n\nTime & Ease will be ignored if the Ease type is either 'Classic' or 'Instant'"
+		],
+		[
+			"Set Camera Bop",
+			"Value 1: Rate of bops per beat\nValue 2: Intensity of each bop"
+		],
+		[
+			"Zoom Camera",
+			"Changes the camera zoom\n\nValue 1: Zoom Type\nValue 2: New Zoom Value, Time, Ease.\n\nZoom Types:\n\nAbsolute: Set zoom directly.\nStage: Set zoom as a multiplier of the current stage's default zoom.\n\nTime & Ease will be ignored if the Ease type is 'Instant'"
+		]
 	];
 	
 	public var variables:Map<String, Dynamic> = new Map();
