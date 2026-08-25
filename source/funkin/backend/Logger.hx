@@ -57,7 +57,7 @@ class Logger
 		
 		if (showInGame && ClientPrefs.inDevMode)
 		{
-			DebugTextPlugin.addText(Std.string(data), getHexColourFromSeverity(severity));
+			DebugTextPlugin.instance.addText(Std.string(data), getHexColourFromSeverity(severity));
 		}
 		
 		var output:String = severity.toString() + haxe.Log.formatOutput(data, pos);

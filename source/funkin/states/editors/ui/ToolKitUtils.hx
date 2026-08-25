@@ -253,7 +253,19 @@ class ToolKitUtils
 		}
 	}
 	
-	static function unfocusIter(component:Component):Void
+	/**
+	 * Disables haxe ui focus
+	 */
+	public static function forceUnfocus()
+	{
+		iterated.resize(0);
+		currentFocus = null;
+		
+		for (component in Screen.instance.rootComponents)
+			unfocusIter(component, true);
+	}
+	
+	static function unfocusIter(component:Component, ignoreHitTest:Bool = false):Void
 	{
 		if (iterated.contains(component)) return;
 		
@@ -261,7 +273,7 @@ class ToolKitUtils
 		{
 			_hitTest = FlxG.mouse.getViewPosition(funkin.utils.CameraUtil.lastCamera, _hitTest);
 			
-			if (!component.hasComponentUnderPoint(_hitTest.x, _hitTest.y))
+			if (ignoreHitTest || !component.hasComponentUnderPoint(_hitTest.x, _hitTest.y))
 			{
 				var component:InteractiveComponent = cast component;
 				@:privateAccess component._focus = true;
@@ -270,7 +282,7 @@ class ToolKitUtils
 			}
 		}
 		@:privateAccess if (component._children != null) for (child in component._children)
-			unfocusIter(child);
+			unfocusIter(child, ignoreHitTest);
 	}
 	
 	static function focusIter(component:Component):Void

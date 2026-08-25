@@ -1014,15 +1014,15 @@ class OLDChartEditorState extends MusicBeatState
 		
 		check_mustHitSection = new FlxUICheckBox(10, 15, null, null, "Must hit section", 100);
 		check_mustHitSection.name = 'check_mustHit';
-		check_mustHitSection.checked = _song.notes[curSec].mustHitSection;
+		check_mustHitSection.checked = _song.notes[curSec]?.mustHitSection ?? false;
 		
 		check_gfSection = new FlxUICheckBox(10, check_mustHitSection.y + 22, null, null, "GF section", 100);
 		check_gfSection.name = 'check_gf';
-		check_gfSection.checked = _song.notes[curSec].gfSection;
+		check_gfSection.checked = _song.notes[curSec]?.gfSection ?? false;
 		// _song.needsVoices = check_mustHit.checked;
 		
 		check_altAnim = new FlxUICheckBox(check_gfSection.x + 120, check_gfSection.y, null, null, "Alt Animation", 100);
-		check_altAnim.checked = _song.notes[curSec].altAnim;
+		check_altAnim.checked = _song.notes[curSec]?.altAnim ?? false;
 		
 		stepperBeats = new FlxUINumericStepper(10, 100, 1, 4, 1, 6, 2, 1, new FlxUIInputTextEx(0, 0, 25));
 		stepperBeats.value = getSectionBeats();
@@ -1031,7 +1031,7 @@ class OLDChartEditorState extends MusicBeatState
 		check_altAnim.name = 'check_altAnim';
 		
 		check_changeBPM = new FlxUICheckBox(10, stepperBeats.y + 30, null, null, 'Change BPM', 100);
-		check_changeBPM.checked = _song.notes[curSec].changeBPM;
+		check_changeBPM.checked = _song.notes[curSec]?.changeBPM ?? false;
 		check_changeBPM.name = 'check_changeBPM';
 		
 		stepperSectionBPM = new FlxUINumericStepper(10, check_changeBPM.y + 20, 1, Conductor.bpm, 1, 999, 1, 1, new FlxUIInputTextEx(0, 0, 25));
@@ -2122,8 +2122,8 @@ class OLDChartEditorState extends MusicBeatState
 						}
 						else if (FlxG.keys.pressed.ALT)
 						{
-							selectNote(note);
 							note.chartData[3] = noteTypeIntMap.get(currentType);
+							selectNote(note);
 							updateGrid();
 						}
 						else
@@ -2688,6 +2688,11 @@ class OLDChartEditorState extends MusicBeatState
 					var alpha:Int = alpha;
 					var sub:Null<Int> = sub;
 					
+					if (_song.notes[curSec] == null)
+					{
+						continue;
+					}
+					
 					if ((!_song.notes[curSec].mustHitSection && (x < (_song.keys + 1) || x >= (_song.keys * 2 + 1))) ||
 						(_song.notes[curSec].mustHitSection && (x < 1 || x >= (_song.keys + 1)))) sub ??= 50;
 						
@@ -3152,6 +3157,10 @@ class OLDChartEditorState extends MusicBeatState
 	
 	function updateHeads():Void
 	{
+		if (_song.notes[curSec] == null)
+		{
+			return;
+		}
 		var mustHit:Bool = _song.notes[curSec].mustHitSection;
 		var isGF:Bool = _song.notes[curSec].gfSection;
 		
@@ -3233,6 +3242,11 @@ class OLDChartEditorState extends MusicBeatState
 		nextRenderedSustains.clear();
 		prevRenderedNotes.clear();
 		prevRenderedSustains.clear();
+		
+		if (_song.notes[curSec] == null)
+		{
+			return;
+		}
 		
 		// var skin:NoteSkinHelper = PlayState.noteSkin;
 		
@@ -3408,7 +3422,7 @@ class OLDChartEditorState extends MusicBeatState
 			}
 		}
 		
-		var note:EditorNote = new EditorNote(daStrumTime, intendedData % _song.keys, null, null, true);
+		var note:EditorNote = new EditorNote(daStrumTime, intendedData % _song.keys, null, false, true);
 		note.lane = Std.int(Math.max(Math.floor(intendedData / _song.keys), 0));
 		note.noteData = intendedData % _song.keys;
 		note.alreadyShifted = true;

@@ -1199,7 +1199,6 @@ class PlayState extends MusicBeatState
 		final songName:String = Paths.sanitize(SONG.song);
 		
 		var file:String = Paths.json('$songName/charts/events');
-		if (!FunkinAssets.exists(file)) file = Paths.json('$songName/data/events');
 		
 		inline function makeEv(time:Float, ev:String, v1:String, v2:String)
 		{
@@ -1751,10 +1750,9 @@ class PlayState extends MusicBeatState
 		
 		if (camZooming)
 		{
-			@:privateAccess if (!FlxTween.globalManager.containsTweensOf(FlxG.camera, ['zoom']))
-				FlxG.camera.zoom = MathUtil.decayLerp(FlxG.camera.zoom, defaultCamZoom + defaultCamZoomAdd, 6.25 * camZoomingDecay, elapsed);
-			@:privateAccess if (!FlxTween.globalManager.containsTweensOf(camHUD, ['zoom']))
-				camHUD.zoom = MathUtil.decayLerp(camHUD.zoom, defaultHudZoom, 6.25 * camZoomingDecay, elapsed);
+			@:privateAccess if (!FlxTween.globalManager.containsTweensOf(FlxG.camera,
+				['zoom'])) FlxG.camera.zoom = MathUtil.decayLerp(FlxG.camera.zoom, defaultCamZoom + defaultCamZoomAdd, 6.25 * camZoomingDecay, elapsed);
+			@:privateAccess if (!FlxTween.globalManager.containsTweensOf(camHUD, ['zoom'])) camHUD.zoom = MathUtil.decayLerp(camHUD.zoom, defaultHudZoom, 6.25 * camZoomingDecay, elapsed);
 		}
 		
 		if (!ClientPrefs.noReset && controls.RESET && canReset && !inCutscene && startedCountdown && !endingSong) health = 0;
@@ -2966,7 +2964,7 @@ class PlayState extends MusicBeatState
 		
 		if (camZooming && ClientPrefs.camZooms && curBeat % beatsPerZoom == 0)
 		{
-			@:privateAccess if (!FlxTween.globalManager.containsTweensOf(FlxG.camera, ['zoom'])) //makes it so tweening the camera zoom won't glitch out when it bops every section
+			@:privateAccess if (!FlxTween.globalManager.containsTweensOf(FlxG.camera, ['zoom'])) // makes it so tweening the camera zoom won't glitch out when it bops every section
 				FlxG.camera.zoom += 0.015 * camZoomingMult;
 			@:privateAccess if (!FlxTween.globalManager.containsTweensOf(camHUD, ['zoom'])) // just in case
 				camHUD.zoom += 0.03 * camZoomingMult;

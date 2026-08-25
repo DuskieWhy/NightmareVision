@@ -1,5 +1,7 @@
 package funkin.backend.plugins;
 
+import funkin.backend.DebugDisplay.FpsDisplayMode;
+
 import openfl.display.BitmapData;
 
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -12,91 +14,86 @@ import flixel.addons.transition.FlxTransitionableState;
 class DebugTextPlugin extends FlxTypedGroup<DebugText>
 {
 	@:nullSafety(Off)
-	static var instance:DebugTextPlugin;
+	public static var instance:DebugTextPlugin;
 	
 	public static function init()
 	{
 		if (instance == null)
 		{
 			FlxG.plugins.addPlugin(instance = new DebugTextPlugin());
-			FlxG.signals.preStateSwitch.add(clearTxt);
+			FlxG.signals.preStateSwitch.add(instance.clearTxt);
 			#if debug
 			FlxG.console.registerClass(DebugTextPlugin);
 			#end
 		}
 	}
 	
-	static inline function posText()
+	public function repositionTexts()
 	{
 		if (instance == null) return;
 		
 		var startY:Float = 25;
-		if (ClientPrefs.fpsDisplayType != 'Disabled' && DebugDisplay.instance != null) startY += DebugDisplay.instance.textUnderlay.height + 5;
+		if (DebugDisplay.instance != null && DebugDisplay.instance.visible) startY += DebugDisplay.instance.textUnderlay.height + 5;
 		
-		var count = 0;
+		var count:Int = 0;
 		instance.forEachAlive((temp:DebugText) -> {
 			temp.y = startY + (temp.height * count);
 			count++;
 		});
 	}
 	
-	static function grabText(message:String, colour:FlxColor):DebugText
+	inline function grabText(str:String):DebugText
 	{
-		final sanitized = message.substring(0, message.indexOf(']') + 1);
-		
-		final exists = DebugText.map.exists(sanitized);
-		
-		if (!exists && instance != null && DebugText.map.get(sanitized) == null)
+		var text:Null<DebugText> = null;
+		for (instance in members)
 		{
-			final ret = instance.recycle(DebugText, () -> new DebugText(message, colour));
-			return ret;
+			if (instance?.alive && instance._trace == str)
+			{
+				text = instance;
+				break;
+			}
 		}
-		else
-		{
-			var ret = DebugText.map.get(sanitized);
-			ret?._reset();
-			
-			return ret ?? new DebugText(message, colour);
-		}
+		return text ?? recycle(DebugText);
 	}
 	
-	public static function addText(message:String, colour:FlxColor = FlxColor.WHITE)
+	public function addText(message:String, colour:FlxColor = FlxColor.WHITE)
 	{
 		if (instance == null) return;
 		
-		final text = grabText(message, colour);
-		text.setText(message);
-		text.disableTime = 4;
-		text.alpha = 1;
+		final text = grabText(message);
+		text.resetText();
+		text.setText(message, colour);
 		
-		posText();
+		remove(text, true);
+		insert(0, text);
 		
-		instance.insert(0, text);
+		repositionTexts();
 		
-		instance.camera = CameraUtil.lastCamera;
+		camera = CameraUtil.lastCamera;
 	}
 	
-	static function clearTxt()
+	function clearTxt()
 	{
-		if (instance == null) return;
-		
-		instance.clear();
-		DebugText.clearMap();
+		forEach(text -> {
+			text = FlxDestroyUtil.destroy(text);
+		});
+		clear();
 	}
 }
 
 class DebugText extends FlxText
 {
-	public static var map:Map<String, DebugText> = new Map<String, DebugText>();
-	
 	private final UNDERLAY_PADDING = 5;
 	
 	public var disableTime:Float = 4;
 	public var traceCount:Int = 1;
 	public var markupColor:FlxColor;
 	
-	private var _trace = 'No trace exists';
+	public var _trace = '';
+	
 	private var _underlay:FlxSprite;
+	
+	var _dirtyText:Bool = false;
 	
 	public function new(text:String, color:FlxColor = FlxColor.WHITE)
 	{
@@ -114,46 +111,36 @@ class DebugText extends FlxText
 		_underlay.color = FlxColor.BLACK;
 		_underlay.alpha = 0;
 		_underlay.scrollFactor.set();
-		
-		final sanitized = text.substring(0, text.indexOf(']') + 1);
-		
-		if (!map.exists(sanitized)) map.set(sanitized, this);
 	}
 	
-	public function setText(input:String)
+	public inline function setText(input:String, colour:FlxColor = FlxColor.WHITE)
 	{
-		this._trace = input;
+		_trace = input;
+		color = colour;
+		_dirtyText = true;
 	}
 	
-	public function _reset()
+	public function resetText()
 	{
-		this.revive();
-		
-		this.exists = true;
-		this.alive = true;
-		
-		this.traceCount += 1;
-		this.disableTime = 4;
-		this.alpha = 1;
+		traceCount += 1;
+		disableTime = 4;
+		alpha = 1;
+	}
+	
+	override function kill()
+	{
+		traceCount = 0;
+		super.kill();
 	}
 	
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
 		
-		if (this != null)
-		{
-			this.text = '${traceCount > 1 ? '[$traceCount] - ' : ''}$_trace';
-		}
-		
 		disableTime -= elapsed;
 		if (y >= FlxG.height) kill();
 		
-		if (disableTime <= 0)
-		{
-			map.remove(_trace);
-			kill();
-		}
+		if (disableTime <= 0) kill();
 		else if (disableTime < 1) alpha = disableTime;
 	}
 	
@@ -171,6 +158,12 @@ class DebugText extends FlxText
 			_underlay.draw();
 		}
 		
+		if (_dirtyText)
+		{
+			text = '${traceCount > 1 ? '[$traceCount] - ' : ''}$_trace';
+			_dirtyText = false;
+		}
+		
 		super.draw();
 	}
 	
@@ -178,13 +171,5 @@ class DebugText extends FlxText
 	{
 		_underlay.destroy();
 		super.destroy();
-	}
-	
-	public static function clearMap()
-	{
-		for (i in map)
-			i?.destroy();
-			
-		map.clear();
 	}
 }

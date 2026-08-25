@@ -104,7 +104,7 @@ class FunkinVideoSprite extends FlxVideoSprite
 	 * how far through the video playback currently is.
 	 * Returns `0.0` if the video has no duration.
 	 */
-	public var progress(get, never):Float;
+	public var progress(get, never):Float; // TODO SETTER ?
 	
 	inline function get_progress():Float
 	{
@@ -116,9 +116,9 @@ class FunkinVideoSprite extends FlxVideoSprite
 	 * Returns the current playback position in milliseconds.
 	 * Returns `-1` if the bitmap is unavailable.
 	 */
-	public var currentTime(get, never):Int;
+	public var currentTime(get, never):Int; // TODO SETTER?
 	
-	inline function get_currentTime():Int return bitmap != null ? haxe.Int64.toInt(bitmap.length) : -1;
+	inline function get_currentTime():Int return bitmap != null ? haxe.Int64.toInt(bitmap.time) : -1;
 	
 	/**
 	 * Returns the total duration of the loaded video in milliseconds.

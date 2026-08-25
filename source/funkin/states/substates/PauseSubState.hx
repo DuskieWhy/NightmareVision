@@ -124,10 +124,10 @@ class PauseSubState extends MusicBeatSubstate
 		var meta:SongMetaData = PlayState.meta;
 		if (meta != null)
 		{
-			if (meta.composers != null) createCornerText("Composers: " + meta.composers.join(', '), true);
-			if (meta.charters != null) createCornerText("Charters: " + meta.charters.join(', '), true);
-			if (meta.artists != null) createCornerText("Artists: " + meta.artists.join(', '), true);
-			if (meta.coders != null) createCornerText("Coders: " + meta.coders.join(', '), true);
+			if (meta.composers != null && meta.composers.length > 0) createCornerText("Composers: " + meta.composers.join(', '), true);
+			if (meta.charters != null && meta.charters.length > 0) createCornerText("Charters: " + meta.charters.join(', '), true);
+			if (meta.artists != null && meta.artists.length > 0) createCornerText("Artists: " + meta.artists.join(', '), true);
+			if (meta.coders != null && meta.coders.length > 0) createCornerText("Coders: " + meta.coders.join(', '), true);
 		}
 		
 		var blueballedTxt = createCornerText("Blueballed: " + PlayState.deathCounter);

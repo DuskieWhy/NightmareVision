@@ -2306,7 +2306,7 @@ class ChartEditorState extends haxe.ui.backend.flixel.UIState
 			}
 		}
 		
-		var note:EditorNote = new EditorNote(daStrumTime, intendedData % song.keys, null, null, true);
+		var note:EditorNote = new EditorNote(daStrumTime, intendedData % song.keys, null, false, true);
 		note.lane = Std.int(Math.max(Math.floor(intendedData / song.keys), 0));
 		note.noteData = intendedData % song.keys;
 		note.alreadyShifted = true;

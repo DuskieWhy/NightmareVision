@@ -22,6 +22,7 @@ class MasterEditorMenu extends MusicBeatState
 		'Mods Manager',
 		'Week Editor',
 		'Menu Character Editor',
+		'New Chart Editor (Unfinished)',
 	];
 	private var grpTexts:FlxTypedGroup<Alphabet>;
 	private var directories:Array<String> = [null];
@@ -51,6 +52,16 @@ class MasterEditorMenu extends MusicBeatState
 			leText.isMenuItem = true;
 			leText.targetY = i;
 			grpTexts.add(leText);
+			if (leText.width > 980) // we need to rewrite alphabet bad
+			{
+				var textScale:Float = 980 / leText.width;
+				leText.scale.x = textScale;
+				for (letter in leText.lettersArray)
+				{
+					letter.x *= textScale;
+					letter.offset.x *= textScale;
+				}
+			}
 		}
 		
 		#if MODS_ALLOWED
@@ -121,11 +132,13 @@ class MasterEditorMenu extends MusicBeatState
 				case 'Menu Character Editor':
 					FlxG.switchState(() -> new MenuCharacterEditorState());
 				case 'Chart Editor': // felt it would be cool maybe
-					FlxG.switchState(ChartEditorState.new);
+					FlxG.switchState(OLDChartEditorState.new);
 				// case 'Note Skin Editor':
 				// 	FlxG.switchState(() -> new NoteSkinEditor('default'));
 				case 'Chart Converter':
 					FlxG.switchState(() -> new ChartConverterState());
+				case "New Chart Editor (Unfinished)":
+					FlxG.switchState(ChartEditorState.new);
 			}
 			if (muteMusic)
 			{

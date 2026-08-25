@@ -48,8 +48,6 @@ class Chart
 		
 		var path = Paths.json('$songName/charts/${Difficulty.getDifficultyFilePath(difficulty)}');
 		
-		if (!FunkinAssets.exists(path)) path = Paths.json('$songName/data/${Difficulty.getDifficultyFilePath(difficulty)}');
-		
 		if (!FunkinAssets.exists(path)) throw 'couldnt find chart at ($path)';
 		
 		return fromData(FunkinAssets.parseJson(FunkinAssets.getContent(path)));

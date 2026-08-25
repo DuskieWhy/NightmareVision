@@ -268,8 +268,7 @@ class NoteUtil
 				anim: "loop",
 				xmlName: "loop",
 				offsets: [45, 35],
-				looping: true,
-				fps: 12
+				looping: true
 			},
 			{
 				anim: "end",
@@ -289,8 +288,7 @@ class NoteUtil
 				anim: "loop",
 				xmlName: "loop",
 				offsets: [45, 35],
-				looping: true,
-				fps: 12
+				looping: true
 			},
 			{
 				anim: "end",
@@ -310,8 +308,7 @@ class NoteUtil
 				anim: "loop",
 				xmlName: "loop",
 				offsets: [45, 35],
-				looping: true,
-				fps: 12
+				looping: true
 			},
 			{
 				anim: "end",
@@ -331,8 +328,7 @@ class NoteUtil
 				anim: "loop",
 				xmlName: "loop",
 				offsets: [45, 35],
-				looping: true,
-				fps: 12
+				looping: true
 			},
 			{
 				anim: "end",
