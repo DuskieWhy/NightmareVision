@@ -54,7 +54,7 @@ class WeekEditorState extends MusicBeatState
 		txtWeekTitle.setFormat(Paths.DEFAULT_FONT, 32, FlxColor.WHITE, RIGHT);
 		txtWeekTitle.alpha = 0.7;
 		
-		var ui_tex = Paths.getSparrowAtlas('campaign_menu_UI_assets');
+		var ui_tex = Paths.getSparrowAtlas('menus/story/ui_elements');
 		var bgYellow:FlxSprite = new FlxSprite(0, 56).makeGraphic(FlxG.width, 386, 0xFFF9CF51);
 		bgSprite = new FlxSprite(0, 56);
 		
@@ -91,7 +91,7 @@ class WeekEditorState extends MusicBeatState
 		add(bgSprite);
 		add(grpWeekCharacters);
 		
-		var tracksSprite:FlxSprite = new FlxSprite(FlxG.width * 0.07, bgSprite.y + 435).loadGraphic(Paths.image('Menu_Tracks'));
+		var tracksSprite:FlxSprite = new FlxSprite(FlxG.width * 0.07, bgSprite.y + 435).loadGraphic(Paths.image('menus/story/Menu_Tracks'));
 		add(tracksSprite);
 		
 		txtTracklist = new FlxText(FlxG.width * 0.05, tracksSprite.y + 60, 0, "", 32);
@@ -326,9 +326,9 @@ class WeekEditorState extends MusicBeatState
 		var isMissing:Bool = true;
 		if (assetName != null && assetName.length > 0)
 		{
-			if (FunkinAssets.exists(Paths.getPath('images/menubackgrounds/menu_$assetName.png', null, true)))
+			if (FunkinAssets.exists(Paths.getPath('images/menus/story/bgs/menu_$assetName.png', null, true)))
 			{
-				bgSprite.loadGraphic(Paths.image('menubackgrounds/menu_$assetName'));
+				bgSprite.loadGraphic(Paths.image('menus/story/bgs/menu_$assetName'));
 				isMissing = false;
 			}
 		}
@@ -348,9 +348,9 @@ class WeekEditorState extends MusicBeatState
 		var isMissing:Bool = true;
 		if (assetName != null && assetName.length > 0)
 		{
-			if (FunkinAssets.exists(Paths.getPath('images/menus/story/$assetName.png', null, true)))
+			if (FunkinAssets.exists(Paths.getPath('images/menus/story/weeks/$assetName.png', null, true)))
 			{
-				weekThing.loadGraphic(Paths.image('menus/story/$assetName'));
+				weekThing.loadGraphic(Paths.image('menus/story/weeks/$assetName'));
 				isMissing = false;
 			}
 		}
@@ -359,7 +359,7 @@ class WeekEditorState extends MusicBeatState
 		{
 			weekThing.visible = false;
 			missingFileText.visible = true;
-			missingFileText.text = 'MISSING FILE: images/menus/story/' + assetName + '.png';
+			missingFileText.text = 'MISSING FILE: images/menus/story/weeks/' + assetName + '.png';
 		}
 		recalculateStuffPosition();
 		
