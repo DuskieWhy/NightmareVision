@@ -79,7 +79,7 @@ class SyncedFlxSoundGroup extends FlxTypedGroup<FlxSound>
 	// if vocals are shorter than inst, game doesnt bug out and get stuck in a cycle of looping the vocals over and over and over and...
 	public inline function checkLength(snd:Null<FlxSound>):Bool
 	{
-		return ((snd?.time ?? 0) < songLength) && ((snd?.length ?? 0) <= songLength) && ((snd?.time ?? 0) < (snd?.length ?? 1));
+		return ((snd?.time ?? 0) < (snd?.length ?? 1));
 	}
 	
 	/**
