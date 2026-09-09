@@ -1663,7 +1663,7 @@ class PlayState extends MusicBeatState
 	
 	function checkResync():Void
 	{
-		final maxToleratedOffset:Float = 20 * playbackRate;
+		final maxToleratedOffset:Float = 50 * playbackRate;
 		
 		final correctTime = Math.abs(Conductor.songPosition - Conductor.offset);
 		final songSync = audio.syncVoiceStatus() ? audio.getDesyncDifference(correctTime) : correctTime - audio.inst.time;
