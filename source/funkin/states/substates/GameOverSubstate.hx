@@ -6,6 +6,7 @@ import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
+import flixel.system.FlxAssets.FlxSoundAsset;
 
 import funkin.backend.MusicBeatSubstate;
 import funkin.states.PlayState;
@@ -56,6 +57,9 @@ class GameOverSubstate extends MusicBeatSubstate
 	 */
 	public var startedDeath:Bool = false;
 	
+	var confirmTimer:FlxTimer;
+	var gameOverSfx:FlxSound;
+	
 	/**
 	 * Resets gameover character values
 	 */
@@ -90,7 +94,9 @@ class GameOverSubstate extends MusicBeatSubstate
 			camFollow = new FlxObject(boyfriend.getMidpoint()
 				.x - boyfriend.cameraPosition[0] - 100, boyfriend.getMidpoint().y + boyfriend.cameraPosition[1] - 100);
 				
-			if (deathSoundName != null) FlxG.sound.play(Paths.sound(deathSoundName));
+			confirmTimer = new FlxTimer();
+			
+			if (deathSoundName != null) playSfx(Paths.sound(deathSoundName));
 			FlxG.camera.scroll.set();
 			FlxG.camera.target = null;
 			
@@ -204,13 +210,20 @@ class GameOverSubstate extends MusicBeatSubstate
 			isEnding = true;
 			boyfriend.playAnim('deathConfirm', true);
 			FlxG.sound.music.stop();
-			if (endSoundName != null) FlxG.sound.play(Paths.music(endSoundName));
-			new FlxTimer().start(0.7, function(tmr:FlxTimer) {
-				FlxG.camera.fade(FlxColor.BLACK, 2, false, function() {
+			if (endSoundName != null) playSfx(Paths.music(endSoundName));
+			confirmTimer.start(0.7, function(tmr:FlxTimer) {
+				FlxG.camera.fade(FlxColor.BLACK, 2, false);
+				confirmTimer.start(2, function(tmr:FlxTimer) {
 					FlxG.resetState();
 				});
 			});
 			PlayState.instance?.scripts.call('onGameOverConfirm', [true]);
+		}
+		else
+		{
+			confirmTimer.cancel();
+			destroySfx();
+			FlxG.resetState();
 		}
 	}
 	
@@ -218,5 +231,21 @@ class GameOverSubstate extends MusicBeatSubstate
 	{
 		instance = null;
 		super.destroy();
+	}
+	
+	function playSfx(path:FlxSoundAsset):Void
+	{
+		destroySfx();
+		
+		gameOverSfx = FlxG.sound.play(path);
+		gameOverSfx.onComplete = destroySfx;
+	}
+	
+	function destroySfx():Void
+	{
+		if (gameOverSfx == null) return;
+		
+		gameOverSfx.destroy();
+		gameOverSfx = null;
 	}
 }
