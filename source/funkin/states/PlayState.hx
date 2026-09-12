@@ -407,6 +407,7 @@ class PlayState extends MusicBeatState
 	public var defaultHudZoom:Float = 1;
 	
 	public var beatsPerZoom:Int = 4;
+	public var beatOffset:Int = 0;
 	
 	public var inCutscene:Bool = false;
 	public var ingameCutscene:Bool = false;
@@ -2951,7 +2952,7 @@ class PlayState extends MusicBeatState
 		
 		if (beatsPerZoom == 0) beatsPerZoom = 4;
 		
-		if (camZooming && ClientPrefs.camZooms && curBeat % beatsPerZoom == 0)
+		if (camZooming && ClientPrefs.camZooms && curBeat % beatsPerZoom == beatOffset)
 		{
 			@:privateAccess if (!FlxTween.globalManager.containsTweensOf(FlxG.camera, ['zoom'])) // makes it so tweening the camera zoom won't glitch out when it bops every section
 				FlxG.camera.zoom += 0.015 * camZoomingMult;
